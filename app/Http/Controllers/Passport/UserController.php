@@ -61,6 +61,9 @@ class UserController extends Controller
                     $startTime = Carbon::createFromFormat('Y-m-d' , $start)->startOfDay()->subDays(8)->toDateTimeString();
                     $endTime = Carbon::createFromFormat('Y-m-d' , $start)->endOfDay()->subDays(8)->toDateTimeString();
                 }
+                Log::info('$start' , array($start));
+                Log::info('$startTime' , array($startTime));
+                Log::info('$endTime' , array($endTime));
                 $connection->table('users_countries')
                     ->where('country' , $country_code)
                     ->where('created_at' , '>=' , $startTime)
@@ -174,7 +177,7 @@ class UserController extends Controller
                     'sevenNum'=>$sevenNum,
                     'thirtyNum'=>$thirtyNum,
                 );
-                Log::info('test' , array('$start:'.$start.' $num:'.$num.' $tomorrowNum:'.$tomorrowNum.' $twoNum:'.$twoNum.' $threeNum:'.$threeNum.' $sevenNum:'.$sevenNum.' $thirtyNum:'.$thirtyNum));
+//                Log::info('test' , array('$start:'.$start.' $num:'.$num.' $tomorrowNum:'.$tomorrowNum.' $twoNum:'.$twoNum.' $threeNum:'.$threeNum.' $sevenNum:'.$sevenNum.' $thirtyNum:'.$thirtyNum));
                 $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
             }while ($start != $end);
         }
