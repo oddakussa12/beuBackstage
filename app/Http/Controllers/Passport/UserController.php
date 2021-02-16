@@ -83,10 +83,10 @@ class UserController extends Controller
                         {
                             $tomorrowTable = 'visit_logs_'.$pm;
                             $tomorrowT = $connection->table($tomorrowTable)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $tomorrow->startOfDay()->timestamp)
-                                ->where('visited_at' , '<=' , $tomorrow->endOfDay()->timestamp)->count();
+                                ->where('visited_at' , '<=' , $tomorrow->endOfDay()->timestamp)->count(DB::raw('DISTINCT(user_id)'));
                         }else{
-                            $tomorrowPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count();
-                            $tomorrowNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count();
+                            $tomorrowPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count(DB::raw('DISTINCT(user_id)'));
+                            $tomorrowNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count(DB::raw('DISTINCT(user_id)'));
                             $tomorrowT = $tomorrowPT+$tomorrowNT;
                         }
                         $tomorrowNum = $tomorrowNum+$tomorrowT;
@@ -104,8 +104,8 @@ class UserController extends Controller
                             $twoDaysT = $connection->table($twoDaysTable)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $twoDays->startOfDay()->timestamp)
                                 ->where('visited_at' , '<=' , $twoDays->endOfDay()->timestamp)->count();
                         }else{
-                            $twoDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count();
-                            $twoDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count();
+                            $twoDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count(DB::raw('DISTINCT(user_id)'));
+                            $twoDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count(DB::raw('DISTINCT(user_id)'));
                             $twoDaysT = $twoDaysPT+$twoDaysNT;
                         }
                         $twoNum = $twoNum+$twoDaysT;
@@ -121,10 +121,10 @@ class UserController extends Controller
                         {
                             $threeDaysTable = 'visit_logs_'.$pm;
                             $threeDaysT = $connection->table($threeDaysTable)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $threeDays->startOfDay()->timestamp)
-                                ->where('visited_at' , '<=' , $threeDays->endOfDay()->timestamp)->count();
+                                ->where('visited_at' , '<=' , $threeDays->endOfDay()->timestamp)->count(DB::raw('DISTINCT(user_id)'));
                         }else{
-                            $threeDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count();
-                            $threeDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count();
+                            $threeDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count(DB::raw('DISTINCT(user_id)'));
+                            $threeDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count(DB::raw('DISTINCT(user_id)'));
                             $threeDaysT = $threeDaysPT+$threeDaysNT;
                         }
                         $threeNum = $threeNum+$threeDaysT;
@@ -140,10 +140,10 @@ class UserController extends Controller
                         {
                             $sevenDaysTable = 'visit_logs_'.$pm;
                             $sevenDaysT = $connection->table($sevenDaysTable)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $sevenDays->startOfDay()->timestamp)
-                                ->where('visited_at' , '<=' , $sevenDays->endOfDay()->timestamp)->count();
+                                ->where('visited_at' , '<=' , $sevenDays->endOfDay()->timestamp)->count(DB::raw('DISTINCT(user_id)'));
                         }else{
-                            $sevenDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count();
-                            $sevenDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count();
+                            $sevenDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count(DB::raw('DISTINCT(user_id)'));
+                            $sevenDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count(DB::raw('DISTINCT(user_id)'));
                             $sevenDaysT = $sevenDaysPT+$sevenDaysNT;
                         }
                         $sevenNum = $sevenNum+$sevenDaysT;
@@ -159,10 +159,10 @@ class UserController extends Controller
                         {
                             $thirtyDaysTable = 'visit_logs_'.$pm;
                             $thirtyDaysT = $connection->table($thirtyDaysTable)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $thirtyDays->startOfDay()->timestamp)
-                                ->where('visited_at' , '<=' , $thirtyDays->endOfDay()->timestamp)->count();
+                                ->where('visited_at' , '<=' , $thirtyDays->endOfDay()->timestamp)->count(DB::raw('DISTINCT(user_id)'));
                         }else{
-                            $thirtyDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count();
-                            $thirtyDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count();
+                            $thirtyDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count(DB::raw('DISTINCT(user_id)'));
+                            $thirtyDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count(DB::raw('DISTINCT(user_id)'));
                             $thirtyDaysT = $thirtyDaysPT+$thirtyDaysNT;
                         }
                         $thirtyNum = $thirtyNum+$thirtyDaysT;
