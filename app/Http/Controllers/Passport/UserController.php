@@ -102,7 +102,7 @@ class UserController extends Controller
                         {
                             $twoDaysTable = 'visit_logs_'.$pm;
                             $twoDaysT = $connection->table($twoDaysTable)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $twoDays->startOfDay()->timestamp)
-                                ->where('visited_at' , '<=' , $twoDays->endOfDay()->timestamp)->count();
+                                ->where('visited_at' , '<=' , $twoDays->endOfDay()->timestamp)->count(DB::raw('DISTINCT(user_id)'));
                         }else{
                             $twoDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $pm)->count(DB::raw('DISTINCT(user_id)'));
                             $twoDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $nm)->count(DB::raw('DISTINCT(user_id)'));
