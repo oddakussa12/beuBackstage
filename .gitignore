@@ -1,0 +1,9 @@
+.idea
+/vendor
+/.env
+/composer.lock
+/public/.user.ini
+/database/migrations/*.php
+/storage/logs/*.log
+/storage/*.key
+/node_modules
