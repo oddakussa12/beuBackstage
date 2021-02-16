@@ -26,33 +26,18 @@
         <table class="layui-table" >
             <thead>
             <tr>
-                <th>日期</th>
-                <th>注册</th>
-                <th  colspan="2">1日</th>
-                <th  colspan="2">2日</th>
-                <th  colspan="2">3日</th>
-                <th  colspan="2">7日</th>
-                <th  colspan="2">30日</th>
-            </tr>
-            <tr>
-                <th>数量</th>
-                <th>比例</th>
-            </tr>
-            <tr>
-                <th>数量</th>
-                <th>比例</th>
-            </tr>
-            <tr>
-                <th>数量</th>
-                <th>比例</th>
-            </tr>
-            <tr>
-                <th>数量</th>
-                <th>比例</th>
-            </tr>
-            <tr>
-                <th>数量</th>
-                <th>比例</th>
+                <th>Day</th>
+                <th>SignUp</th>
+                <th>1Day</th>
+                <th>1Day%</th>
+                <th>2Day</th>
+                <th>2Day%</th>
+                <th>3Day</th>
+                <th>3Day%</th>
+                <th>7Day</th>
+                <th>7Day%</th>
+                <th>30Day</th>
+                <th>30Day%</th>
             </tr>
             </thead>
             @foreach($list as $d=>$l)
@@ -60,15 +45,39 @@
                     <td>{{$d}}</td>
                     <td>{{$l['num']}}</td>
                     <td>{{$l['tomorrowNum']}}</td>
+                    @if ($l['num']==0)
+                    <td>0%</td>
+                    @else
                     <td>{{round($l['tomorrowNum']/$l['num']*100 , 2)}}%</td>
+                    @endif
+
                     <td>{{$l['twoNum']}}</td>
+                    @if ($l['num']==0)
+                    <td>0%</td>
+                    @else
                     <td>{{round($l['twoNum']/$l['num']*100 , 2)}}%</td>
+                    @endif
+
                     <td>{{$l['threeNum']}}</td>
+                    @if ($l['num']==0)
+                    <td>0%</td>
+                    @else
                     <td>{{round($l['threeNum']/$l['num']*100 , 2)}}%</td>
+                    @endif
+
                     <td>{{$l['sevenNum']}}</td>
+                    @if ($l['num']==0)
+                        <td>0%</td>
+                    @else
                     <td>{{round($l['sevenNum']/$l['num']*100 , 2)}}%</td>
+                    @endif
+
                     <td>{{$l['thirtyNum']}}</td>
+                    @if ($l['num']==0)
+                        <td>0%</td>
+                    @else
                     <td>{{round($l['thirtyNum']/$l['num']*100 , 2)}}%</td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>
