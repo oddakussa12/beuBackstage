@@ -65,15 +65,13 @@ class UserController extends Controller
                 Log::info('$startTime' , array($startTime));
                 Log::info('$endTime' , array($endTime));
                 $connection->table('users_countries')
+                    ->where('activation' , 1)
                     ->where('country' , $country_code)
                     ->where('created_at' , '>=' , $startTime)
                     ->where('created_at' , '<=' , $endTime)
                     ->orderByDesc('user_id')->chunk(200 , function ($users) use ($connection , $start , $tz , &$num , &$tomorrowNum , &$twoNum , &$threeNum , &$sevenNum , &$thirtyNum){
                         $num = $num+count($users);
                         $userIds = $users->pluck('user_id')->all();
-
-
-
                         $tomorrow = Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(1);
                         $s = $tomorrow->startOfDay()->timestamp;
                         $e = $tomorrow->endOfDay()->timestamp;

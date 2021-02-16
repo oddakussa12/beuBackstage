@@ -28,11 +28,31 @@
             <tr>
                 <th>日期</th>
                 <th>注册</th>
-                <th>1日</th>
-                <th>2日</th>
-                <th>3日</th>
-                <th>7日</th>
-                <th>30日</th>
+                <th  colspan="2">1日</th>
+                <th  colspan="2">2日</th>
+                <th  colspan="2">3日</th>
+                <th  colspan="2">7日</th>
+                <th  colspan="2">30日</th>
+            </tr>
+            <tr>
+                <th>数量</th>
+                <th>比例</th>
+            </tr>
+            <tr>
+                <th>数量</th>
+                <th>比例</th>
+            </tr>
+            <tr>
+                <th>数量</th>
+                <th>比例</th>
+            </tr>
+            <tr>
+                <th>数量</th>
+                <th>比例</th>
+            </tr>
+            <tr>
+                <th>数量</th>
+                <th>比例</th>
             </tr>
             </thead>
             @foreach($list as $d=>$l)
@@ -40,10 +60,15 @@
                     <td>{{$d}}</td>
                     <td>{{$l['num']}}</td>
                     <td>{{$l['tomorrowNum']}}</td>
+                    <td>{{round($l['tomorrowNum']/$l['num']*100 , 2)}}%</td>
                     <td>{{$l['twoNum']}}</td>
+                    <td>{{round($l['twoNum']/$l['num']*100 , 2)}}%</td>
                     <td>{{$l['threeNum']}}</td>
+                    <td>{{round($l['threeNum']/$l['num']*100 , 2)}}%</td>
                     <td>{{$l['sevenNum']}}</td>
+                    <td>{{round($l['sevenNum']/$l['num']*100 , 2)}}%</td>
                     <td>{{$l['thirtyNum']}}</td>
+                    <td>{{round($l['thirtyNum']/$l['num']*100 , 2)}}%</td>
                 </tr>
                 @endforeach
             </tbody>
