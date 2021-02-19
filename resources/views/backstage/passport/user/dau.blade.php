@@ -181,7 +181,7 @@
                     data: @json($xAxis)
                 },
                 yAxis: {
-                    type: 'value'
+                    type: 'category'
                 },
                 series: [
                     {
