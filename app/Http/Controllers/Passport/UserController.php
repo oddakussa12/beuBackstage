@@ -230,6 +230,7 @@ class UserController extends Controller
         $xAxis = collect(array_keys($list))->map(function ($item, $key) {
             return "'".$item."'";
         })->toJson();
+        dump($xAxis);
         $counties = config('country');
         return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
     }
