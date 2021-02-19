@@ -3,8 +3,8 @@
     <div  class="layui-fluid">
         <div class="layui-tab">
             <ul class="layui-tab-title">
-                <li class="layui-this">DAU</li>
                 <li>DAU</li>
+                <li class="layui-this">DAU</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
