@@ -229,7 +229,7 @@
                 // myChart.style.height = $(".layui-body").clientHeight + 'px';
                 // $('#layui-echarts').style.height =  $(".layui-body").clientHeight + 'px';
                 console.log($('.layui-body').height());
-                $('#layui-echarts').height($('.layui-body').height()-100);
+                $('#layui-echarts').height($('.layui-body').height()-200);
                 // console.log($('#layui-echarts').clientHeight);
                 myChart.resize();
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
