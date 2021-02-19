@@ -90219,7 +90219,7 @@
     exports.version = version$1;
     exports.zrUtil = util;
     exports.zrender = zrender;
-    Object.defineProperty(exports, '__esModule', { value: true });
+    // Object.defineProperty(exports, '__esModule', { value: true });
     exports.parseGeoJson = parseGeoJson;
     return exports;
 
