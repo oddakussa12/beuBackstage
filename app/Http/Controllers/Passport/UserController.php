@@ -212,8 +212,7 @@ class UserController extends Controller
                 );
             }
         }
-        $list = collect($list)->sortByDesc('date')->toArray();
-        dd($list);
+        $list = collect($list)->sortBy('date')->toArray();
         $counties = config('country');
         return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
