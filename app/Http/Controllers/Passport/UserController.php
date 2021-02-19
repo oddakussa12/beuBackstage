@@ -227,7 +227,7 @@ class UserController extends Controller
         $two = \json_encode(collect($list)->pluck('two')->toArray());
         $gt3 = \json_encode(collect($list)->pluck('gt3')->toArray());
 
-        $xAxis = \json_encode(array_keys($list));
+        $xAxis = collect(array_keys($list))->toJson();
         $counties = config('country');
         return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
     }
