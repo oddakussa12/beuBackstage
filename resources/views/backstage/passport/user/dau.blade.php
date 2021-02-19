@@ -83,13 +83,12 @@
                     </table>
                 </div>
                 <div class="layui-tab-item  layui-show">
-                    <div id="container" style="height: 100%"></div>
+
                 </div>
             </div>
         </div>
-
-
     </div>
+    <div id="container" style="height: 100%"></div>
 @endsection
 @section('footerScripts')
     @parent
