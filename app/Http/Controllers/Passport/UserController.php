@@ -194,9 +194,11 @@ class UserController extends Controller
             do{
                 array_push($dates , $start);
                 $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
-            }while($start != $end);
+            }while($start > $end);
         }
         $list = DB::connection('lovbee')->table('dau_counts')->where('country' , $country_code)->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
+        $list = collect($list->toArray())->keyBy('date')->toArray();
+        dd($list);
         $counties = config('country');
         return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
