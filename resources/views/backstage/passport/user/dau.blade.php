@@ -16,10 +16,15 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
             @include('layouts.bread_crumb')
-        <div class="layui-collapse" lay-filter="dau">
-            <div class="layui-colla-item">
-                <h2 class="layui-colla-title">DAU</h2>
-                <div class="layui-colla-content layui-show">
+
+        <div class="layui-tab" lay-filter="dau">
+            <ul class="layui-tab-title">
+                <li class="layui-this">DAU</li>
+                <li>DAU</li>
+
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
                     <div class="layui-fluid">
                         <form class="layui-form" action="" lay-filter="keep">
                             <div class="layui-form-item">
@@ -96,10 +101,10 @@
                         </table>
                     </div>
                 </div>
-            </div>
-            <div class="layui-colla-item">
-                <h2 class="layui-colla-title">DAU</h2>
-                <div class="layui-colla-content" id="layui-echarts"><div id="container" style="height: 100%"></div></div>
+                <div class="layui-tab-item"  id="layui-echarts">
+                    <div id="container" style="height: 100%">
+                </div>
+
             </div>
         </div>
     </div>
@@ -235,13 +240,19 @@
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
             };
             element.on('collapse(dau)', function(data){
-                console.log(data.show); //得到当前面板的展开状态，true或者false
-                console.log(data.title); //得到当前点击面板的标题区域DOM对象
-                console.log(data.content); //得到当前点击面板的内容区域DOM对象
-                if(data.show)
-                {
-                    autoContainer();//重置容器高宽
-                }
+                // console.log(data.show); //得到当前面板的展开状态，true或者false
+                // console.log(data.title); //得到当前点击面板的标题区域DOM对象
+                // console.log(data.content); //得到当前点击面板的内容区域DOM对象
+                // if(data.show)
+                // {
+                //     autoContainer();//重置容器高宽
+                // }
+            });
+
+            element.on('tabDelete(dau)', function(data){
+                console.log(this); //当前Tab标题所在的原始DOM元素
+                console.log(data.index); //得到当前Tab的所在下标
+                console.log(data.elem); //得到当前的Tab大容器
             });
 
 
