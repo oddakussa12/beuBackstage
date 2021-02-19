@@ -206,11 +206,12 @@
 
             if (option && typeof option === 'object') {
                 myChart.setOption(option);
+                window.onresize = function () {//用于使chart自适应高度和宽度
+                    autoContainer();//重置容器高宽
+                    myChart.resize();
+                };
             }
-            window.onresize = function () {//用于使chart自适应高度和宽度
-                autoContainer();//重置容器高宽
-                myChart.resize();
-            };
+
 
 
         })
