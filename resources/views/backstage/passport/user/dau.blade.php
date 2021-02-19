@@ -99,7 +99,7 @@
             </div>
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">DAU</h2>
-                <div class="layui-colla-content layui-show " id="layui-echarts"><div id="container" style="height: 100%"></div></div>
+                <div class="layui-colla-content" id="layui-echarts"><div id="container" style="height: 100%"></div></div>
             </div>
         </div>
     </div>
@@ -229,7 +229,7 @@
                 // myChart.style.height = $(".layui-body").clientHeight + 'px';
                 // $('#layui-echarts').style.height =  $(".layui-body").clientHeight + 'px';
                 console.log($('.layui-body').height());
-                $('#layui-echarts').height($('.layui-body').height());
+                $('#layui-echarts').height($('.layui-body').height()-100);
                 // console.log($('#layui-echarts').clientHeight);
                 myChart.resize();
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
