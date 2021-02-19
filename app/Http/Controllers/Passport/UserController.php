@@ -212,7 +212,27 @@ class UserController extends Controller
                 );
             }
         }
+        $titles = array(
+            'dau',
+            'zero',
+            'one',
+            'two',
+            'gt3',
+        );
+        dump($list);
         $list = collect($list)->sortBy('date')->toArray();
+        $dau = collect($list)->pluck('dau')->toArray();
+        $zero = collect($list)->pluck('zero')->toArray();
+        $one = collect($list)->pluck('one')->toArray();
+        $two = collect($list)->pluck('two')->toArray();
+        $gt3 = collect($list)->pluck('gt3')->toArray();
+
+        dump($dau);
+        dump($zero);
+        dump($one);
+        dump($two);
+        dd($gt3);
+        $xAxis = array_keys($list);
         $counties = config('country');
         return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
