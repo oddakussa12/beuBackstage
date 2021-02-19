@@ -82,7 +82,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="layui-tab-item  layui-show">
+                <div class="layui-tab-item  layui-show layui-echarts">
                     <div id="container" style="height: 100%"></div>
                 </div>
             </div>
@@ -196,10 +196,21 @@
                     }
                 ]
             };
+            var autoContainer = function () {
+                //container.clientWidth和container.clientHeight //自适应容器宽和高
+                // window.innerWidth和window.innerHeight//自适应浏览器宽和高
+
+                myChart.style.width = $(".layui-echarts").clientWidth + 'px';
+                //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
+            };
 
             if (option && typeof option === 'object') {
                 myChart.setOption(option);
             }
+            window.onresize = function () {//用于使chart自适应高度和宽度
+                autoContainer();//重置容器高宽
+                myChart.resize();
+            };
 
 
         })
