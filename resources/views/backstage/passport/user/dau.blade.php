@@ -99,7 +99,7 @@
             </div>
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">DAU</h2>
-                <div class="layui-colla-content layui-show"><div id="container" style="height: 100%"></div></div>
+                <div class="layui-colla-content layui-show layui-echarts"><div id="container" style="height: 100%"></div></div>
             </div>
         </div>
     </div>
@@ -227,8 +227,8 @@
                 //container.clientWidth和container.clientHeight //自适应容器宽和高
                 // window.innerWidth和window.innerHeight//自适应浏览器宽和高
                 // myChart.style.height = $(".layui-body").clientHeight + 'px';
-                $('.layui-colla-content').style.height =  $(".layui-body").clientHeight + 'px';
-                console.log($('.layui-colla-content').clientHeight);
+                $('.layui-echarts').style.height =  $(".layui-body").clientHeight + 'px';
+                console.log($('.layui-echarts').clientHeight);
                 myChart.resize();
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
             };
