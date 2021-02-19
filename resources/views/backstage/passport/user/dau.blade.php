@@ -46,29 +46,44 @@
                     <td>{{$l['zero']}}</td>
                     @if ($l['dau']==0)
                     <td>0%</td>
-                    <td>0%</td>
-                    <td>0%</td>
-                    <td>0%</td>
                     @else
                     <td>{{round($l['zero']/$l['dau']*100 , 2)}}%</td>
-                    <td>{{round($l['one']/$l['dau']*100 , 2)}}%</td>
-                    <td>{{round($l['two']/$l['dau']*100 , 2)}}%</td>
-                    <td>{{round($l['gt3']/$l['dau']*100 , 2)}}%</td>
+                    @endif
+
+                    <td>{{$l['one']}}</td>
+                    @if ($l['dau']==0)
+                        <td>0%</td>
+                    @else
+                        <td>{{round($l['one']/$l['dau']*100 , 2)}}%</td>
+                    @endif
+
+                    <td>{{$l['two']}}</td>
+                    @if ($l['dau']==0)
+                        <td>0%</td>
+                    @else
+                        <td>{{round($l['two']/$l['dau']*100 , 2)}}%</td>
+                    @endif
+
+                    <td>{{$l['gt3']}}</td>
+                    @if ($l['dau']==0)
+                        <td>0%</td>
+                    @else
+                        <td>{{round($l['gt3']/$l['dau']*100 , 2)}}%</td>
                     @endif
                 </tr>
-            @endforeach
+                @endforeach
             </tbody>
         </table>
     </div>
 @endsection
 @section('footerScripts')
     @parent
-<script>
-    import Table from "../../../../../public/plugin/layui/lay/modules/table"
-    export default {
-        components: {Table},
-    }
-</script>
+    <script type="text/html" id="operateTpl">
+        <div class="layui-table-cell laytable-cell-1-6">
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
+        </div>
+    </script>
 
     <script>
         layui.config({
@@ -89,12 +104,15 @@
                 ,range: true
                 ,max : 'today'
                 ,lang: 'en'
+
+
             });
 
 
             table.init('user_table', { //转化静态表格
                 page:false
             });
+
         })
     </script>
     <style>
