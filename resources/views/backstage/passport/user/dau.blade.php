@@ -138,16 +138,7 @@
                 ,lang: 'en'
             });
 
-            element.on('collapse(dau)', function(data){
-                console.log(data.show); //得到当前面板的展开状态，true或者false
-                console.log(data.title); //得到当前点击面板的标题区域DOM对象
-                console.log(data.content); //得到当前点击面板的内容区域DOM对象
-                if(data.show)
-                {
-                    autoContainer();//重置容器高宽
-                    myChart.resize();
-                }
-            });
+
 
             table.init('user_table', { //转化静态表格
                 page:false
@@ -238,6 +229,16 @@
                     myChart.resize();
                 };
             }
+            element.on('collapse(dau)', function(data){
+                console.log(data.show); //得到当前面板的展开状态，true或者false
+                console.log(data.title); //得到当前点击面板的标题区域DOM对象
+                console.log(data.content); //得到当前点击面板的内容区域DOM对象
+                if(data.show)
+                {
+                    autoContainer();//重置容器高宽
+                    myChart.resize();
+                }
+            });
 
 
 
