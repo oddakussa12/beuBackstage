@@ -227,8 +227,14 @@
                 //container.clientWidth和container.clientHeight //自适应容器宽和高
                 // window.innerWidth和window.innerHeight//自适应浏览器宽和高
                 // myChart.style.height = $(".layui-body").clientHeight + 'px';
-                $('#layui-echarts').style.height =  $(".layui-body").clientHeight + 'px';
-                console.log($('#layui-echarts').clientHeight);
+                // $('#layui-echarts').style.height =  $(".layui-body").clientHeight + 'px';
+                var i=0;
+                var children = $('#layui-echarts').children;
+                for(i = 0; i < children.length; i++){
+                    children[i].style.height = $(".layui-body").clientHeight + 'px';
+                    console.log(children[i].clientHeight);
+                }
+                // console.log($('#layui-echarts').clientHeight);
                 myChart.resize();
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
             };
