@@ -41,21 +41,21 @@
             @foreach($list as $l)
                 <tr>
                     <td>{{$l['date']}}</td>
-                    <td>{{$l['dau']}}</td>
-                    <td>{{$l['zero']}}</td>
-                    @if ($l['dau']==0)
-                    <td>0%</td>
-                    <td>0%</td>
-                    <td>0%</td>
-                    <td>0%</td>
-                    @else
-                    <td>{{round($l['zero']/$l['dau']*100 , 2)}}%</td>
-                    <td>{{round($l['one']/$l['dau']*100 , 2)}}%</td>
-                    <td>{{round($l['two']/$l['dau']*100 , 2)}}%</td>
-                    <td>{{round($l['gt3']/$l['dau']*100 , 2)}}%</td>
-                    @endif
+{{--                    <td>{{$l['dau']}}</td>--}}
+{{--                    <td>{{$l['zero']}}</td>--}}
+{{--                    @if ($l['dau']==0)--}}
+{{--                    <td>0%</td>--}}
+{{--                    <td>0%</td>--}}
+{{--                    <td>0%</td>--}}
+{{--                    <td>0%</td>--}}
+{{--                    @else--}}
+{{--                    <td>{{round($l['zero']/$l['dau']*100 , 2)}}%</td>--}}
+{{--                    <td>{{round($l['one']/$l['dau']*100 , 2)}}%</td>--}}
+{{--                    <td>{{round($l['two']/$l['dau']*100 , 2)}}%</td>--}}
+{{--                    <td>{{round($l['gt3']/$l['dau']*100 , 2)}}%</td>--}}
+{{--                    @endif--}}
                 </tr>
-                @endforeach
+            @endforeach
             </tbody>
         </table>
     </div>
