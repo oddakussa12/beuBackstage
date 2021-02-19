@@ -221,13 +221,15 @@ class UserController extends Controller
         );
         $list = collect($list)->sortBy('date')->toArray();
 
-        $dau = \json_encode(collect($list)->pluck('dau')->toArray());
-        $zero = \json_encode(collect($list)->pluck('zero')->toArray());
-        $one = \json_encode(collect($list)->pluck('one')->toArray());
-        $two = \json_encode(collect($list)->pluck('two')->toArray());
-        $gt3 = \json_encode(collect($list)->pluck('gt3')->toArray());
+        $dau = collect($list)->pluck('dau')->toJson();
+        $zero = collect($list)->pluck('zero')->toJson();
+        $one = collect($list)->pluck('one')->toJson();
+        $two = collect($list)->pluck('two')->toJson();
+        $gt3 = collect($list)->pluck('gt3')->toJson();
 
-        $xAxis = collect(array_keys($list))->toJson();
+        $xAxis = collect(array_keys($list))->map(function ($item, $key) {
+            return "'".$item."'";
+        })->toJson();
         $counties = config('country');
         return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
     }
