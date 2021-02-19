@@ -197,7 +197,7 @@ class UserController extends Controller
             }while($start <= $end);
         }
         $list = DB::connection('lovbee')->table('dau_counts')->where('country' , $country_code)->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
-        $list = collect($list->toArray())->keyBy('date')->toArray();
+        $list = collect($list->map(function ($value) {return (array)$value;})->toArray())->keyBy('date')->toArray();
         foreach ($dates as $d)
         {
             if(!isset($list[$d]))

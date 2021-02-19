@@ -38,18 +38,37 @@
                 <th>>3NUM%</th>
             </tr>
             </thead>
-
+            <tbody>
+            @foreach($list as $l)
+                <tr>
+                    <td>{{$l['date']}}</td>
+                    <td>{{$l['dau']}}</td>
+                    <td>{{$l['zero']}}</td>
+                    @if ($l['dau']==0)
+                    <td>0%</td>
+                    <td>0%</td>
+                    <td>0%</td>
+                    <td>0%</td>
+                    @else
+                    <td>{{round($l['zero']/$l['dau']*100 , 2)}}%</td>
+                    <td>{{round($l['one']/$l['dau']*100 , 2)}}%</td>
+                    <td>{{round($l['two']/$l['dau']*100 , 2)}}%</td>
+                    <td>{{round($l['gt3']/$l['dau']*100 , 2)}}%</td>
+                    @endif
+                </tr>
+            @endforeach
+            </tbody>
         </table>
     </div>
 @endsection
 @section('footerScripts')
     @parent
-    <script type="text/html" id="operateTpl">
-        <div class="layui-table-cell laytable-cell-1-6">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
-        </div>
-    </script>
+<script>
+    import Table from "../../../../../public/plugin/layui/lay/modules/table"
+    export default {
+        components: {Table},
+    }
+</script>
 
     <script>
         layui.config({

@@ -40,6 +40,7 @@
                 <th>30Day%</th>
             </tr>
             </thead>
+            <tbody>
             @foreach($list as $d=>$l)
                 <tr>
                     <td>{{$d}}</td>
