@@ -220,21 +220,16 @@ class UserController extends Controller
             'gt3',
         );
         $list = collect($list)->sortBy('date')->toArray();
-        dump($list);
-        $dau = collect($list)->pluck('dau')->toArray();
-        $zero = collect($list)->pluck('zero')->toArray();
-        $one = collect($list)->pluck('one')->toArray();
-        $two = collect($list)->pluck('two')->toArray();
-        $gt3 = collect($list)->pluck('gt3')->toArray();
 
-        dump($dau);
-        dump($zero);
-        dump($one);
-        dump($two);
-        dd($gt3);
-        $xAxis = array_keys($list);
+        $dau = \json_encode(collect($list)->pluck('dau')->toArray());
+        $zero = \json_encode(collect($list)->pluck('zero')->toArray());
+        $one = \json_encode(collect($list)->pluck('one')->toArray());
+        $two = \json_encode(collect($list)->pluck('two')->toArray());
+        $gt3 = \json_encode(collect($list)->pluck('gt3')->toArray());
+
+        $xAxis = \json_encode(array_keys($list));
         $counties = config('country');
-        return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list'));
+        return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
     }
 
 }
