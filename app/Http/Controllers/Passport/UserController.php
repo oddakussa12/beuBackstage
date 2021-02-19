@@ -197,8 +197,22 @@ class UserController extends Controller
             }while($start <= $end);
         }
         $list = DB::connection('lovbee')->table('dau_counts')->where('country' , $country_code)->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
-
         $list = collect($list->toArray())->keyBy('date')->toArray();
+        foreach ($dates as $d)
+        {
+            if(!isset($list[$d]))
+            {
+                $list[$d] = array(
+                  'date'=>$d,
+                  'dau'=>0,
+                  'zero'=>0,
+                  'one'=>0,
+                  'two'=>0,
+                  'gt3'=>0,
+                );
+            }
+        }
+        $list = collect($list)->keyBy('date')->toArray();
         dd($list);
         $counties = config('country');
         return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list'));
