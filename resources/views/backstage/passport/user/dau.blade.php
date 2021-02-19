@@ -131,7 +131,6 @@
                 common = layui.common,
                 echarts = layui.echarts,
                 laydate = layui.laydate;
-
             laydate.render({
                 elem: '#period'
                 ,range: true
@@ -143,8 +142,12 @@
                 console.log(data.show); //得到当前面板的展开状态，true或者false
                 console.log(data.title); //得到当前点击面板的标题区域DOM对象
                 console.log(data.content); //得到当前点击面板的内容区域DOM对象
+                if(data.show)
+                {
+                    autoContainer();//重置容器高宽
+                    myChart.resize();
+                }
             });
-
 
             table.init('user_table', { //转化静态表格
                 page:false
@@ -224,7 +227,7 @@
                 //container.clientWidth和container.clientHeight //自适应容器宽和高
                 // window.innerWidth和window.innerHeight//自适应浏览器宽和高
 
-                myChart.style.width = $(".layui-echarts").clientWidth + 'px';
+                myChart.style.width = $(".layui-body").clientWidth + 'px';
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
             };
 
