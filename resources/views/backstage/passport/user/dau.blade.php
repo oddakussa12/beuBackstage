@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <div class="layui-tab-item"  id="layui-echarts">
-                    <div id="container" style="height: 100%">
+{{--                    <div id="container" style="height: 100%">--}}
                 </div>
 
             </div>
