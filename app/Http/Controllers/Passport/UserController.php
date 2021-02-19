@@ -183,4 +183,22 @@ class UserController extends Controller
         return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
 
+    public function dau(Request $request)
+    {
+        $period = $request->input('period' , '');
+        $country_code = strtolower(strval($request->input('country_code' , '')));
+        $dates = array();
+        if(!blank($period)&&!blank($country_code))
+        {
+            list($start , $end) = explode(' - ' , $period);
+            do{
+                array_push($dates , $start);
+                $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
+            }while($start != $end);
+        }
+        $list = DB::connection('lovbee')->table('dau_counts')->where('country' , $country_code)->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
+        $counties = config('country');
+        return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list'));
+    }
+
 }
