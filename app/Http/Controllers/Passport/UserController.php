@@ -219,8 +219,8 @@ class UserController extends Controller
             'two',
             'gt3',
         );
-        dump($list);
         $list = collect($list)->sortBy('date')->toArray();
+        dump($list);
         $dau = collect($list)->pluck('dau')->toArray();
         $zero = collect($list)->pluck('zero')->toArray();
         $one = collect($list)->pluck('one')->toArray();
