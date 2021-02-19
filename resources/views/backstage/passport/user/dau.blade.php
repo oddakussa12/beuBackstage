@@ -7,7 +7,7 @@
                 <li class="layui-this">DAU</li>
             </ul>
             <div class="layui-tab-content">
-                <div class="layui-tab-item layui-show">
+                <div class="layui-tab-item">
                     <form class="layui-form" action="" lay-filter="keep">
                         <div class="layui-form-item">
                             <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
