@@ -16,7 +16,7 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
             @include('layouts.bread_crumb')
-        <div class="layui-collapse">
+        <div class="layui-collapse" lay-filter="dau">
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">DAU</h2>
                 <div class="layui-colla-content layui-show">
@@ -137,8 +137,12 @@
                 ,range: true
                 ,max : 'today'
                 ,lang: 'en'
+            });
 
-
+            element.on('collapse(dau)', function(data){
+                console.log(data.show); //得到当前面板的展开状态，true或者false
+                console.log(data.title); //得到当前点击面板的标题区域DOM对象
+                console.log(data.content); //得到当前点击面板的内容区域DOM对象
             });
 
 
