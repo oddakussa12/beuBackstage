@@ -178,7 +178,7 @@
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: {{$xAxis}}
+                    data: @json($xAxis)
                 },
                 yAxis: {
                     type: 'value'
