@@ -226,8 +226,8 @@
             var autoContainer = function () {
                 //container.clientWidth和container.clientHeight //自适应容器宽和高
                 // window.innerWidth和window.innerHeight//自适应浏览器宽和高
-                console.log(myChart);
-                myChart.style.height = $(".layui-body").clientHeight + 'px';
+                // myChart.style.height = $(".layui-body").clientHeight + 'px';
+                myChart.getDom().style.height =  $(".layui-body").clientHeight + 'px';
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
             };
             element.on('collapse(dau)', function(data){
