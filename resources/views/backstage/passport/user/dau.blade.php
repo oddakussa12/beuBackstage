@@ -228,6 +228,7 @@
                 // window.innerWidth和window.innerHeight//自适应浏览器宽和高
                 // myChart.style.height = $(".layui-body").clientHeight + 'px';
                 myChart.getDom().style.height =  $(".layui-body").clientHeight + 'px';
+                myChart.resize();
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
             };
             element.on('collapse(dau)', function(data){
@@ -237,7 +238,6 @@
                 if(data.show)
                 {
                     autoContainer();//重置容器高宽
-                    myChart.resize();
                 }
             });
 
