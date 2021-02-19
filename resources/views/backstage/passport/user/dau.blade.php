@@ -1,6 +1,120 @@
-@extends('layouts.dashboard')
-@section('layui-content')
-    <div id="container" style="height: 100%"></div>
+@extends('layouts.app')
+@section('title', trans('common.header.title'))
+@section('content')
+    <div class="layui-header">
+        <!-- 引入头部 -->
+        @include('layouts.nav')
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree">
+                @include('layouts.side')
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="layui-fluid">
+            @include('layouts.bread_crumb')
+            <div  class="layui-fluid">
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li>DAU</li>
+                        <li class="layui-this">DAU</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item">
+                            <form class="layui-form" action="" lay-filter="keep">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
+                                    <div class="layui-inline">
+                                        <select name="country_code" lay-verify="" lay-search>
+                                            <option value="">{{trans('user.form.placeholder.user_country')}}</option>
+                                            @foreach($counties  as $country)
+                                                <option value="{{strtolower($country['code'])}}" @if($country_code==strtolower($country['code'])) selected @endif>{{$country['name']}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" name="period" id="period" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$period}}">
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <table class="layui-table" >
+                                <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>DUA</th>
+                                    <th>0NUM</th>
+                                    <th>0NUM%</th>
+                                    <th>1NUM</th>
+                                    <th>1NUM%</th>
+                                    <th>2NUM</th>
+                                    <th>2NUM%</th>
+                                    <th>>3NUM</th>
+                                    <th>>3NUM%</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($list as $l)
+                                    <tr>
+                                        <td>{{$l['date']}}</td>
+                                        <td>{{$l['dau']}}</td>
+                                        <td>{{$l['zero']}}</td>
+                                        @if ($l['dau']==0)
+                                            <td>0%</td>
+                                        @else
+                                            <td>{{round($l['zero']/$l['dau']*100 , 2)}}%</td>
+                                        @endif
+
+                                        <td>{{$l['one']}}</td>
+                                        @if ($l['dau']==0)
+                                            <td>0%</td>
+                                        @else
+                                            <td>{{round($l['one']/$l['dau']*100 , 2)}}%</td>
+                                        @endif
+
+                                        <td>{{$l['two']}}</td>
+                                        @if ($l['dau']==0)
+                                            <td>0%</td>
+                                        @else
+                                            <td>{{round($l['two']/$l['dau']*100 , 2)}}%</td>
+                                        @endif
+
+                                        <td>{{$l['gt3']}}</td>
+                                        @if ($l['dau']==0)
+                                            <td>0%</td>
+                                        @else
+                                            <td>{{round($l['gt3']/$l['dau']*100 , 2)}}%</td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="layui-tab-item  layui-show layui-echarts">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="container" style="height: 100%"></div>
+
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © {{ trans('common.company_name') }}
+    </div>
+
 @endsection
 @section('footerScripts')
     @parent
@@ -17,8 +131,9 @@
         }).extend({
             common: 'lay/modules/admin/common',
             echarts: 'lay/modules/echarts',
-        }).use(['common' , 'table', 'laydate' , 'echarts'], function () {
+        }).use(['element','common' , 'table', 'laydate' , 'echarts'], function () {
             var $ = layui.jquery,
+                element = layui.element,
                 table = layui.table,
                 common = layui.common,
                 echarts = layui.echarts,

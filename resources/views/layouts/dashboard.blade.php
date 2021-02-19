@@ -8,12 +8,6 @@
         <!-- 引入头部 -->
         @include('layouts.nav')
     </div>
-{{--    <div class="layui-side layui-bg-black">--}}
-{{--        <div class="layui-side-scroll"  id="navBarId">--}}
-{{--            <!-- 引入侧边栏 -->--}}
-{{--            @include('layouts.side')--}}
-{{--        </div>--}}
-{{--    </div>--}}
     <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
