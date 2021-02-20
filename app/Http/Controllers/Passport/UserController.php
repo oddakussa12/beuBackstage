@@ -183,6 +183,45 @@ class UserController extends Controller
         return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
 
+    public function allDau(Request $request)
+    {
+        $period = $request->input('period' , '');
+        $dates = array();
+        if(!blank($period))
+        {
+            list($start , $end) = explode(' - ' , $period);
+            do{
+                array_push($dates , $start);
+                $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
+            }while($start <= $end);
+        }
+        $list = DB::connection('lovbee')->table('dau_counts')->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
+        $list = collect($list->map(function ($value) {return (array)$value;})->toArray())->keyBy('date')->toArray();
+        foreach ($dates as $d)
+        {
+            if(!isset($list[$d]))
+            {
+                $list[$d] = array(
+                    'date'=>$d,
+                    'dau'=>0,
+                    'zero'=>0,
+                    'one'=>0,
+                    'two'=>0,
+                    'gt3'=>0,
+                );
+            }
+        }
+
+        $list = collect($list)->sortBy('date')->toArray();
+        $dau = collect($list)->pluck('dau')->toJson();
+        $zero = collect($list)->pluck('zero')->toJson();
+        $one = collect($list)->pluck('one')->toJson();
+        $two = collect($list)->pluck('two')->toJson();
+        $gt3 = collect($list)->pluck('gt3')->toJson();
+        $xAxis = array_keys($list);
+        return  view('backstage.passport.user.dau' , compact('period' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
+    }
+
     public function dau(Request $request)
     {
         $period = $request->input('period' , '');
@@ -196,7 +235,12 @@ class UserController extends Controller
                 $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
             }while($start <= $end);
         }
-        $list = DB::connection('lovbee')->table('dau_counts')->where('country' , $country_code)->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
+        if($country_code=='all')
+        {
+            $list = DB::connection('lovbee')->table('dau_counts')->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
+        }else{
+            $list = DB::connection('lovbee')->table('dau_counts')->where('country' , $country_code)->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
+        }
         $list = collect($list->map(function ($value) {return (array)$value;})->toArray())->keyBy('date')->toArray();
         foreach ($dates as $d)
         {
