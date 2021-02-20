@@ -237,7 +237,8 @@ class UserController extends Controller
         }
         if($country_code=='all')
         {
-            $list = DB::connection('lovbee')->table('dau_counts')->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->toSql();
+            $list = DB::connection('lovbee')->table('dau_counts')->whereIn('date' , $dates)->select('date' , DB::raw("sum(dau) as dau") , DB::raw("sum(0) as zero") , DB::raw("sum(1) as one"), DB::raw("sum(2) as two") , DB::raw("sum(gt3) as gt3"))->groupBy('date')->toSql();
+
             dump($dates);
             echo $list;die;
         }else{
