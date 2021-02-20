@@ -147,7 +147,7 @@
                     "autoplay":true,
                     "controls": true,
                     "preload":"auto",
-                    "resource":[
+                    "sources":[
                         @foreach($messages as $message)
                         {"src":"https://media.helloo.cn.mantouhealth.com/{{$message->message_content}}"}
                         @endforeach
