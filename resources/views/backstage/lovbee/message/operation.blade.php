@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('content')
+@extends('layouts.dashboard')
+@section('layui-content')
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend>消息管理</legend>
     </fieldset>
