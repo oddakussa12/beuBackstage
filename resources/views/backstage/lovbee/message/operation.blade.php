@@ -1,73 +1,75 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>消息管理</legend>
-    </fieldset>
-    <form class="layui-form"  method="post">
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">发送类型</label>
-                <div class="layui-input-inline">
-                    <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <select name="type" lay-verify="required"  multiple="" lay-filter="type">
-                        <option value="0" selected>全部</option>
-                        <option value="1">国家</option>
-                        <option value="2">个人</option>
-                        <option value="3">朋友</option>
-                    </select>
+    <div  class="layui-fluid">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>消息管理</legend>
+        </fieldset>
+        <form class="layui-form"  method="post">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">发送类型</label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <select name="type" lay-verify="required"  multiple="" lay-filter="type">
+                            <option value="0" selected>全部</option>
+                            <option value="1">国家</option>
+                            <option value="2">个人</option>
+                            <option value="3">朋友</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-inline"  style="display: none;" id="countryDiv" >
-                <label class="layui-form-label">国家</label>
-                <div class="layui-input-inline">
-                    <select name="country" lay-verify="required" xm-select="country" lay-filter="country" id="country">
-                        <option value="tl" selected>东帝汶</option>
-                        <option value="id">印尼</option>
-                        <option value="gl">格林纳达</option>
-                        <option value="au">澳大利亚</option>
-                    </select>
+                <div class="layui-inline"  style="display: none;" id="countryDiv" >
+                    <label class="layui-form-label">国家</label>
+                    <div class="layui-input-inline">
+                        <select name="country" lay-verify="required" xm-select="country" lay-filter="country" id="country">
+                            <option value="tl" selected>东帝汶</option>
+                            <option value="id">印尼</option>
+                            <option value="gl">格林纳达</option>
+                            <option value="au">澳大利亚</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="layui-inline" >
-                <label class="layui-form-label">发送人</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="sender" lay-verify="required" autocomplete="off" class="layui-input" id="userId" placeholder="861388888888">
+                <div class="layui-inline" >
+                    <label class="layui-form-label">发送人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="sender" lay-verify="required" autocomplete="off" class="layui-input" id="userId" placeholder="861388888888">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-inline" id="targetIdDiv" style="display: none;" >
-                <label class="layui-form-label">接收人</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="target" autocomplete="off" class="layui-input" id="targetId" disabled="disabled"  placeholder="861388888888">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <div class="layui-upload">
-                    <button type="button" class="layui-btn" id="image"><i class="layui-icon"></i>上传图片</button>
-                    <button type="button" class="layui-btn" id="video"><i class="layui-icon"></i>上传视频</button>
-                    <button class="layui-btn" lay-submit="">发送</button>
-                    <div class="layui-upload-list">
-                        <table class="layui-table">
-                            <thead>
-                            <tr>
-                                <th>文件名</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody id="fileList">
-
-                            </tbody>
-                        </table>
+                <div class="layui-inline" id="targetIdDiv" style="display: none;" >
+                    <label class="layui-form-label">接收人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="target" autocomplete="off" class="layui-input" id="targetId" disabled="disabled"  placeholder="861388888888">
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn" id="image"><i class="layui-icon"></i>上传图片</button>
+                        <button type="button" class="layui-btn" id="video"><i class="layui-icon"></i>上传视频</button>
+                        <button class="layui-btn" lay-submit="">发送</button>
+                        <div class="layui-upload-list">
+                            <table class="layui-table">
+                                <thead>
+                                <tr>
+                                    <th>文件名</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="fileList">
 
-        <div class="layui-form-item" id="media">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        </div>
-    </form>
+            <div class="layui-form-item" id="media">
+
+            </div>
+        </form>
+    </div>
 @endsection
 @section('footerScripts')
     @parent
