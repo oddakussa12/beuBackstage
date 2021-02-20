@@ -19,8 +19,8 @@
 
         <div class="layui-tab" lay-filter="dau">
             <ul class="layui-tab-title">
-                <li class="layui-this">DAU</li>
-                <li>DAU</li>
+                <li class="layui-this"  lay-id="0">DAU</li>
+                <li  lay-id="1">DAU</li>
 
             </ul>
             <div class="layui-tab-content">
