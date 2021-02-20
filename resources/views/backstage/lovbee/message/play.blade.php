@@ -149,7 +149,7 @@
                     "preload":"auto",
                     "sources":[
                         @foreach($messages as $message)
-                        {"src":"https://media.helloo.cn.mantouhealth.com/{{$message->message_content}}"}
+                        {"src":"https://media.helloo.cn.mantouhealth.com/{{$message->message_content}}","type":"video/mp4"}
                         @endforeach
                     ]
                 }, function() {
