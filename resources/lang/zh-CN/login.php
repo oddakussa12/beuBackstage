@@ -4,7 +4,7 @@
 return [
     'title'=>'登录',
     'header' =>[
-        'head'=>'馒头科技',
+        'head'=>'Lovbee',
     ],
     'button'=>[
         'login'=>'登录'

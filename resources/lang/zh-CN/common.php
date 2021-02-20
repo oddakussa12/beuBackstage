@@ -2,11 +2,11 @@
 
 
 return [
-    'company_name'=>'馒头科技',
+    'company_name'=>'Lovbee project',
     'backend_home'=>'后台',
     'header' =>[
-        'title'=>'馒头科技后台',
-        'head'=>'馒头科技',
+        'title'=>'Lovbee project background',
+        'head'=>'Lovbee project',
     ],
     'button'=>[
         'sign_out'=>'退出',
