@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="layui-tab-item"  id="layui-echarts">
-{{--                    <div id="container" style="height: 100%">--}}
+                    <div id="container" style="height: 100%;display: none">
                 </div>
 
             </div>
@@ -150,109 +150,109 @@
                 page:false
             });
 
-            {{--var dom = document.getElementById("container");--}}
-            {{--var myChart = echarts.init(dom);--}}
-            {{--var app = {};--}}
+            var dom = document.getElementById("container");
+            var myChart = echarts.init(dom);
+            var app = {};
 
-            {{--var option;--}}
-
-
-
-            {{--option = {--}}
-            {{--    tooltip: {--}}
-            {{--        trigger: 'axis'--}}
-            {{--    },--}}
-            {{--    legend: {--}}
-            {{--        data: ['dau', 'zero', 'one', 'two', 'gt3']--}}
-            {{--    },--}}
-            {{--    grid: {--}}
-            {{--        left: '3%',--}}
-            {{--        right: '4%',--}}
-            {{--        bottom: '3%',--}}
-            {{--        containLabel: true--}}
-            {{--    },--}}
-            {{--    toolbox: {--}}
-            {{--        feature: {--}}
-            {{--            saveAsImage: {}--}}
-            {{--        }--}}
-            {{--    },--}}
-            {{--    xAxis: {--}}
-            {{--        type: 'category',--}}
-            {{--        boundaryGap: false,--}}
-            {{--        data: @json($xAxis)--}}
-            {{--    },--}}
-            {{--    yAxis: {--}}
-            {{--        type: 'category'--}}
-            {{--    },--}}
-            {{--    series: [--}}
-            {{--        {--}}
-            {{--            name: 'dau',--}}
-            {{--            type: 'line',--}}
-            {{--            stack: 'count',--}}
-            {{--            data: {{$dau}}--}}
-            {{--        },--}}
-            {{--        {--}}
-            {{--            name: 'zero',--}}
-            {{--            type: 'line',--}}
-            {{--            stack: 'count',--}}
-            {{--            data: {{$zero}}--}}
-            {{--        },--}}
-            {{--        {--}}
-            {{--            name: 'one',--}}
-            {{--            type: 'line',--}}
-            {{--            stack: 'count',--}}
-            {{--            data: {{$one}}--}}
-            {{--        },--}}
-            {{--        {--}}
-            {{--            name: 'two',--}}
-            {{--            type: 'line',--}}
-            {{--            stack: 'count',--}}
-            {{--            data: {{$two}}--}}
-            {{--        },--}}
-            {{--        {--}}
-            {{--            name: 'gt3',--}}
-            {{--            type: 'line',--}}
-            {{--            stack: 'count',--}}
-            {{--            data: {{$gt3}}--}}
-            {{--        }--}}
-            {{--    ]--}}
-            {{--};--}}
+            var option;
 
 
-            {{--if (option && typeof option === 'object') {--}}
-            {{--    myChart.setOption(option);--}}
-            {{--    window.onresize = function () {//用于使chart自适应高度和宽度--}}
-            {{--        autoContainer();//重置容器高宽--}}
-            {{--        myChart.resize();--}}
-            {{--    };--}}
-            {{--}--}}
-            {{--var autoContainer = function () {--}}
-            {{--    //container.clientWidth和container.clientHeight //自适应容器宽和高--}}
-            {{--    // window.innerWidth和window.innerHeight//自适应浏览器宽和高--}}
-            {{--    // myChart.style.height = $(".layui-body").clientHeight + 'px';--}}
-            {{--    // $('#layui-echarts').style.height =  $(".layui-body").clientHeight + 'px';--}}
-            {{--    console.log($('.layui-body').height());--}}
-            {{--    $('#layui-echarts').height($('.layui-body').height()-200);--}}
-            {{--    // console.log($('#layui-echarts').clientHeight);--}}
-            {{--    myChart.resize();--}}
-            {{--    //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';--}}
-            {{--};--}}
-            {{--element.on('collapse(dau)', function(data){--}}
-            {{--    // console.log(data.show); //得到当前面板的展开状态，true或者false--}}
-            {{--    // console.log(data.title); //得到当前点击面板的标题区域DOM对象--}}
-            {{--    // console.log(data.content); //得到当前点击面板的内容区域DOM对象--}}
-            {{--    // if(data.show)--}}
-            {{--    // {--}}
-            {{--    //     autoContainer();//重置容器高宽--}}
-            {{--    // }--}}
-            {{--});--}}
 
-            {{--element.on('tab(dau)', function(data){--}}
-            {{--    if(data.index==1)--}}
-            {{--    {--}}
-            {{--        autoContainer();--}}
-            {{--    }--}}
-            {{--});--}}
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['dau', 'zero', 'one', 'two', 'gt3']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: @json($xAxis)
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name: 'dau',
+                        type: 'line',
+                        stack: 'count',
+                        data: {{$dau}}
+                    },
+                    {
+                        name: 'zero',
+                        type: 'line',
+                        stack: 'count',
+                        data: {{$zero}}
+                    },
+                    {
+                        name: 'one',
+                        type: 'line',
+                        stack: 'count',
+                        data: {{$one}}
+                    },
+                    {
+                        name: 'two',
+                        type: 'line',
+                        stack: 'count',
+                        data: {{$two}}
+                    },
+                    {
+                        name: 'gt3',
+                        type: 'line',
+                        stack: 'count',
+                        data: {{$gt3}}
+                    }
+                ]
+            };
+
+
+            if (option && typeof option === 'object') {
+                myChart.setOption(option);
+                window.onresize = function () {//用于使chart自适应高度和宽度
+                    autoContainer();//重置容器高宽
+                    myChart.resize();
+                };
+            }
+            var autoContainer = function () {
+                //container.clientWidth和container.clientHeight //自适应容器宽和高
+                // window.innerWidth和window.innerHeight//自适应浏览器宽和高
+                // myChart.style.height = $(".layui-body").clientHeight + 'px';
+                // $('#layui-echarts').style.height =  $(".layui-body").clientHeight + 'px';
+                console.log($('.layui-body').height());
+                $('#layui-echarts').height($('.layui-body').height()-200);
+                // console.log($('#layui-echarts').clientHeight);
+                myChart.resize();
+                //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
+            };
+            element.on('collapse(dau)', function(data){
+                // console.log(data.show); //得到当前面板的展开状态，true或者false
+                // console.log(data.title); //得到当前点击面板的标题区域DOM对象
+                // console.log(data.content); //得到当前点击面板的内容区域DOM对象
+                // if(data.show)
+                // {
+                //     autoContainer();//重置容器高宽
+                // }
+            });
+
+            element.on('tab(dau)', function(data){
+                if(data.index==1)
+                {
+                    autoContainer();
+                }
+            });
 
 
 
