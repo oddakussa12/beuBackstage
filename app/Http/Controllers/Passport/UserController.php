@@ -265,11 +265,11 @@ class UserController extends Controller
         );
         $list = collect($list)->sortBy('date')->toArray();
 
-        $dau = collect($list)->pluck('dau')->toJson();
-        $zero = collect($list)->pluck('zero')->toJson();
-        $one = collect($list)->pluck('one')->toJson();
-        $two = collect($list)->pluck('two')->toJson();
-        $gt3 = collect($list)->pluck('gt3')->toJson();
+        $dau = collect($list)->pluck('dau');
+        $zero = collect($list)->pluck('zero');
+        $one = collect($list)->pluck('one');
+        $two = collect($list)->pluck('two');
+        $gt3 = collect($list)->pluck('gt3');
 
         $xAxis = array_keys($list);
         $counties = config('country');

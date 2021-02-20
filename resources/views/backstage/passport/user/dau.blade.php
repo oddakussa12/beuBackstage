@@ -189,31 +189,31 @@
                         name: 'dau',
                         type: 'line',
                         stack: 'count',
-                        data: {{$dau}}
+                        data: @json($dau)
                     },
                     {
                         name: 'zero',
                         type: 'line',
                         stack: 'count',
-                        data: {{$zero}}
+                        stack: @json($zero)
                     },
                     {
                         name: 'one',
                         type: 'line',
                         stack: 'count',
-                        data: {{$one}}
+                        data: @json($one)
                     },
                     {
                         name: 'two',
                         type: 'line',
                         stack: 'count',
-                        data: {{$two}}
+                        data: @json($two)
                     },
                     {
                         name: 'gt3',
                         type: 'line',
                         stack: 'count',
-                        data: {{$gt3}}
+                        data: @json($gt3)
                     }
                 ]
             };
