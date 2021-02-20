@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="layui-tab-item"  id="layui-echarts">
-                    <div id="container" style="height: 100%;display: none">
+                    <div id="container" style="height: 100%">
                 </div>
 
             </div>
@@ -188,31 +188,27 @@
                     {
                         name: 'dau',
                         type: 'line',
-                        stack: 'count',
                         data: @json($dau)
                     },
                     {
                         name: 'zero',
                         type: 'line',
-                        stack: 'count',
+
                         stack: @json($zero)
                     },
                     {
                         name: 'one',
                         type: 'line',
-                        stack: 'count',
                         data: @json($one)
                     },
                     {
                         name: 'two',
                         type: 'line',
-                        stack: 'count',
                         data: @json($two)
                     },
                     {
                         name: 'gt3',
                         type: 'line',
-                        stack: 'count',
                         data: @json($gt3)
                     }
                 ]
