@@ -281,9 +281,11 @@ class UserController extends Controller
         $diliT = Carbon::createFromFormat("Y-m-d H:i:s" , $utc , 'Asia/Dili')->timestamp;
         $mauritiusT = Carbon::createFromFormat("Y-m-d H:i:s" , $utc , 'Indian/Mauritius')->timestamp;
 
-        $Grenada = Carbon::createFromTimestamp($grenadaT)->toDateTimeString();
-        $Dili = Carbon::createFromTimestamp($diliT)->toDateTimeString();
-        $Mauritius = Carbon::createFromTimestamp($mauritiusT)->toDateTimeString();
+        $Grenada = Carbon::createFromTimestamp($grenadaT , new \DateTimeZone('UTC'))->toDateTimeString();
+        $Dili = Carbon::createFromTimestamp($diliT , new \DateTimeZone('UTC'))->toDateTimeString();
+        $Mauritius = Carbon::createFromTimestamp($mauritiusT , new \DateTimeZone('UTC'))->toDateTimeString();
+
+
 
         $GrenadaBj = Carbon::createFromTimestamp($grenadaT , 'Asia/Shanghai')->toDateTimeString();
         $DiliBj = Carbon::createFromTimestamp($diliT , 'Asia/Shanghai')->toDateTimeString();
