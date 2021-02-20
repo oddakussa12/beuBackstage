@@ -273,7 +273,24 @@ class UserController extends Controller
 
         $xAxis = array_keys($list);
         $counties = config('country');
-        return  view('backstage.passport.user.dau' , compact('period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
+
+
+        $utc = Carbon::tomorrow('Asia/Shanghai')->format('Y-m-d 01:00:00');
+
+        $grenadaT = Carbon::createFromFormat("Y-m-d H:i:s" , $utc , 'America/Grenada')->timestamp;
+        $diliT = Carbon::createFromFormat("Y-m-d H:i:s" , $utc , 'Asia/Dili')->timestamp;
+        $mauritiusT = Carbon::createFromFormat("Y-m-d H:i:s" , $utc , 'Indian/Mauritius')->timestamp;
+
+        $Grenada = Carbon::createFromTimestamp($grenadaT)->toDateTimeString();
+        $Dili = Carbon::createFromTimestamp($diliT)->toDateTimeString();
+        $Mauritius = Carbon::createFromTimestamp($mauritiusT)->toDateTimeString();
+
+        $GrenadaBj = Carbon::createFromTimestamp($grenadaT , 'Asia/Shanghai')->toDateTimeString();
+        $DiliBj = Carbon::createFromTimestamp($diliT , 'Asia/Shanghai')->toDateTimeString();
+        $MauritiusBj = Carbon::createFromTimestamp($mauritiusT , 'Asia/Shanghai')->toDateTimeString();
+
+
+        return  view('backstage.passport.user.dau' , compact('utc' ,'Grenada' ,'Dili' ,'Mauritius' ,'GrenadaBj' ,'DiliBj' ,'MauritiusBj' ,'period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
     }
 
 }
