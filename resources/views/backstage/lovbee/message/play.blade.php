@@ -54,9 +54,7 @@
                             controls
                             muted
                             data-setup='{"autoplay": true,"preload": "true"}'>
-                        @foreach($messages as $message)
-                        <source src="https://media.helloo.cn.mantouhealth.com/{{$message->message_content}}"></source>
-                        @endforeach
+
                         <p class="vjs-no-js">
                             To view this video please enable JavaScript, and consider upgrading to a
                             web browser that
@@ -149,7 +147,11 @@
                     "autoplay":true,
                     "controls": true,
                     "preload":"auto",
-                    // 'loop':true
+                    "resource":[
+                        @foreach($messages as $message)
+                        "src":{{$message->message_content}}
+                        @endforeach
+                    ]
                 }, function() {
                     // 播放
                     this.on('play', function() {
