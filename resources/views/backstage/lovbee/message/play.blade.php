@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>消息管理</legend>
+        <legend>Play</legend>
     </fieldset>
     <div class="layui-container">
 
@@ -9,7 +9,7 @@
                 <div class="layui-col-md4 layui-col-md-offset4">
                     <form class="layui-form">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">自动下一个</label>
+                            <label class="layui-form-label">Auto play next</label>
                             <div class="layui-input-block">
                                 <input type="checkbox" name="auto" lay-filter="auto" lay-skin="switch" lay-text="ON|OFF">
                             </div>
@@ -24,7 +24,7 @@
         <div class="layui-row">
             <form class="layui-form">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">月份</label>
+                    <label class="layui-form-label">Month</label>
                     <div class="layui-input-block">
                         <select name="month" lay-filter="month">
                             @for($i=1; $i<13; $i++)
@@ -119,179 +119,6 @@
                 Storage.set = function(name, val) {
                     localStorage.setItem(name, val);
                 };
-
-                var image = upload.render({
-                    elem: '#image'
-                    ,accept: 'images' //视频
-                    ,auto: false
-                    ,choose:function (obj , test){
-                        var formData = new FormData();
-                        var files = obj.pushFile();
-                        // console.log(files);
-                        var keys = Object.keys(files);
-                        var end = keys[keys.length-1]
-                        var file = files[end];
-                        var formData = new FormData();
-
-                        common.ajax("{{config('common.lovbee_domain')}}api/aws/image/form?file="+file.name , {} , function(res){
-                            image.config.url = res.action;
-                            for (p in res.form) {
-                                formData.append(p, res.form[p]);
-                            }
-                            // image.config.data = res.form;
-                            // image.config.headers = {
-                            //     'Content-Type': false,
-                            // };
-                            formData.append('file',file);
-                            $.ajax({
-                                url:res.action,
-                                type:'POST',
-                                data: formData,
-                                processData:false,
-                                cache:false,
-                                contentType:false,
-                                xhr:jqureAjaxXhrOnProgress(function(e){
-                                    var percent=e.loaded / e.total;
-                                    percent = Math.round((percent + Number.EPSILON) * 100);
-                                    $("#upload_progress").html(percent);
-                                }),
-                                beforeSend: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
-                                    common.prompt('已上传<span id="upload_progress"></span>%' , 16 , 0 , 0 , 'auto' , undefined , [0.8, '#393D49']);
-                                },
-                                success:function(data){
-                                    var fileListView = $('#fileList')
-                                    fileListView.find('.image-tr').remove();
-                                    var tr = $(['<tr class="image-tr">'
-                                        ,'<td><a href="'+res.domain+res.form.key+'" target="_blank">'+ res.domain+res.form.key +'</a><input type="hidden" name="image" value="'+res.domain+res.form.key+'"></td>'
-                                        ,'</td>'
-                                        ,'<td><button type="button" class="layui-btn layui-btn-xs layui-btn-danger file-delete">删除</button>'
-                                        ,'</td>'
-                                        ,'</tr>'].join(''));
-                                    //删除
-                                    tr.find('.file-delete').on('click', function(obj){
-                                        // console.log($(obj.target).parent());
-                                        // return;
-                                        // var row = $(obj.target).parent().parent();
-                                        $(obj.target).closest('tr').remove();
-                                        // var tb = row.parent();   //獲得當前表格
-                                        // var rowIndex = row.rowIndex;	//獲取當前行的索引
-                                        // tb.deleteRow(rowIndex);  //通過行索引刪除行
-                                        table.render();
-                                    });
-                                    fileListView.append(tr);
-                                    // $('#media').html(
-                                    //     "<div class='layui-inline'>"+
-                                    //         "<div class='layui-input-inline'>"+
-                                    //             "<input type='text' name='image' class='layui-input' value='"+res.domain+res.form.key+"'>"+
-                                    //         "</div>"+
-                                    //     "</div>"
-                                    // );
-                                },
-                                error:function(){
-                                    alert('上传失败');
-                                },
-                                complete:function (){
-                                    layer.closeAll();
-                                }
-                            })
-                        } , 'get' , undefined , undefined , false);
-                    }
-                });
-                var jqureAjaxXhrOnProgress = function(fun) {
-                    jqureAjaxXhrOnProgress.onprogress = fun; //绑定监听
-                    //使用闭包实现监听绑
-                    return function() {
-                        //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
-                        var xhr = $.ajaxSettings.xhr();
-                        //判断监听函数是否为函数
-                        if (typeof jqureAjaxXhrOnProgress.onprogress !== 'function')
-                            return xhr;
-                        //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
-                        if (jqureAjaxXhrOnProgress.onprogress && xhr.upload) {
-                            xhr.upload.onprogress = jqureAjaxXhrOnProgress.onprogress;
-                        }
-                        return xhr;
-                    }
-                }
-            var video = upload.render({
-                    elem: '#video'
-                    ,accept: 'video' //视频
-                    ,auto: false
-                    ,choose:function (obj , test){
-                        var formData = new FormData();
-                        var files = obj.pushFile();
-                        // console.log(files);
-                        var keys = Object.keys(files);
-                        var end = keys[keys.length-1]
-                        var file = files[end];
-                        var formData = new FormData();
-
-                        common.ajax("{{config('common.lovbee_domain')}}api/aws/video/form?file="+file.name , {} , function(res){
-                            // layer.closeAll();
-                            image.config.url = res.action;
-                            for (p in res.form) {
-                                formData.append(p, res.form[p]);
-                            }
-                            // image.config.data = res.form;
-                            // image.config.headers = {
-                            //     'Content-Type': false,
-                            // };
-                            formData.append('file',file);
-                            $.ajax({
-                                url:res.action,
-                                type:'POST',
-                                data: formData,
-                                processData:false,
-                                cache:false,
-                                contentType:false,
-                                xhr:jqureAjaxXhrOnProgress(function(e){
-                                    var percent=e.loaded / e.total;
-                                    percent = Math.round((percent + Number.EPSILON) * 100);
-                                    $("#upload_progress").html(percent);
-                                }),
-                                beforeSend: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
-                                    layer.closeAll();
-                                    common.prompt('已上传<span id="upload_progress"></span>%' , 16 , 0 , 0 , 'auto' , undefined , [0.8, '#393D49']);
-                                },
-                                success:function(data){
-                                    var fileListView = $('#fileList')
-                                    fileListView.find('.video-tr').remove();
-                                    var tr = $(['<tr class="video-tr">'
-                                        ,'<td><a href="'+res.domain+res.form.key+'" target="_blank">'+ res.domain+res.form.key +'</a><input type="hidden" name="video" value="'+res.domain+res.form.key+'"></td>'
-                                        ,'</td>'
-                                        ,'<td><button type="button" class="layui-btn layui-btn-xs layui-btn-danger file-delete">删除</button>'
-                                        ,'</td>'
-                                        ,'</tr>'].join(''));
-                                    tr.find('.file-delete').on('click', function(obj){
-                                        // console.log($(obj.target).parent());
-                                        // return;
-                                        // var row = $(obj.target).parent().parent();
-                                        $(obj.target).closest('tr').remove();
-                                        // var tb = row.parent();   //獲得當前表格
-                                        // var rowIndex = row.rowIndex;	//獲取當前行的索引
-                                        // tb.deleteRow(rowIndex);  //通過行索引刪除行
-                                        table.render();
-                                    });
-                                    fileListView.append(tr);
-                                    // $('#media').html(
-                                    //     "<div class='layui-inline'>"+
-                                    //         "<div class='layui-input-inline'>"+
-                                    //             "<input type='text' name='image' class='layui-input' value='"+res.domain+res.form.key+"'>"+
-                                    //         "</div>"+
-                                    //     "</div>"
-                                    // );
-                                },
-                                error:function(){
-                                    alert('上传失败');
-                                },
-                                complete:function (){
-                                    console.log('finish');
-                                    layer.closeAll();
-                                }
-                            })
-                        } , 'get' , undefined , undefined , false);
-                    }
-                });
                 form.on('select(type)', function (data) {
                     if (data.value == 0||data.value == 3) {
                         $("#targetId").attr("disabled", "true");
@@ -412,7 +239,7 @@
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                             player.play()
                         }else{
-                            common.prompt('暂无视频');
+                            common.prompt('No video anymore');
                         }
                         $("input[name='next']").val(page);
                         $("input[name='prev']").val(page);

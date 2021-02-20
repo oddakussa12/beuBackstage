@@ -2,41 +2,41 @@
 @section('layui-content')
     <div  class="layui-fluid">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-            <legend>消息管理</legend>
+            <legend>Message</legend>
         </fieldset>
         <form class="layui-form"  method="post">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">发送类型</label>
+                    <label class="layui-form-label">Send Type</label>
                     <div class="layui-input-inline">
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                         <select name="type" lay-verify="required"  multiple="" lay-filter="type">
-                            <option value="0" selected>全部</option>
-                            <option value="1">国家</option>
-                            <option value="2">个人</option>
-                            <option value="3">朋友</option>
+                            <option value="0" selected>All</option>
+                            <option value="1">Country</option>
+                            <option value="2">Private</option>
+                            <option value="3">Friend</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline"  style="display: none;" id="countryDiv" >
-                    <label class="layui-form-label">国家</label>
+                    <label class="layui-form-label">Country</label>
                     <div class="layui-input-inline">
                         <select name="country" lay-verify="required" xm-select="country" lay-filter="country" id="country">
-                            <option value="tl" selected>东帝汶</option>
-                            <option value="id">印尼</option>
-                            <option value="gl">格林纳达</option>
-                            <option value="au">澳大利亚</option>
+                            <option value="tl" selected>East Timor</option>
+                            <option value="id">Indonesia</option>
+                            <option value="gl">Grenada</option>
+                            <option value="au">Australia</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline" >
-                    <label class="layui-form-label">发送人</label>
+                    <label class="layui-form-label">From</label>
                     <div class="layui-input-inline">
                         <input type="text" name="sender" lay-verify="required" autocomplete="off" class="layui-input" id="userId" placeholder="861388888888">
                     </div>
                 </div>
                 <div class="layui-inline" id="targetIdDiv" style="display: none;" >
-                    <label class="layui-form-label">接收人</label>
+                    <label class="layui-form-label">To</label>
                     <div class="layui-input-inline">
                         <input type="text" name="target" autocomplete="off" class="layui-input" id="targetId" disabled="disabled"  placeholder="861388888888">
                     </div>
@@ -45,15 +45,15 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-upload">
-                        <button type="button" class="layui-btn" id="image"><i class="layui-icon"></i>上传图片</button>
-                        <button type="button" class="layui-btn" id="video"><i class="layui-icon"></i>上传视频</button>
-                        <button class="layui-btn" lay-submit="">发送</button>
+                        <button type="button" class="layui-btn" id="image"><i class="layui-icon"></i>Upload Image</button>
+                        <button type="button" class="layui-btn" id="video"><i class="layui-icon"></i>Upload Video</button>
+                        <button class="layui-btn" lay-submit="">Send</button>
                         <div class="layui-upload-list">
                             <table class="layui-table">
                                 <thead>
                                 <tr>
-                                    <th>文件名</th>
-                                    <th>操作</th>
+                                    <th>File Name</th>
+                                    <th>Operate</th>
                                 </tr>
                                 </thead>
                                 <tbody id="fileList">
@@ -129,7 +129,7 @@
                                     $("#upload_progress").html(percent);
                                 }),
                                 beforeSend: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
-                                    common.prompt('已上传<span id="upload_progress"></span>%' , 16 , 0 , 0 , 'auto' , undefined , [0.8, '#393D49']);
+                                    common.prompt('uploaded<span id="upload_progress"></span>%' , 16 , 0 , 0 , 'auto' , undefined , [0.8, '#393D49']);
                                 },
                                 success:function(data){
                                     console.log(res.domain+res.form.key)
@@ -138,7 +138,7 @@
                                     var tr = $(['<tr class="image-tr">'
                                         ,'<td><a href="'+res.domain+res.form.key+'" target="_blank">'+ res.domain+res.form.key +'</a><input type="hidden" name="image" value="'+res.domain+res.form.key+'"></td>'
                                         ,'</td>'
-                                        ,'<td><button type="button" class="layui-btn layui-btn-xs layui-btn-danger file-delete">删除</button>'
+                                        ,'<td><button type="button" class="layui-btn layui-btn-xs layui-btn-danger file-delete">delete</button>'
                                         ,'</td>'
                                         ,'</tr>'].join(''));
                                     //删除
@@ -162,7 +162,7 @@
                                     // );
                                 },
                                 error:function(){
-                                    alert('上传失败');
+                                    alert('upload failed');
                                 },
                                 complete:function (){
                                     layer.closeAll();
@@ -225,7 +225,7 @@
                                 }),
                                 beforeSend: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
                                     layer.closeAll();
-                                    common.prompt('已上传<span id="upload_progress"></span>%' , 16 , 0 , 0 , 'auto' , undefined , [0.8, '#393D49']);
+                                    common.prompt('uploaded<span id="upload_progress"></span>%' , 16 , 0 , 0 , 'auto' , undefined , [0.8, '#393D49']);
                                 },
                                 success:function(data){
                                     console.log(res.domain+res.form.key)
@@ -234,7 +234,7 @@
                                     var tr = $(['<tr class="video-tr">'
                                         ,'<td><a href="'+res.domain+res.form.key+'" target="_blank">'+ res.domain+res.form.key +'</a><input type="hidden" name="video" value="'+res.domain+res.form.key+'"></td>'
                                         ,'</td>'
-                                        ,'<td><button type="button" class="layui-btn layui-btn-xs layui-btn-danger file-delete">删除</button>'
+                                        ,'<td><button type="button" class="layui-btn layui-btn-xs layui-btn-danger file-delete">delete</button>'
                                         ,'</td>'
                                         ,'</tr>'].join(''));
                                     tr.find('.file-delete').on('click', function(obj){
@@ -257,7 +257,7 @@
                                     // );
                                 },
                                 error:function(){
-                                    alert('上传失败');
+                                    alert('upload failed');
                                 },
                                 complete:function (){
                                     console.log('finish');

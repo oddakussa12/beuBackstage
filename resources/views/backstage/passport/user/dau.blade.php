@@ -53,7 +53,7 @@
                             <thead>
                             <tr>
                                 <th>Day</th>
-                                <th>DUA</th>
+                                <th>DAU</th>
                                 <th>0NUM</th>
                                 <th>0NUM%</th>
                                 <th>1NUM</th>
