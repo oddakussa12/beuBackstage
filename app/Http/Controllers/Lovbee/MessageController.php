@@ -11,12 +11,8 @@ use Illuminate\Support\Facades\Schema;
 class MessageController extends Controller
 {
 
-    private $bossId;
+    private CONST BOSS_ID=290;
 
-    public function __construct()
-    {
-        $this->bossId = 290;
-    }
     public function index()
     {
 
@@ -118,8 +114,7 @@ class MessageController extends Controller
 
         $result = DB::connection('lovbee')->table($table)->where('message_type' , 'Helloo:VideoMsg')->groupBy('message_content')->orderByDesc('id')->offset($page)->limit(1)->get();
         $msgId  = $result->pluck('message_id')->toArray();
-        $chat   = DB::connection('lovbee')->table($cTable)->where('chat_from_id', $this->bossId)->orWhere('chat_to_id', $this->bossId)
-            ->where('chat_msg_uid', current($msgId))->select('chat_msg_uid')->first();
+        $chat   = DB::connection('lovbee')->table($cTable)->where('chat_msg_uid', current($msgId))->where('chat_from_id' , self::BOSS_ID)->select('chat_from_id')->first();
         if (!empty($chat)) {
             $page = $page+1;
             $request->offsetSet('page', $page);
