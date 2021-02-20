@@ -193,8 +193,7 @@
                     {
                         name: 'zero',
                         type: 'line',
-
-                        stack: @json($zero)
+                        data: @json($zero)
                     },
                     {
                         name: 'one',
