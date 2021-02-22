@@ -7,7 +7,6 @@
         <div  class="layui-row">
             <div  class="layui-col-md4  layui-col-lg-offset4">
                 <div class="layui-card">
-                    <div class="layui-card-header">Account</div>
                     <div class="layui-card-body">
                         <table class="layui-table">
                             <colgroup>
@@ -39,7 +38,7 @@
                 <div class="layui-col-md4 layui-col-lg-offset4">
                     <form class="layui-form">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">Autoplay next</label>
+                            <label class="layui-form-label">Autoplay</label>
                             <div class="layui-input-block">
                                 <input type="checkbox" name="auto" lay-filter="auto" lay-skin="switch" lay-text="ON|OFF">
                             </div>
