@@ -376,6 +376,7 @@
                     $('#userId').html(user.user_id);
                     $('#userName').html(user.user_name);
                     $('#userNickName').html(user.user_nick_name);
+                    table.render();
                 };
 
         });
