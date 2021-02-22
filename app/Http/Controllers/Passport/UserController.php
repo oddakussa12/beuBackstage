@@ -56,6 +56,11 @@ class UserController extends Controller
                     $tz = 'Asia/Dili';
                     $startTime = Carbon::createFromFormat('Y-m-d' , $start , $tz)->startOfDay()->subHours(9)->toDateTimeString();
                     $endTime = Carbon::createFromFormat('Y-m-d' , $start , $tz)->endOfDay()->subHours(9)->toDateTimeString();
+                }elseif ($country_code=='mu')
+                {
+                    $tz = 'Indian/Mauritius';
+                    $startTime = Carbon::createFromFormat('Y-m-d', $start, $tz)->startOfDay()->subHours(4)->toDateTimeString();
+                    $endTime = Carbon::createFromFormat('Y-m-d', $start, $tz)->endOfDay()->subHours(4)->toDateTimeString();
                 }else{
                     $tz = null;
                     $startTime = Carbon::createFromFormat('Y-m-d' , $start)->startOfDay()->subHours(8)->toDateTimeString();
