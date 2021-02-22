@@ -4,37 +4,39 @@
         <legend>Play</legend>
     </fieldset>
     <div class="layui-container">
-
-        <div class="layui-row">
-                <div  class="layui-col-md4">
-                    <div class="layui-card">
-                        <div class="layui-card-header">Account</div>
-                        <div class="layui-card-body">
-                            <table class="layui-table">
-                                <colgroup>
-                                    <col width="150">
-                                    <col width="150">
-                                    <col width="200">
-                                </colgroup>
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>User name</th>
-                                    <th>User nick name</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td id="userId">{{$from->user_id}}</td>
-                                    <td id="userName">{{$from->user_name}}</td>
-                                    <td id="userNickName">{{$from->user_nick_name}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+        <div  class="layui-row">
+            <div  class="layui-col-md4  layui-col-lg-offset4">
+                <div class="layui-card">
+                    <div class="layui-card-header">Account</div>
+                    <div class="layui-card-body">
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="150">
+                                <col width="150">
+                                <col width="200">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User name</th>
+                                <th>User nick name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td id="userId">{{$from->user_id}}</td>
+                                <td id="userName">{{$from->user_name}}</td>
+                                <td id="userNickName">{{$from->user_nick_name}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="layui-col-md4">
+            </div>
+        </div>
+        <div class="layui-row">
+
+                <div class="layui-col-md4 layui-col-lg-offset4">
                     <form class="layui-form">
                         <div class="layui-form-item">
                             <label class="layui-form-label">Autoplay next</label>
@@ -115,6 +117,7 @@
         #my-player{
             width: 800px;
             height: 400px;
+            margin: 0 auto;
         }
     </style>
     <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
