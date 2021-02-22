@@ -6,7 +6,35 @@
     <div class="layui-container">
 
         <div class="layui-row">
-                <div class="layui-col-md4 layui-col-md-offset4">
+                <div  class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header">Account</div>
+                        <div class="layui-card-body">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="200">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User name</th>
+                                    <th>User nick name</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td id="userId">{{$from->user_id}}</td>
+                                    <td id="userName">{{$from->user_name}}</td>
+                                    <td id="userNickName">{{$from->user_nick_name}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
                     <form class="layui-form">
                         <div class="layui-form-item">
                             <label class="layui-form-label">Auto play next</label>
@@ -186,6 +214,10 @@
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                             player.play()
                         }
+                        if(JSON.stringify(res.from) !== '[]')
+                        {
+                            updateUser(res.from);
+                        }
                         $("input[name='prev']").val(page);
                         $("input[name='next']").val(page);
                     } , 'GET');
@@ -205,6 +237,10 @@
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                             player.play()
                         }
+                        if(JSON.stringify(res.from) !== '[]')
+                        {
+                            updateUser(res.from);
+                        }
                         $("input[name='prev']").val(page);
                         $("input[name='next']").val(page);
                     } , 'GET');
@@ -223,6 +259,10 @@
                             let player =  videojs('my-player');
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                             player.play()
+                        }
+                        if(JSON.stringify(res.from) !== '[]')
+                        {
+                            updateUser(res.from);
                         }
                         $("input[name='next']").val(page);
                         $("input[name='prev']").val(page);
@@ -244,6 +284,10 @@
                             player.play()
                         }else{
                             common.prompt('No video anymore');
+                        }
+                        if(JSON.stringify(res.from) !== '[]')
+                        {
+                            updateUser(res.from);
                         }
                         $("input[name='next']").val(page);
                         $("input[name='prev']").val(page);
@@ -271,6 +315,10 @@
                         }else{
                             $(obj.elem).val(beforeMonth);
                             layui.form.render('select');
+                        }
+                        if(JSON.stringify(res.from) !== '[]')
+                        {
+                            updateUser(res.from);
                         }
                     } , 'GET');
                 });
@@ -309,6 +357,10 @@
                                 player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                                 player.play()
                             }
+                            if(JSON.stringify(res.from) !== '[]')
+                            {
+                                updateUser(res.from);
+                            }
                             $("input[name='next']").val(page);
                             $("input[name='prev']").val(page);
                         } , 'GET');
@@ -319,6 +371,12 @@
                     $("input[name='auto']").attr("checked", true);
                     form.render();
                 }
+
+                var updateUser = function (user){
+                    $('#userId').html(user.user_id);
+                    $('#userName').html(user.user_name);
+                    $('#userNickName').html(user.user_nick_name);
+                };
 
         });
     </script>
