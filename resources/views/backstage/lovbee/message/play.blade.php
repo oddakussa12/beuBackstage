@@ -37,7 +37,7 @@
                 <div class="layui-col-md4">
                     <form class="layui-form">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">Auto play next</label>
+                            <label class="layui-form-label">Autoplay next</label>
                             <div class="layui-input-block">
                                 <input type="checkbox" name="auto" lay-filter="auto" lay-skin="switch" lay-text="ON|OFF">
                             </div>
