@@ -184,6 +184,7 @@ class UserController extends Controller
                 $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
             }while ($start != $end);
         }
+        Log::info('list' , $list);
         $counties = config('country');
         return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
