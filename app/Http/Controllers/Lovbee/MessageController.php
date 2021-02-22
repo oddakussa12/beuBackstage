@@ -116,14 +116,13 @@ class MessageController extends Controller
 
         $result = DB::connection('lovbee')->table($table)->where('message_type' , 'Helloo:VideoMsg')->groupBy('message_content')->orderByDesc('id')->offset($page)->limit(1)->get();
         $msgId  = $result->pluck('message_id')->toArray();
-        $fromId  = current($result->pluck('chat_from_id')->toArray());
         $chat   = DB::connection('lovbee')->table($cTable)->where('chat_msg_uid', current($msgId))->where('chat_from_id' , self::BOSS_ID)->select('chat_from_id')->first();
         if (!empty($chat)) {
             $page = $page+1;
             $request->offsetSet('page', $page);
             return $this->message($request);
         }
-        $from = DB::connection('lovbee')->table('users')->where('user_id', $fromId)->first();
+        $from = DB::connection('lovbee')->table('users')->where('user_id', $chat->chat_from_id)->first();
         return array('result'=>$result , 'from'=>$from);
 
     }
