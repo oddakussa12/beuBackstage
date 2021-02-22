@@ -54,7 +54,9 @@
                             controls
                             muted
                             data-setup='{"autoplay": true,"preload": "true"}'>
-
+                        @foreach($messages as $message)
+                        <source src="https://media.helloo.cn.mantouhealth.com/{{$message->message_content}}"></source>
+                        @endforeach
                         <p class="vjs-no-js">
                             To view this video please enable JavaScript, and consider upgrading to a
                             web browser that
@@ -147,11 +149,7 @@
                     "autoplay":true,
                     "controls": true,
                     "preload":"auto",
-                    "sources":[
-                        @foreach($messages as $message)
-                        {"src":"https://media.helloo.cn.mantouhealth.com/{{$message->message_content}}","type":"video/mp4"}
-                        @endforeach
-                    ]
+                    // 'loop':true
                 }, function() {
                     // 播放
                     this.on('play', function() {
@@ -180,9 +178,10 @@
                     var month = parseInt($("select[name='month']").val());
                     common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month , {} , function(res){
                         layer.closeAll();
-                        if(JSON.stringify(res) !== '[]')
+                        console.log(res);
+                        if(JSON.stringify(res.messages) !== '[]')
                         {
-                            let uri = res[0].message_content;
+                            let uri = res.messages[0].message_content;
                             let player =  videojs('my-player');
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                             player.play()
@@ -198,9 +197,10 @@
                     var month = parseInt($("select[name='month']").val());
                     common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month , {} , function(res){
                         layer.closeAll();
-                        if(JSON.stringify(res) !== '[]')
+                        console.log(res);
+                        if(JSON.stringify(res.messages) !== '[]')
                         {
-                            let uri = res[0].message_content;
+                            let uri = res.messages[0].message_content;
                             let player =  videojs('my-player');
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                             player.play()
@@ -216,9 +216,10 @@
                     var month = parseInt($("select[name='month']").val());
                     common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month  , {} , function(res){
                         layer.closeAll();
-                        if(JSON.stringify(res) !== '[]')
+                        console.log(res);
+                        if(JSON.stringify(res.messages) !== '[]')
                         {
-                            let uri = res[0].message_content;
+                            let uri = res.messages[0].message_content;
                             let player =  videojs('my-player');
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                             player.play()
@@ -234,9 +235,10 @@
                     var month = parseInt($("select[name='month']").val());
                     common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month  , {} , function(res){
                         layer.closeAll();
-                        if(JSON.stringify(res) !== '[]')
+                        console.log(res);
+                        if(JSON.stringify(res.messages) !== '[]')
                         {
-                            let uri = res[0].message_content;
+                            let uri = res.messages[0].message_content;
                             let player =  videojs('my-player');
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                             player.play()
@@ -256,9 +258,10 @@
 
                     common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month  , {} , function(res){
                         layer.closeAll();
-                        if(JSON.stringify(res) !== '[]')
+                        console.log(res);
+                        if(JSON.stringify(res.messages) !== '[]')
                         {
-                            let uri = res[0].message_content;
+                            let uri = res.messages[0].message_content;
                             let player =  videojs('my-player');
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                             player.play()
@@ -298,9 +301,10 @@
                         let page = GetQueryString('page');
                         common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month  , {} , function(res){
                             layer.closeAll();
-                            if(JSON.stringify(res) !== '[]')
+                            console.log(res);
+                            if(JSON.stringify(res.messages) !== '[]')
                             {
-                                let uri = res[0].message_content;
+                                let uri = res.messages[0].message_content;
                                 let player =  videojs('my-player');
                                 player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
                                 player.play()
