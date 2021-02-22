@@ -1,8 +1,5 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>Play</legend>
-    </fieldset>
     <div class="layui-container">
         <div  class="layui-row">
             <div  class="layui-col-md4  layui-col-lg-offset4">
