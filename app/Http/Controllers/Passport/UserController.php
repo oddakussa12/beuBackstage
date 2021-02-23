@@ -46,6 +46,7 @@ class UserController extends Controller
                 $threeNum = 0;
                 $sevenNum = 0;
                 $thirtyNum = 0;
+                $fourteenNum = 0;
                 if($country_code=='gd')
                 {
                     $tz = 'America/Grenada';
@@ -74,7 +75,7 @@ class UserController extends Controller
                     ->where('country' , $country_code)
                     ->where('created_at' , '>=' , $startTime)
                     ->where('created_at' , '<=' , $endTime)
-                    ->orderByDesc('user_id')->chunk(200 , function ($users) use ($connection , $start , $tz , &$num , &$tomorrowNum , &$twoNum , &$threeNum , &$sevenNum , &$thirtyNum){
+                    ->orderByDesc('user_id')->chunk(200 , function ($users) use ($connection , $start , $tz , &$num , &$tomorrowNum , &$twoNum , &$threeNum , &$sevenNum , &$fourteenNum , &$thirtyNum){
                         $num = $num+count($users);
                         $userIds = $users->pluck('user_id')->all();
                         $tomorrow = Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(1);
@@ -151,6 +152,23 @@ class UserController extends Controller
                         }
                         $sevenNum = $sevenNum+$sevenDaysT;
 
+                        $fourteenDays= Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(14);
+                        $s = $fourteenDays->startOfDay()->timestamp;
+                        $e = $fourteenDays->endOfDay()->timestamp;
+                        $pm = Carbon::createFromTimestamp($s)->format('Ym');
+                        $nm = Carbon::createFromTimestamp($e)->format('Ym');
+                        if($pm==$nm)
+                        {
+                            $fourteenDaysTable = 'visit_logs_'.$pm;
+                            $fourteenDaysT = $connection->table($fourteenDaysTable)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $fourteenDays->startOfDay()->timestamp)
+                                ->where('visited_at' , '<=' , $fourteenDays->endOfDay()->timestamp)->count(DB::raw('DISTINCT(user_id)'));
+                        }else{
+                            $fourteenDaysPT = $connection->table('visit_logs_'.$pm)->whereIn('user_id' , $userIds)->where('visited_at' , '>=' , $s)->count(DB::raw('DISTINCT(user_id)'));
+                            $fourteenDaysNT = $connection->table('visit_logs_'.$nm)->whereIn('user_id' , $userIds)->where('visited_at' , '<=' , $e)->count(DB::raw('DISTINCT(user_id)'));
+                            $fourteenDaysT = $fourteenDaysPT+$fourteenDaysNT;
+                        }
+                        $fourteenNum = $fourteenNum+$fourteenDaysT;
+
 
 
                         $thirtyDays= Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(30);
@@ -178,13 +196,44 @@ class UserController extends Controller
                     'twoNum'=>$twoNum,
                     'threeNum'=>$threeNum,
                     'sevenNum'=>$sevenNum,
+                    'fourteenNum'=>$fourteenNum,
                     'thirtyNum'=>$thirtyNum,
                 );
 //                Log::info('test' , array('$start:'.$start.' $num:'.$num.' $tomorrowNum:'.$tomorrowNum.' $twoNum:'.$twoNum.' $threeNum:'.$threeNum.' $sevenNum:'.$sevenNum.' $thirtyNum:'.$thirtyNum));
                 $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
             }while ($start != $end);
+            Log::info('list' , $list);
+            foreach($list as $d=>$l)
+            {
+                $result = $connection->table('data_retentions')->where('country' , $country_code)->where('date' , $d)->first();
+                if(blank($result))
+                {
+                    $connection->table('data_retentions')->insert(
+                        array(
+                            'date'=>$d,
+                            'country'=>$country_code,
+                            '1'=>$l->num,
+                            '2'=>$l->num,
+                            '3'=>$l->num,
+                            '7'=>$l->num,
+                            '14'=>$l->num,
+                            '30'=>$l->num,
+                            'created_at'=>Carbon::now(new \DateTimeZone('UTC'))->toDateTimeString(),
+                        )
+                    );
+                }else{
+                    $connection->table('data_retentions')->where('id' , $result->id)->update(array(
+                        '1'=>$l->num,
+                        '2'=>$l->num,
+                        '3'=>$l->num,
+                        '7'=>$l->num,
+                        '14'=>$l->num,
+                        '30'=>$l->num,
+                    ));
+                }
+            }
         }
-        Log::info('list' , $list);
+
         $counties = config('country');
         return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
