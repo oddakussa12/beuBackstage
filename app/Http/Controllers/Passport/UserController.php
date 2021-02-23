@@ -212,23 +212,25 @@ class UserController extends Controller
                         array(
                             'date'=>$d,
                             'country'=>$country_code,
-                            '1'=>$l->num,
-                            '2'=>$l->num,
-                            '3'=>$l->num,
-                            '7'=>$l->num,
-                            '14'=>$l->num,
-                            '30'=>$l->num,
+                            'new'=>$l['num'],
+                            '1'=>$l['tomorrowNum'],
+                            '2'=>$l['twoNum'],
+                            '3'=>$l['threeNum'],
+                            '7'=>$l['sevenNum'],
+                            '14'=>$l['fourteenNum'],
+                            '30'=>$l['thirtyNum'],
                             'created_at'=>Carbon::now(new \DateTimeZone('UTC'))->toDateTimeString(),
                         )
                     );
                 }else{
                     $connection->table('data_retentions')->where('id' , $result->id)->update(array(
-                        '1'=>$l->num,
-                        '2'=>$l->num,
-                        '3'=>$l->num,
-                        '7'=>$l->num,
-                        '14'=>$l->num,
-                        '30'=>$l->num,
+                        'new'=>$l['num'],
+                        '1'=>$l['tomorrowNum'],
+                        '2'=>$l['twoNum'],
+                        '3'=>$l['threeNum'],
+                        '7'=>$l['sevenNum'],
+                        '14'=>$l['fourteenNum'],
+                        '30'=>$l['thirtyNum'],
                     ));
                 }
             }
