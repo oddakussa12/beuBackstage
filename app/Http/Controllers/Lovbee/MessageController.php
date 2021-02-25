@@ -104,7 +104,7 @@ class MessageController extends Controller
         $messages = $message['result'];
         $from     = $message['from'];
         $page     = $page+1;
-        return  view('backstage.lovbee.message.play2' , compact('messages' , 'from' , 'page', 'month'));
+        return  view('backstage.lovbee.message.play' , compact('messages' , 'from' , 'page', 'month'));
     }
 
     public function video(Request $request)
