@@ -84,12 +84,12 @@ class MessageController extends Controller
         $time   = date('Y-m-d H:i:s');
         $params['updated_at'] = $time;
 
-        $result = DB::table('message_comment')->where('message_id', $params['message_id'])->first();
+        $result = DB::table('message_comments')->where('message_id', $params['message_id'])->first();
         if (!$result) {
             $params['created_at'] = $time;
-            $result = DB::table('message_comment')->insert($params);
+            $result = DB::table('message_comments')->insert($params);
         } else {
-            $result = DB::table('message_comment')->where('message_id', $params['message_id'])->update($params);
+            $result = DB::table('message_comments')->where('message_id', $params['message_id'])->update($params);
         }
         return ['data'=>$result];
     }
@@ -146,7 +146,7 @@ class MessageController extends Controller
 
         $newResult = current(collect($result)->toArray());
         if ($newResult) {
-            $result = DB::table('message_comment')->where('message_id', $newResult->id)->first();
+            $result = DB::table('message_comments')->where('message_id', $newResult->id)->first();
             $newResult->comment = !empty($result) ? $result->comment : '';
         }
         return array('result'=>(array)$newResult , 'from'=>$from);
