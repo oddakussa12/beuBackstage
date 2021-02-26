@@ -426,7 +426,7 @@ class UserController extends Controller
         $list = array();
         $connection = DB::connection('lovbee');
         $date = $request->input('date' , Carbon::yesterday('Asia/Shanghai')->toDateString());
-        $dau = $connection->table('dau_counts')->where('date' , $date)->groupBy('date')->select(DB::raw("sum(`dau`) as `dau`"))->first()->toArray();
+        $dau = $connection->table('dau_counts')->where('date' , $date)->groupBy('date')->select(DB::raw("sum(`dau`) as `dau`"))->first();
         $list['dau'] = array(
             'date'=>$date,
             'dau'=>$dau,
@@ -436,7 +436,7 @@ class UserController extends Controller
         dump($keepDate);
 
         $one = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(1)->toDateString();
-        $oneKeep = $connection->table('data_retentions')->where('date' , $one)->select('date' , DB::raw("sum(`1`) as `one`"))->first()->toArray();
+        $oneKeep = $connection->table('data_retentions')->where('date' , $one)->select('date' , DB::raw("sum(`1`) as `one`"))->first();
         $list['keep']['one'] = array(
             'one'=>$one,
             'oneKeep'=>$oneKeep,
@@ -445,7 +445,7 @@ class UserController extends Controller
         dump($oneKeep);
 
         $two = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(2)->toDateString();
-        $twoKeep = $connection->table('data_retentions')->where('date' , $two)->select('date' , DB::raw("sum(`2`) as `two`"))->first()->toArray();
+        $twoKeep = $connection->table('data_retentions')->where('date' , $two)->select('date' , DB::raw("sum(`2`) as `two`"))->first();
         $list['keep']['two'] = array(
             'two'=>$two,
             'twoKeep'=>$twoKeep,
