@@ -304,6 +304,7 @@ class UserController extends Controller
              */
         }
         $counties = config('country');
+        dd($list);
         return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
 
