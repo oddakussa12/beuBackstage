@@ -292,6 +292,7 @@ class UserController extends Controller
                     );
                 }
             }
+            dd($list);
             /**
              *
             'num'=>$num,
