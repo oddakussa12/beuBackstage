@@ -274,7 +274,7 @@ class UserController extends Controller
                     ->select('date' , 'new as num' , '1 as tomorrowNum' , '2 as twoNum' , '3 as threeNum' , '7 as sevenNum' , '14 as fourteenNum' , '30 as thirtyNum')
                     ->get()->map(function ($value) {
                         return (array)$value;
-                    })->groupBy('date')->toArray();
+                    })->keyBy('date')->toArray();
             }
 
             foreach ($dates as $date)
@@ -304,7 +304,6 @@ class UserController extends Controller
              */
         }
         $counties = config('country');
-        dd($list);
         return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
 
