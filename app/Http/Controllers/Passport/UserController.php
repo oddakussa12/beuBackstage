@@ -421,6 +421,11 @@ class UserController extends Controller
         return  view('backstage.passport.user.dau' , compact('utc' ,'Grenada' ,'Dili' ,'Mauritius' ,'GrenadaBj' ,'DiliBj' ,'MauritiusBj' ,'period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
     }
 
+    public function yesterdayView()
+    {
+        return  view('backstage.passport.user.yesterday');
+    }
+
     public function yesterday(Request $request)
     {
         $list = array();
