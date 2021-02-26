@@ -1,5 +1,5 @@
-@extends('layouts.dashboard')
-@section('layui-content')
+@extends('layouts.app')
+@section('content')
     <div  class="layui-fluid">
         <table class="layui-hide" id="user_table" lay-filter="user_table">
         </table>
