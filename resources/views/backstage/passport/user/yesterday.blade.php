@@ -158,8 +158,15 @@
                 });
             }
             setInterval(function() {
-                isLoaded && tableIns.reload();
-            }, 5000);
+                if(isLoaded)
+                {
+                    tableIns.reload({page:{
+                        curr:1
+                        }});
+                }else{
+                    console.log(111);
+                }
+            }, 10000);
         })
     </script>
     <style>
