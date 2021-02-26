@@ -32,6 +32,11 @@ class UserController extends Controller
 
     public function keep(Request $request)
     {
+        $v = $request->input('v' , 0);
+        if($v==1)
+        {
+            return $this->keepV2($request);
+        }
         $list = array();
         $period = $request->input('period' , '');
         $country_code = strtolower(strval($request->input('country_code' , '')));
@@ -253,9 +258,53 @@ class UserController extends Controller
             do{
                 array_push($dates , $start);
                 $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
-            }while($start != $end);
-            $connection->table('data_retentions')->where('country' , $country_code)->whereIn('date' , $dates)->orderBy('date')->get();
+            }while($start <= $end);
+            if(blank($country_code))
+            {
+                $list = $connection->table('data_retentions')
+                    ->whereIn('date' , $dates)->orderBy('date')
+                    ->select('date' , 'new as num' , '1 as tomorrowNum' , '2 as twoNum' , '3 as threeNum' , '7 as sevenNum' , '14 as fourteenNum' , '30 as thirtyNum')
+                    ->get()->map(function ($value) {
+                        return (array)$value;
+                    })->groupBy('date')->toArray();
+            }else{
+                $list = $connection->table('data_retentions')
+                    ->where('country' , $country_code)
+                    ->whereIn('date' , $dates)->orderBy('date')
+                    ->select('date' , 'new as num' , '1 as tomorrowNum' , '2 as twoNum' , '3 as threeNum' , '7 as sevenNum' , '14 as fourteenNum' , '30 as thirtyNum')
+                    ->get()->map(function ($value) {
+                        return (array)$value;
+                    })->groupBy('date')->toArray();
+            }
+
+            foreach ($dates as $date)
+            {
+                if(!isset($list[$date]))
+                {
+                    $list[$date] = array(
+                        'num'=>0,
+                        'tomorrowNum'=>0,
+                        'twoNum'=>0,
+                        'threeNum'=>0,
+                        'sevenNum'=>0,
+                        'fourteenNum'=>0,
+                        'thirtyNum'=>0,
+                    );
+                }
+            }
+            /**
+             *
+            'num'=>$num,
+            'tomorrowNum'=>$tomorrowNum,
+            'twoNum'=>$twoNum,
+            'threeNum'=>$threeNum,
+            'sevenNum'=>$sevenNum,
+            'fourteenNum'=>$fourteenNum,
+            'thirtyNum'=>$thirtyNum,
+             */
         }
+        $counties = config('country');
+        return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
     }
 
     public function allDau(Request $request)
