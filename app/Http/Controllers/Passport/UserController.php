@@ -242,12 +242,13 @@ class UserController extends Controller
         }
 
         $counties = config('country');
-        return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
+        return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list' , 'v'));
     }
 
     public function keepV2(Request $request)
     {
         $list = array();
+        $v = $request->input('v' , 0);
         $period = $request->input('period' , '');
         $country_code = strtolower(strval($request->input('country_code' , '')));
         $dates = array();
@@ -304,7 +305,7 @@ class UserController extends Controller
              */
         }
         $counties = config('country');
-        return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
+        return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list' , 'v'));
     }
 
     public function allDau(Request $request)
