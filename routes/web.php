@@ -63,6 +63,9 @@ Route::group(['prefix'=>'backstage'] , function(){
 
             Route::get('user/suspend' , 'UserController@suspend')->name('user.suspend');
             Route::get('user/keep' , 'UserController@keep')->name('user.keep');
+
+            Route::get('user/yesterday' , 'UserController@yesterday')->name('user.yesterday');
+
             Route::get('user/dau' , 'UserController@dau')->name('user.dau');
             Route::get('user/export' , 'UserController@export')->name('user.export');
             Route::get('user/difference/keep' , 'UserController@differenceKeep')->name('user.difference.keep');
