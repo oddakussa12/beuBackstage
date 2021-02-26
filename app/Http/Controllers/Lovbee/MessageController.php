@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Schema;
 class MessageController extends Controller
 {
 
-    private CONST BOSS_ID=290;
+    CONST BOSS_ID=290;
 
     public function index()
     {
@@ -73,25 +73,45 @@ class MessageController extends Controller
         return back();
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     * 添加评论
+     */
+    public function comment(Request $request)
+    {
+        $params = $request->all();
+        $time   = date('Y-m-d H:i:s');
+        $params['updated_at'] = $time;
+
+        $result = DB::table('message_comments')->where('message_id', $params['message_id'])->first();
+        if (!$result) {
+            $params['created_at'] = $time;
+            $result = DB::table('message_comments')->insert($params);
+        } else {
+            $result = DB::table('message_comments')->where('message_id', $params['message_id'])->update($params);
+        }
+        return ['data'=>$result];
+    }
+
     public function play(Request $request)
     {
-        $page  = intval($request->input('page' , 1));
-        $month = intval($request->input('month' , 1));
-        $page  = $page-1;
-        $page  = $page<0?0:$page;
-        $message = $this->message($request);
+        $page     = intval($request->input('page' , 1));
+        $month    = intval($request->input('month' , 1));
+        $page     = $page-1;
+        $page     = $page<0?0:$page;
+        $message  = $this->message($request);
         $messages = $message['result'];
-        $from = $message['from'];
-        $page = $page+1;
+        $from     = $message['from'];
+        $page     = $page+1;
         return  view('backstage.lovbee.message.play' , compact('messages' , 'from' , 'page', 'month'));
     }
 
     public function video(Request $request)
     {
         $message = $this->message($request);
-        $messages = collect($message['result'])->toArray();
-        $from = $message['from'];;
-        return response(array('messages'=>$messages , 'from'=>$from));
+        $from = $message['from'];
+        return response(array('messages'=>$message , 'from'=>$from));
     }
 
     public function message(Request $request)
@@ -123,7 +143,13 @@ class MessageController extends Controller
             return $this->message($request);
         }
         $from = DB::connection('lovbee')->table('users')->where('user_id', $chat->chat_from_id)->first();
-        return array('result'=>$result , 'from'=>$from);
+
+        $newResult = current(collect($result)->toArray());
+        if ($newResult) {
+            $result = DB::table('message_comments')->where('message_id', $newResult->id)->first();
+            $newResult->comment = !empty($result) ? $result->comment : '';
+        }
+        return array('result'=>(array)$newResult , 'from'=>$from);
 
     }
 }

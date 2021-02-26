@@ -105,6 +105,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::post('message/operation' , 'MessageController@submit')->name('message.submit'); // 消息管理
             Route::get('message/play' , 'MessageController@play')->name('message.play'); // 消息管理
             Route::get('message/video' , 'MessageController@video')->name('message.video'); // 消息管理
+            Route::post('message/comment' , 'MessageController@comment')->name('message.comment'); // 消息管理
         });
 
         Route::group(['namespace'=>'Report','prefix'=>'report' , 'as' => 'report::'] , function (){
