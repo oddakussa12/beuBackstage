@@ -131,7 +131,7 @@ Route::group(['prefix'=>'backstage'] , function(){
 
 
     });
-    Route::get('passport/user/yesterday/view' , 'UserController@yesterdayView')->name('user.yesterday.view');
+    Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('user.yesterday.view');
 });
 
 
