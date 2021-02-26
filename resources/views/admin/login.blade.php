@@ -20,7 +20,7 @@
                     <input type="password" name="password" id="LAY-user-login-password" placeholder="{{ trans('login.placeholder.password') }}" class="layui-input">
                 </div>
                 <div class="layui-form-item">
-                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login-submit">{{ trans('login.button.login') }}</button>
+                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login-submit" id="login-submit">{{ trans('login.button.login') }}</button>
                 </div>
             </div>
         </div>
@@ -62,13 +62,13 @@
             });
 
 
-            var loginForm = form.on('submit(login-submit)', function(data){
+            form.on('submit(login-submit)', function(data){
                 return login(data);
             });
 
             $(document).keyup(function(event){
                 if(event.keyCode ==13){
-                    loginForm.submit();
+                    $('#login-submit').click();
                 }
             });
 
