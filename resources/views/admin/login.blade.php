@@ -60,7 +60,17 @@
                     ,"{{ trans('login.verification.email') }}"
                 ]
             });
+
+            $(document).keyup(function(event){
+                if(event.keyCode ==13){
+                    return login(data);
+                }
+            });
             form.on('submit(login-submit)', function(data){
+                return login(data);
+            });
+
+            var login = function(data){
                 loadBar.start();
                 try{
                     common.ajax("{{ url(App::getLocale().'/backstage/login') }}", data.field, function (res) {
@@ -90,8 +100,6 @@
                             loadBar.error();
                         });
 
-
-                        // alert("Error requesting " + opt.url + ": " + xhr.status + " " + xhr.statusText);return false;
                     });
                 }catch (e) {
                     loadBar.error();
@@ -99,7 +107,7 @@
                     console.error("Error message: " + e.message);
                 }
                 return false;
-            });
+            }
         });
     </script>
 @endsection
