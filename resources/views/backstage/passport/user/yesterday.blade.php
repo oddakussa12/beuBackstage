@@ -39,6 +39,7 @@
                 ,response: {
                     statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
                 }
+                ,height: 'full-20'
                 ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                     console.log(res);
                     var item = [];
