@@ -64,7 +64,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user/suspend' , 'UserController@suspend')->name('user.suspend');
             Route::get('user/keep' , 'UserController@keep')->name('user.keep');
 
-            Route::get('user/yesterday' , 'UserController@yesterday')->name('user.yesterday');
+
 
 
             Route::get('user/dau' , 'UserController@dau')->name('user.dau');
@@ -131,7 +131,8 @@ Route::group(['prefix'=>'backstage'] , function(){
 
 
     });
-    Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('user.yesterday.view');
+    Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
+    Route::get('passport/user/yesterday' , 'Passport\UserController@yesterday')->name('passport.user.yesterday');
 });
 
 
