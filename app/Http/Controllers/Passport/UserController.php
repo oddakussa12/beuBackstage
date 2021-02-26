@@ -261,14 +261,12 @@ class UserController extends Controller
             }while($start <= $end);
             if(blank($country_code))
             {
-                dump($dates);
                 $list = $connection->table('data_retentions')
                     ->whereIn('date' , $dates)->groupBy('date')->orderBy('date')
                     ->select('date' , DB::raw("sum(`new`) as `num`") ,DB::raw("sum(`1`) as `tomorrowNum`") , DB::raw("sum(`2`) as `twoNum`") , DB::raw("sum(`3`) as `threeNum`") , DB::raw("sum(`7`) as `sevenNum`") , DB::raw("sum(`14`) as `fourteenNum`") , DB::raw("sum(`30`) as `thirtyNum`"))
                     ->get()->map(function ($value) {
                         return (array)$value;
                     })->keyBy('date')->toArray();
-                dd($list);
             }else{
                 $list = $connection->table('data_retentions')
                     ->where('country' , $country_code)
