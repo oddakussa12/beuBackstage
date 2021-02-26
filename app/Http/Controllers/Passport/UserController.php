@@ -267,6 +267,7 @@ class UserController extends Controller
                     ->get()->map(function ($value) {
                         return (array)$value;
                     })->keyBy('date')->toArray();
+                dd($list);
             }else{
                 $list = $connection->table('data_retentions')
                     ->where('country' , $country_code)
