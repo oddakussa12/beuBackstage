@@ -425,7 +425,7 @@ class UserController extends Controller
     {
         $connection = DB::connection('lovbee');
         $date = $request->input('date' , Carbon::yesterday('Asia/Shanghai')->toDateString());
-        $dau = $connection->table('dau_counts')->where('date' , $date)->select(DB::raw("sum(`dau`) as `dau`"))->first();
+        $dau = $connection->table('dau_counts')->where('date' , $date)->groupBy('date')->select(DB::raw("sum(`dau`) as `dau`"))->get();
         dump($date);
         dump($dau);
 
