@@ -1,22 +1,48 @@
 <?php
 namespace App\Http\Controllers\Lovbee;
 
+use App\Exports\MessageExport;
+use App\Exports\UsersExport;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MessageController extends Controller
 {
 
     CONST BOSS_ID=290;
 
-    public function index()
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * 导出
+     */
+    public function export(Request $request)
     {
+        ini_set('memory_limit','256M');
 
+        $now       = Carbon::now();
+        $startDate = $now->startOfDay()->toDateTimeString();
+        $endDate   = $now->endOfDay()->toDateTimeString();
+        $params    = $request->all();
+        $date      = $request->input('dateTime' , $startDate.' - '.$endDate);
+        $allDate   = explode(' - ' , $date);
+        $start     = array_shift($allDate);
+        $end       = array_pop($allDate);
+
+        if (empty($start) || empty($end)) {
+            $start = $startDate;
+            $end   = $endDate;
+        }
+        return  Excel::download(new MessageExport($params), 'message-'.$start.'-'.$end.'.xlsx');
     }
+
 
     public function operation()
     {
@@ -104,7 +130,8 @@ class MessageController extends Controller
         $messages = $message['result'];
         $from     = $message['from'];
         $page     = $page+1;
-        return  view('backstage.lovbee.message.play' , compact('messages' , 'from' , 'page', 'month'));
+        $dateTime = date('Y-m-d', time()-86400*2). ' - '. date('Y-m-d', time()-86400);
+        return  view('backstage.lovbee.message.play' , compact('messages' , 'from' , 'page', 'month', 'dateTime'));
     }
 
     public function video(Request $request)
