@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <div  class="layui-fluid">
-        <table class="layui-table"  lay-filter="user_table" id="user_table">
+        <table class="layui-hide" id="user_table" lay-filter="user_table">
         </table>
     </div>
 @endsection
