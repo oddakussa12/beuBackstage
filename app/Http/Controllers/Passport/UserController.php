@@ -81,8 +81,8 @@ class UserController extends Controller
                         $tomorrow = Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(1);
                         $s = $tomorrow->startOfDay()->timestamp;
                         $e = $tomorrow->endOfDay()->timestamp;
-                        $pm = Carbon::createFromTimestamp($s)->format('Ym');
-                        $nm = Carbon::createFromTimestamp($e)->format('Ym');
+                        $pm = Carbon::createFromTimestamp($s , 'Asia/Shanghai')->format('Ym');
+                        $nm = Carbon::createFromTimestamp($e , 'Asia/Shanghai')->format('Ym');
                         if($pm==$nm)
                         {
                             $tomorrowTable = 'visit_logs_'.$pm;
@@ -100,8 +100,8 @@ class UserController extends Controller
                         $twoDays = Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(2);
                         $s = $twoDays->startOfDay()->timestamp;
                         $e = $twoDays->endOfDay()->timestamp;
-                        $pm = Carbon::createFromTimestamp($s)->format('Ym');
-                        $nm = Carbon::createFromTimestamp($e)->format('Ym');
+                        $pm = Carbon::createFromTimestamp($s , 'Asia/Shanghai')->format('Ym');
+                        $nm = Carbon::createFromTimestamp($e , 'Asia/Shanghai')->format('Ym');
                         if($pm==$nm)
                         {
                             $twoDaysTable = 'visit_logs_'.$pm;
@@ -119,8 +119,8 @@ class UserController extends Controller
                         $threeDays= Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(3);
                         $s = $threeDays->startOfDay()->timestamp;
                         $e = $threeDays->endOfDay()->timestamp;
-                        $pm = Carbon::createFromTimestamp($s)->format('Ym');
-                        $nm = Carbon::createFromTimestamp($e)->format('Ym');
+                        $pm = Carbon::createFromTimestamp($s , 'Asia/Shanghai')->format('Ym');
+                        $nm = Carbon::createFromTimestamp($e , 'Asia/Shanghai')->format('Ym');
                         if($pm==$nm)
                         {
                             $threeDaysTable = 'visit_logs_'.$pm;
@@ -138,8 +138,8 @@ class UserController extends Controller
                         $sevenDays= Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(7);
                         $s = $sevenDays->startOfDay()->timestamp;
                         $e = $sevenDays->endOfDay()->timestamp;
-                        $pm = Carbon::createFromTimestamp($s)->format('Ym');
-                        $nm = Carbon::createFromTimestamp($e)->format('Ym');
+                        $pm = Carbon::createFromTimestamp($s , 'Asia/Shanghai')->format('Ym');
+                        $nm = Carbon::createFromTimestamp($e , 'Asia/Shanghai')->format('Ym');
                         if($pm==$nm)
                         {
                             $sevenDaysTable = 'visit_logs_'.$pm;
@@ -155,8 +155,8 @@ class UserController extends Controller
                         $fourteenDays= Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(14);
                         $s = $fourteenDays->startOfDay()->timestamp;
                         $e = $fourteenDays->endOfDay()->timestamp;
-                        $pm = Carbon::createFromTimestamp($s)->format('Ym');
-                        $nm = Carbon::createFromTimestamp($e)->format('Ym');
+                        $pm = Carbon::createFromTimestamp($s , 'Asia/Shanghai')->format('Ym');
+                        $nm = Carbon::createFromTimestamp($e , 'Asia/Shanghai')->format('Ym');
                         if($pm==$nm)
                         {
                             $fourteenDaysTable = 'visit_logs_'.$pm;
@@ -174,8 +174,8 @@ class UserController extends Controller
                         $thirtyDays= Carbon::createFromFormat('Y-m-d' , $start , $tz)->addDays(30);
                         $s = $thirtyDays->startOfDay()->timestamp;
                         $e = $thirtyDays->endOfDay()->timestamp;
-                        $pm = Carbon::createFromTimestamp($s)->format('Ym');
-                        $nm = Carbon::createFromTimestamp($e)->format('Ym');
+                        $pm = Carbon::createFromTimestamp($s , 'Asia/Shanghai')->format('Ym');
+                        $nm = Carbon::createFromTimestamp($e , 'Asia/Shanghai')->format('Ym');
                         if($pm==$nm)
                         {
                             $thirtyDaysTable = 'visit_logs_'.$pm;
@@ -238,6 +238,24 @@ class UserController extends Controller
 
         $counties = config('country');
         return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list'));
+    }
+
+    public function keepV2(Request $request)
+    {
+        $list = array();
+        $period = $request->input('period' , '');
+        $country_code = strtolower(strval($request->input('country_code' , '')));
+        $dates = array();
+        if(!blank($period)&&!blank($country_code))
+        {
+            $connection = DB::connection('lovbee');
+            list($start , $end) = explode(' - ' , $period);
+            do{
+                array_push($dates , $start);
+                $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
+            }while($start != $end);
+            $connection->table('data_retentions')->where('country' , $country_code)->whereIn('date' , $dates)->orderBy('date')->get();
+        }
     }
 
     public function allDau(Request $request)
