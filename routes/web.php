@@ -14,6 +14,7 @@
 
 
 Route::group(['prefix'=>'backstage'] , function(){
+    Route::get('passport/user/yesterday' , 'Passport\UserController@yesterday')->name('passport.user.yesterday');
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('admin.login_form');
     Route::post('login', 'Auth\LoginController@login')->name('admin.login');
 //    Route::get('register', 'Auth\RegisterController@showRegistrationForm');
@@ -132,7 +133,7 @@ Route::group(['prefix'=>'backstage'] , function(){
 
     });
     Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
-    Route::get('passport/user/yesterday' , 'Passport\UserController@yesterday')->name('passport.user.yesterday');
+
 });
 
 
