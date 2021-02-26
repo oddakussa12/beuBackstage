@@ -260,7 +260,7 @@ class UserController extends Controller
                 array_push($dates , $start);
                 $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
             }while($start <= $end);
-            if(blank($country_code))
+            if(blank($country_code)||$country_code=='all')
             {
                 $list = $connection->table('data_retentions')
                     ->whereIn('date' , $dates)->groupBy('date')->orderBy('date')
