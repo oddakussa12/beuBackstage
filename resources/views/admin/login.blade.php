@@ -61,13 +61,15 @@
                 ]
             });
 
+
+            var loginForm = form.on('submit(login-submit)', function(data){
+                return login(data);
+            });
+
             $(document).keyup(function(event){
                 if(event.keyCode ==13){
-                    return login(data);
+                    loginForm.submit();
                 }
-            });
-            form.on('submit(login-submit)', function(data){
-                return login(data);
             });
 
             var login = function(data){
