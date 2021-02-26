@@ -192,7 +192,6 @@ return [
         App\Providers\QiniuStorageServiceProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
-        Chenhua\Kindeditor\KindeditorServiceProvider::class,
 
     ],
 
