@@ -29,7 +29,7 @@
             table.render({
                 elem: '#user_table'
                 ,url:'/backstage/passport/user/yesterday'
-                ,toolbar: true
+                // ,toolbar: true
                 ,cols: [[
                     ,{field:'title', title:'Title', maxWidth:120}
                     ,{field:'date', title:'Date', maxWidth:120}
