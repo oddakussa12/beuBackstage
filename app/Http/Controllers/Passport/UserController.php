@@ -426,7 +426,7 @@ class UserController extends Controller
         $list = array();
         $connection = DB::connection('lovbee');
         $date = $request->input('date' , Carbon::yesterday('Asia/Shanghai')->toDateString());
-        $dau = $connection->table('dau_counts')->where('date' , $date)->groupBy('date')->select(DB::raw("sum(`dau`) as `dau`"))->get();
+        $dau = $connection->table('dau_counts')->where('date' , $date)->groupBy('date')->select(DB::raw("sum(`dau`) as `dau`"))->get()->map(function ($value) {return (array)$value;})->toArray();
         $list['dau'] = array(
             'date'=>$date,
             'dau'=>$dau,
@@ -436,7 +436,7 @@ class UserController extends Controller
         dump($keepDate);
 
         $one = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(1)->toDateString();
-        $oneKeep = $connection->table('data_retentions')->where('date' , $one)->select('date' , DB::raw("sum(`1`) as `one`"))->get();
+        $oneKeep = $connection->table('data_retentions')->where('date' , $one)->select('date' , DB::raw("sum(`1`) as `one`"))->get()->map(function ($value) {return (array)$value;})->toArray();
         $list['keep']['one'] = array(
             'one'=>$one,
             'oneKeep'=>$oneKeep,
@@ -445,7 +445,7 @@ class UserController extends Controller
         dump($oneKeep);
 
         $two = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(2)->toDateString();
-        $twoKeep = $connection->table('data_retentions')->where('date' , $two)->select('date' , DB::raw("sum(`2`) as `two`"))->get();
+        $twoKeep = $connection->table('data_retentions')->where('date' , $two)->select('date' , DB::raw("sum(`2`) as `two`"))->get()->map(function ($value) {return (array)$value;})->toArray();
         $list['keep']['two'] = array(
             'two'=>$two,
             'twoKeep'=>$twoKeep,
@@ -454,7 +454,7 @@ class UserController extends Controller
         dump($twoKeep);
 
         $three = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(3)->toDateString();
-        $threeKeep = $connection->table('data_retentions')->where('date' , $three)->select('date' , DB::raw("sum(`3`) as `three`"))->get();
+        $threeKeep = $connection->table('data_retentions')->where('date' , $three)->select('date' , DB::raw("sum(`3`) as `three`"))->get()->map(function ($value) {return (array)$value;})->toArray();
         $list['keep']['three'] = array(
             'three'=>$three,
             'threeKeep'=>$threeKeep,
@@ -463,7 +463,7 @@ class UserController extends Controller
         dump($threeKeep);
 
         $seven = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(7)->toDateString();
-        $sevenKeep = $connection->table('data_retentions')->where('date' , $seven)->select('date' , DB::raw("sum(`7`) as `seven`"))->get();
+        $sevenKeep = $connection->table('data_retentions')->where('date' , $seven)->select('date' , DB::raw("sum(`7`) as `seven`"))->get()->map(function ($value) {return (array)$value;})->toArray();
         $list['keep']['seven'] = array(
             'seven'=>$seven,
             'sevenKeep'=>$sevenKeep,
@@ -472,7 +472,7 @@ class UserController extends Controller
         dump($sevenKeep);
 
         $fourteen = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(14)->toDateString();
-        $fourteenKeep = $connection->table('data_retentions')->where('date' , $fourteen)->select('date' , DB::raw("sum(`14`) as `fourteen`"))->get();
+        $fourteenKeep = $connection->table('data_retentions')->where('date' , $fourteen)->select('date' , DB::raw("sum(`14`) as `fourteen`"))->get()->map(function ($value) {return (array)$value;})->toArray();
         $list['keep']['fourteen'] = array(
             'fourteen'=>$fourteen,
             'fourteenKeep'=>$fourteenKeep,
@@ -481,7 +481,7 @@ class UserController extends Controller
         dump($fourteenKeep);
 
         $thirty = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(30)->toDateString();
-        $thirtyKeep = $connection->table('data_retentions')->where('date' , $thirty)->select('date' , DB::raw("sum(`30`) as `thirty`"))->get();
+        $thirtyKeep = $connection->table('data_retentions')->where('date' , $thirty)->select('date' , DB::raw("sum(`30`) as `thirty`"))->get()->map(function ($value) {return (array)$value;})->toArray();
         $list['keep']['thirty'] = array(
             'thirty'=>$thirty,
             'thirtyKeep'=>$thirtyKeep,
