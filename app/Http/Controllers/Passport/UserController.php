@@ -434,7 +434,7 @@ class UserController extends Controller
 
         $keepDate = Carbon::now('Asia/Shanghai')->subDays(2)->toDateString();
 //        dump($keepDate);
-
+        $list['keep']['date'] = $keepDate;
         $one = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(1)->toDateString();
         $oneKeep = $connection->table('data_retentions')->where('date' , $one)->select('date' , DB::raw("sum(`new`) as `new`") , DB::raw("sum(`1`) as `one`"))->first();
         $list['keep']['one'] = array(
