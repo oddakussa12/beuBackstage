@@ -110,7 +110,7 @@
                 }else{
                     console.log(111);
                 }
-            }, 10000);
+            }, 300000);
         })
     </script>
     <style>
