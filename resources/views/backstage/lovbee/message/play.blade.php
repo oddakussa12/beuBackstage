@@ -2,11 +2,11 @@
 @section('layui-content')
     <style>
         .layui-form-switch { width: 50px;}
-        .layui-input, .layui-form-select, .layui-form-selected{width: 100px;}
+        .layui-input, .layui-form-select, .layui-form-selected{width: 100px; height: 30px;}
         .layui-edge {right:0;left: 77px;}
         .layui-input-block {padding:0px;margin-left: 10px}
-        .layui-form-switch {height: 30px; line-height: 30px; width: 60px;}
-        .layui-form-switch i {top: 7px;}
+        .layui-form-switch {width: 60px; margin: 0px;}
+        /*.layui-form-switch i {top: 7px;}*/
         .text-right {text-align: left; width: 35%}
     </style>
     <div  class="layui-fluid">
@@ -23,6 +23,15 @@
         </div>
         <div style="width:59%; float: left; margin-left: 1%;">
             <table style="margin: 0px;" class="layui-table" lay-filter="post_table">
+                <tr>
+                    <td>Choose Date</td>
+                    <td>
+                        <form id="exportForm" method="get" action="/backstage/lovbee/message/export" class="layui-form">
+                            <input style="width: 200px; height: 30px; float: left;" type="text" class="layui-input" name="dateTime" id="dateTime" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$dateTime}}">
+                            <button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-sm" name="export" id="export">Export</button>
+                        </form>
+                    </td>
+                </tr>
                 <tr>
                     <td class="text-right">Choose Month </td>
                     <td>
@@ -76,7 +85,7 @@
                     <td colspan="2">
                         <form class="layui-form">
                             <input type="hidden" id="id" name="id" value="{{$messages['id']}}">
-                            <textarea id="comment" name="comment" style="width: 100%;height: 78px; padding: 5px;">{{$messages['comment']}}</textarea>
+                            <textarea id="comment" name="comment" style="width: 100%;height: 53px; padding: 5px;">{{$messages['comment']}}</textarea>
                             <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="submit">Submit</button>
                         </form>
                     </td>
@@ -84,7 +93,6 @@
             </table>
         </div>
     </div>
-
 
 @endsection
 @section('footerScripts')
@@ -106,52 +114,28 @@
             common: 'lay/modules/admin/common',
             loadBar: 'lay/modules/admin/loadBar',
             formSelects: 'lay/modules/formSelects-v4',
-        }).use(['common' , 'table' , 'layer' , 'carousel' , 'element' , 'upload' , 'loadBar' , 'formSelects'], function () {
-            var form = layui.form,
+        }).use(['common' , 'table', 'layer', 'laydate', 'element' , 'formSelects'], function () {
+            let $=layui.jquery,
+                form = layui.form,
                 layer = layui.layer,
-                table = layui.table,
-                loadBar = layui.loadBar,
                 common = layui.common,
-                carousel = layui.carousel,
-                $=layui.jquery,
-                formSelects=layui.formSelects,
-                upload = layui.upload;
-            formSelects.render('country');
-            const Storage = {};
+                laydate = layui.laydate;
+            laydate.render({
+                elem: '#dateTime'
+                ,range: true
+                ,max : 'today'
+                ,lang: 'en'
+            });
 
+            const Storage = {};
             Storage.get = function(name) {
                 return localStorage.getItem(name);
             };
-
             Storage.set = function(name, val) {
                 localStorage.setItem(name, val);
             };
-            form.on('select(type)', function (data) {
-                if (data.value == 0||data.value == 3) {
-                    $("#targetId").attr("disabled", "true");
-                    $("#targetIdDiv").hide();
-                    $("#country").attr("disabled", "true");
-                    $("#targetId").removeAttr("lay-verify");
-                    $("#countryDiv").hide();
-                    form.render('select');
-                }else if (data.value == 1) {
-                    $("#targetId").attr("disabled", "true");
-                    $("#targetIdDiv").hide();
-                    $("#country").removeAttr("disabled");
-                    $("#targetId").removeAttr("lay-verify");
-                    $("#countryDiv").show();
-                    form.render('select');//select是固定写法 不是选择器
-                } else {
-                    $("#targetId").removeAttr("disabled");
-                    $("#targetIdDiv").show();
-                    $("#country").attr("disabled", "true");
-                    $("#targetId").attr("lay-verify", "required");
-                    $("#countryDiv").hide();
-                    form.render('select');
-                }
-            });
 
-            var player = videojs('my-player', {
+            let player = videojs('my-player', {
                 "autoplay":true,
                 "controls": true,
                 "preload":"auto",
@@ -213,6 +197,14 @@
                 } , 'POST');
             });
 
+            $('#export').on('click' , function(){
+                $("#exportForm").submit();
+                /*let dateTime = $("#dateTime").val();
+                common.ajax("/backstage/lovbee/message/export", {"dateTime":dateTime} , function(res){
+                    layer.closeAll();
+                } , 'GET');*/
+            });
+
             form.on('select(month)', function(obj){
                 var month = obj.value;
                 let page = GetQueryString('page');
@@ -242,7 +234,7 @@
                 $(window).on('popstate', function () {
                     var month = GetQueryString('month');
                     let page = GetQueryString('page');
-
+                    get(page, month);
                 });
             }
             if (Storage.get("auto")==='on') {
@@ -254,7 +246,6 @@
                 $('#userId').text(user.user_id);
                 $('#userName').text(user.user_name);
                 $('#userNickName').text(user.user_nick_name);
-                table.render();
             };
             var updateTime = function (result) {
                 $('#id').val(result.id);
