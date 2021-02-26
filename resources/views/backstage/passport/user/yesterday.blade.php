@@ -31,7 +31,7 @@
                 ,url:'/backstage/passport/user/yesterday'
                 ,toolbar: true
                 ,cols: [[
-                    ,{field:'title', title:'Title', width:120, fixed: 'left'}
+                    ,{field:'title', title:'Title', width:120}
                     ,{field:'date', title:'Date', width:120}
                     ,{field:'value', title:'Value'}
                 ]]
