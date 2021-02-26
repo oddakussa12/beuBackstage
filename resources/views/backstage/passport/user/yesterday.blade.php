@@ -30,7 +30,6 @@
                 elem: '#user_table'
                 ,url:'/backstage/passport/user/yesterday'
                 ,toolbar: true
-                ,totalRow: true
                 ,cols: [[
                     ,{field:'title', title:'Title', width:120, fixed: 'left'}
                     ,{field:'date', title:'Date', width:120}
