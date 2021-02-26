@@ -433,7 +433,7 @@ class UserController extends Controller
         );
 
         $keepDate = Carbon::now('Asia/Shanghai')->subDays(2)->toDateString();
-        dump($keepDate);
+//        dump($keepDate);
 
         $one = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(1)->toDateString();
         $oneKeep = $connection->table('data_retentions')->where('date' , $one)->select('date' , DB::raw("sum(`1`) as `one`"))->first();
@@ -441,8 +441,8 @@ class UserController extends Controller
             'one'=>$one,
             'oneKeep'=>collect($oneKeep)->toArray(),
         );
-        dump($one);
-        dump($oneKeep);
+//        dump($one);
+//        dump($oneKeep);
 
         $two = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(2)->toDateString();
         $twoKeep = $connection->table('data_retentions')->where('date' , $two)->select('date' , DB::raw("sum(`2`) as `two`"))->first();
@@ -450,8 +450,8 @@ class UserController extends Controller
             'two'=>$two,
             'twoKeep'=>collect($twoKeep)->toArray(),
         );
-        dump($two);
-        dump($twoKeep);
+//        dump($two);
+//        dump($twoKeep);
 
         $three = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(3)->toDateString();
         $threeKeep = $connection->table('data_retentions')->where('date' , $three)->select('date' , DB::raw("sum(`3`) as `three`"))->first();
@@ -459,8 +459,8 @@ class UserController extends Controller
             'three'=>$three,
             'threeKeep'=>collect($threeKeep)->toArray(),
         );
-        dump($three);
-        dump($threeKeep);
+//        dump($three);
+//        dump($threeKeep);
 
         $seven = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(7)->toDateString();
         $sevenKeep = $connection->table('data_retentions')->where('date' , $seven)->select('date' , DB::raw("sum(`7`) as `seven`"))->first();
@@ -468,8 +468,8 @@ class UserController extends Controller
             'seven'=>$seven,
             'sevenKeep'=>collect($sevenKeep)->toArray(),
         );
-        dump($seven);
-        dump($sevenKeep);
+//        dump($seven);
+//        dump($sevenKeep);
 
         $fourteen = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(14)->toDateString();
         $fourteenKeep = $connection->table('data_retentions')->where('date' , $fourteen)->select('date' , DB::raw("sum(`14`) as `fourteen`"))->first();
@@ -477,8 +477,8 @@ class UserController extends Controller
             'fourteen'=>$fourteen,
             'fourteenKeep'=>collect($fourteenKeep)->toArray(),
         );
-        dump($fourteen);
-        dump($fourteenKeep);
+//        dump($fourteen);
+//        dump($fourteenKeep);
 
         $thirty = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(30)->toDateString();
         $thirtyKeep = $connection->table('data_retentions')->where('date' , $thirty)->select('date' , DB::raw("sum(`30`) as `thirty`"))->first();
@@ -486,9 +486,10 @@ class UserController extends Controller
             'thirty'=>$thirty,
             'thirtyKeep'=>collect($thirtyKeep)->toArray(),
         );
-        dump($thirty);
-        dump($thirtyKeep);
-        dump($list);
+//        dump($thirty);
+//        dump($thirtyKeep);
+//        dump($list);
+        return response($list);
 
     }
 
