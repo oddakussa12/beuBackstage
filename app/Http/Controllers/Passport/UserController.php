@@ -263,7 +263,7 @@ class UserController extends Controller
             {
                 $list = $connection->table('data_retentions')
                     ->whereIn('date' , $dates)->orderBy('date')
-                    ->select('date' , 'new as num' , '1 as tomorrowNum' , '2 as twoNum' , '3 as threeNum' , '7 as sevenNum' , '14 as fourteenNum' , '30 as thirtyNum')
+                    ->select('date' , 'sum(`new`) as num' , 'sum(`1`) as tomorrowNum' , 'sum(`2`) as twoNum' , 'sum(`3`) as threeNum' , 'sum(`7`) as sevenNum' , 'sum(`14`) as fourteenNum' , 'sum(`30`) as thirtyNum')
                     ->get()->map(function ($value) {
                         return (array)$value;
                     })->groupBy('date')->toArray();
