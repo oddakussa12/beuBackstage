@@ -47,40 +47,40 @@
                         'date':res.dau.date,
                         'value':res.dau.dau.dau,
                     });
-                    item.push({
-                        'title':"TIMELINE",
-                        'date':res.keep.date,
-                        'value':res.keep.date,
-                    });
+                    // item.push({
+                    //     'title':"TIMELINE",
+                    //     'date':res.keep.date,
+                    //     'value':res.keep.date,
+                    // });
                     item.push({
                         'title':"ONE",
-                        'date':res.keep.one.one,
-                        'value':res.keep.one.oneKeep.one/res.keep.one.oneKeep.new,
+                        'date':res.keep.one.one+'=>'+res.keep.date,
+                        'value':(res.keep.one.oneKeep.one*100/res.keep.one.oneKeep.new).toFixed(2)+"%",
                     });
                     item.push({
                         'title':"TWO",
-                        'date':res.keep.two.two,
-                        'value':res.keep.two.twoKeep.two/res.keep.two.twoKeep.new,
+                        'date':res.keep.two.two+'=>'+res.keep.date,
+                        'value':(res.keep.two.twoKeep.two*100/res.keep.two.twoKeep.new).toFixed(2)+"%",
                     });
                     item.push({
                         'title':"THREE",
-                        'date':res.keep.three.three,
-                        'value':res.keep.three.threeKeep.three/res.keep.three.threeKeep.new,
+                        'date':res.keep.three.three+'=>'+res.keep.date,
+                        'value':(res.keep.three.threeKeep.three*100/res.keep.three.threeKeep.new).toFixed(2)+"%",
                     });
                     item.push({
                         'title':"SEVEN",
-                        'date':res.keep.seven.seven,
-                        'value':res.keep.seven.sevenKeep.seven/res.keep.seven.sevenKeep.new,
+                        'date':res.keep.seven.seven+'=>'+res.keep.date,
+                        'value':(res.keep.seven.sevenKeep.seven*100/res.keep.seven.sevenKeep.new).toFixed(2)+"%",
                     });
                     item.push({
                         'title':"FOURTEEN",
-                        'date':res.keep.fourteen.fourteen,
-                        'value':res.keep.fourteen.fourteenKeep.fourteen/res.keep.fourteen.fourteenKeep.new,
+                        'date':res.keep.fourteen.fourteen+'=>'+res.keep.date,
+                        'value':(res.keep.fourteen.fourteenKeep.fourteen*100/res.keep.fourteen.fourteenKeep.new).toFixed(2)+"%",
                     });
                     item.push({
                         'title':"THIRTY",
-                        'date':res.keep.thirty.thirty,
-                        'value':res.keep.thirty.thirtyKeep.thirty/res.keep.thirty.thirtyKeep.new,
+                        'date':res.keep.thirty.thirty+'=>'+res.keep.date,
+                        'value':(res.keep.thirty.thirtyKeep.thirty*100/res.keep.thirty.thirtyKeep.new).toFixed(2)+"%",
                     });
                     console.log(item);
                     return {
