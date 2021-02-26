@@ -25,7 +25,7 @@
                 laydate = layui.laydate;
 
 
-            table.render({
+            var tableIns = table.render({
                 elem: '#user_table'
                 ,url:'/backstage/passport/user/yesterday'
                 // ,toolbar: true
@@ -96,6 +96,70 @@
                     };
                 }
             });
+            var isLoaded = false;
+            function reqs() {
+                $.ajax({
+                    type: 'get',
+                    url: '/backstage/passport/user/yesterday',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        isLoaded = false;
+                    },
+                    success: function(res) {
+                        var item = [];
+                        item.push({
+                            'title':"DAU",
+                            'date':res.dau.date,
+                            'value':res.dau.dau.dau,
+                        });
+                        // item.push({
+                        //     'title':"TIMELINE",
+                        //     'date':res.keep.date,
+                        //     'value':res.keep.date,
+                        // });
+                        item.push({
+                            'title':"One day retention",
+                            'date':res.keep.one.one+'=>'+res.keep.date,
+                            'value':(res.keep.one.oneKeep.one*100/res.keep.one.oneKeep.new).toFixed(2)+"%",
+                        });
+                        item.push({
+                            'title':"Two day retention",
+                            'date':res.keep.two.two+'=>'+res.keep.date,
+                            'value':(res.keep.two.twoKeep.two*100/res.keep.two.twoKeep.new).toFixed(2)+"%",
+                        });
+                        item.push({
+                            'title':"Three day retention",
+                            'date':res.keep.three.three+'=>'+res.keep.date,
+                            'value':(res.keep.three.threeKeep.three*100/res.keep.three.threeKeep.new).toFixed(2)+"%",
+                        });
+                        item.push({
+                            'title':"Seven day retention",
+                            'date':res.keep.seven.seven+'=>'+res.keep.date,
+                            'value':(res.keep.seven.sevenKeep.seven*100/res.keep.seven.sevenKeep.new).toFixed(2)+"%",
+                        });
+                        item.push({
+                            'title':"Fourteen day retention",
+                            'date':res.keep.fourteen.fourteen+'=>'+res.keep.date,
+                            'value':(res.keep.fourteen.fourteenKeep.fourteen*100/res.keep.fourteen.fourteenKeep.new).toFixed(2)+"%",
+                        });
+                        item.push({
+                            'title':"Thirty day retention",
+                            'date':res.keep.thirty.thirty+'=>'+res.keep.date,
+                            'value':(res.keep.thirty.thirtyKeep.thirty*100/res.keep.thirty.thirtyKeep.new).toFixed(2)+"%",
+                        });
+                        console.log(item);
+                    },
+                    complete: function() {
+                        isLoaded = true;
+                    },
+                    error: function() {
+                        console.log('请求失败~');
+                    }
+                });
+            }
+            setInterval(function() {
+                isLoaded && tableIns.reload();
+            }, 5000);
         })
     </script>
     <style>
