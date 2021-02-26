@@ -59,7 +59,7 @@ class MessageExport extends StringValueBinder implements FromCollection,WithHead
         $sql    = "select u.user_id,u.user_name,u.user_nick_name,m.id, m.message_content, m.created_at from t_users u 
                 inner join t_{$cTable} chats on chats.chat_from_id=u.user_id
                 inner join t_{$table} m      on m.message_id=chats.chat_msg_uid
-                where m.message_type='Helloo:VideoMsg' and m.created_at between '{$start}' and '{$end}'
+                where m.message_type='Helloo:VideoMsg' and chats.chat_created_at between '{$start}' and '{$end}'
                 group by m.message_content order by m.id desc ";
 
         $result = DB::connection('lovbee')->select($sql);
@@ -71,7 +71,7 @@ class MessageExport extends StringValueBinder implements FromCollection,WithHead
                 continue;
             }
             $item->comment = '';
-            $item->message_content = 'https://media.helloo.cn.mantouhealth.com/' . $item->message_content;
+            $item->message_content = stripos($item->message_content,'mantouhealth')===false ? 'https://media.helloo.cn.mantouhealth.com/'.$item->message_content : $item->message_content;
             foreach ($comments as $comment) {
                 if ($comment->message_id == $item->id) {
                     $item->comment = $comment->comment;
