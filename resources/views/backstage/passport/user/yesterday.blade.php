@@ -43,9 +43,9 @@
                 ]]
                 ,page: false
                 ,response: {
-                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+                    statusCode: 200
                 }
-                ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                ,parseData: function(res){
                     console.log(res);
                     var item = [];
                     item.push({
@@ -53,11 +53,11 @@
                         'date':res.dau.date,
                         'value':res.dau.dau.dau,
                     });
-                    // item.push({
-                    //     'title':"TIMELINE",
-                    //     'date':res.keep.date,
-                    //     'value':res.keep.date,
-                    // });
+                    item.push({
+                        'title':"Sign Up",
+                        'date':res.new.date,
+                        'value':res.new.new.new,
+                    });
                     item.push({
                         'title':"One day retention",
                         'date':res.keep.one.one+'=>'+res.keep.date,
@@ -90,9 +90,7 @@
                     });
                     console.log(item);
                     return {
-                        "code": 200, //解析接口状态
-                        // "msg": res.message, //解析提示文本
-                        // "count": res.total, //解析数据长度
+                        "code": 200,
                         "data": item
                     };
                 },
@@ -104,9 +102,7 @@
             setInterval(function() {
                 if(isLoaded)
                 {
-                    tableIns.reload({page:{
-                        curr:1
-                        }});
+                    tableIns.reload();
                 }else{
                     console.log(111);
                 }

@@ -437,6 +437,12 @@ class UserController extends Controller
             'dau'=>collect($dau)->toArray(),
         );
 
+        $new = $connection->table('data_retentions')->where('date' , $date)->groupBy('date')->select(DB::raw("sum(`new`) as `new`"))->first();
+        $list['new'] = array(
+            'date'=>$date,
+            'new'=>collect($new)->toArray(),
+        );
+
         $keepDate = Carbon::now('Asia/Shanghai')->subDays(2)->toDateString();
 //        dump($keepDate);
         $list['keep']['date'] = $keepDate;
