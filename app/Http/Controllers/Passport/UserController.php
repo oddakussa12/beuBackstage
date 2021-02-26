@@ -33,7 +33,7 @@ class UserController extends Controller
     public function keep(Request $request)
     {
         $v = $request->input('v' , 0);
-        if($v==1)
+        if($v==0)
         {
             return $this->keepV2($request);
         }
@@ -251,7 +251,7 @@ class UserController extends Controller
         $period = $request->input('period' , '');
         $country_code = strtolower(strval($request->input('country_code' , '')));
         $dates = array();
-        if(!blank($period)&&!blank($country_code))
+        if(!blank($period))
         {
             $connection = DB::connection('lovbee');
             list($start , $end) = explode(' - ' , $period);
