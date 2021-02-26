@@ -53,32 +53,32 @@
                     //     'value':res.keep.date,
                     // });
                     item.push({
-                        'title':"ONE",
+                        'title':"One day retention",
                         'date':res.keep.one.one+'=>'+res.keep.date,
                         'value':(res.keep.one.oneKeep.one*100/res.keep.one.oneKeep.new).toFixed(2)+"%",
                     });
                     item.push({
-                        'title':"TWO",
+                        'title':"Two day retention",
                         'date':res.keep.two.two+'=>'+res.keep.date,
                         'value':(res.keep.two.twoKeep.two*100/res.keep.two.twoKeep.new).toFixed(2)+"%",
                     });
                     item.push({
-                        'title':"THREE",
+                        'title':"Three day retention",
                         'date':res.keep.three.three+'=>'+res.keep.date,
                         'value':(res.keep.three.threeKeep.three*100/res.keep.three.threeKeep.new).toFixed(2)+"%",
                     });
                     item.push({
-                        'title':"SEVEN",
+                        'title':"Seven day retention",
                         'date':res.keep.seven.seven+'=>'+res.keep.date,
                         'value':(res.keep.seven.sevenKeep.seven*100/res.keep.seven.sevenKeep.new).toFixed(2)+"%",
                     });
                     item.push({
-                        'title':"FOURTEEN",
+                        'title':"Fourteen day retention",
                         'date':res.keep.fourteen.fourteen+'=>'+res.keep.date,
                         'value':(res.keep.fourteen.fourteenKeep.fourteen*100/res.keep.fourteen.fourteenKeep.new).toFixed(2)+"%",
                     });
                     item.push({
-                        'title':"THIRTY",
+                        'title':"Thirty day retention",
                         'date':res.keep.thirty.thirty+'=>'+res.keep.date,
                         'value':(res.keep.thirty.thirtyKeep.thirty*100/res.keep.thirty.thirtyKeep.new).toFixed(2)+"%",
                     });
