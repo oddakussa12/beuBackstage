@@ -30,9 +30,18 @@
                 ,url:'/backstage/passport/user/yesterday'
                 // ,toolbar: true
                 ,cols: [[
-                    {field:'title', title:'Title', maxWidth:120}
-                    ,{field:'date', title:'Date', maxWidth:120}
-                    ,{field:'value', title:'Value', minWidth:120}
+                    {field:'title', title:'Title', maxWidth:120,templet: function(d){
+                            return '<span style="color: #000000;">'+ d.title +'</span>'
+                        }
+                    }
+                    ,{field:'date', title:'Date', maxWidth:120,templet: function(d){
+                            return '<span style="color: #cc0000;">'+ d.date +'</span>'
+                      }
+                    }
+                    ,{field:'value', title:'Value', minWidth:120,templet: function(d){
+                            return '<span style="color: #cc0000;">'+ d.value +'</span>'
+                        }
+                    }
                 ]]
                 ,page: false
                 ,response: {
@@ -92,11 +101,10 @@
             });
         })
     </script>
-
     <style>
         .layui-table-cell {
-            height: 40px;
-            line-height: 40px;
+            height: 60px;
+            line-height: 60px;
         }
         .multi dl dd.layui-this{background-color:#fff}
     </style>
