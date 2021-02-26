@@ -30,10 +30,7 @@
                 ,url:'/backstage/passport/user/yesterday'
                 // ,toolbar: true
                 ,cols: [[
-                    {field:'title', title:'Title', maxWidth:120,templet: function(d){
-                            return '<span class="layui-bg-black">'+ d.title +'</span>'
-                        }
-                    }
+                    {field:'title', title:'Title', maxWidth:120,style:'font-weight:bold;color:#393D49;'}
                     ,{field:'date', title:'Date', maxWidth:120,templet: function(d){
                             return '<span style="color: #ff0013;font-size: 30px;font-weight:bold;">'+ d.date +'</span>'
                       }
