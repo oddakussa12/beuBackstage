@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Passport;
 use App\Models\Passport\BlackUser;
 use Excel;
 use Carbon\Carbon;
+use Fenos\Tests\Models\Car;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Exports\UsersExport;
@@ -418,6 +419,77 @@ class UserController extends Controller
 
 
         return  view('backstage.passport.user.dau' , compact('utc' ,'Grenada' ,'Dili' ,'Mauritius' ,'GrenadaBj' ,'DiliBj' ,'MauritiusBj' ,'period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
+    }
+
+    public function yesterday(Request $request)
+    {
+        $list = array();
+        $connection = DB::connection('lovbee');
+        $date = $request->input('date' , Carbon::yesterday('Asia/Shanghai')->toDateString());
+        $dau = $connection->table('dau_counts')->where('date' , $date)->groupBy('date')->select(DB::raw("sum(`dau`) as `dau`"))->first();
+        $list['dau'] = array(
+            'date'=>$date,
+            'dau'=>collect($dau)->toArray(),
+        );
+
+        $keepDate = Carbon::now('Asia/Shanghai')->subDays(2)->toDateString();
+        dump($keepDate);
+
+        $one = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(1)->toDateString();
+        $oneKeep = $connection->table('data_retentions')->where('date' , $one)->select('date' , DB::raw("sum(`1`) as `one`"))->first();
+        $list['keep']['one'] = array(
+            'one'=>$one,
+            'oneKeep'=>collect($oneKeep)->toArray(),
+        );
+        dump($one);
+        dump($oneKeep);
+
+        $two = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(2)->toDateString();
+        $twoKeep = $connection->table('data_retentions')->where('date' , $two)->select('date' , DB::raw("sum(`2`) as `two`"))->first();
+        $list['keep']['two'] = array(
+            'two'=>$two,
+            'twoKeep'=>collect($twoKeep)->toArray(),
+        );
+        dump($two);
+        dump($twoKeep);
+
+        $three = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(3)->toDateString();
+        $threeKeep = $connection->table('data_retentions')->where('date' , $three)->select('date' , DB::raw("sum(`3`) as `three`"))->first();
+        $list['keep']['three'] = array(
+            'three'=>$three,
+            'threeKeep'=>collect($threeKeep)->toArray(),
+        );
+        dump($three);
+        dump($threeKeep);
+
+        $seven = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(7)->toDateString();
+        $sevenKeep = $connection->table('data_retentions')->where('date' , $seven)->select('date' , DB::raw("sum(`7`) as `seven`"))->first();
+        $list['keep']['seven'] = array(
+            'seven'=>$seven,
+            'sevenKeep'=>collect($sevenKeep)->toArray(),
+        );
+        dump($seven);
+        dump($sevenKeep);
+
+        $fourteen = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(14)->toDateString();
+        $fourteenKeep = $connection->table('data_retentions')->where('date' , $fourteen)->select('date' , DB::raw("sum(`14`) as `fourteen`"))->first();
+        $list['keep']['fourteen'] = array(
+            'fourteen'=>$fourteen,
+            'fourteenKeep'=>collect($fourteenKeep)->toArray(),
+        );
+        dump($fourteen);
+        dump($fourteenKeep);
+
+        $thirty = Carbon::createFromFormat('Y-m-d' , $keepDate , 'Asia/Shanghai')->subDays(30)->toDateString();
+        $thirtyKeep = $connection->table('data_retentions')->where('date' , $thirty)->select('date' , DB::raw("sum(`30`) as `thirty`"))->first();
+        $list['keep']['thirty'] = array(
+            'thirty'=>$thirty,
+            'thirtyKeep'=>collect($thirtyKeep)->toArray(),
+        );
+        dump($thirty);
+        dump($thirtyKeep);
+        dump($list);
+
     }
 
 }
