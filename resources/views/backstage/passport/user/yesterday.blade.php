@@ -31,15 +31,15 @@
                 // ,toolbar: true
                 ,cols: [[
                     {field:'title', title:'Title', maxWidth:120,templet: function(d){
-                            return '<span style="color: #000000;">'+ d.title +'</span>'
+                            return '<span class="layui-bg-black">'+ d.title +'</span>'
                         }
                     }
                     ,{field:'date', title:'Date', maxWidth:120,templet: function(d){
-                            return '<span style="color: #cc0000;">'+ d.date +'</span>'
+                            return '<span style="color: #ff0013;font-size: 30px;font-weight:bold;">'+ d.date +'</span>'
                       }
                     }
                     ,{field:'value', title:'Value', minWidth:120,templet: function(d){
-                            return '<span style="color: #cc0000;">'+ d.value +'</span>'
+                            return '<span style="color: #ff0013;font-size: 30px;font-weight:bold;">'+ d.value +'</span>'
                         }
                     }
                 ]]
