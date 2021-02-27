@@ -421,9 +421,10 @@ class UserController extends Controller
         return  view('backstage.passport.user.dau' , compact('utc' ,'Grenada' ,'Dili' ,'Mauritius' ,'GrenadaBj' ,'DiliBj' ,'MauritiusBj' ,'period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
     }
 
-    public function yesterdayView()
+    public function yesterdayView(Request $request)
     {
-        return  view('backstage.passport.user.yesterday');
+        $jump = $request->input('jump' , 0);
+        return  view('backstage.passport.user.yesterday' , compact('jump'));
     }
 
     public function yesterday(Request $request)

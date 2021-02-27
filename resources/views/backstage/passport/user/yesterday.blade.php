@@ -106,7 +106,12 @@
                 }else{
                     console.log(111);
                 }
+            }, 200000);
+            @if($jump==1)
+            setTimeout(function() {
+                location.href="http://62.234.26.29:8000/dau";
             }, 300000);
+            @endif
         })
     </script>
     <style>
