@@ -33,6 +33,10 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('message/{message}/image' , 'MessageController@image')->name('message.image');
         });
 
+        Route::group(['namespace'=>'Content','prefix'=>'content' , 'as' => 'content::'] , function (){
+            Route::get('music/index' , 'MusicController@index')->name('music.index');
+        });
+
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){
 
             Route::get('user/keep' , 'UserController@keep')->name('user.keep');

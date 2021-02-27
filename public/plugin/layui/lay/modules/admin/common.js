@@ -1,12 +1,12 @@
-layui.define(['jquery'], function(exports){
-    var $ = layui.jquery;
+layui.define(['jquery'], function(exports){
+    var $ = layui.jquery;
     var call_back = function(index, layero){
         //按钮【按钮二】的回调
         layer.close(index);
         return false; //开启该代码可禁止点击该按钮关闭
     };
-    var obj = {
-        ajax: function (url, data, callback , type, error, dataType , async) {
+    var obj = {
+        ajax: function (url, data, callback , type, error, dataType , async) {
             url = url==undefined?'':url;
             type = type==undefined?'post':type;
             data = data==undefined?{_time:time()}:data;
@@ -18,8 +18,8 @@ layui.define(['jquery'], function(exports){
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: url,
-                type: type,
+                url: url,
+                type: type,
                 async:async,
                 beforeSend:function(){
                     layer.closeAll();
@@ -27,9 +27,9 @@ layui.define(['jquery'], function(exports){
                         shade: [0.8,'#393D49'] //0.1透明度的白色背景
                     });
                 },
-                dataType: dataType,
-                data: data,
-                success: callback,
+                dataType: dataType,
+                data: data,
+                success: callback,
                 error: error,
                 complete:function(){
                     // layer.closeAll();
@@ -217,5 +217,5 @@ layui.define(['jquery'], function(exports){
 
     };
     //输出接口
-    exports('common', obj);
+    exports('common', obj);
 });
