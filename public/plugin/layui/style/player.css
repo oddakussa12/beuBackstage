@@ -2,6 +2,7 @@
     position:fixed;
     overflow:hidden;
     bottom:62px;
+    left:0px;
     transition:transform .5s ease
 }
 #QPlayer .left {
@@ -92,8 +93,7 @@
 #player .ctrl .icon:active {
     opacity:.3
 }
-.liebiao {
-    background-image:url( ../images/music/liebiao.png);
+.playlist {
     background-position:-58px -14px!important;
     width:13px;
     height:10px;
@@ -125,7 +125,7 @@
     position:absolute;
     left:92px
 }
-.fastforward {
+.forward {
     background-position:-58px 0!important;
     width:9px;
     height:10px;

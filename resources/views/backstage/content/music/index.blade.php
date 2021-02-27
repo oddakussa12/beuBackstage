@@ -1,33 +1,47 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <div id="QPlayer">
+    <div id="QPlayer" style="transform: translateX(250px);">
         <div id="pContent">
             <div id="player">
-                <span class="cover"></span>
+                <span class="cover" >
+{{--                    <img src="http://p3.music.126.net/DkVjogF-Ga8_FX0Kf7p7Pw==/2328765627693725.jpg?param=106x106" style="animation: 9.8s linear 0s infinite normal none paused rotate;">--}}
+                </span>
                 <div class="ctrl">
                     <div class="musicTag marquee">
-                        <strong>Title</strong>
-                        <span> - </span>
-                        <span class="artist">Artist</span>
+                        <strong>그대라는 한 사람</strong>
+{{--                        <span> - </span>--}}
+{{--                        <span class="artist">Jessica</span>--}}
                     </div>
                     <div class="progress">
                         <div class="timer left">0:00</div>
                         <div class="contr">
                             <div class="rewind icon"></div>
                             <div class="playback icon"></div>
-                            <div class="fastforward icon"></div>
+                            <div class="forward icon"></div>
                         </div>
                         <div class="right">
-                            <div class="liebiao icon"></div>
+                            <div class="playlist icon"></div>
                         </div>
                     </div>
                 </div>
+                <audio>
+{{--                    <source src="http://p2.music.126.net/N5MyzQh73z5KRqhmQe_WPg==/5675679022587512.mp3">--}}
+                </audio>
             </div>
             <div class="ssBtn">
-                <div class="adf"></div>
+                <div class="adf on"></div>
             </div>
         </div>
-        <ol id="playlist"></ol>
+        <ol id="playlist" style="ooverflow: auto; max-height: 0px; transition: max-height 0.5s ease 0s; border: 0px;" class="">
+{{--            <li class="lib" style="overflow: hidden; background: rgba(246, 246, 246, 0.5);">--}}
+{{--                <strong style="margin-left: 5px;">Gravity</strong>--}}
+{{--                <span style="float: right;" class="artist">Jessica</span>--}}
+{{--            </li>--}}
+{{--            <li class="lib" style="overflow: hidden; color: rgb(221, 221, 221);">--}}
+{{--                <strong style="margin-left: 5px;">-エンディング- 世界の约束 ~ 人生のメリーゴーランド</strong>--}}
+{{--                <span style="float: right;" class="artist">久石譲</span>--}}
+{{--            </li>--}}
+        </ol>
     </div>
 
 @endsection
@@ -54,18 +68,33 @@
                 form = layui.form,
                 layer = layui.layer,
                 common = layui.common,
-                laydate = layui.laydate;
+                laydate = layui.laydate,
+                music = layui.music;
+            var page = getQueryString('page');
             var	playlist = [
-                {title:"Gravity",artist:"Jessica",mp3:"http://p2.music.126.net/lkK28FliZQJwQ5r1XAZ-KA==/3285340747760477.mp3",cover:"http://p4.music.126.net/7VJn16zrictuj5kdfW1qHA==/3264450024433083.jpg?param=106x106"}
-                ];
-            var isRotate = true;
-            var autoplay = false;
-            function bgChange(){
-                var lis= $('.lib');
-                for(var i=0; i<lis.length; i+=2)
-                    lis[i].style.background = 'rgba(246, 246, 246, 0.5)';
+                {
+                    title:"Gravity",
+                    artist:"Jessica",
+                    mp3:"http://p2.music.126.net/lkK28FliZQJwQ5r1XAZ-KA==/3285340747760477.mp3",
+                    cover:"http://p4.music.126.net/7VJn16zrictuj5kdfW1qHA==/3264450024433083.jpg?param=106x106"
+                }
+            ];
+            common.ajax("/backstage/content/music/index?page="+page , {} , function(res){
+                layer.closeAll();
+                var data = res.data;
+                data.forEach(function (value,index){
+
+                });
+            } , 'GET');
+            function getQueryString(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if(r != null){
+                    //解决中文乱码
+                    return decodeURI(r[2]);
+                }
+                return 1;
             }
-            window.onload = bgChange;
         });
     </script>
 @endsection

@@ -9,7 +9,9 @@
 namespace App\Http\Controllers\Content;
 
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
 
 class MusicController extends BaseController
 {
@@ -20,8 +22,12 @@ class MusicController extends BaseController
      * @return \Illuminate\Http\Response
      * @throws \Throwable
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax())
+        {
+            return DB::connection('lovbee')->table('bgms')->paginate();
+        }
         return view('backstage.content.music.index');
     }
 
