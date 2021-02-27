@@ -430,7 +430,7 @@ class UserController extends Controller
     {
         $list = array();
         $connection = DB::connection('lovbee');
-        $date = $request->input('date' , Carbon::yesterday('Asia/Shanghai')->toDateString());
+        $date = $request->input('date' , Carbon::now('Asia/Shanghai')->subDays(2)->toDateString());
         $dau = $connection->table('dau_counts')->where('date' , $date)->groupBy('date')->select(DB::raw("sum(`dau`) as `dau`"))->first();
         $list['dau'] = array(
             'date'=>$date,
