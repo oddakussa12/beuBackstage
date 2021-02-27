@@ -75,12 +75,11 @@
             var login = function(data){
                 loadBar.start();
                 try{
-                    common.ajax("{{ url(App::getLocale().'/backstage/login') }}", data.field, function (res) {
+                    common.ajax("{{ url('/backstage/login') }}", data.field, function (res) {
                         loadBar.finish();
                         common.prompt(res.message , 1 , 1500 , 6 , 'b' ,function () {
-                            location.href="{{ url(App::getLocale().'/backstage') }}";
+                            location.href="{{ url('/backstage') }}";
                         });
-                        console.log("{{ url(App::getLocale().'/backstage') }}");
                     } , 'post' , function (e,xhr,opt) {
                         var msg = 'Unknown error';
                         if((opt=='Unprocessable Entity'&&e.status==422)||e.status==423)

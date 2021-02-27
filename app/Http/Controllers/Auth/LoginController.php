@@ -52,7 +52,7 @@ class LoginController extends Controller
 
 //        $request->session()->invalidate();
 
-        return redirect(LaravelLocalization::setLocale().$this->redirectTo);
+        return redirect($this->redirectTo);
     }
 
     public function showLoginForm()
