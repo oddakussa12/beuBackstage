@@ -40,9 +40,7 @@
             margin: 0 auto;
         }
     </style>
-    <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
-    <link href="/plugin/style/player.css" rel="stylesheet">
-    <script src="//vjs.zencdn.net/7.10.2/video.min.js"></script>
+    <link href="/plugin/layui/style/player.css" rel="stylesheet">
     <script>
         //内容修改弹窗
         layui.config({
