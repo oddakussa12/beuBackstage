@@ -18,7 +18,11 @@
             </dl>
         @else
             @if(Auth::user()->can($menu->menu_auth))
-                <a  href="{{ url($menu->menu_url)}}" >{{$menu->menu_format_name}}</a>
+                @if(blank($menu->menu_url))
+                    <a  href="javascript:;" >{{$menu->menu_format_name}}</a>
+                @else
+                    <a  href="{{ url($menu->menu_url)}}" >{{$menu->menu_format_name}}</a>
+                @endif
             @endif
         @endif
     </li>
