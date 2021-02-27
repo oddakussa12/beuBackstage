@@ -6,7 +6,7 @@
                 @include('layouts.child_side' , ['all_menu' => $menu->child])
             @else
                 @if(Auth::user()->can($menu->menu_auth))
-                    <a  href="{{ url(App::getLocale().$menu->menu_url) }}">{{$menu->menu_format_name}}</a>
+                    <a  href="{{ url($menu->menu_url) }}">{{$menu->menu_format_name}}</a>
                 @endif
             @endif
         </dd>
