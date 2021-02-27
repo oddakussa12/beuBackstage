@@ -6,7 +6,7 @@
  * Time: 17:06
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Content;
 
 
 use App\Http\Controllers\Controller as BaseController;
