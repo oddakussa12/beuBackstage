@@ -51,12 +51,12 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::post('message/comment' , 'MessageController@comment')->name('message.comment'); // 消息管理
             Route::get('message/export' , 'MessageController@export')->name('message.export'); // 消息管理
         });
-
-        Route::group(['namespace'=>'Report','prefix'=>'report' , 'as' => 'report::'] , function (){
-            Route::get('report' , 'ReportController@index')->name('report.index');
-            Route::post('report' , 'ReportController@store')->name('report.store');
-            Route::resource('feedback' , 'FeedbackController' , ['only' => ['index' , 'update']]);
-        });
+//
+//        Route::group(['namespace'=>'Report','prefix'=>'report' , 'as' => 'report::'] , function (){
+//            Route::get('report' , 'ReportController@index')->name('report.index');
+//            Route::post('report' , 'ReportController@store')->name('report.store');
+//            Route::resource('feedback' , 'FeedbackController' , ['only' => ['index' , 'update']]);
+//        });
         Route::resource('menu' , 'MenuController');
         Route::resource('translation' , 'TranslationController');
         Route::resource('config' , 'ConfigController');
