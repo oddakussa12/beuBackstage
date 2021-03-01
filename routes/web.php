@@ -33,6 +33,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('message/{message}/image' , 'MessageController@image')->name('message.image');
         });
 
+
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){
 
             Route::get('user/keep' , 'UserController@keep')->name('user.keep');
@@ -55,7 +56,7 @@ Route::group(['prefix'=>'backstage'] , function(){
         Route::resource('menu' , 'MenuController');
         Route::resource('translation' , 'TranslationController');
         Route::resource('config' , 'ConfigController');
-        Route::resource('app', 'AppController');
+
     });
     Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
 
