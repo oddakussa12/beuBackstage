@@ -21,7 +21,7 @@
                 <label class="layui-form-label">选择类别：</label>
                 <div class="layui-inline">
                     <input id="id" name="id" type="hidden" value="{{$data['id']}}" />
-                    <select  name="category"  lay-search>
+                    <select  name="category">
                         <option value="test" @if($data->default=='test')  selected @endif>test</option>
                         <option value="test2"@if($data->default=='test2') selected @endif>test2</option>
                         <option value="test3"@if($data->default=='test3') selected @endif>test3</option>
@@ -42,6 +42,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">道具名称：</label>
                     <div class="layui-input-block">
+                        <input type="hidden" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="{{$data->hash}}">
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="{{$data->name}}">
                     </div>
                 </div>
@@ -73,14 +74,6 @@
                             <option value="1" @if($data->is_delete==1) selected @endif>下架</option>
                             <option value="0" @if($data->is_delete==0) selected @endif>上架</option>
                         </select>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">Hash(MD5)：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="{{$data->hash}}">
                     </div>
                 </div>
             </div>

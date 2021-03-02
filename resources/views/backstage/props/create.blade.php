@@ -21,7 +21,7 @@
                 <label class="layui-form-label">选择类别：</label>
                 <div class="layui-inline">
                     <input id="id" name="id" type="hidden" value="{{$data['id']}}" />
-                    <select  name="category"  lay-search>
+                    <select  name="category">
                         <option value="test">test</option>
                         <option value="test2">test2</option>
                         <option value="test3">test3</option>
@@ -45,19 +45,10 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">道具名称：</label>
                     <div class="layui-input-block">
+                        <input type="hidden" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="">
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">是否默认：</label>
-                    <div class="layui-input-block">
-                        <select  name="default" >
-                            <option value="0">否</option>
-                            <option value="1">是</option>
-                        </select>
-                    </div>
-                </div>
-
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
@@ -76,14 +67,6 @@
                             <option value="0">下架</option>
                             <option value="1">上架</option>
                         </select>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">Hash(MD5)：</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
             </div>
