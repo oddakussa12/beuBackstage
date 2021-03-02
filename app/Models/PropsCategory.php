@@ -5,12 +5,12 @@ namespace App\Models;
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 
-class Props extends Model
+class PropsCategory extends Model
 {
     //
     protected $connection = 'lovbee';
 
-    protected $table = 'props';
+    protected $table = 'props_categories';
 
     const CREATED_AT = 'created_at';
 
@@ -19,7 +19,7 @@ class Props extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-      'name', 'cover', 'url', 'category', 'hash', 'camera', 'is_default', 'recommendation', 'is_delete'
+      'name'
     ];
 
 }

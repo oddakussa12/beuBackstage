@@ -56,6 +56,8 @@ Route::group(['prefix'=>'backstage'] , function(){
         Route::group(['namespace'=>'Props','prefix'=>'props' , 'as' => 'props::'] , function (){
             Route::get('props/index' , 'PropsController@index')->name('props.index'); // 道具管理
             Route::resource('props' , 'PropsController'); // 道具管理
+            Route::get('category/index' , 'CategoryController@index')->name('category.index'); // 分类管理
+            Route::resource('category' , 'CategoryController'); // 分类管理
         });
 
         Route::resource('menu' , 'MenuController');

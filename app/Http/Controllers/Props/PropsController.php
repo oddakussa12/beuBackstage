@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Props;
 
 use App\Http\Controllers\Controller;
 use App\Models\Props;
+use App\Models\PropsCategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -36,7 +37,8 @@ class PropsController extends Controller
      */
     public function create()
     {
-        return view('backstage.props.create', ['data' => null, 'counties'=>config('country')]);
+        $category = PropsCategory::whereNull('deleted_at')->get();
+        return view('backstage.props.create', ['data' => null, 'categories'=>$category]);
     }
 
     /**
@@ -48,6 +50,8 @@ class PropsController extends Controller
     public function store(Request $request)
     {
 
+        $params = $request->except('_token');
+
         Log::info('提交参数', $request->all());
         $this->validate($request, [
             'name'  => 'required|string',
@@ -56,7 +60,6 @@ class PropsController extends Controller
             'hash'  => 'required|string',
         ]);
 
-        $params = $request->except('_token');
         if (!empty($params['hash'])) {
             $params['hash'] = strtolower($params['hash']);
         }
@@ -72,10 +75,11 @@ class PropsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $data = Props::find($id);
-        return view('backstage.props.edit')->with(['data' => $data, 'counties'=>config('country')]);
+        $category = PropsCategory::whereNull('deleted_at')->get();
+        return view('backstage.props.edit')->with(['data' => $data, 'categories'=>$category]);
     }
     /**
      * Update the specified resource in storage.
