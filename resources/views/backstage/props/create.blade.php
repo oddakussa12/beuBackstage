@@ -81,7 +81,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Hash：</label>
+                    <label class="layui-form-label">Hash(MD5)：</label>
                     <div class="layui-input-block">
                         <input type="text" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="">
                     </div>
@@ -189,6 +189,8 @@
                     //, url: 'https://upload-as0.qiniup.com/' //上传接口
                     , url: 'https://up-z1.qiniup.com/' //上传接口
                     , method: 'post'
+                    , accept: 'file'
+                    , exts: type!=='' ? type : 'jpg|png|jpeg|gif'
                     ,choose: function (obj) {
                         let files = obj.pushFile();
                         obj.preview(function (index, file, result) {
@@ -205,9 +207,6 @@
                     , done: function (res, index, upload) {
 
                         console.log(res);
-                        console.log(index);
-                        console.log(upload);
-
                         let param = {};
                         param.image = res.name;
                         let file = "https://qneventsource.mmantou.cn/"+res.name;

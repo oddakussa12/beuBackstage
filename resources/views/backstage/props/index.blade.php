@@ -20,7 +20,7 @@
                 <th lay-data="{field:'recommendation', width:100}">是否推荐</th>
                 <th lay-data="{field:'category', width:80}">类别</th>
                 <th lay-data="{field:'camera', width:80}">摄像头</th>
-                <th lay-data="{field:'hash', width:280}">Hash</th>
+                <th lay-data="{field:'hash', width:280}">Hash(MD5)</th>
                 <th lay-data="{field:'url', width:300}">URL</th>
                 <th lay-data="{field:'unlock', width:100}">解锁数量</th>
                 <th lay-data="{field:'created_at', width:160}">创建时间</th>

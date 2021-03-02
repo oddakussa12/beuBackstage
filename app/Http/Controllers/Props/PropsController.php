@@ -103,6 +103,9 @@ class PropsController extends Controller
         }
         $param['updated_at'] = date('Y-m-d H:i:s');
 
+        if (!empty($params['hash'])) {
+            $params['hash'] = strtolower($params['hash']);
+        }
 
         Props::where('id', $id)->update($param);
         return response()->json(['result' => 'success']);
