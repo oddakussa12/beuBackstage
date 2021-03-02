@@ -8,6 +8,51 @@
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
                 <table class="layui-hide" id="music_table" lay-filter="music_table"></table>
+                <form  class="layui-form" lay-filter="music_form">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">{{trans('music.form.label.name')}}</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="name" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">{{trans('music.form.label.time')}}</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="time" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn" id="music"><i class="layui-icon"></i>Upload Music</button>
+                                <div class="layui-upload-list">
+                                    <table class="layui-table">
+                                        <thead>
+                                        <tr>
+                                            <th>File Name</th>
+                                            <th>Operate</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="fileList">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="form_submit_add">{{trans('common.form.button.add')}}</button>
+                            <button class="layui-btn" lay-submit lay-filter="form_submit_update">{{trans('common.form.button.update')}}</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">{{trans('common.form.button.reset')}}</button>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="layui-tab-item">
                 <audio id="player" src=""></audio>
@@ -78,6 +123,12 @@
 @endsection
 @section('footerScripts')
     @parent
+    <script type="text/html" id="operateTpl">
+        <div class="layui-table-cell laytable-cell-1-6">
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
+        </div>
+    </script>
     <style>
         #my-player{
             width: 400px;
@@ -93,12 +144,13 @@
         }).extend({
             common: 'lay/modules/admin/common',
             loadBar: 'lay/modules/admin/loadBar',
-        }).use(['common' , 'table', 'layer', 'laydate', 'element'], function () {
+        }).use(['common' , 'table', 'layer', 'laydate', 'element' , 'upload'], function () {
             let $=layui.jquery,
                 form = layui.form,
                 table = layui.table,
                 layer = layui.layer,
                 common = layui.common,
+                upload = layui.upload,
                 music_list=[],
                 play_list = document.querySelector("#play_list"),
                 player = document.querySelector("#player"),
@@ -267,6 +319,7 @@
                         }}
                     ,{field:'sort', title:'Sort', minWidth:120 , edit:'text'}
                     ,{field:'created_at', title:'CreatedAt', minWidth:120}
+                    ,{field:'op', minWidth:120 , templet: '#operateTpl'}
                 ]]
                 ,page: true
                 ,limit:2
@@ -325,10 +378,10 @@
                     ,field = obj.field //得到字段
                     ,original = $(this).prev().text(); //得到字段
                 var params = d = {};
+                d[field] = original;
                 @if(!Auth::user()->can('content::music.update'))
                 common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
-                d[field] = original;
-                obj.update(data);
+                obj.update(d);
                 $(this).val(original);
                 table.render();
                 return true;
@@ -347,13 +400,122 @@
                         },100);
                     });
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
-                    console.log(d);
-                    console.log(original);
-                    console.log(original);
+                    d[field] = original;
                     obj.update(d);
                     $(that).val(original);
                     table.render();
                 });
+            });
+
+            table.on('tool(translation_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+                if(layEvent === 'edit'){ //查看
+                    //do somehing
+                }else if(layEvent === 'del') { //查看
+
+                }
+            });
+
+            form.on('submit(form_submit_add)', function(data){
+                var params = {};
+                $.each(data.field , function (k ,v) {
+                    if(v==''||v==undefined)
+                    {
+                        return true;
+                    }
+                    params[k] = v;
+                });
+
+                common.ajax("{{url('/backstage/content/music')}}" , params , function(res){
+                    common.prompt("{{trans('common.ajax.result.prompt.add')}}"  , 1 , 1500 , 6 , 't' ,function () {
+                        location.reload();
+                    });
+                });
+                return false;
+            });
+
+            var music = upload.render({
+                elem: '#music'
+                ,accept: 'audio' //视频
+                ,auto: false
+                ,choose:function (obj , test){
+                    var files = obj.pushFile();
+                    // console.log(files);
+                    var keys = Object.keys(files);
+                    var end = keys[keys.length-1]
+                    var file = files[end];
+                    var formData = new FormData();
+                    var jqureAjaxXhrOnProgress = function(fun) {
+                        jqureAjaxXhrOnProgress.onprogress = fun; //绑定监听
+                        //使用闭包实现监听绑
+                        return function() {
+                            //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
+                            var xhr = $.ajaxSettings.xhr();
+                            //判断监听函数是否为函数
+                            if (typeof jqureAjaxXhrOnProgress.onprogress !== 'function')
+                                return xhr;
+                            //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
+                            if (jqureAjaxXhrOnProgress.onprogress && xhr.upload) {
+                                xhr.upload.onprogress = jqureAjaxXhrOnProgress.onprogress;
+                            }
+                            return xhr;
+                        }
+                    }
+                    common.ajax("/backstage/qn/bundle/token" , {} , function(res){
+                        formData.append('token', res.token);
+                        formData.append('file',file);
+                        $.ajax({
+                            url:'https://up-z1.qiniup.com/',
+                            type:'POST',
+                            data: formData,
+                            processData:false,
+                            cache:false,
+                            contentType:false,
+                            xhr:jqureAjaxXhrOnProgress(function(e){
+                                var percent=e.loaded / e.total;
+                                percent = Math.round((percent + Number.EPSILON) * 100);
+                                $("#upload_progress").html(percent);
+                            }),
+                            beforeSend: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                                common.prompt('uploaded<span id="upload_progress"></span>%' , 16 , 0 , 0 , 'auto' , undefined , [0.8, '#393D49']);
+                            },
+                            success:function(data){
+                                var fileListView = $('#fileList')
+                                fileListView.find('.music-tr').remove();
+                                var tr = $(['<tr class="music">'
+                                    ,'<td><a href="'+res.domain+data.name+'" target="_blank">'+ res.domain+data.name +'</a><input type="hidden" name="music" value="'+res.domain+data.name+'"></td>'
+                                    ,'</td>'
+                                    ,'<td><button type="button" class="layui-btn layui-btn-xs layui-btn-danger file-delete">delete</button>'
+                                    ,'</td>'
+                                    ,'</tr>'].join(''));
+                                //删除
+                                var audio = new Audio(res.domain+data.name);
+                                audio.load();
+                                console.log(audio.readyState);
+                                if(audio.readyState > 0)
+                                {
+                                    var minutes = parseInt(audio.duration / 60, 10);
+                                    var seconds = parseInt(audio.duration % 60);
+                                    console.log(minutes , seconds);
+                                }
+                                tr.find('.file-delete').on('click', function(obj){
+                                    $(obj.target).closest('tr').remove();
+                                    table.render();
+                                });
+                                fileListView.append(tr);
+                            },
+                            error:function(){
+                                alert('upload failed');
+                            },
+                            complete:function (){
+                                layer.closeAll();
+                            }
+                        })
+                    } , 'get' , undefined , undefined , false);
+                }
             });
 
         });

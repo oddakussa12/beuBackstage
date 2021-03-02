@@ -65,4 +65,37 @@ class MusicController extends BaseController
 
     }
 
+
+    public function store(Request $request)
+    {
+        $data = array();
+        if($request->has('name'))
+        {
+            $name = strval($request->input('name' , ''));
+            !blank($name)&&$data['name'] = $name;
+        }
+        if($request->has('music'))
+        {
+            $url = strval($request->input('music' , ''));
+            !blank($url)&&$data['url'] = $url;
+        }
+        if($request->has('hash'))
+        {
+            $hash = strval($request->input('hash' , ''));
+            !blank($hash)&&$data['hash'] = $hash;
+        }
+        if($request->has('time'))
+        {
+            $data['time'] = intval($request->input('time' , 15));
+        }
+        if(!blank($data))
+        {
+            DB::connection('lovbee')->table('bgms')->insert($data);
+        }
+        return response()->json([
+            'result' => 'success',
+        ]);
+
+    }
+
 }
