@@ -33,9 +33,6 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('message/{message}/image' , 'MessageController@image')->name('message.image');
         });
 
-        Route::group(['namespace'=>'Content','prefix'=>'content' , 'as' => 'content::'] , function (){
-            Route::get('music/index' , 'MusicController@index')->name('music.index');
-        });
 
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){
 
@@ -52,15 +49,14 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('message/export' , 'MessageController@export')->name('message.export'); // 消息管理
         });
 
-        Route::group(['namespace'=>'Report','prefix'=>'report' , 'as' => 'report::'] , function (){
-            Route::get('report' , 'ReportController@index')->name('report.index');
-            Route::post('report' , 'ReportController@store')->name('report.store');
-            Route::resource('feedback' , 'FeedbackController' , ['only' => ['index' , 'update']]);
+        Route::group(['namespace'=>'Props','prefix'=>'props' , 'as' => 'props::'] , function (){
+            Route::get('props/index' , 'PropsController@index')->name('props.index'); // 道具管理
+            Route::resource('props' , 'PropsController'); // 道具管理
         });
         Route::resource('menu' , 'MenuController');
         Route::resource('translation' , 'TranslationController');
         Route::resource('config' , 'ConfigController');
-        Route::resource('app', 'AppController');
+
     });
     Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
 

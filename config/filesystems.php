@@ -113,10 +113,9 @@ return [
             'driver'     => 'qn_image_sia',
             'access_key' => env('QINIU_ACCESS_KEY', 'Rzzn0G7I6K38FsVHHkW9o48ZWZsuOpPvRQGzZyLS'),
             'secret_key' => env('QINIU_SECRET_KEY', 'BrMK7FBrj7wvzA7KC7q4fBsaYBznA2p_6PWT6ku5'),
-            'bucket'     => env('QINIU_BUCKET', 'idimage'),
+            'bucket'     => env('QINIU_BUCKET', 'eventsource'),
             'domain'     => env('QINIU_DOMAIN', 'https://qnidyooulimage.mmantou.cn/'), // or host: https://xxxx.clouddn.com
         ],
-
     ],
 
 ];
