@@ -38,18 +38,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">道具名称：</label>
-                    <div class="layui-input-block">
-                        <input type="hidden" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="">
-                        <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="">
-                    </div>
-                </div>
-            </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">是否推荐：</label>
@@ -67,6 +55,15 @@
                             <option value="0">下架</option>
                             <option value="1">上架</option>
                         </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">道具名称：</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="">
+                        <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
             </div>
@@ -91,7 +88,7 @@
                     <div class="layui-input-block">
                         <input type="hidden" id="url" name="url" />
                         <button type="button" id="uploads" name="uploads">上传文件</button>
-                        <span style="width:200px;" id="bundle" name="bundle"></span>
+                        <span style="" id="bundle" name="bundle"></span>
                     </div>
                 </div>
             </div>

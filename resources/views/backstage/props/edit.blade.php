@@ -40,25 +40,6 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">道具名称：</label>
-                    <div class="layui-input-block">
-                        <input type="hidden" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="{{$data->hash}}">
-                        <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="{{$data->name}}">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">是否默认：</label>
-                    <div class="layui-input-block">
-                        <select  name="default" >
-                            <option value="0" @if($data->default==0) selected @endif>否</option>
-                            <option value="1" @if($data->default==1) selected @endif>是</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
                     <label class="layui-form-label">是否推荐：</label>
                     <div class="layui-input-block">
                         <select  name="recommendation" >
@@ -74,6 +55,15 @@
                             <option value="1" @if($data->is_delete==1) selected @endif>下架</option>
                             <option value="0" @if($data->is_delete==0) selected @endif>上架</option>
                         </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">道具名称：</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="{{$data->hash}}">
+                        <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="{{$data->name}}">
                     </div>
                 </div>
             </div>
