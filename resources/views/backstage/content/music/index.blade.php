@@ -1,64 +1,79 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <audio id="player" src="https://qneventsource.mmantou.cn/b14fb0b27d8ff0cc44cf6c9a76a2c0f6.mp3"></audio>
-    <div id="bz_music" class="bz_music">
-        <div class="music_info">
-            <div class="left_photo">
-                <a href="javascript:;">
-                    <img id="left_photo" src="/plugin/layui/images/music/vinyl.png" alt="" /></a>
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">Music</li>
+            <li>Music Play</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <table class="layui-hide" id="music_table" lay-filter="music_table"></table>
             </div>
-            <div class="center_list">
-                <ul>
-                    <li class="list_current">
-                        <a href="javascript:;">
-                            <span id="list_title" class="list_title"></span></a>
-                        <a href="javascript:;">
-                            <span id="list_singer" class="list_singer"></span></a>
-                    </li>
-                </ul>
+            <div class="layui-tab-item">
+                <audio id="player" src=""></audio>
+                <div id="bz_music" class="bz_music">
+                    <div class="music_info">
+                        <div class="left_photo">
+                            <a href="javascript:;">
+                                <img id="left_photo" src="/plugin/layui/images/music/vinyl.png" alt="" /></a>
+                        </div>
+                        <div class="center_list">
+                            <ul>
+                                <li class="list_current">
+                                    <a href="javascript:;">
+                                        <span id="list_title" class="list_title"></span></a>
+                                    <a href="javascript:;">
+                                        <span id="list_singer" class="list_singer"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="right_btn">
+                            <a id="btn_prev" href="javascript:;">
+                                <span class="layui-icon layui-icon-prev"  style="font-size: 20px; color: #666;"></span>
+                            </a>
+                            <a id="btn_list" href="javascript:;">
+                                <i id="showHide" class="layui-icon layui-icon-spread-left"  style="font-size: 20px; color: #666;"></i>
+                            </a>
+                            <a id="btn_next" href="javascript:;">
+                                <i class="layui-icon layui-icon-next"  style="font-size: 20px; color: #666;"></i>
+                            </a>
+                        </div>
+                        <div id="process" class="process">
+                            <i id="process_slide" class="process_slide"></i>
+                        </div>
+                    </div>
+                    <div class="music_controls">
+                        <div id="time" class="time">00:00</div>
+                        <div class="play_controls">
+                            <a id="btnBackward" href="javascript:;">
+                                <i class="layui-icon layui-icon-left" style="font-size: 40px; color: #666;"></i>
+                            </a>
+                            <a id="btnPlay" href="javascript:;">
+                                <i class="layui-icon layui-icon-play" style="font-size: 40px; color: #666;"></i>
+                            </a>
+                            <a id="btnForward" href="javascript:;">
+                                <i class="layui-icon layui-icon-right" style="font-size: 40px; color: #666;"></i>
+                            </a>
+                        </div>
+                        <a id="volumeOff" class="volumeOff" href="javascript:;">
+                            <i class="layui-icon layui-icon-subtraction" style="font-size: 10px; color: #666;"></i>
+                        </a>
+                        <div id="volume" class="volume">
+                            <span id="volume_slide" class="btn_slide"></span>
+                        </div>
+                        <a id="volumeOn" class="volumeOn" href="javascript:;">
+                            <i class="layui-icon layui-icon-addition" style="font-size: 10px; color: #666;"></i>
+                        </a>
+                    </div>
+                    <div id="play_list_area" class="play_list_area">
+                        <ul id="play_list" class="play_list"></ul>
+                    </div>
+                </div>
             </div>
-            <div class="right_btn">
-                <a id="btn_prev" href="javascript:;">
-                    <span class="layui-icon layui-icon-prev"  style="font-size: 20px; color: #666;"></span>
-                </a>
-                <a id="btn_list" href="javascript:;">
-                    <i id="showHide" class="layui-icon layui-icon-spread-left"  style="font-size: 20px; color: #666;"></i>
-                </a>
-                <a id="btn_next" href="javascript:;">
-                    <i class="layui-icon layui-icon-next"  style="font-size: 20px; color: #666;"></i>
-                </a>
-            </div>
-            <div id="process" class="process">
-                <i id="process_slide" class="process_slide"></i>
-            </div>
-        </div>
-        <div class="music_controls">
-            <div id="time" class="time">00:00</div>
-            <div class="play_controls">
-                <a id="btnBackward" href="javascript:;">
-                    <i class="layui-icon layui-icon-left" style="font-size: 40px; color: #666;"></i>
-                </a>
-                <a id="btnPlay" href="javascript:;">
-                    <i class="layui-icon layui-icon-play" style="font-size: 40px; color: #666;"></i>
-                </a>
-                <a id="btnForward" href="javascript:;">
-                    <i class="layui-icon layui-icon-right" style="font-size: 40px; color: #666;"></i>
-                </a>
-            </div>
-            <a id="volumeOff" class="volumeOff" href="javascript:;">
-                <i class="layui-icon layui-icon-subtraction" style="font-size: 10px; color: #666;"></i>
-            </a>
-            <div id="volume" class="volume">
-                <span id="volume_slide" class="btn_slide"></span>
-            </div>
-            <a id="volumeOn" class="volumeOn" href="javascript:;">
-                <i class="layui-icon layui-icon-addition" style="font-size: 10px; color: #666;"></i>
-            </a>
-        </div>
-        <div id="play_list_area" class="play_list_area">
-            <ul id="play_list" class="play_list"></ul>
         </div>
     </div>
+
+
 
 @endsection
 @section('footerScripts')
@@ -81,9 +96,9 @@
         }).use(['common' , 'table', 'layer', 'laydate', 'element'], function () {
             let $=layui.jquery,
                 form = layui.form,
+                table = layui.table,
                 layer = layui.layer,
                 common = layui.common,
-                laydate = layui.laydate,
                 music_list=[],
                 play_list = document.querySelector("#play_list"),
                 player = document.querySelector("#player"),
@@ -124,58 +139,59 @@
             }
 
 
-            var musicList = function (){
-                var url = '?page='+getQueryString('page');
-                common.ajax(url , {} , function(res){
-                    layer.closeAll();
-                    music_list = res.data;
-                    for(var i=0;i<music_list.length;i++){
-                        //将每个对象，分别存到music中
-                        var music = music_list[i];
-                        //创建li标签
-                        var liTag = document.createElement("li");
-                        //创建歌曲名span标签
-                        var spanTitleTag = document.createElement("span");
-                        //创建时长span标签
-                        var spanDurationTag = document.createElement("span");
-                        console.log(play_list);
-                        //为ul添加li标签，子节点
-                        play_list.appendChild(liTag);
-                        //为li标签，添加子节点
-                        liTag.appendChild(spanTitleTag);
-                        liTag.appendChild(spanDurationTag);
+            var musicList = function (res){
+                // var url = '?page='+getQueryString('page');
+                // common.ajax(url , {} , function(res){
+                //     layer.closeAll();
+                //
+                // } , 'get');
+                music_list = res.data;
+                for(var i=0;i<music_list.length;i++){
+                    //将每个对象，分别存到music中
+                    var music = music_list[i];
+                    //创建li标签
+                    var liTag = document.createElement("li");
+                    //创建歌曲名span标签
+                    var spanTitleTag = document.createElement("span");
+                    //创建时长span标签
+                    var spanDurationTag = document.createElement("span");
+                    console.log(play_list);
+                    //为ul添加li标签，子节点
+                    play_list.appendChild(liTag);
+                    //为li标签，添加子节点
+                    liTag.appendChild(spanTitleTag);
+                    liTag.appendChild(spanDurationTag);
 
-                        //添加内容
-                        spanTitleTag.innerHTML=music.name;
-                        spanDurationTag.innerHTML='00:15';
+                    //添加内容
+                    spanTitleTag.innerHTML=music.name;
+                    spanDurationTag.innerHTML='00:15';
 
-                        //添加类名
-                        spanTitleTag.classList.add("list_title");
-                        spanDurationTag.classList.add("list_time");
+                    //添加类名
+                    spanTitleTag.classList.add("list_title");
+                    spanDurationTag.classList.add("list_time");
 
-                        //自定义属性
-                        //需要用的时候，直接从标签中取值，不需要和后台交互
-                        liTag.setAttribute("data-index",i.toString());
+                    //自定义属性
+                    //需要用的时候，直接从标签中取值，不需要和后台交互
+                    liTag.setAttribute("data-index",i.toString());
 
-                        //当点击每一个li标签的时候
-                        //重新载入歌曲信息(专辑图片、歌曲路径、歌曲名、歌手名)
-                        //播放当前点击的音乐
-                        liTag.addEventListener("click",function(){
-                            //获取每个li标签的歌曲id
-                            play_index = this.getAttribute("data-index");
+                    //当点击每一个li标签的时候
+                    //重新载入歌曲信息(专辑图片、歌曲路径、歌曲名、歌手名)
+                    //播放当前点击的音乐
+                    liTag.addEventListener("click",function(){
+                        //获取每个li标签的歌曲id
+                        play_index = this.getAttribute("data-index");
 
-                            //将歌曲id赋给，全局变量play_index
-                            loadMusic();
-                            playMusic();
-
-                        })
-                        //调用载入歌曲函数
+                        //将歌曲id赋给，全局变量play_index
                         loadMusic();
-                        //播放音乐
-                        // player.muted = true;
-                        // playMusic();
-                    }
-                } , 'get');
+                        playMusic();
+
+                    })
+                    //调用载入歌曲函数
+                    loadMusic();
+                    //播放音乐
+                    // player.muted = true;
+                    // playMusic();
+                }
             }
 
             var loadMusic = function (){
@@ -223,7 +239,122 @@
                 }
                 console.log(player.paused);
             })
-            musicList();
+
+            var tableIns = table.render({
+                elem: '#music_table'
+                ,url:'/backstage/content/music/index'
+                // ,toolbar: true
+                ,cols: [[
+                    {field:'id', title:'ID', maxWidth:50}
+                    ,{field:'name', title:'Name', maxWidth:120 , edit:'text'}
+                    ,{field:'hash', title:'Hash', minWidth:120}
+                    ,{field:'time', title:'Time', minWidth:120 , edit:'text'}
+                    ,{field:'is_delete', title:'Deleted', minWidth:120 ,templet:function(d){
+                            if(d.is_delete==1)
+                            {
+                                return '<input type="checkbox" checked name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="ON|OFF">';
+                            }else{
+                                return '<input type="checkbox"  name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="ON|OFF">';
+                            }
+                        }}
+                    ,{field:'recommendation', title:'Recommendation', minWidth:120 ,templet:function(d){
+                            if(d.recommendation==1)
+                            {
+                                return '<input type="checkbox" checked name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="ON|OFF">';
+                            }else{
+                                return '<input type="checkbox"  name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="ON|OFF">';
+                            }
+                        }}
+                    ,{field:'sort', title:'Sort', minWidth:120 , edit:'text'}
+                    ,{field:'created_at', title:'CreatedAt', minWidth:120}
+                ]]
+                ,page: true
+                ,limit:2
+                ,limits:[2]
+                ,response: {
+                    statusCode: 200
+                }
+                ,parseData: function(res){
+                    console.log(res);
+                    var list = [];
+                    musicList(res);
+                    // var data = res.data;
+
+
+                    return {
+                        "code": 200,
+                        "data": res.data,
+                        'count':res.total
+                    };
+                }
+            });
+            form.render();
+            form.on('switch(switchAll)', function(data){
+                let params;
+                const checked = data.elem.checked;
+                const musicId  = data.othis.parents('tr').find("td:eq(0)").text();
+                data.elem.checked = !checked;
+                @if(!Auth::user()->can('content::music.update'))
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
+                form.render();
+                return false;
+                @endif
+                let name = $(data.elem).attr('name');
+                params = checked ? '{"' + name + '":"on"}' : '{"' + name + '":"off"}';
+                form.render();
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax("{{url('/backstage/content/music')}}/"+musicId , JSON.parse(params) , function(res){
+                        data.elem.checked = checked;
+                        form.render();
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                    } , 'PATCH' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            data.elem.checked = !checked;
+                            form.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
+            });
+
+            //监听单元格编辑
+            table.on('edit(music_table)', function(obj){
+                var that = this;
+                var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field //得到字段
+                    ,original = $(this).prev().text(); //得到字段
+                var params = d = {};
+                @if(!Auth::user()->can('content::music.update'))
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
+                d[field] = original;
+                obj.update(data);
+                $(this).val(original);
+                table.render();
+                return true;
+                @endif
+                params[field] = value;
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax("{{url('/backstage/content/music')}}/"+data.id , params , function(res){
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                        table.render();
+                    } , 'PATCH' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            obj.update(d);
+                            $(that).val(original);
+                            table.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                    console.log(d);
+                    console.log(original);
+                    console.log(original);
+                    obj.update(d);
+                    $(that).val(original);
+                    table.render();
+                });
+            });
 
         });
     </script>
