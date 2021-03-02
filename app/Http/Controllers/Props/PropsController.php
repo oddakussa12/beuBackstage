@@ -57,6 +57,9 @@ class PropsController extends Controller
         ]);
 
         $params = $request->except('_token');
+        if (!empty($params['hash'])) {
+            $params['hash'] = strtolower($params['hash']);
+        }
         $result = Props::create($params);
         return response()->json([
             'result' => 'success',
@@ -103,6 +106,9 @@ class PropsController extends Controller
         }
         $param['updated_at'] = date('Y-m-d H:i:s');
 
+        if (!empty($param['hash'])) {
+            $param['hash'] = strtolower($param['hash']);
+        }
 
         Props::where('id', $id)->update($param);
         return response()->json(['result' => 'success']);

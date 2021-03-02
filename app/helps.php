@@ -19,9 +19,26 @@ if(!function_exists('qnToken')){
         $disk = Storage::disk($drive);
         $policy = $policy==null?[
             'saveKey'=>"$(etag)$(ext)",
-            'mimeLimit'=>'image/*',
+//            'mimeLimit'=>'image/*',
             'forceSaveKey'=>true,
             'returnBody'=>"{\"name\": \"$name\", \"hash\": \"$(etag)\", \"w\": $(imageInfo.width),\"h\": $(imageInfo.height),\"size\": \"$(fsize)\",\"url\":\"$url\"}"
+        ]:$policy;
+        return array('token'=>$disk->getUploadToken($key , $expires , $policy , $strictPolice) , 'domain'=>config('filesystems.disks.'.$drive.'.domain'));
+    }
+}
+
+if(!function_exists('qnBundleToken')){
+    function qnBundleToken($drive='qn_default' , $key = null, $expires = 3600, $policy = null, $strictPolice = null)
+    {
+        $config = config('filesystems.disks.'.$drive);
+        $name = "$(etag)$(ext)";
+        $url = $config['domain'];
+        $disk = Storage::disk($drive);
+        $policy = $policy==null?[
+            'saveKey'=>"$(etag)$(ext)",
+//            'mimeLimit'=>'image/*',
+            'forceSaveKey'=>true,
+            'returnBody'=>"{\"name\": \"$name\", \"hash\": \"$(etag)\", \"size\": \"$(fsize)\",\"url\":\"$url\"}"
         ]:$policy;
         return array('token'=>$disk->getUploadToken($key , $expires , $policy , $strictPolice) , 'domain'=>config('filesystems.disks.'.$drive.'.domain'));
     }
