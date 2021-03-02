@@ -5,7 +5,7 @@ return [
     'company_name'=>'Lovbee project',
     'backend_home'=>'后台',
     'header' =>[
-        'title'=>'Lovbee project background',
+        'title'=>'Lovbee project',
         'head'=>'Lovbee project',
     ],
     'button'=>[
