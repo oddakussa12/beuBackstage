@@ -2,7 +2,7 @@
 @section('title', trans('common.header.title'))
 @section('content')
     @php
-        $qn_token = qnToken('qn_image_sia');
+        $qn_token = qnToken('qn_event_source');
     @endphp
     {{--    <meta name="csrf-token" content="{{ csrf_token() }}">--}}
     <fieldset class="layui-elem-field layui-field-title">
@@ -22,10 +22,9 @@
                 <div class="layui-inline">
                     <input id="id" name="id" type="hidden" value="{{$data['id']}}" />
                     <select  name="category">
-                        <option value="test">test</option>
-                        <option value="test2">test2</option>
-                        <option value="test3">test3</option>
-                        <option value="test4">test4</option>
+                        @foreach($categories as $category)
+                            <option value="{{$category->name}}" @if($data['category']==$category->name)  selected @endif>{{$category->name}}</option>
+                        @endforeach;
                     </select>
                 </div>
                 <div class="layui-inline">
@@ -51,7 +50,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">状态：</label>
                     <div class="layui-input-block">
-                        <select  name="status" >
+                        <select  name="is_delete" >
                             <option value="0">下架</option>
                             <option value="1">上架</option>
                         </select>
@@ -62,7 +61,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">道具名称：</label>
                     <div class="layui-input-block">
-                        <input type="hidden" id="hash" name="hash" required="required" autocomplete="off" class="layui-input" value="">
+                        <input type="hidden" id="hash" name="hash" value="">
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
@@ -72,7 +71,7 @@
                     <label class="layui-form-label">图片：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="cover" name="cover" />
-                        <button type="button" id="upload" name="upload">上传图片</button>
+                        <button type="button" id="upload" name="upload" class="layui-btn"><i class="layui-icon"></i>Upload Image</button>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -87,7 +86,7 @@
                     <label class="layui-form-label">上传Bundle：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="url" name="url" />
-                        <button type="button" id="uploads" name="uploads">上传文件</button>
+                        <button type="button" id="uploads" name="uploads" class="layui-btn"><i class="layui-icon"></i>Upload Bundle</button>
                         <span style="" id="bundle" name="bundle"></span>
                     </div>
                 </div>
@@ -195,6 +194,7 @@
                             $("#show").attr('src', file).show();
                         } else {
                             $("#url").val(file);
+                            $("#hash").val(res.hash);
                             $("#bundle").text(file);
                         }
                     }

@@ -1,16 +1,5 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <style>
-       /* .layui-table-cell {
-            font-size:14px;
-            padding:0 5px;
-            height:auto;
-            overflow:visible;
-            text-overflow:inherit;
-            white-space:normal;
-            word-break: break-all;
-        }*/
-    </style>
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-inline">
@@ -22,36 +11,18 @@
         <table class="layui-table"   lay-filter="post_table" id="post_table" >
             <thead>
             <tr>
-                <th lay-data="{field:'id', width:80}">ID</th>
-                <th lay-data="{field:'cover', width:80}">图片</th>
-                <th lay-data="{field:'name', width:150,sort:true}">名称</th>
-{{--                <th lay-data="{field:'type', width:100}">类型</th>--}}
-                <th lay-data="{field:'is_delete', width:100}">状态</th>
-                <th lay-data="{field:'recommendation', width:100}">是否推荐</th>
-                <th lay-data="{field:'category', width:80}">类别</th>
-                <th lay-data="{field:'camera', width:80}">摄像头</th>
-                <th lay-data="{field:'hash', width:280}">Hash(MD5)</th>
-                <th lay-data="{field:'url', width:360}">URL</th>
-                <th lay-data="{field:'created_at', width:160}">创建时间</th>
-                <th lay-data="{field:'updated_at', width:160}">修改时间</th>
-{{--                <th lay-data="{field:'deleted_at', width:160}">删除时间</th>--}}
+                <th lay-data="{field:'id', width:200}">ID</th>
+                <th lay-data="{field:'name', width:200,sort:true}">名称</th>
+                <th lay-data="{field:'created_at', width:200}">创建时间</th>
+                <th lay-data="{field:'updated_at', width:200}">修改时间</th>
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#postop'}">{{trans('common.table.header.op')}}</th>
-
             </tr>
             </thead>
             <tbody>
             @foreach($data as $value)
                 <tr>
                     <td>{{$value->id}}</td>
-                    <td><img style="width: 33px;" src="{{$value->cover}}"></td>
                     <td>{{$value->name}}</td>
-{{--                    <td>{{$value->type}}</td>--}}
-                    <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="上架|下架"></td>
-                    <td><input type="checkbox" @if($value->recommendation==1) checked @endif name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="是|否"></td>
-                    <td>{{$value->category}}</td>
-                    <td>{{$value->camera}}</td>
-                    <td>{{$value->hash}}</td>
-                    <td>{{$value->url}}</td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>
 {{--                    <td>@if($value->deleted_at=='0000-00-00 00:00:00')@else{{$value->deleted_at}}@endif</td>--}}
@@ -95,10 +66,10 @@
                         title: '道具设置',
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['60%','90%'],
+                        area: ['30%','50%'],
                         offset: 'auto',
                         'scrollbar':true,
-                        content: '/backstage/props/props/'+id+'/edit',
+                        content: '/backstage/props/category/'+id+'/edit',
                     });
                 }
             });
@@ -119,7 +90,7 @@
                 }
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/props/props')}}/"+postId , JSON.parse(params) , function(res){
+                    common.ajax("{{url('/backstage/props/category')}}/"+postId , JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
@@ -138,9 +109,9 @@
                     title: '道具设置',
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['60%','90%'],
+                    area: ['30%','50%'],
                     offset: 'auto',
-                    content: '/backstage/props/props/create',
+                    content: '/backstage/props/category/create',
                 });
             });
             table.init('post_table', { //转化静态表格
