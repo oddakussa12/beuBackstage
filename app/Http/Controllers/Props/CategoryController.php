@@ -47,18 +47,29 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $params = $request->except('_token');
+
         Log::info('提交参数', $request->all());
         $this->validate($request, [
-            'name'  => 'required|string',
+            'category'  => 'required|array',
+            'language'  => 'required|array',
         ]);
-        $params = $request->except('_token');
-        $result = PropsCategory::where('name', $params['name'])->first();
+
+        $result = PropsCategory::where('name', $params['category'][0])->first();
 
         if ($result) {
             return ['code'=>200, 'result'=>'name alreadly existed'];
         }
 
-        PropsCategory::create($params);
+        if (in_array('en', $params['language']) && !empty($params['category'])) {
+            $insert['name'] = $params['category'][0];
+        }
+        foreach ($params['language'] as $key=>$language) {
+            $ext[] = [$language=>$params['category'][$key]];
+        }
+
+        $insert['language'] = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
+        PropsCategory::create($insert);
         return response()->json(['result'=>'success']);
     }
 
@@ -71,6 +82,10 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $data = PropsCategory::find($id);
+        if (!empty($data)) {
+            $data['language'] = json_decode($data['language'], true);
+        }
+
         return view('backstage.category.edit')->with(['data' => $data, 'counties'=>config('country')]);
     }
 
@@ -86,9 +101,22 @@ class CategoryController extends Controller
         $params = $request->all();
         $param  = $request->except('_token');
 
-        $param['updated_at'] = date('Y-m-d H:i:s');
+        $this->validate($request, [
+            'category'  => 'required|array',
+            'language'  => 'required|array',
+        ]);
 
-        PropsCategory::where('id', $id)->update($param);
+        if (in_array('en', $params['language']) && !empty($params['category'])) {
+            $update['name'] = $params['category'][0];
+        }
+        foreach ($params['language'] as $key=>$language) {
+            $ext[] = [$language=>$params['category'][$key]];
+        }
+
+        $update['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
+        $update['updated_at'] = date('Y-m-d H:i:s');
+
+        PropsCategory::where('id', $id)->update($update);
         return response()->json(['result' => 'success']);
     }
 

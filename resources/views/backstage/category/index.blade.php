@@ -11,10 +11,11 @@
         <table class="layui-table"   lay-filter="post_table" id="post_table" >
             <thead>
             <tr>
-                <th lay-data="{field:'id', width:200}">ID</th>
-                <th lay-data="{field:'name', width:200,sort:true}">名称</th>
-                <th lay-data="{field:'created_at', width:200}">创建时间</th>
-                <th lay-data="{field:'updated_at', width:200}">修改时间</th>
+                <th lay-data="{field:'id', width:100}">ID</th>
+                <th lay-data="{field:'name', width:150,sort:true}">名称</th>
+                <th lay-data="{field:'language', width:500,sort:true}">语言包</th>
+                <th lay-data="{field:'created_at', width:160}">创建时间</th>
+                <th lay-data="{field:'updated_at', width:160}">修改时间</th>
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#postop'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
@@ -23,6 +24,7 @@
                 <tr>
                     <td>{{$value->id}}</td>
                     <td>{{$value->name}}</td>
+                    <td>{{$value->language}}</td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>
 {{--                    <td>@if($value->deleted_at=='0000-00-00 00:00:00')@else{{$value->deleted_at}}@endif</td>--}}
@@ -66,7 +68,7 @@
                         title: '道具设置',
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['30%','50%'],
+                        area: ['50%','90%'],
                         offset: 'auto',
                         'scrollbar':true,
                         content: '/backstage/props/category/'+id+'/edit',
@@ -109,7 +111,7 @@
                     title: '道具设置',
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['30%','50%'],
+                    area: ['50%','90%'],
                     offset: 'auto',
                     content: '/backstage/props/category/create',
                 });
