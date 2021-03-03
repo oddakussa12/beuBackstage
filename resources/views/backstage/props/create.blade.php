@@ -51,8 +51,8 @@
                     <label class="layui-form-label">状态：</label>
                     <div class="layui-input-block">
                         <select  name="is_delete" >
-                            <option value="0">下架</option>
-                            <option value="1">上架</option>
+                            <option value="1">下架</option>
+                            <option value="0">上架</option>
                         </select>
                     </div>
                 </div>
