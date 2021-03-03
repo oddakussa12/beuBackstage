@@ -16,24 +16,24 @@
             <div class="layui-inline">
 {{--                <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>--}}
                 <div class="layui-btn layui-btn-primary">{{$data->total()}}</div>
-                <button id="add" type="button" class="layui-btn layui-btn-normal">添加</button>
+                <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
             </div>
         </form>
         <table class="layui-table"   lay-filter="post_table" id="post_table" >
             <thead>
             <tr>
                 <th lay-data="{field:'id', width:80}">ID</th>
-                <th lay-data="{field:'cover', width:80}">图片</th>
-                <th lay-data="{field:'name', width:150,sort:true}">名称</th>
+                <th lay-data="{field:'cover', width:80}">Image</th>
+                <th lay-data="{field:'name', width:150,sort:true}">Name</th>
 {{--                <th lay-data="{field:'type', width:100}">类型</th>--}}
-                <th lay-data="{field:'is_delete', width:100}">状态</th>
-                <th lay-data="{field:'recommendation', width:100}">是否推荐</th>
-                <th lay-data="{field:'category', width:80}">类别</th>
-                <th lay-data="{field:'camera', width:80}">摄像头</th>
+                <th lay-data="{field:'recommendation', width:120}">Recommend</th>
+                <th lay-data="{field:'category', width:100}">Category</th>
+                <th lay-data="{field:'camera', width:80}">Camera</th>
                 <th lay-data="{field:'hash', width:280}">Hash(MD5)</th>
+                <th lay-data="{field:'is_delete', width:100}">Status</th>
                 <th lay-data="{field:'url', width:360}">URL</th>
-                <th lay-data="{field:'created_at', width:160}">创建时间</th>
-                <th lay-data="{field:'updated_at', width:160}">修改时间</th>
+                <th lay-data="{field:'created_at', width:160}">Created_at</th>
+                <th lay-data="{field:'updated_at', width:160}">Updated_at</th>
 {{--                <th lay-data="{field:'deleted_at', width:160}">删除时间</th>--}}
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#postop'}">{{trans('common.table.header.op')}}</th>
 
@@ -46,11 +46,11 @@
                     <td><img style="width: 33px;" src="{{$value->cover}}"></td>
                     <td>{{$value->name}}</td>
 {{--                    <td>{{$value->type}}</td>--}}
-                    <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="上架|下架"></td>
-                    <td><input type="checkbox" @if($value->recommendation==1) checked @endif name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="是|否"></td>
+                    <td><input type="checkbox" @if($value->recommendation==1) checked @endif name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>{{$value->category}}</td>
                     <td>{{$value->camera}}</td>
                     <td>{{$value->hash}}</td>
+                    <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="上架|下架"></td>
                     <td>{{$value->url}}</td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>
