@@ -36,6 +36,8 @@ Route::group(['prefix'=>'backstage'] , function(){
         Route::group(['namespace'=>'Content','prefix'=>'content' , 'as' => 'content::'] , function (){
             Route::get('music/index' , 'MusicController@index')->name('music.index');
             Route::patch('music/{music}' , 'MusicController@update')->name('music.update');
+            Route::delete('music/{music}' , 'MusicController@destroy')->name('music.destroy');
+            Route::post('music' , 'MusicController@store')->name('music.store');
         });
 
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){
@@ -63,6 +65,11 @@ Route::group(['prefix'=>'backstage'] , function(){
         Route::resource('menu' , 'MenuController');
         Route::resource('translation' , 'TranslationController');
         Route::resource('config' , 'ConfigController');
+    });
+    Route::group(['middleware' => ['auth']] , function (){
+        Route::group(['prefix'=>'qn' , 'as' => 'qn.'] , function (){
+            Route::get('bundle/token' , 'QiNiuController@bundleToken')->name('bundle.token'); // bundle token
+        });
     });
     Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
 

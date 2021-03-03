@@ -70,51 +70,12 @@ return [
             'domain'     => env('QINIU_DOMAIN', 'pv4wf6zk2.bkt.clouddn.com/'), // or host: https://xxxx.clouddn.com
         ],
 
-        'qn_avatar_sia' => [
-            'driver'     => 'qn_avatar_sia',
+        'qn_eventsource' => [
+            'driver'     => 'qn_eventsource',
             'access_key' => env('QINIU_ACCESS_KEY', 'Rzzn0G7I6K38FsVHHkW9o48ZWZsuOpPvRQGzZyLS'),
             'secret_key' => env('QINIU_SECRET_KEY', 'BrMK7FBrj7wvzA7KC7q4fBsaYBznA2p_6PWT6ku5'),
-            'bucket'     => env('QINIU_BUCKET', 'idwebother-sia'),
-            'domain'     => env('QINIU_DOMAIN', 'qnwebothersia.mmantou.cn/'), // or host: https://xxxx.clouddn.com
-        ],
-        'qn_cover' => [
-            'driver'     => 'qn_cover',
-            'access_key' => env('QINIU_ACCESS_KEY', 'Rzzn0G7I6K38FsVHHkW9o48ZWZsuOpPvRQGzZyLS'),
-            'secret_key' => env('QINIU_SECRET_KEY', 'BrMK7FBrj7wvzA7KC7q4fBsaYBznA2p_6PWT6ku5'),
-            'bucket'     => env('QINIU_BUCKET', 'idwebother'),
-            'domain'     => env('QINIU_DOMAIN', 'pv4wf6zk2.bkt.clouddn.com/'), // or host: https://xxxx.clouddn.com
-        ],
-
-        'qn_subtitle' => [
-            'driver'     => 'qn_subtitle',
-            'access_key' => env('QINIU_ACCESS_KEY', 'Rzzn0G7I6K38FsVHHkW9o48ZWZsuOpPvRQGzZyLS'),
-            'secret_key' => env('QINIU_SECRET_KEY', 'BrMK7FBrj7wvzA7KC7q4fBsaYBznA2p_6PWT6ku5'),
-            'bucket'     => env('QINIU_BUCKET', 'idwebother'),
-            'domain'     => env('QINIU_DOMAIN', 'pv4wf6zk2.bkt.clouddn.com/'), // or host: https://xxxx.clouddn.comom
-        ],
-
-        'qn_video' => [
-            'driver'     => 'qn_video',
-            'access_key' => env('QINIU_ACCESS_KEY', 'Rzzn0G7I6K38FsVHHkW9o48ZWZsuOpPvRQGzZyLS'),
-            'secret_key' => env('QINIU_SECRET_KEY', 'BrMK7FBrj7wvzA7KC7q4fBsaYBznA2p_6PWT6ku5'),
-            'bucket'     => env('QINIU_BUCKET', 'idwebother'),
-            'domain'     => env('QINIU_DOMAIN', 'pv4wf6zk2.bkt.clouddn.com/'), // or host: https://xxxx.clouddn.com
-        ],
-
-        'qn_image' => [
-            'driver'     => 'qn_image',
-            'access_key' => env('QINIU_ACCESS_KEY', 'Rzzn0G7I6K38FsVHHkW9o48ZWZsuOpPvRQGzZyLS'),
-            'secret_key' => env('QINIU_SECRET_KEY', 'BrMK7FBrj7wvzA7KC7q4fBsaYBznA2p_6PWT6ku5'),
-            'bucket'     => env('QINIU_BUCKET', 'idwebother'),
-            'domain'     => env('QINIU_DOMAIN', 'pv4wf6zk2.bkt.clouddn.com/'), // or host: https://xxxx.clouddn.com
-        ],
-
-        'qn_image_sia' => [
-            'driver'     => 'qn_image_sia',
-            'access_key' => env('QINIU_ACCESS_KEY', 'Rzzn0G7I6K38FsVHHkW9o48ZWZsuOpPvRQGzZyLS'),
-            'secret_key' => env('QINIU_SECRET_KEY', 'BrMK7FBrj7wvzA7KC7q4fBsaYBznA2p_6PWT6ku5'),
-            'bucket'     => env('QINIU_BUCKET', 'eventsource'),
-            'domain'     => env('QINIU_DOMAIN', 'https://qnidyooulimage.mmantou.cn/'), // or host: https://xxxx.clouddn.com
+            'bucket'     => env('QINIU_EVENTSOURCE_BUCKET', 'eventsource'),
+            'domain'     => env('QINIU_DOMAIN', 'https://qneventsource.mmantou.cn/'), // or host: https://xxxx.clouddn.com
         ],
         'qn_event_source' => [
             'driver'     => 'qn_event_source',
