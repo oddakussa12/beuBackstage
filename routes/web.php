@@ -36,6 +36,7 @@ Route::group(['prefix'=>'backstage'] , function(){
         Route::group(['namespace'=>'Content','prefix'=>'content' , 'as' => 'content::'] , function (){
             Route::get('music/index' , 'MusicController@index')->name('music.index');
             Route::patch('music/{music}' , 'MusicController@update')->name('music.update');
+            Route::delete('music/{music}' , 'MusicController@destroy')->name('music.destroy');
             Route::post('music' , 'MusicController@store')->name('music.store');
         });
 

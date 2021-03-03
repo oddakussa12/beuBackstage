@@ -8,51 +8,56 @@
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
                 <table class="layui-hide" id="music_table" lay-filter="music_table"></table>
-                <form  class="layui-form" lay-filter="music_form">
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">{{trans('music.form.label.name')}}</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="name" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">{{trans('music.form.label.time')}}</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="time" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <div class="layui-upload">
-                                <button type="button" class="layui-btn" id="music"><i class="layui-icon"></i>Upload Music</button>
-                                <div class="layui-upload-list">
-                                    <table class="layui-table">
-                                        <thead>
-                                        <tr>
-                                            <th>File Name</th>
-                                            <th>Operate</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="fileList">
-
-                                        </tbody>
-                                    </table>
+                <div style="display:block;margin:0 80% 0 20%;width:500px;">
+                    <form  class="layui-form" lay-filter="music_form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">{{trans('music.form.label.name')}}</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit lay-filter="form_submit_add">{{trans('common.form.button.add')}}</button>
-                            <button class="layui-btn" lay-submit lay-filter="form_submit_update">{{trans('common.form.button.update')}}</button>
-                            <button type="reset" class="layui-btn layui-btn-primary">{{trans('common.form.button.reset')}}</button>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">{{trans('music.form.label.time')}}</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="time" lay-verify="required" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <div class="layui-upload">
+                                    <label class="layui-form-label">Upload Music</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-upload-list">
+                                            <table class="layui-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Operate</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="fileList">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="form_submit_add">{{trans('common.form.button.add')}}</button>
+                                <button type="button" class="layui-btn" id="music"><i class="layui-icon"></i>Upload Music</button>
+                                {{--                            <button class="layui-btn" lay-submit lay-filter="form_submit_update">{{trans('common.form.button.update')}}</button>--}}
+                                {{--                            <button type="reset" class="layui-btn layui-btn-primary">{{trans('common.form.button.reset')}}</button>--}}
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="layui-tab-item">
                 <audio id="player" src=""></audio>
@@ -125,7 +130,7 @@
     @parent
     <script type="text/html" id="operateTpl">
         <div class="layui-table-cell laytable-cell-1-6">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
+{{--            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>--}}
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
         </div>
     </script>
@@ -301,20 +306,20 @@
                     ,{field:'name', title:'Name', maxWidth:120 , edit:'text'}
                     ,{field:'hash', title:'Hash', minWidth:120}
                     ,{field:'time', title:'Time', minWidth:120 , edit:'text'}
-                    ,{field:'is_delete', title:'Deleted', minWidth:120 ,templet:function(d){
-                            if(d.is_delete==1)
+                    ,{field:'status', title:'Status', minWidth:120 ,templet:function(d){
+                            if(d.status==1)
                             {
-                                return '<input type="checkbox" checked name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="ON|OFF">';
+                                return '<input type="checkbox" checked name="status" lay-skin="switch" lay-filter="switchAll" >';
                             }else{
-                                return '<input type="checkbox"  name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="ON|OFF">';
+                                return '<input type="checkbox"  name="status" lay-skin="switch" lay-filter="switchAll" >';
                             }
                         }}
                     ,{field:'recommendation', title:'Recommendation', minWidth:120 ,templet:function(d){
                             if(d.recommendation==1)
                             {
-                                return '<input type="checkbox" checked name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="ON|OFF">';
+                                return '<input type="checkbox" checked name="recommendation" lay-skin="switch" lay-filter="switchAll" >';
                             }else{
-                                return '<input type="checkbox"  name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="ON|OFF">';
+                                return '<input type="checkbox"  name="recommendation" lay-skin="switch" lay-filter="switchAll" >';
                             }
                         }}
                     ,{field:'sort', title:'Sort', minWidth:120 , edit:'text'}
@@ -322,14 +327,15 @@
                     ,{field:'op', minWidth:120 , templet: '#operateTpl'}
                 ]]
                 ,page: true
-                ,limit:2
-                ,limits:[2]
+                ,limit:4
+                ,limits:[4]
                 ,response: {
                     statusCode: 200
                 }
                 ,parseData: function(res){
                     console.log(res);
                     var list = [];
+                    $(play_list).empty();
                     musicList(res);
                     // var data = res.data;
 
@@ -407,7 +413,7 @@
                 });
             });
 
-            table.on('tool(translation_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(music_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -415,7 +421,23 @@
                 if(layEvent === 'edit'){ //查看
                     //do somehing
                 }else if(layEvent === 'del') { //查看
-
+                    @if(!Auth::user()->can('content::music.destroy'))
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
+                    table.render();
+                    return true;
+                    @endif
+                    common.confirm("{{trans('common.confirm.delete')}}" , function(){
+                        common.ajax("{{url('/backstage/content/music')}}/"+data.id , {} , function(res){
+                            common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
+                                location.reload();
+                            });
+                        } , 'delete' , function (event,xhr,options,exc) {
+                            setTimeout(function(){
+                                common.init_error(event,xhr,options,exc);
+                                form.render();
+                            },100);
+                        });
+                    } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
                 }
             });
 
@@ -486,7 +508,9 @@
                                 var fileListView = $('#fileList')
                                 fileListView.find('.music-tr').remove();
                                 var tr = $(['<tr class="music">'
-                                    ,'<td><a href="'+res.domain+data.name+'" target="_blank">'+ res.domain+data.name +'</a><input type="hidden" name="music" value="'+res.domain+data.name+'"></td>'
+                                    ,'<td><a href="'+res.domain+data.name+'" target="_blank">'+ res.domain+data.name +'</a>' +
+                                    '<input type="hidden" name="music" value="'+res.domain+data.name+'"></td>'+
+                                    '<input type="hidden" name="hash" value="'+data.hash+'"></td>'
                                     ,'</td>'
                                     ,'<td><button type="button" class="layui-btn layui-btn-xs layui-btn-danger file-delete">delete</button>'
                                     ,'</td>'

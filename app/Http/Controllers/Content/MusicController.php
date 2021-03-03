@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Content;
 
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
@@ -36,10 +37,10 @@ class MusicController extends BaseController
     public function update(Request $request , $id)
     {
         $data = array();
-        if($request->has('is_delete'))
+        if($request->has('status'))
         {
-            $is_delete = $request->input('is_delete' , 'on');
-            $data['is_delete'] = $is_delete=='on'?1:0;
+            $status = $request->input('status' , 'on');
+            $data['status'] = $status=='on'?1:0;
         }
         if($request->has('recommendation'))
         {
@@ -57,6 +58,7 @@ class MusicController extends BaseController
         }
         if(!blank($data))
         {
+            $data['updated_at'] = Carbon::now()->toDateTimeString();
             DB::connection('lovbee')->table('bgms')->where('id' , $id)->update($data);
         }
         return response()->json([
@@ -69,6 +71,12 @@ class MusicController extends BaseController
     public function store(Request $request)
     {
         $data = array();
+        $this->validate($request, [
+            'name' => 'required|alpha_num',
+            'music' => 'required|string',
+            'hash' => 'required|string',
+            'time' => 'required|string',
+        ]);
         if($request->has('name'))
         {
             $name = strval($request->input('name' , ''));
@@ -90,12 +98,23 @@ class MusicController extends BaseController
         }
         if(!blank($data))
         {
+            $data['created_at'] = Carbon::now()->toDateTimeString();
             DB::connection('lovbee')->table('bgms')->insert($data);
         }
         return response()->json([
             'result' => 'success',
         ]);
 
+    }
+
+    public function destroy($id)
+    {
+        $data['is_delete'] = 1;
+        $data['deleted_at'] = Carbon::now()->toDateTimeString();
+        DB::connection('lovbee')->table('bgms')->where('id' , $id)->update($data);
+        return response()->json([
+            'result' => 'success',
+        ]);
     }
 
 }
