@@ -97,7 +97,7 @@
         </form>
     </div>
 @endsection
-
+<script src="/js/bundle.js"></script>
 @section('footerScripts')
     @parent
     <script type="text/html" id="operateTpl">
@@ -173,8 +173,13 @@
                     ,choose: function (obj) {
                         let files = obj.pushFile();
                         obj.preview(function (index, file, result) {
-                            fileName = files[index].name;
-                            console.log(fileName);
+                            console.log(file);
+                            browserMD5File(file, function (err, md5) {
+                                if (type!=='') {
+                                    $("#hash").val(md5);
+                                }
+                                console.log('md5:'+md5); // 97027eb624f85892c69c4bcec8ab0f11
+                            });
                         })
                     }, data: {
                         //key: 'aaa.png',  //自定义文件名
@@ -192,7 +197,6 @@
                             $("#cover").val(file);
                             $("#show").attr('src', file).show();
                         } else {
-                            $("#hash").val(res.hash);
                             $("#url").val(file);
                             $("#bundle").text(file);
                         }

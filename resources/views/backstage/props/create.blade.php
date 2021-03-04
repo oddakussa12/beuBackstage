@@ -97,7 +97,7 @@
         </form>
     </div>
 @endsection
-
+<script src="/js/bundle.js"></script>
 @section('footerScripts')
     @parent
     <script type="text/html" id="operateTpl">
@@ -161,8 +161,9 @@
                 let btn = $(this);
                 uploads(btn, 'bundle');
             });
+
+
             function uploads(btn, type=''){
-                let fileName = '';
                 upload.render({
                     elem: btn //绑定元素
                     //, url: 'https://upload-as0.qiniup.com/' //上传接口
@@ -173,8 +174,13 @@
                     ,choose: function (obj) {
                         let files = obj.pushFile();
                         obj.preview(function (index, file, result) {
-                            fileName = files[index].name;
-                            console.log(fileName);
+                            console.log(file);
+                            browserMD5File(file, function (err, md5) {
+                               if (type!=='') {
+                                   $("#hash").val(md5);
+                               }
+                                console.log('md5:'+md5); // 97027eb624f85892c69c4bcec8ab0f11
+                            });
                         })
                     }, data: {
                         //key: 'aaa.png',  //自定义文件名
@@ -194,7 +200,6 @@
                             $("#show").attr('src', file).show();
                         } else {
                             $("#url").val(file);
-                            $("#hash").val(res.hash);
                             $("#bundle").text(file);
                         }
                     }
@@ -205,7 +210,16 @@
 
                 });
             }
+
+
+            function handle(e) {
+                var file = e.target.files[0];
+                browserMD5File(file, function (err, md5) {
+                    console.log(md5); // 97027eb624f85892c69c4bcec8ab0f11
+                });
+            }
         });
+
     </script>
     <style>
         .multi dl dd.layui-this{background-color:#fff}
