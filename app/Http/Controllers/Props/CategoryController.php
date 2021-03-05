@@ -13,16 +13,13 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-
-        $uri    = parse_url($request->server('REQUEST_URI'));
-        $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
-        $params['query'] = $query;
-        $goods   = PropsCategory::orderByDesc('id')->paginate(10);
+        $goods  = PropsCategory::orderByDesc('id')->paginate(10);
         $params['appends'] = $params;
         $params['data']    = $goods;
 

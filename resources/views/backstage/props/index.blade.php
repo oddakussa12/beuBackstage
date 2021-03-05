@@ -13,8 +13,21 @@
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
-            <div class="layui-inline">
-{{--                <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>--}}
+            <div class="layui-form-item">
+                <label class="layui-form-label">Name:</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" name="name" id="name" value="@if(!empty($name)){{$name}}@endif" />
+                </div>
+                <label class="layui-form-label">Category:</label>
+                <div class="layui-input-inline">
+                    <select  name="category">
+                        <option value="">全部(All)</option>
+                        @foreach($categories as $cate)
+                            <option value="{{$cate->name}}" @if(isset($category) && $category==$cate->name) selected @endif>{{$cate->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
                 <div class="layui-btn layui-btn-primary">{{$data->total()}}</div>
                 <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
             </div>

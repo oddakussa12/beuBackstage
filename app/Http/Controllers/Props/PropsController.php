@@ -18,14 +18,20 @@ class PropsController extends Controller
      */
     public function index(Request $request)
     {
-
-        $uri    = parse_url($request->server('REQUEST_URI'));
-        $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
-        $params['query'] = $query;
-        $goods   = Props::orderByDesc('id')->paginate(10);
         $params['appends'] = $params;
-        $params['data']    = $goods;
+        $props  = Props::orderByDesc('id');
+
+        if (!empty($params['name'])) {
+            $props = $props->where('name', 'like', "%{$params['name']}%");
+        }
+        if (!empty($params['category'])) {
+            $props = $props->where('category', $params['category']);
+        }
+        $props = $props->paginate(10);
+        $params['data']    = $props;
+
+        $params['categories'] = PropsCategory::whereNull('deleted_at')->get();
 
         return view('backstage.props.index', $params);
     }
