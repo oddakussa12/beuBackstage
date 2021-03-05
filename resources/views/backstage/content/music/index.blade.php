@@ -22,7 +22,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('music.form.label.time')}}</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="time" lay-verify="required" autocomplete="off" class="layui-input">
+                                    <input type="text" name="time" lay-verify="required" autocomplete="off" value="15" class="layui-input">
                                 </div>
                             </div>
                         </div>
@@ -128,6 +128,7 @@
 @endsection
 @section('footerScripts')
     @parent
+    <script src="/js/bundle.js"></script>
     <script type="text/html" id="operateTpl">
         <div class="layui-table-cell laytable-cell-1-6">
 {{--            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>--}}
@@ -530,6 +531,9 @@
                                     table.render();
                                 });
                                 fileListView.append(tr);
+                                browserMD5File(file, function (err, md5) {
+                                    $("input[name=hash]").val(md5);
+                                });
                             },
                             error:function(){
                                 alert('upload failed');
