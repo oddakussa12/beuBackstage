@@ -101,7 +101,9 @@ class PropsController extends Controller
         $params = $request->all();
         $param  = $request->except('_token');
 
-        if (isset($params['is_delete']) && in_array($params['is_delete'], ['on', 'off'])) {
+        if (isset($params['hot']) && in_array($params['hot'], ['on', 'off'])) {
+            $param['hot']  = $params['hot']=='on' ? 1 : 0;
+        } elseif (isset($params['is_delete']) && in_array($params['is_delete'], ['on', 'off'])) {
             $param['is_delete']  = $params['is_delete']=='off' ? 1 : 0;
             $param['deleted_at'] = $params['is_delete']=='off' ? date('Y-m-d H:i:s') : null;
         } elseif (isset($params['recommendation']) && in_array($params['recommendation'], ['on', 'off'])) {
