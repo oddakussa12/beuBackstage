@@ -46,7 +46,7 @@
                 form = layui.form,
                 $ = layui.$,
                 loadBar = layui.loadBar,
-                common = layui.common;
+                common = layui.common;
             form.verify({
                 email: function(value, item){ //value：表单的值、item：表单的DOM对象
                     if(!new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$").test(value)){
@@ -75,10 +75,10 @@
             var login = function(data){
                 loadBar.start();
                 try{
-                    common.ajax("{{ url('/backstage/login') }}", data.field, function (res) {
+                    common.ajax("{{ url('/backstage/login') }}", data.field, function (res) {
                         loadBar.finish();
                         common.prompt(res.message , 1 , 1500 , 6 , 'b' ,function () {
-                            location.href="{{ url('/backstage') }}";
+                            location.href="{{$redirect}}";
                         });
                     } , 'post' , function (e,xhr,opt) {
                         var msg = 'Unknown error';
