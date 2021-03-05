@@ -19,7 +19,7 @@ class PropsCategory extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-      'name', 'language'
+      'name', 'language', 'is_delete', 'sort',
     ];
 
 }

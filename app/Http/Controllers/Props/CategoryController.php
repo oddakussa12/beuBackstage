@@ -99,6 +99,8 @@ class CategoryController extends Controller
 
         if (isset($params['is_delete']) && in_array($params['is_delete'], ['on', 'off'])) {
             $update['is_delete'] = $params['is_delete'] == 'off' ? 1 : 0;
+        } elseif(isset($params['field'])) {
+            $update[$params['field']] = $params['value'];
         } else {
             $this->validate($request, [
                 'category'  => 'required|array',

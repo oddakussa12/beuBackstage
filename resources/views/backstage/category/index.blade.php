@@ -15,6 +15,7 @@
                 <th lay-data="{field:'name', width:150,sort:true}">名称</th>
                 <th lay-data="{field:'language', width:500,sort:true}">语言包</th>
                 <th lay-data="{field:'is_delete', width:100,}">状态</th>
+                <th lay-data="{field:'sort', width:100,edit: 'text'}">排序</th>
                 <th lay-data="{field:'created_at', width:160}">创建时间</th>
                 <th lay-data="{field:'updated_at', width:160}">修改时间</th>
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#postop'}">{{trans('common.table.header.op')}}</th>
@@ -27,6 +28,7 @@
                     <td>{{$value->name}}</td>
                     <td>{{$value->language}}</td>
                     <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="上架|下架"></td>
+                    <td>{{$value->sort}}</td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>
 {{--                    <td>@if($value->deleted_at=='0000-00-00 00:00:00')@else{{$value->deleted_at}}@endif</td>--}}
@@ -76,6 +78,15 @@
                         content: '/backstage/props/category/'+id+'/edit',
                     });
                 }
+            });
+            table.on('edit(post_table)', function(obj){
+                var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field; //得到字段
+                var params = {value:value , field:field};
+                common.ajax("{{url('/backstage/props/category')}}/"+data.id , params , function(res){
+                    common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                } , 'patch');
             });
             form.on('switch(switchAll)', function(data){
                 var checked = data.elem.checked;
