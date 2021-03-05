@@ -15,7 +15,7 @@
                 <th lay-data="{field:'name', width:150,sort:true}">名称</th>
                 <th lay-data="{field:'language', width:500,sort:true}">语言包</th>
                 <th lay-data="{field:'is_delete', width:100,}">状态</th>
-                <th lay-data="{field:'sort', width:100,edit: 'text'}">排序</th>
+                <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">排序</th>
                 <th lay-data="{field:'created_at', width:160}">创建时间</th>
                 <th lay-data="{field:'updated_at', width:160}">修改时间</th>
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#postop'}">{{trans('common.table.header.op')}}</th>
