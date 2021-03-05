@@ -96,21 +96,24 @@ class CategoryController extends Controller
     public function update(Request $request, int $id)
     {
         $params = $request->all();
-        $param  = $request->except('_token');
 
-        $this->validate($request, [
-            'category'  => 'required|array',
-            'language'  => 'required|array',
-        ]);
-
-        if (in_array('en', $params['language']) && !empty($params['category'])) {
-            $update['name'] = $params['category'][0];
+        if (isset($params['is_delete']) && in_array($params['is_delete'], ['on', 'off'])) {
+            $update['is_delete'] = $params['is_delete'] == 'off' ? 1 : 0;
+        } else {
+            $this->validate($request, [
+                'category'  => 'required|array',
+                'language'  => 'required|array',
+            ]);
+            if (in_array('en', $params['language']) && !empty($params['category'])) {
+                $update['name'] = $params['category'][0];
+            }
+            foreach ($params['language'] as $key=>$language) {
+                $ext[] = [$language=>$params['category'][$key]];
+            }
+            $update['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
         }
-        foreach ($params['language'] as $key=>$language) {
-            $ext[] = [$language=>$params['category'][$key]];
-        }
 
-        $update['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
+
         $update['updated_at'] = date('Y-m-d H:i:s');
 
         PropsCategory::where('id', $id)->update($update);

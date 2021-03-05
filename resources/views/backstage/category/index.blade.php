@@ -14,6 +14,7 @@
                 <th lay-data="{field:'id', width:100}">ID</th>
                 <th lay-data="{field:'name', width:150,sort:true}">名称</th>
                 <th lay-data="{field:'language', width:500,sort:true}">语言包</th>
+                <th lay-data="{field:'is_delete', width:100,}">状态</th>
                 <th lay-data="{field:'created_at', width:160}">创建时间</th>
                 <th lay-data="{field:'updated_at', width:160}">修改时间</th>
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#postop'}">{{trans('common.table.header.op')}}</th>
@@ -25,6 +26,7 @@
                     <td>{{$value->id}}</td>
                     <td>{{$value->name}}</td>
                     <td>{{$value->language}}</td>
+                    <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="上架|下架"></td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>
 {{--                    <td>@if($value->deleted_at=='0000-00-00 00:00:00')@else{{$value->deleted_at}}@endif</td>--}}
