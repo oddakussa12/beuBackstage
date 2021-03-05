@@ -13,7 +13,15 @@
     </style>
     <form class="layui-form layui-tab-content">
         {{ csrf_field() }}
-        <table class="layui-table" border="1" align="center">
+        <table class="layui-table">
+            <thred>
+                <tr>
+                    <th>分类名称</th>
+                    <th><input type="text" placeholder="仅可输入英文，不可有空格、#" id="name" name="name"  /></th>
+                </tr>
+            </thred>
+        </table>
+        <table id="layui-table" class="layui-table" border="1" align="center">
             <thead>
             <tr>
                 <th>序号</th>
@@ -69,7 +77,7 @@
             //添加一行
             function fun(){
                 let $td = $("#clo").clone();       //增加一行,克隆第一个对象
-                $(".layui-table").append($td);
+                $("#layui-table").append($td);
                 let i = 1;
                 $(".td").each(function(){       //增加一行后重新更新序号1,2,3......
                     $(this).html(i++);

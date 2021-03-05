@@ -14,7 +14,15 @@
     <form class="layui-form layui-tab-content">
         {{ csrf_field() }}
         <input type="hidden" id="id" name="id" value="{{$data->id}}">
-        <table class="layui-table" border="1" align="center">
+        <table class="layui-table">
+            <thred>
+                <tr>
+                    <th>分类名称</th>
+                    <th><input type="text" placeholder="仅可输入英文，不可有空格、#" id="name" name="name" value="{{$data->name}}" /></th>
+                </tr>
+            </thred>
+        </table>
+        <table id="layui-table" class="layui-table" border="1" align="center">
             <thead>
             <tr>
                 <th>序号</th>
@@ -23,22 +31,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr id="clo">
-                <td class="td">1</td>
-                <td> <input id="language[]" name="language[]" value="en" /></td>
-                <td> <input id="category[]" name="category[]" value="{{$data->name}}" /></td>
-            </tr>
             @if(!empty($data->language))
                 @foreach($data->language as $key=>$value)
-                    @if($key>0)
                         @foreach($value as $kk=>$vv)
-                            <tr id="clo">
-                                <td class="td">{{$key+2}}</td>
+                            <tr @if($kk==0) id="clo" @endif>
+                                <td class="td">{{$key+1}}</td>
                                 <td> <input id="language[]" name="language[]" value="{{$kk}}" /></td>
                                 <td> <input id="category[]" name="category[]" value="{{$vv}}" /></td>
                             </tr>
                         @endforeach
-                    @endif
                 @endforeach
             @endif
             </tbody>

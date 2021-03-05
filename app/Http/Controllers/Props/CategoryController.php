@@ -48,6 +48,7 @@ class CategoryController extends Controller
 
         Log::info('提交参数', $request->all());
         $this->validate($request, [
+            'name'      => 'required|string|max:30',
             'category'  => 'required|array',
             'language'  => 'required|array',
         ]);
@@ -58,14 +59,16 @@ class CategoryController extends Controller
             return ['code'=>200, 'result'=>'name alreadly existed'];
         }
 
-        if (in_array('en', $params['language']) && !empty($params['category'])) {
-            $insert['name'] = $params['category'][0];
+        if (!in_array('en', $params['language']) || empty($params['category'])) {
+            return ['code'=>200, 'result'=>'英文>>分类名称必须存在'];
         }
         foreach ($params['language'] as $key=>$language) {
             $ext[] = [$language=>$params['category'][$key]];
         }
 
         $insert['language'] = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
+        $insert['name']     = $this->filter($params['name']);
+
         PropsCategory::create($insert);
         return response()->json(['result'=>'success']);
     }
@@ -103,11 +106,12 @@ class CategoryController extends Controller
             $update[$params['field']] = $params['value'];
         } else {
             $this->validate($request, [
+                'name'      => 'required|string|max:30',
                 'category'  => 'required|array',
                 'language'  => 'required|array',
             ]);
-            if (in_array('en', $params['language']) && !empty($params['category'])) {
-                $update['name'] = $params['category'][0];
+            if (!in_array('en', $params['language']) || empty($params['category'])) {
+                return ['code'=>200, 'result'=>'英文>>分类名称必须存在'];
             }
             foreach ($params['language'] as $key=>$language) {
                 $ext[] = [$language=>$params['category'][$key]];
@@ -115,11 +119,25 @@ class CategoryController extends Controller
             $update['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
         }
 
-
+        $update['name']       = $this->filter($params['name']);
         $update['updated_at'] = date('Y-m-d H:i:s');
 
         PropsCategory::where('id', $id)->update($update);
         return response()->json(['result' => 'success']);
     }
 
+    /**
+     * @param $word
+     * @return string|string[]|force(kmixed)|null
+     * 过滤英文标点
+     */
+    public function filter($word)
+    {
+        $word = str_replace('&amp;', '', $word); // &
+        $word = str_replace(' ', '', $word);
+        // Filter 英文标点符号
+        return preg_replace("/[[:punct:]]/i","",$word);
+
+
+    }
 }
