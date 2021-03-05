@@ -14,6 +14,7 @@ class PropsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -31,7 +32,7 @@ class PropsController extends Controller
         $props = $props->paginate(10);
         $params['data']    = $props;
 
-        $params['categories'] = PropsCategory::whereNull('deleted_at')->get();
+        $params['categories'] = PropsCategory::where('is_delete', 0)->get();
 
         return view('backstage.props.index', $params);
     }
@@ -43,7 +44,7 @@ class PropsController extends Controller
      */
     public function create()
     {
-        $category = PropsCategory::whereNull('deleted_at')->get();
+        $category = PropsCategory::where('is_delete', 0)->get();
         return view('backstage.props.create', ['data' => null, 'categories'=>$category]);
     }
 
@@ -84,9 +85,10 @@ class PropsController extends Controller
     public function edit(int $id)
     {
         $data = Props::find($id);
-        $category = PropsCategory::whereNull('deleted_at')->get();
+        $category = PropsCategory::where('is_delete', 0)->get();
         return view('backstage.props.edit')->with(['data' => $data, 'categories'=>$category]);
     }
+
     /**
      * Update the specified resource in storage.
      *
@@ -94,7 +96,7 @@ class PropsController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $params = $request->all();
         $param  = $request->except('_token');

@@ -65,6 +65,15 @@
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="{{$data->name}}">
                     </div>
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否热门：</label>
+                    <div class="layui-input-block">
+                        <select  name="hot" >
+                            <option value="0" @if($data->hot==0) selected @endif>否</option>
+                            <option value="1" @if($data->hot==1) selected @endif>是</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">

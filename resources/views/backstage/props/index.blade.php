@@ -42,6 +42,7 @@
                 <th lay-data="{field:'recommendation', width:120}">Recommend</th>
                 <th lay-data="{field:'category', width:100}">Category</th>
                 <th lay-data="{field:'camera', width:80}">Camera</th>
+                <th lay-data="{field:'hot', width:100}">Hot</th>
                 <th lay-data="{field:'hash', width:280}">Hash(MD5)</th>
                 <th lay-data="{field:'is_delete', width:100}">Status</th>
                 <th lay-data="{field:'url', width:360}">URL</th>
@@ -62,6 +63,7 @@
                     <td><input type="checkbox" @if($value->recommendation==1) checked @endif name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>{{$value->category}}</td>
                     <td>{{$value->camera}}</td>
+                    <td><input type="checkbox" @if($value->hot==1) checked @endif name="hot" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>{{$value->hash}}</td>
                     <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="上架|下架"></td>
                     <td>{{$value->url}}</td>

@@ -65,6 +65,15 @@
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否热门：</label>
+                    <div class="layui-input-block">
+                        <select  name="hot" >
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
