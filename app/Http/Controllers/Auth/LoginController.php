@@ -55,9 +55,10 @@ class LoginController extends Controller
         return redirect($this->redirectTo);
     }
 
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
-        return view('admin.login');
+        $redirect = $request->input('origin' , '/backstage');
+        return view('admin.login' , compact('redirect'));
     }
 
     protected function validateLogin(Request $request)

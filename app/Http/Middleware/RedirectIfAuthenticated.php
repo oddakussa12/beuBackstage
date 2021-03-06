@@ -21,7 +21,7 @@ class RedirectIfAuthenticated
         if (Auth::guard($guard)->check()) {
             if(!$request->ajax())
             {
-                return redirect(LaravelLocalization::setLocale().'/backstage');
+                return redirect('/backstage');
             }
         }
         return $next($request);
