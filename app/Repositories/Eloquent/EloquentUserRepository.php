@@ -22,7 +22,11 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
     public function findByWhere($params)
     {
         $now  = Carbon::now();
-        $user = $this->model->withTrashed();
+
+        $user = $this->model->withTrashed()->join('users_countries', 'users.user_id', '=', 'users_countries.user_id');
+
+        $sql = "select u.*,c.* from t_users where 1 ";
+
         if (!empty($params['field'])&&!empty($params['value'])) {
             $keyword = $params['value'];
             $user    = $params['field']=='user_key'
@@ -37,12 +41,12 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             $user     = $user->where('user_country_id' , $country);
         }
         if (!empty($params['dateTime'])) {
-            $startDate = $now->startOfDay()->toDateTimeString();
             $endDate   = $now->endOfDay()->toDateTimeString();
-            $dateTime  =  $startDate.' - '.$endDate;
             $allDate   = explode(' - ' , $params['dateTime']);
             $start     = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->subHours(8)->toDateTimeString();
             $end       = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
+            $end       = $end > $endDate ? $endDate : $end;
+            $start     = $start > $end   ? $end     : $start;
             if ($end>$endDate) {
                 $end   = $endDate;
             }
@@ -50,9 +54,9 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
                 $start = $end;
             }
 
-            $user = $user->where('user_created_at' , '>=' , $start)->where('user_created_at' , '<=' , $end);
+            $user = $user->where('users.user_created_at' , '>=' , $start)->where('users.user_created_at' , '<=' , $end);
         }
-        return $user->orderBy($this->model->getCreatedAtColumn(), 'DESC')->paginate(10);
+        return $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC')->paginate(10);
     }
 
     public function export($params)
