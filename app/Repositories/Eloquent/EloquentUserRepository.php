@@ -31,7 +31,7 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             $keyword = $params['value'];
             $user    = $params['field']=='user_key'
                 ? $user->where(function ($query) use ($keyword) {$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");})
-                : $user->where($params['field'] , $params['value']);
+                : $user->where('users.'.$params['field'] , $params['value']);
         }
         if (!empty($params['country_code'])) {
             //$counties = config('country');
