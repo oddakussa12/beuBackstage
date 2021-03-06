@@ -3,24 +3,26 @@
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-form-item">
-                <label class="layui-form-label"></label>
-                <div class="layui-input-inline">
-                    <select name="field">
-                        <option value="">{{trans('common.form.placeholder.select_first')}}</option>
-                        @foreach(trans('user.form.select.query') as $key=>$translation)
-                            <option value="{{$key}}" @if(!empty($field)&&$field==$key) selected @endif>{{$translation}}</option>
-                        @endforeach
-                    </select>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('user.form.label.user_name')}}:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="fuzzy search" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
+                    </div>
                 </div>
-                <div class="layui-form-mid layui-word-aux">:</div>
-
-                <div class="layui-input-inline">
-                    <input class="layui-input" name="value" id="value"  @if(!empty($value)) value="{{$value}}" @endif />
+                <div class="layui-inline">
+                    <label class="layui-form-label">UserId:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="user_id" id="user_id"  @if(!empty($user_id)) value="{{$user_id}}" @endif />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('user.form.phone')}}:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="fuzzy search" name="phone" id="phone"  @if(!empty($phone)) value="{{$phone}}" @endif />
+                    </div>
                 </div>
             </div>
-
             <div class="layui-form-item">
-
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('comment.form.placeholder.comment_country_id')}}:</label>
                     <div class="layui-input-inline">
@@ -35,14 +37,14 @@
 
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('user.form.label.user_created_at')}}:</label>
-                    <div class="layui-input-inline" style="width: 240px;">
+                    <div class="layui-input-inline" style="width: 300px;">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
                 </div>
 
                 <div class="layui-inline">
                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                    <a href="{{route('passport::user.export')}}@if(!empty($query))?{{$query}}@endif" class="layui-btn" target="_blank">{{trans('common.form.button.export')}}</a>
+{{--                    <a href="{{route('passport::user.export')}}@if(!empty($query))?{{$query}}@endif" class="layui-btn" target="_blank">{{trans('common.form.button.export')}}</a>--}}
                     <div class="layui-btn layui-btn-primary">{{$users->total()}}</div>
                 </div>
             </div>
@@ -54,9 +56,11 @@
                 <th  lay-data="{field:'user_avatar', width:80}">头像</th>
                 <th  lay-data="{field:'user_nick_name', minWidth:150}">用户昵称</th>
                 <th  lay-data="{field:'user_name', minWidth:190}">用户名</th>
-                <th  lay-data="{field:'user_gender', width:100}">性别</th>
+                <th  lay-data="{field:'user_phone', minWidth:120}">手机号</th>
+                <th  lay-data="{field:'friends', minWidth:120}">好友数</th>
+                <th  lay-data="{field:'user_gender', width:80}">性别</th>
                 <th  lay-data="{field:'country', width:100}">国家</th>
-                <th  lay-data="{field:'time', width:160,sort:true}">最近登录</th>
+                <th  lay-data="{field:'time', width:160,sort:true}">最近登录时间</th>
                 <th  lay-data="{field:'ip', width:160}">最近登录IP</th>
 
                 <th  lay-data="{field:'activation', width:100}">激活</th>
@@ -71,6 +75,8 @@
                     <td><img width="32px;" src="@if(stripos($user->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$user->user_avatar}}@else{{$user->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
                     <td>{{$user->user_nick_name}}</td>
                     <td>{{$user->user_name}}</td>
+                    <td>{{$user->user_phone_country}} {{$user->user_phone}}</td>
+                    <td>{{$user->friends}}</td>
                     <td><span class="layui-btn layui-btn-xs">@if($user->user_gender==-1)未知@elseif($user->user_gender==0)女@else男@endif</span></td>
                     <td>{{ $user->country }}</td>
                     <td>@if($user->time){{ date('Y-m-d H:i:s', $user->time) }}@endif</td>
@@ -127,6 +133,10 @@
                 if(layEvent === 'edit'){ //编辑
                     location.href='/{{app()->getLocale()}}/backstage/passport/user/'+data.user_id+'/edit';
                 }
+            });
+            table.init('user_table', { //转化静态表格
+                page:false,
+                toolbar: '#toolbar'
             });
 
             flow.lazyimg();

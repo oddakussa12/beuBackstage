@@ -23,23 +23,22 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
     public function findByWhere($params)
     {
         $now  = Carbon::now();
+        $user = $this->model->withTrashed()
+                ->join('users_countries', 'users.user_id', '=', 'users_countries.user_id')
+                ->join('users_phones', 'users.user_id', '=', 'users_phones.user_id');
 
-        $user = $this->model->withTrashed()->join('users_countries', 'users.user_id', '=', 'users_countries.user_id');
-
-        $sql = "select u.*,c.* from t_users where 1 ";
-
-        if (!empty($params['field'])&&!empty($params['value'])) {
-            $keyword = $params['value'];
-            $user    = $params['field']=='user_key'
-                ? $user->where(function ($query) use ($keyword) {$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");})
-                : $user->where('users.'.$params['field'] , $params['value']);
+        if (!empty($params['user_id'])) {
+            $user    = $user->where('users.user_id', $params['user_id']);
+        }
+        if (!empty($params['phone'])) {
+            $user    = $user->where('users_phones.user_phone', 'like', "%{$params['phone']}%");
+        }
+        if (!empty($params['keyword'])) {
+            $keyword = $params['keyword'];
+            $user    = $user->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
         }
         if (!empty($params['country_code'])) {
-            //$counties = config('country');
-            //$codes    = collect($counties)->pluck('code')->all();
-            //$k        = array_search($params['country_code'] , $codes);
-            //$country  = $k===false?0:intval($k+1);
-            $user     = $user->where('users_countries.country', strtolower($params['country_code']));
+            $user    = $user->where('users_countries.country', strtolower($params['country_code']));
         }
         if (!empty($params['dateTime'])) {
             $endDate   = $now->endOfDay()->toDateTimeString();
@@ -55,16 +54,22 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
                 $start = $end;
             }
 
-            $user = $user->where('users.user_created_at' , '>=' , $start)->where('users.user_created_at' , '<=' , $end);
+            $user = $user->whereBetween('users.user_created_at', [$start, $end]);
         }
         $result  = $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC')->paginate(10);
         $userIds = $result->pluck('user_id')->toArray();
         $logs    = DB::connection('lovbee')->table('status_logs')->whereIn('user_id', $userIds)->groupBy('user_id')->orderByDesc('created_at')->get();
+        $friends = DB::connection('lovbee')->table('users_friends')->select(DB::raw('count(1) num'), 'user_id')->whereIn('user_id', $userIds)->groupBy('user_id')->get();
         foreach ($result as $item) {
             foreach ($logs as $log) {
                 if ($item->user_id==$log->user_id) {
                     $item->ip   = $log->ip;
                     $item->time = $log->time;
+                }
+            }
+            foreach ($friends as $friend) {
+                if ($item->user_id==$friend->user_id) {
+                    $item->friends = $friend->num;
                 }
             }
         }

@@ -50,6 +50,7 @@ return [
         ]
     ],
     'form'=>[
+        'phone'=>'手机号',
         'select'=>[
             'query'=>[
                 'user_key'=>'关键字',
@@ -62,7 +63,7 @@ return [
           'export'=>'导出'
         ],
         'label'=>[
-            'user_name'=>'账号',
+            'user_name'=>'用户名',
             'user_email'=>'邮箱',
             'user_ip_address'=>'注册IP',
             'user_passwd'=>'密码',
