@@ -6,7 +6,7 @@
                 <label class="layui-form-label"></label>
                 <div class="layui-input-inline">
                     <select name="field">
-                        <option value="">{{trans('common.form.placeholder.select_first')}} {{trans('user.form.select.query.user_email')}}</option>
+                        <option value="">{{trans('common.form.placeholder.select_first')}}</option>
                         @foreach(trans('user.form.select.query') as $key=>$translation)
                             <option value="{{$key}}" @if(!empty($field)&&$field==$key) selected @endif>{{$translation}}</option>
                         @endforeach
@@ -56,11 +56,12 @@
                 <th  lay-data="{field:'user_name', minWidth:190}">用户名</th>
                 <th  lay-data="{field:'user_gender', width:100}">性别</th>
                 <th  lay-data="{field:'country', width:100}">国家</th>
+                <th  lay-data="{field:'time', width:160,sort:true}">最近登录</th>
+                <th  lay-data="{field:'ip', width:160}">最近登录IP</th>
+
                 <th  lay-data="{field:'activation', width:100}">激活</th>
-{{--                <th  lay-data="{field:'user_level', width:100}">{{trans('user.table.header.user_level')}}</th>--}}
-{{--                <th  lay-data="{field:'user_is_block', width:100}">{{trans('user.table.header.user_block')}}</th>--}}
                 <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
-                <th  lay-data="{field:'user_op', minWidth:250 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+{{--                <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>--}}
             </tr>
             </thead>
             <tbody>
@@ -71,15 +72,11 @@
                     <td>{{$user->user_nick_name}}</td>
                     <td>{{$user->user_name}}</td>
                     <td><span class="layui-btn layui-btn-xs">@if($user->user_gender==-1)未知@elseif($user->user_gender==0)女@else男@endif</span></td>
-{{--                    <td><input type="checkbox" @if($user->user_level>0) checked @endif name="user_level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>--}}
-{{--                    <td><input type="checkbox" @if($user->is_block==true) checked @endif name="is_block" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>--}}
                     <td>{{ $user->country }}</td>
+                    <td>@if($user->time){{ date('Y-m-d H:i:s', $user->time) }}@endif</td>
+                    <td>{{$user->ip}}</td>
                     <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) 是 @else 否 @endif</span></td>
-
-{{--                    <td><span class="layui-btn layui-btn-xs">@if($user->type==1)2@endif</span></td>--}}
                     <td>{{ $user->user_format_created_at }}</td>
-
-                    <td></td>
                 </tr>
             @endforeach
             </tbody>

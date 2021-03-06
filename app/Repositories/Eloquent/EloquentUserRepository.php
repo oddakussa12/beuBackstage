@@ -10,6 +10,7 @@ namespace App\Repositories\Eloquent;
 use Carbon\Carbon;
 use App\Repositories\EloquentBaseRepository;
 use App\Repositories\Contracts\UserRepository;
+use Illuminate\Support\Facades\DB;
 
 
 class EloquentUserRepository  extends EloquentBaseRepository implements UserRepository
@@ -56,7 +57,18 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
 
             $user = $user->where('users.user_created_at' , '>=' , $start)->where('users.user_created_at' , '<=' , $end);
         }
-        return $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC')->paginate(10);
+        $result  = $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC')->paginate(10);
+        $userIds = $result->pluck('user_id')->toArray();
+        $logs    = DB::connection('lovbee')->table('status_logs')->whereIn('user_id', $userIds)->groupBy('user_id')->orderByDesc('created_at')->get();
+        foreach ($result as $item) {
+            foreach ($logs as $log) {
+                if ($item->user_id==$log->user_id) {
+                    $item->ip   = $log->ip;
+                    $item->time = $log->time;
+                }
+            }
+        }
+        return $result;
     }
 
     public function export($params)
