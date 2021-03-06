@@ -55,7 +55,6 @@ return [
                 'user_key'=>'关键字',
                 'user_id'=>'ID ',
                 'user_name'=>'账号',
-                'user_email'=>'邮箱',
             ]
         ],
         'button'=>[

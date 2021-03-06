@@ -6,7 +6,7 @@
                 <label class="layui-form-label"></label>
                 <div class="layui-input-inline">
                     <select name="field">
-                        <option value="">{{trans('common.form.placeholder.select_first')}}</option>
+                        <option value="">{{trans('common.form.placeholder.select_first')}} {{trans('user.form.select.query.user_email')}}</option>
                         @foreach(trans('user.form.select.query') as $key=>$translation)
                             <option value="{{$key}}" @if(!empty($field)&&$field==$key) selected @endif>{{$translation}}</option>
                         @endforeach
@@ -56,7 +56,6 @@
                 <th  lay-data="{field:'user_name', minWidth:190}">用户名</th>
                 <th  lay-data="{field:'user_gender', width:100}">性别</th>
                 <th  lay-data="{field:'country', width:100}">国家</th>
-                <th  lay-data="{field:'type', width:100}">类型</th>
                 <th  lay-data="{field:'activation', width:100}">激活</th>
 {{--                <th  lay-data="{field:'user_level', width:100}">{{trans('user.table.header.user_level')}}</th>--}}
 {{--                <th  lay-data="{field:'user_is_block', width:100}">{{trans('user.table.header.user_block')}}</th>--}}
@@ -75,7 +74,6 @@
 {{--                    <td><input type="checkbox" @if($user->user_level>0) checked @endif name="user_level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>--}}
 {{--                    <td><input type="checkbox" @if($user->is_block==true) checked @endif name="is_block" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>--}}
                     <td>{{ $user->country }}</td>
-                    <td><span class="layui-btn layui-btn-xs">@if($user->type==0) 1 @else 1 @endif</span></td>
                     <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) 是 @else 否 @endif</span></td>
 
 {{--                    <td><span class="layui-btn layui-btn-xs">@if($user->type==1)2@endif</span></td>--}}
