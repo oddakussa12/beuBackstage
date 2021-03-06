@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Passport;
 
+use App\Exports\MessageExport;
 use App\Models\Passport\BlackUser;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -16,6 +17,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use App\Repositories\Contracts\UserRepository;
 use App\Http\Requests\Passport\UpdateUserRequest;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -65,7 +67,7 @@ class UserController extends Controller
             $start = $startDate;
             $end = $endDate;
         }
-        return (new UsersExport($params))->download('user'.$start.'-'.$end.'.xlsx');
+        return  Excel::download(new UsersExport($params), 'user-'.$start.'-'.$end.'.xlsx');
     }
 
     public function videoView($id)

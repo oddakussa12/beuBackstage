@@ -44,7 +44,7 @@
 
                 <div class="layui-inline">
                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-{{--                    <a href="{{route('passport::user.export')}}@if(!empty($query))?{{$query}}@endif" class="layui-btn" target="_blank">{{trans('common.form.button.export')}}</a>--}}
+                    <a href="{{route('passport::user.export')}}@if(!empty($query))?{{$query}}@endif" class="layui-btn" target="_blank">{{trans('common.form.button.export')}}</a>
                     <div class="layui-btn layui-btn-primary">{{$users->total()}}</div>
                 </div>
             </div>
@@ -56,8 +56,8 @@
                 <th  lay-data="{field:'user_avatar', width:80}">头像</th>
                 <th  lay-data="{field:'user_nick_name', minWidth:150}">用户昵称</th>
                 <th  lay-data="{field:'user_name', minWidth:190}">用户名</th>
-                <th  lay-data="{field:'user_phone', minWidth:120}">手机号</th>
-                <th  lay-data="{field:'friends', minWidth:120}">好友数</th>
+                <th  lay-data="{field:'user_phone', minWidth:130}">手机号</th>
+                <th  lay-data="{field:'friends', minWidth:120,sort:true}">好友数</th>
                 <th  lay-data="{field:'user_gender', width:80}">性别</th>
                 <th  lay-data="{field:'country', width:100}">国家</th>
                 <th  lay-data="{field:'time', width:160,sort:true}">最近登录时间</th>
@@ -79,7 +79,7 @@
                     <td>{{$user->friends}}</td>
                     <td><span class="layui-btn layui-btn-xs">@if($user->user_gender==-1)未知@elseif($user->user_gender==0)女@else男@endif</span></td>
                     <td>{{ $user->country }}</td>
-                    <td>@if($user->time){{ date('Y-m-d H:i:s', $user->time) }}@endif</td>
+                    <td>{{$user->time}}</td>
                     <td>{{$user->ip}}</td>
                     <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) 是 @else 否 @endif</span></td>
                     <td>{{ $user->user_format_created_at }}</td>

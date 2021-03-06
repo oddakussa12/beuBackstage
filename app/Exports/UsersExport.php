@@ -1,13 +1,19 @@
 <?php
 namespace App\Exports;
 
+use App\Repositories\Contracts\UserRepository;
 use Carbon\Carbon;
-use App\Models\Passport\User;
-use Maatwebsite\Excel\Concerns\FromQuery;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
+use PhpOffice\PhpSpreadsheet\Cell\StringValueBinder;
 
-class UsersExport implements FromQuery,WithMapping
+class UsersExport extends StringValueBinder implements FromCollection,WithHeadings,ShouldAutoSize,WithCustomValueBinder
 {
     use Exportable;
 
@@ -18,64 +24,25 @@ class UsersExport implements FromQuery,WithMapping
         $this->params = $params;
     }
 
-    public function map($user): array
+    /**
+     * @return string[]
+     * 设置header头
+     */
+    public function headings(): array
     {
-        return [
-            $user->user_id,
-            $user->user_name,
-            $user->user_email,
-            $user->user_src,
-            $user->country_name,
-            $user->user_ip_address,
-            Carbon::parse($user->user_created_at)->addHours(8)->toDateTimeString()
-        ];
+        return ['user_id', 'user_avatar', 'user_name', 'user_nick_name', 'user_phone_country', 'user_phone','user_gender', 'country','user_register_at','ip','last_login_time','friend_count'];
     }
 
-    public function query()
+    /**
+     * @param array $params
+     * @return Collection
+     * 返回结果集
+     */
+    public function collection($params=[]): Collection
     {
-        $now = Carbon::now();
-        $params = $this->params;
-        $user = User::query()
-            ->leftJoin('countries', 'users.user_country_id', '=', 'countries.country_id')
-            ->select(['users.user_id' , 'users.user_name' , 'users.user_email' , 'users.user_src'  , 'countries.country_name' , 'users.user_ip_address' , 'users.user_created_at']);
-        if(!empty($params['field'])&&!empty($params['value']))
-        {
-            $user = $params['field']=='user_key'?$user->where('user_name' , 'like' , "%{$params['value']}%"):$user->where($params['field'] , $params['value']);
-        }
-
-        if(!empty($params['country_code']))
-        {
-            $counties = config('country');
-            $codes = collect($counties)->pluck('code')->all();
-            $k = array_search($params['country_code'] , $codes);
-            $country = $k===false?0:intval($k+1);
-            $user = $user->where('user_country_id' , $country);
-        }
-        if(!empty($params['dateTime']))
-        {
-            $startDate = $now->startOfDay()->toDateTimeString();
-            $endDate = $now->endOfDay()->toDateTimeString();
-            $dateTime =  $params['dateTime'];
-            $allDate = explode(' - ' , $dateTime);
-            $start = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->subHours(8)->toDateTimeString();
-            $end = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
-            if($end>$endDate)
-            {
-                $end =  $endDate;
-            }
-            if($start>$end)
-            {
-                $start = $end;
-            }
-            if(Carbon::createFromFormat('Y-m-d H:i:s' , $start)->DiffInDays($end)>15)
-            {
-                $start = $now->startOfDay()->toDateTimeString();
-                $end = $now->endOfDay()->toDateTimeString();
-            }
-        }else{
-            $start = $now->startOfDay()->toDateTimeString();
-            $end = $now->endOfDay()->toDateTimeString();
-        }
-        return $user->where('user_created_at' , '>=' , $start)->where('user_created_at' , '<=' , $end);
+       $result = app(UserRepository::class)->findByWhere($params, true);
+        // 查询评论
+        return collect($result)->values();
     }
+
 }

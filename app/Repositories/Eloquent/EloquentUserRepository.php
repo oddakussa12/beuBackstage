@@ -20,12 +20,15 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         return $this->model->find($id)->videoViews;
     }
 
-    public function findByWhere($params)
+    public function findByWhere($params, $export=false)
     {
         $now  = Carbon::now();
-        $user = $this->model->withTrashed()
-                ->join('users_countries', 'users.user_id', '=', 'users_countries.user_id')
-                ->join('users_phones', 'users.user_id', '=', 'users_phones.user_id');
+        $user = $this->model->withTrashed();
+        if($export){
+            $user = $user->select('users.user_id', 'users.user_avatar', 'users.user_name', 'users.user_nick_name', 'users_phones.user_phone_country', 'users_phones.user_phone','users.user_gender', 'users_countries.country','users.user_created_at');
+        }
+        $user = $user->join('users_countries', 'users.user_id', '=', 'users_countries.user_id')
+                     ->join('users_phones', 'users.user_id', '=', 'users_phones.user_id');
 
         if (!empty($params['user_id'])) {
             $user    = $user->where('users.user_id', $params['user_id']);
@@ -56,7 +59,11 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
 
             $user = $user->whereBetween('users.user_created_at', [$start, $end]);
         }
-        $result  = $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC')->paginate(10);
+        if ($export===false) {
+            $result  = $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC')->paginate(10);
+        } else {
+            $result  = $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC')->get();
+        }
         $userIds = $result->pluck('user_id')->toArray();
         $logs    = DB::connection('lovbee')->table('status_logs')->whereIn('user_id', $userIds)->groupBy('user_id')->orderByDesc('created_at')->get();
         $friends = DB::connection('lovbee')->table('users_friends')->select(DB::raw('count(1) num'), 'user_id')->whereIn('user_id', $userIds)->groupBy('user_id')->get();
@@ -64,7 +71,7 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             foreach ($logs as $log) {
                 if ($item->user_id==$log->user_id) {
                     $item->ip   = $log->ip;
-                    $item->time = $log->time;
+                    $item->time = date('Y-m-d H:i:s', $log->time);
                 }
             }
             foreach ($friends as $friend) {
