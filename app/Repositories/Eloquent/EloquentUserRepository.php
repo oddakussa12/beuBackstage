@@ -34,11 +34,11 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
                 : $user->where($params['field'] , $params['value']);
         }
         if (!empty($params['country_code'])) {
-            $counties = config('country');
-            $codes    = collect($counties)->pluck('code')->all();
-            $k        = array_search($params['country_code'] , $codes);
-            $country  = $k===false?0:intval($k+1);
-            $user     = $user->where('user_country_id' , $country);
+            //$counties = config('country');
+            //$codes    = collect($counties)->pluck('code')->all();
+            //$k        = array_search($params['country_code'] , $codes);
+            //$country  = $k===false?0:intval($k+1);
+            $user     = $user->where('users_countries.country', strtolower($params['country_code']));
         }
         if (!empty($params['dateTime'])) {
             $endDate   = $now->endOfDay()->toDateTimeString();
