@@ -56,14 +56,14 @@
                 <th  lay-data="{field:'user_avatar', width:80}">头像</th>
                 <th  lay-data="{field:'user_nick_name', minWidth:150}">用户昵称</th>
                 <th  lay-data="{field:'user_name', minWidth:190}">用户名</th>
-                <th  lay-data="{field:'user_phone', minWidth:130}">手机号</th>
-                <th  lay-data="{field:'friends', minWidth:120,sort:true}">好友数</th>
-                <th  lay-data="{field:'user_gender', width:80}">性别</th>
-                <th  lay-data="{field:'country', width:100}">国家</th>
+                <th  lay-data="{field:'user_phone', minWidth:180}">手机号</th>
+                <th  lay-data="{field:'friends', minWidth:100,sort:true}">好友数</th>
+                <th  lay-data="{field:'user_gender', width:70}">性别</th>
+                <th  lay-data="{field:'country', width:80}">国家</th>
                 <th  lay-data="{field:'time', width:160,sort:true}">最近登录时间</th>
                 <th  lay-data="{field:'ip', width:160}">最近登录IP</th>
 
-                <th  lay-data="{field:'activation', width:100}">激活</th>
+                <th  lay-data="{field:'activation', width:70}">激活</th>
                 <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
 {{--                <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>--}}
             </tr>
