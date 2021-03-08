@@ -65,7 +65,7 @@
 
                 <th  lay-data="{field:'activation', width:70}">激活</th>
                 <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
-{{--                <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>--}}
+                <th  lay-data="{field:'user_op', minWidth:300 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -77,12 +77,13 @@
                     <td>{{$user->user_name}}</td>
                     <td>{{$user->user_phone_country}} {{$user->user_phone}}</td>
                     <td>{{$user->friends}}</td>
-                    <td><span class="layui-btn layui-btn-xs">@if($user->user_gender==-1)未知@elseif($user->user_gender==0)女@else男@endif</span></td>
+                    <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1)未知@elseif($user->user_gender==0)女@else男@endif</span></td>
                     <td>{{ $user->country }}</td>
                     <td>{{$user->time}}</td>
                     <td>{{$user->ip}}</td>
                     <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) 是 @else 否 @endif</span></td>
                     <td>{{ $user->user_format_created_at }}</td>
+                    <td></td>
                 </tr>
             @endforeach
             </tbody>
@@ -100,7 +101,8 @@
     @parent
     <script type="text/html" id="operateTpl">
         <div class="layui-table-cell laytable-cell-1-6">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend">{{trans('common.table.button.friend')}}</a>
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="history">{{trans('common.table.button.history')}}</a>
         </div>
     </script>
 
@@ -130,9 +132,29 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 let tr = obj.tr; //获得当前行 tr 的DOM对象
-                if(layEvent === 'edit'){ //编辑
-                    location.href='/{{app()->getLocale()}}/backstage/passport/user/'+data.user_id+'/edit';
+                if(layEvent === 'friend'){ //好友
+                    layer.open({
+                        type: 2,
+                        title: '好友列表',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['70%','90%'],
+                        offset: 'auto',
+                        'scrollbar':true,
+                        content: '/backstage/passport/user/friend/'+data.user_id,
+                    });
                 }
+                if(layEvent === 'history'){ //登录历史
+                    layer.open({
+                        type: 2,
+                        title: 'Login History',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['70%','90%'],
+                        offset: 'auto',
+                        'scrollbar':true,
+                        content: '/backstage/passport/user/history/'+data.user_id
+                    });                }
             });
             table.init('user_table', { //转化静态表格
                 page:false,

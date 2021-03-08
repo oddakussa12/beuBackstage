@@ -39,6 +39,8 @@ return [
             'detail'=>'查看',
             'check'=>'审核',
             'unpopular'=>'冷宫',
+            'friend'=>'好友数',
+            'history'=>'登录历史',
         ],
         'header'=>[
             'op'=>'操作',

@@ -30,6 +30,15 @@ return [
             'edit'=>'edit',
             'delete'=>'delete',
         ],
+        'button'=>[
+            'edit'=>'edit',
+            'delete'=>'delete',
+            'detail'=>'detail',
+            'check'=>'check',
+            'unpopular'=>'unpopular',
+            'friend'=>'friendCount',
+            'login'=>'loginHistory',
+        ],
         'header'=>[
             'op'=>'operate',
         ]

@@ -17,14 +17,14 @@
         </div>
     </div>
 
-    <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <div class="layui-fluid">
-            @include('layouts.bread_crumb')
-            @yield('layui-content')
-        </div>
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div class="layui-fluid">
+                @include('layouts.bread_crumb')
+                @yield('layui-content')
+            </div>
 
-    </div>
+        </div>
 
     <div class="layui-footer">
         <!-- 底部固定区域 -->

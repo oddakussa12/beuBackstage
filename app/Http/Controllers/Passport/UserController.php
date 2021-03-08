@@ -70,6 +70,22 @@ class UserController extends Controller
         return  Excel::download(new UsersExport($params), 'user-'.$start.'-'.$end.'.xlsx');
     }
 
+    public function friend(int $userId)
+    {
+        $friend = DB::connection('lovbee')->table('users_friends')->select( DB::raw('t_users.*'), 'users_friends.created_at')
+            ->join('users', 'users.user_id', '=', 'users_friends.friend_id')
+            ->where('users_friends.user_id', $userId)->paginate(10);
+        $params['users']=$friend;
+        return view('backstage.passport.user.friend' , $params);
+    }
+
+    public function history($userId)
+    {
+        $history = DB::connection('lovbee')->table('status_logs')->where('user_id', $userId)->orderByDesc('id')->paginate(10);
+        $params['users'] = $history;
+        return view('backstage.passport.user.history' , $params);
+    }
+
     public function videoView($id)
     {
         $videoViews = $this->user->videoViews($id);
