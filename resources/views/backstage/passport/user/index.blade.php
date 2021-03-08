@@ -65,7 +65,7 @@
 
                 <th  lay-data="{field:'activation', width:70}">激活</th>
                 <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
-                <th  lay-data="{field:'user_op', minWidth:300 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                <th  lay-data="{field:'user_op', minWidth:200 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
