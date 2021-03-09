@@ -72,7 +72,7 @@
             });
             //删除一行
             function del(){
-                $("table tr:not(:first):not(:first):last").remove();//移除最后一行,并且保留前两行
+                $("#layui-table tr:not(:first):not(:first):last").remove();//移除最后一行,并且保留前两行
             }
             //添加一行
             function fun(){
