@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Props;
 
-use Dimsav\Translatable\Translatable;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Base;
 
-class Props extends Model
+class Props extends Base
 {
     //
     protected $connection = 'lovbee';

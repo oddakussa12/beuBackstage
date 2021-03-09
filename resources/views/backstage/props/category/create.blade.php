@@ -16,17 +16,17 @@
         <table class="layui-table">
             <thred>
                 <tr>
-                    <th>分类名称</th>
-                    <th><input type="text" placeholder="仅可输入英文，不可有空格、#" id="name" name="name"  /></th>
+                    <th>Name:</th>
+                    <th><input type="text" placeholder="English only" id="name" name="name"  /></th>
                 </tr>
             </thred>
         </table>
         <table id="layui-table" class="layui-table" border="1" align="center">
             <thead>
             <tr>
-                <th>序号</th>
-                <th>分类语言</th>
-                <th>分类名称</th>
+                <th>ID</th>
+                <th>Language</th>
+                <th>Name</th>
             </tr>
             </thead>
             <tbody>
@@ -36,10 +36,10 @@
                 <td> <input id="category[]" name="category[]" value="" /></td>
             </tr>
             </tbody>
-            <a href="javascript:;" id="addCol" name="addCol" class="layui-btn layui-btn-xs">增加一行</a>
-            <a href="javascript:;" id="delCol" name="delCol" class="layui-btn layui-btn-xs" >删除一行</a>
+            <a href="javascript:;" id="addCol" name="addCol" class="layui-btn layui-btn-xs">Add</a>
+            <a href="javascript:;" id="delCol" name="delCol" class="layui-btn layui-btn-xs" >Delete</a>
         </table>
-        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="admin_form" id="btn">提交</button>
+        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="admin_form" id="btn">Submit</button>
 
     </form>
 
@@ -90,8 +90,6 @@
                     if(v==''||v==undefined) {return true;}
                     params[k] = v;
                 });
-                console.log(params);
-                console.log('ajax start');
                 common.ajax("{{url('/backstage/props/category')}}/", params, function(res){
                     console.log(res);
                     console.log(res.code);
@@ -103,7 +101,6 @@
                     }
                     parent.location.reload();
                 } , 'post');
-                console.log('end');
                 return false;
             });
 

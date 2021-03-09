@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Props;
 
-use App\Http\Controllers\Controller;
-use App\Models\Props;
-use App\Models\PropsCategory;
-use Illuminate\Http\JsonResponse;
+use App\Models\Props\Props;
 use Illuminate\Http\Request;
+use App\Models\Props\PropsCategory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class PropsController extends Controller
 {
@@ -16,6 +16,7 @@ class PropsController extends Controller
      *
      * @param Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
@@ -34,18 +35,19 @@ class PropsController extends Controller
 
         $params['categories'] = PropsCategory::where('is_delete', 0)->get();
 
-        return view('backstage.props.index', $params);
+        return view('backstage.props.props.index', $params);
     }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function create()
     {
         $category = PropsCategory::where('is_delete', 0)->get();
-        return view('backstage.props.create', ['data' => null, 'categories'=>$category]);
+        return view('backstage.props.props.create', ['data' => null, 'categories'=>$category]);
     }
 
     /**
@@ -79,14 +81,15 @@ class PropsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function edit(int $id)
     {
         $data = Props::find($id);
         $category = PropsCategory::where('is_delete', 0)->get();
-        return view('backstage.props.edit')->with(['data' => $data, 'categories'=>$category]);
+        return view('backstage.props.props.edit')->with(['data' => $data, 'categories'=>$category]);
     }
 
     /**

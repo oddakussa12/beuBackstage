@@ -21,7 +21,7 @@
                 <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
             </div>
         </form>
-        <table class="layui-table"   lay-filter="prop_table" id="prop_table" >
+        <table class="layui-table"   lay-filter="props_table" id="props_table" >
             <thead>
             <tr>
                 <th lay-data="{field:'id', width:80}">ID</th>
@@ -38,7 +38,7 @@
                 <th lay-data="{field:'created_at', width:160}">Created_at</th>
                 <th lay-data="{field:'updated_at', width:160}">Updated_at</th>
 {{--                <th lay-data="{field:'deleted_at', width:160}">删除时间</th>--}}
-                <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#propop'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
 
             </tr>
             </thead>
@@ -85,7 +85,7 @@
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common;
-            table.on('tool(prop_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(props_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -93,7 +93,7 @@
                     var id = data.id;
                     layer.open({
                         type: 2,
-                        title: 'Prop settings',
+                        title: 'Props settings',
                         shadeClose: true,
                         shade: 0.8,
                         area: ['60%','90%'],
@@ -105,7 +105,7 @@
             });
             form.on('switch(switchAll)', function(data){
                 var checked = data.elem.checked;
-                var propId = data.othis.parents('tr').find("td :first").text();
+                var propsId = data.othis.parents('tr').find("td :first").text();
                 data.elem.checked = !checked;
                 @if(!Auth::user()->can('props::props.update'))
                 common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
@@ -120,7 +120,7 @@
                 }
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/props/props')}}/"+propId , JSON.parse(params) , function(res){
+                    common.ajax("{{url('/backstage/props/props')}}/"+propsId , JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
@@ -136,7 +136,7 @@
             $(document).on('click','#add',function(){
                 layer.open({
                     type: 2,
-                    title: 'Prop settings',
+                    title: 'Props settings',
                     shadeClose: true,
                     shade: 0.8,
                     area: ['60%','90%'],
@@ -144,13 +144,13 @@
                     content: '/backstage/props/props/create',
                 });
             });
-            table.init('prop_table', { //转化静态表格
+            table.init('props_table', { //转化静态表格
                 page:false,
                 toolbar: '#toolbar'
             });
         });
     </script>
-    <script type="text/html" id="propop">
+    <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
     </script>
 @endsection

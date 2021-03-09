@@ -5,20 +5,20 @@
             <div class="layui-inline">
 {{--                <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>--}}
                 <div class="layui-btn layui-btn-primary">{{$data->total()}}</div>
-                <button id="add" type="button" class="layui-btn layui-btn-normal">添加</button>
+                <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
             </div>
         </form>
-        <table class="layui-table"   lay-filter="post_table" id="post_table" >
+        <table class="layui-table"   lay-filter="category_table" id="category_table" >
             <thead>
             <tr>
                 <th lay-data="{field:'id', width:100}">ID</th>
-                <th lay-data="{field:'name', width:150,sort:true}">名称</th>
-                <th lay-data="{field:'language', width:500,sort:true}">语言包</th>
-                <th lay-data="{field:'is_delete', width:100,}">状态</th>
-                <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">排序</th>
-                <th lay-data="{field:'created_at', width:160}">创建时间</th>
-                <th lay-data="{field:'updated_at', width:160}">修改时间</th>
-                <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#postop'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{field:'name', width:150,sort:true}">Name</th>
+                <th lay-data="{field:'language', width:500,sort:true}">Language</th>
+                <th lay-data="{field:'is_delete', width:100,}">Status</th>
+                <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">Sort</th>
+                <th lay-data="{field:'created_at', width:160}">CreatedAt</th>
+{{--                <th lay-data="{field:'updated_at', width:160}">UpdatedAt</th>--}}
+                <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -27,10 +27,10 @@
                     <td>{{$value->id}}</td>
                     <td>{{$value->name}}</td>
                     <td>{{$value->language}}</td>
-                    <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="上架|下架"></td>
+                    <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="ONLINE|OFFLINE"></td>
                     <td>{{$value->sort}}</td>
                     <td>{{$value->created_at}}</td>
-                    <td>{{$value->updated_at}}</td>
+{{--                    <td>{{$value->updated_at}}</td>--}}
 {{--                    <td>@if($value->deleted_at=='0000-00-00 00:00:00')@else{{$value->deleted_at}}@endif</td>--}}
                     <td></td>
                 </tr>
@@ -51,25 +51,22 @@
         layui.config({
             base: "{{url('plugin/layui')}}/"
         }).extend({
-            common: 'lay/modules/admin/common',
-            timePicker: 'lay/modules/admin/timePicker',
-        }).use(['common' , 'table' , 'layer' , 'timePicker'], function () {
+            common: 'lay/modules/admin/common'
+        }).use(['common' , 'table' , 'layer'], function () {
             var $ = layui.jquery,
                 form = layui.form,
                 layer = layui.layer,
                 table = layui.table,
-                common = layui.common,
-                timePicker = layui.timePicker;
-            table.on('tool(post_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                common = layui.common;
+            table.on('tool(category_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
                if(layEvent === 'edit'){ //编辑
-                    console.log(data);
                     var id = data.id;
                     layer.open({
                         type: 2,
-                        title: '道具设置',
+                        title: 'Category',
                         shadeClose: true,
                         shade: 0.8,
                         area: ['50%','90%'],
@@ -79,18 +76,9 @@
                     });
                 }
             });
-            table.on('edit(post_table)', function(obj){
-                var value = obj.value //得到修改后的值
-                    ,data = obj.data //得到所在行所有键值
-                    ,field = obj.field; //得到字段
-                var params = {value:value , field:field};
-                common.ajax("{{url('/backstage/props/category')}}/"+data.id , params , function(res){
-                    common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
-                } , 'patch');
-            });
             form.on('switch(switchAll)', function(data){
                 var checked = data.elem.checked;
-                var postId = data.othis.parents('tr').find("td :first").text();
+                var categoryId = data.othis.parents('tr').find("td :first").text();
                 data.elem.checked = !checked;
                 @if(!Auth::user()->can('props::props.update'))
                 common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
@@ -105,7 +93,7 @@
                 }
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/props/category')}}/"+postId , JSON.parse(params) , function(res){
+                    common.ajax("{{url('/backstage/props/category')}}/"+categoryId , JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
@@ -121,7 +109,7 @@
             $(document).on('click','#add',function(){
                 layer.open({
                     type: 2,
-                    title: '道具设置',
+                    title: 'Category',
                     shadeClose: true,
                     shade: 0.8,
                     area: ['50%','90%'],
@@ -129,20 +117,13 @@
                     content: '/backstage/props/category/create',
                 });
             });
-            table.init('post_table', { //转化静态表格
+            table.init('category_table', { //转化静态表格
                 page:false,
                 toolbar: '#toolbar'
             });
-            timePicker.render({
-                elem: '#dateTime', //定义输入框input对象
-                options:{      //可选参数timeStamp，format
-                    timeStamp:false,//true开启时间戳 开启后format就不需要配置，false关闭时间戳 //默认false
-                    format:'YYYY-MM-DD HH:ss:mm',//格式化时间具体可以参考moment.js官网 默认是YYYY-MM-DD HH:ss:mm
-                },
-            });
         });
     </script>
-    <script type="text/html" id="postop">
+    <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
     </script>
 @endsection

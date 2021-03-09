@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Props;
 
-use App\Http\Controllers\Controller;
-use App\Models\PropsCategory;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use App\Models\Props\PropsCategory;
+use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
@@ -15,6 +15,7 @@ class CategoryController extends Controller
      *
      * @param Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
@@ -23,17 +24,18 @@ class CategoryController extends Controller
         $params['appends'] = $params;
         $params['data']    = $goods;
 
-        return view('backstage.category.index', $params);
+        return view('backstage.props.category.index', $params);
     }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function create()
     {
-        return view('backstage.category.create', ['data' => null, 'counties'=>config('country')]);
+        return view('backstage.props.category.create', ['data' => null, 'counties'=>config('country')]);
     }
 
     /**
@@ -46,7 +48,6 @@ class CategoryController extends Controller
     {
         $params = $request->except('_token');
 
-        Log::info('提交参数', $request->all());
         $this->validate($request, [
             'name'      => 'required|string|max:30',
             'category'  => 'required|array',
@@ -56,7 +57,7 @@ class CategoryController extends Controller
         $result = PropsCategory::where('name', $params['category'][0])->first();
 
         if ($result) {
-            return ['code'=>200, 'result'=>'name alreadly existed'];
+            return ['code'=>200, 'result'=>'name existed'];
         }
 
         if (!in_array('en', $params['language']) || empty($params['category'])) {
@@ -76,8 +77,9 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function edit($id)
     {
@@ -86,7 +88,7 @@ class CategoryController extends Controller
             $data['language'] = json_decode($data['language'], true);
         }
 
-        return view('backstage.category.edit')->with(['data' => $data, 'counties'=>config('country')]);
+        return view('backstage.props.category.edit')->with(['data' => $data, 'counties'=>config('country')]);
     }
 
     /**

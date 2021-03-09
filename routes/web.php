@@ -51,19 +51,19 @@ Route::group(['prefix'=>'backstage'] , function(){
         });
 
         Route::group(['namespace'=>'Lovbee','prefix'=>'lovbee' , 'as' => 'lovbee::'] , function (){
-            Route::get('message/operation' , 'MessageController@operation')->name('message.operation'); // 消息管理
-            Route::post('message/operation' , 'MessageController@submit')->name('message.submit'); // 消息管理
-            Route::get('message/play' , 'MessageController@play')->name('message.play'); // 消息管理
-            Route::get('message/video' , 'MessageController@video')->name('message.video'); // 消息管理
-            Route::post('message/comment' , 'MessageController@comment')->name('message.comment'); // 消息管理
-            Route::get('message/export' , 'MessageController@export')->name('message.export'); // 消息管理
+            Route::get('message/operation' , 'MessageController@operation')->name('message.operation');
+            Route::post('message/operation' , 'MessageController@submit')->name('message.submit');
+            Route::get('message/play' , 'MessageController@play')->name('message.play');
+            Route::get('message/video' , 'MessageController@video')->name('message.video');
+            Route::post('message/comment' , 'MessageController@comment')->name('message.comment');
+            Route::get('message/export' , 'MessageController@export')->name('message.export');
         });
 
         Route::group(['namespace'=>'Props','prefix'=>'props' , 'as' => 'props::'] , function (){
-            Route::get('props/index' , 'PropsController@index')->name('props.index'); // 道具管理
-            Route::resource('props' , 'PropsController'); // 道具管理
-            Route::get('category/index' , 'CategoryController@index')->name('category.index'); // 分类管理
-            Route::resource('category' , 'CategoryController'); // 分类管理
+            Route::get('props/index' , 'PropsController@index')->name('props.index');
+            Route::resource('props' , 'PropsController');
+            Route::get('category/index' , 'CategoryController@index')->name('category.index');
+            Route::resource('category' , 'CategoryController');
         });
 
         Route::resource('menu' , 'MenuController');
