@@ -4,9 +4,9 @@
     <table class="layui-table"  lay-filter="user_table">
         <thead>
         <tr>
-            <th  lay-data="{field:'ip', minWidth:130 ,fixed: 'left'}">IP</th>
-            <th  lay-data="{field:'time', minWidth:80}">LoginTime</th>
-            <th  lay-data="{field:'status', minWidth:150}">Status</th>
+            <th  lay-data="{field:'ip', minWidth:130 ,fixed: 'left'}">{{trans('user.table.header.user_ip_address')}}</th>
+            <th  lay-data="{field:'time', minWidth:80}">{{trans('user.table.header.last_avtive_time')}}</th>
+            <th  lay-data="{field:'status', minWidth:150}">{{trans('common.table.header.status')}}</th>
         </tr>
         </thead>
         <tbody>

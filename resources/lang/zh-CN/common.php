@@ -43,6 +43,7 @@ return [
             'history'=>'活跃历史',
         ],
         'header'=>[
+            'status'=>'状态',
             'op'=>'操作',
             'created_at'=>'创建时间',
             'updated_at'=>'更新时间',

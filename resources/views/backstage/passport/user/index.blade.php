@@ -77,11 +77,11 @@
                     <td>{{$user->user_name}}</td>
                     <td>{{$user->user_phone_country}} {{$user->user_phone}}</td>
                     <td>{{$user->friends}}</td>
-                    <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1)未知@elseif($user->user_gender==0)女@else男@endif</span></td>
+                    <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1){{trans('common.cast.sex.other')}}@elseif($user->user_gender==0){{trans('common.cast.sex.female')}}@else{{trans('common.cast.sex.male')}}@endif</span></td>
                     <td>{{ $user->country }}</td>
                     <td>{{$user->time}}</td>
                     <td>{{$user->ip}}</td>
-                    <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) 是 @else 否 @endif</span></td>
+                    <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) YES @else NO @endif</span></td>
                     <td>{{ $user->user_format_created_at }}</td>
                     <td></td>
                 </tr>
@@ -135,7 +135,7 @@
                 if(layEvent === 'friend'){ //好友
                     layer.open({
                         type: 2,
-                        title: {{trans('user.form.label.friend_list')}},
+                        title: "{{trans('user.form.label.friend_list')}}",
                         shadeClose: true,
                         shade: 0.8,
                         area: ['70%','90%'],
@@ -144,10 +144,10 @@
                         content: '/backstage/passport/user/friend/'+data.user_id,
                     });
                 }
-                if(layEvent === 'history'){ //登录历史
+                if(layEvent === 'history'){ //活跃历史
                     layer.open({
                         type: 2,
-                        title: {{trans('user.form.label.avtive_list')}},
+                        title: "{{trans('common.table.button.history')}}",
                         shadeClose: true,
                         shade: 0.8,
                         area: ['70%','90%'],

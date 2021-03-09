@@ -45,6 +45,7 @@ return [
             'last_avtive_time'=>'最近活跃时间',
             'last_avtive_ip'=>'最近活跃IP',
             'user_activation'=>'激活',
+            'user_friend_time'=>'加好友时间',
             'user_unblock'=>'解封',
             'user_level'=>'加V',
             'user_op'=>'操作',
@@ -109,7 +110,6 @@ return [
             'user_created_at'=>'请选择日期',
             'date'=>'日期',
             'friend_list' => '好友列表',
-            'avtive_list' => '活跃历史',
 
         ],
         'placeholder'=>[
