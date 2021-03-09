@@ -18,7 +18,7 @@
         <form class="layui-form layui-tab-content">
             {{ csrf_field() }}
             <div class="layui-form-item">
-                <label class="layui-form-label">选择类别：</label>
+                <label class="layui-form-label">Category：</label>
                 <div class="layui-inline">
                     <input id="id" name="id" type="hidden" value="{{$data['id']}}" />
                     <select  name="category">
@@ -28,7 +28,7 @@
                     </select>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">摄像头：</label>
+                    <label class="layui-form-label">Camera：</label>
                     <div class="layui-input-block">
                         <select  name="camera">
                             <option value="front" @if($data->default=='front') selected @endif>front</option>
@@ -39,34 +39,34 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">是否推荐：</label>
+                    <label class="layui-form-label">Recommendation：</label>
                     <div class="layui-input-block">
                         <select  name="recommendation" >
-                            <option value="0" @if($data->recommendation==0) selected @endif>否</option>
-                            <option value="1" @if($data->recommendation==1) selected @endif>是</option>
+                            <option value="0" @if($data->recommendation==0) selected @endif>NO</option>
+                            <option value="1" @if($data->recommendation==1) selected @endif>YES</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">状态：</label>
+                    <label class="layui-form-label">Status：</label>
                     <div class="layui-input-block">
                         <select  name="is_delete" >
-                            <option value="1" @if($data->is_delete==1) selected @endif>下架</option>
-                            <option value="0" @if($data->is_delete==0) selected @endif>上架</option>
+                            <option value="1" @if($data->is_delete==1) selected @endif>ONLINE</option>
+                            <option value="0" @if($data->is_delete==0) selected @endif>OFFLINE</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">道具名称：</label>
+                    <label class="layui-form-label">Name：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="hash" name="hash" value="{{$data->hash}}">
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="{{$data->name}}">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">是否热门：</label>
+                    <label class="layui-form-label">Hotting：</label>
                     <div class="layui-input-block">
                         <select  name="hot" >
                             <option value="0" @if($data->hot==0) selected @endif>否</option>
@@ -77,7 +77,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">图片：</label>
+                    <label class="layui-form-label">Image：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="cover" name="cover" value="{{$data->cover}}" />
                         <button type="button" id="upload" name="upload" class="layui-btn"><i class="layui-icon"></i>Upload Image</button>
@@ -92,7 +92,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">上传Bundle：</label>
+                    <label class="layui-form-label">Bundle：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="url" name="url" value="{{$data->url}}" />
                         <button type="button" id="uploads" name="uploads" class="layui-btn"><i class="layui-icon"></i>Upload Bundle</button>
@@ -101,7 +101,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="admin_form" id="btn">提交</button>
+                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="admin_form" id="btn">Submit</button>
             </div>
         </form>
     </div>

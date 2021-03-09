@@ -18,7 +18,7 @@
         <form class="layui-form layui-tab-content">
             {{ csrf_field() }}
             <div class="layui-form-item">
-                <label class="layui-form-label">选择类别：</label>
+                <label class="layui-form-label">Category：</label>
                 <div class="layui-inline">
                     <input id="id" name="id" type="hidden" value="{{$data['id']}}" />
                     <select  name="category">
@@ -28,7 +28,7 @@
                     </select>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">摄像头：</label>
+                    <label class="layui-form-label">Camera：</label>
                     <div class="layui-input-block">
                         <select  name="camera">
                             <option value="front">front</option>
@@ -39,45 +39,45 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">是否推荐：</label>
+                    <label class="layui-form-label">Recommendation：</label>
                     <div class="layui-input-block">
                         <select  name="recommendation" >
-                            <option value="0">否</option>
-                            <option value="1">是</option>
+                            <option value="0">NO</option>
+                            <option value="1">YES</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">状态：</label>
+                    <label class="layui-form-label">Status：</label>
                     <div class="layui-input-block">
                         <select  name="is_delete" >
-                            <option value="1">下架</option>
-                            <option value="0">上架</option>
+                            <option value="1">ONLINE</option>
+                            <option value="0">OFFLINE</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">道具名称：</label>
+                    <label class="layui-form-label">Name：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="hash" name="hash" value="">
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">是否热门：</label>
+                    <label class="layui-form-label">Hotting：</label>
                     <div class="layui-input-block">
                         <select  name="hot" >
-                            <option value="0">否</option>
-                            <option value="1">是</option>
+                            <option value="0">NO</option>
+                            <option value="1">YES</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">图片：</label>
+                    <label class="layui-form-label">Image：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="cover" name="cover" />
                         <button type="button" id="upload" name="upload" class="layui-btn"><i class="layui-icon"></i>Upload Image</button>
@@ -92,7 +92,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">上传Bundle：</label>
+                    <label class="layui-form-label">Bundle：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="url" name="url" />
                         <button type="button" id="uploads" name="uploads" class="layui-btn"><i class="layui-icon"></i>Upload Bundle</button>
@@ -101,7 +101,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="admin_form" id="btn">提交</button>
+                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="prop_form" id="btn">Submit</button>
             </div>
         </form>
     </div>
@@ -116,50 +116,28 @@
     </script>
 
     <script>
-        //内容修改弹窗
         layui.config({
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
             loadBar: 'lay/modules/admin/loadBar',
-            formSelects: 'lay/modules/formSelects-v4'
-        }).use(['common', 'tree', 'table', 'layer', 'carousel', 'element', 'upload', 'loadBar','laydate', 'formSelects'], function () {
+        }).use(['common', 'table', 'layer', 'element', 'upload', 'loadBar'], function () {
             var form = layui.form,
                 layer = layui.layer,
                 loadBar = layui.loadBar,
-                laydate = layui.laydate,
                 common = layui.common,
-                carousel = layui.carousel,
                 $=layui.jquery,
                 upload = layui.upload;
-            carousel.render({
-                elem: '#top_carousel'
-                ,width: '1200px'
-                ,height: '600px'
-                ,interval: 1000
-            });
-            //formSelects.render('admin_roles');
-            //执行一个laydate实例
-            lay('.time').each(function(){
-                laydate.render({
-                    elem: this, //指定元素
-                    type: 'datetime',
-                    calendar: true
-                });
-            });
 
-            form.on('submit(admin_form)', function(data){
+            form.on('submit(prop_form)', function(data){
                 let params = {};
                 $.each(data.field , function (k ,v) {
                     if(v==''||v==undefined) {return true;}
                     params[k] = v;
                 });
-                console.log(params);
-                console.log('ajax start');
                 common.ajax("{{url('/backstage/props/props')}}/", params , function(res){
                     parent.location.reload();
                 } , 'post');
-                console.log('end');
                 return false;
             });
             $('#upload').each(function(){
@@ -175,7 +153,6 @@
             function uploads(btn, type=''){
                 upload.render({
                     elem: btn //绑定元素
-                    //, url: 'https://upload-as0.qiniup.com/' //上传接口
                     , url: 'https://up-z1.qiniup.com/' //上传接口
                     , method: 'post'
                     , accept: 'file'
@@ -183,7 +160,6 @@
                     ,choose: function (obj) {
                         let files = obj.pushFile();
                         obj.preview(function (index, file, result) {
-                            console.log(file);
                             browserMD5File(file, function (err, md5) {
                                if (type!=='') {
                                    $("#hash").val(md5);
@@ -199,7 +175,7 @@
                         loadBar.start();
                     }
                     , done: function (res, index, upload) {
-
+                        loadBar.finish();
                         console.log(res);
                         let param = {};
                         param.image = res.name;
@@ -214,6 +190,7 @@
                     }
                     , error: function () {
                         //演示失败状态，并实现重传
+                        loadBar.error();
                         return layer.msg('error');
                     }
 
