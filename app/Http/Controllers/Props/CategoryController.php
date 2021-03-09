@@ -104,6 +104,7 @@ class CategoryController extends Controller
 
         if (isset($params['is_delete']) && in_array($params['is_delete'], ['on', 'off'])) {
             $update['is_delete'] = $params['is_delete'] == 'off' ? 1 : 0;
+            $update['deleted_at'] = date('Y-m-d H:i:s');
         } elseif(isset($params['field'])) {
             $update[$params['field']] = $params['value'];
         } else {
@@ -119,12 +120,10 @@ class CategoryController extends Controller
                 $ext[] = [$language=>$params['category'][$key]];
             }
             $update['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
+            $update['name']       = $this->filter($params['name']);
+            $update['updated_at'] = date('Y-m-d H:i:s');
         }
-
-        $update['name']       = $this->filter($params['name']);
-        $update['updated_at'] = date('Y-m-d H:i:s');
-
-        PropsCategory::where('id', $id)->update($update);
+        !blank($update)&&PropsCategory::where('id', $id)->update($update);
         return response()->json(['result' => 'success']);
     }
 
