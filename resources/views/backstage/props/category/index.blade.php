@@ -14,7 +14,7 @@
                 <th lay-data="{field:'id', width:100}">ID</th>
                 <th lay-data="{field:'name', width:150,sort:true}">Name</th>
                 <th lay-data="{field:'language', width:500,sort:true}">Language</th>
-                <th lay-data="{field:'is_delete', width:100,}">Status</th>
+                <th lay-data="{field:'is_delete', maxWidth:200,}">Status</th>
                 <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">Sort</th>
                 <th lay-data="{field:'created_at', width:160}">CreatedAt</th>
 {{--                <th lay-data="{field:'updated_at', width:160}">UpdatedAt</th>--}}

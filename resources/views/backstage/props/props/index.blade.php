@@ -24,9 +24,9 @@
         <table class="layui-table"   lay-filter="props_table" id="props_table" >
             <thead>
             <tr>
-                <th lay-data="{field:'id', width:80}">ID</th>
-                <th lay-data="{field:'cover', width:80}">Image</th>
-                <th lay-data="{field:'name', width:150,sort:true}">Name</th>
+                <th lay-data="{field:'id', width:80 , fixed: 'left'}">ID</th>
+                <th lay-data="{field:'cover', width:80, fixed: 'left'}">Image</th>
+                <th lay-data="{field:'name', width:150,sort:true, fixed: 'left'}">Name</th>
 {{--                <th lay-data="{field:'type', width:100}">类型</th>--}}
                 <th lay-data="{field:'recommendation', width:120}">Recommend</th>
                 <th lay-data="{field:'category', width:100}">Category</th>
@@ -36,7 +36,7 @@
                 <th lay-data="{field:'is_delete', width:100}">Status</th>
                 <th lay-data="{field:'url', width:360}">URL</th>
                 <th lay-data="{field:'created_at', width:160}">Created_at</th>
-                <th lay-data="{field:'updated_at', width:160}">Updated_at</th>
+{{--                <th lay-data="{field:'updated_at', width:160}">Updated_at</th>--}}
 {{--                <th lay-data="{field:'deleted_at', width:160}">删除时间</th>--}}
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
 
