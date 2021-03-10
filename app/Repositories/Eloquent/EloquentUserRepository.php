@@ -10,6 +10,7 @@ namespace App\Repositories\Eloquent;
 use Carbon\Carbon;
 use App\Repositories\EloquentBaseRepository;
 use App\Repositories\Contracts\UserRepository;
+use DateTimeZone;
 use Illuminate\Support\Facades\DB;
 
 
@@ -44,30 +45,33 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             $user    = $user->where('users_countries.country', strtolower($params['country_code']));
         }
         if (!empty($params['dateTime'])) {
-            $endDate   = $now->endOfDay()->toDateTimeString();
-            $allDate   = explode(' - ' , $params['dateTime']);
-            $start     = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->subHours(8)->toDateTimeString();
-            $end       = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
-            $end       = $end > $endDate ? $endDate : $end;
-            $start     = $start > $end   ? $end     : $start;
-            if ($end>$endDate) {
-                $end   = $endDate;
-            }
-            if ($start>$end) {
-                $start = $end;
-            }
-
-            $user = $user->whereBetween('users.user_created_at', [$start, $end]);
+            $endDate = $now->endOfDay()->toDateTimeString();
+            $allDate = explode(' - ' , $params['dateTime']);
+            $start   = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->subHours(8)->toDateTimeString();
+            $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
+            $end     = $end > $endDate ? $endDate : $end;
+            $start   = $start > $end   ? $end     : $start;
+            $user    = $user->whereBetween('users.user_created_at', [$start, $end]);
         }
+        $user = $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC');
         if ($export===false) {
-            $result  = $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC')->paginate(10);
+            $result  = $user->paginate(10);
         } else {
-            $result  = $user->orderBy("users.".$this->model->getCreatedAtColumn(), 'DESC')->get();
+            $result  = $user->get();
         }
+        $result = $this->friend($result);
+        return $result;
+    }
+
+    public function friend($result) {
         $userIds = $result->pluck('user_id')->toArray();
         $logs    = DB::connection('lovbee')->table('status_logs')->whereIn('user_id', $userIds)->groupBy('user_id')->orderByDesc('created_at')->get();
         $friends = DB::connection('lovbee')->table('users_friends')->select(DB::raw('count(1) num'), 'user_id')->whereIn('user_id', $userIds)->groupBy('user_id')->get();
+
         foreach ($result as $item) {
+            $item->ip = $item->time = '';
+            $item->friends = 0;
+
             foreach ($logs as $log) {
                 if ($item->user_id==$log->user_id) {
                     $item->ip   = $log->ip;
@@ -80,7 +84,71 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
                 }
             }
         }
+
         return $result;
+    }
+
+    public function findMessage($params, $export=false)
+    {
+        $sort = !empty($params['sort']) ? $params['sort'] : 'chat_from_id';
+        $field= $sort == 'chat_to_id' ? 'chat_to_id' : 'chat_from_id';
+        $time = !empty($params['dateTime']) ? $params['dateTime'] : date('Y-m-d', time());
+        $date = !empty($params['dateTime']) ? date('Ym', strtotime($params['dateTime'])) : date('Ym');
+        $num  = $field=='chat_from_id' ? 'send' : 'receive';
+
+        $table= 'ry_chats_'.$date;
+        $user = DB::connection('lovbee')->table($table);
+        $user = $user->select(DB::raw("DISTINCT `t_$table`.$field,
+                `t_users`.user_id,`t_users`.user_name, `t_users`.user_nick_name, `t_users`.user_avatar, `t_users`.user_gender,`t_users`.user_created_at,
+                count(`t_$table`.`chat_id`) as $num,
+                `t_users_countries`.country,
+                `t_users_phones`.user_phone_country, `t_users_phones`.user_phone"));
+        $user = $user
+            ->join('users', 'users.user_id', '=', $table.'.'.$field)
+            ->join('users_countries', 'users.user_id', '=', 'users_countries.user_id')
+            ->join('users_phones', 'users.user_id', '=', 'users_phones.user_id');
+
+        if (!empty($params['user_id'])) {
+            $user    = $user->where('users.user_id', $params['user_id']);
+        }
+        if (!empty($params['phone'])) {
+            $user    = $user->where('users_phones.user_phone', 'like', "%{$params['phone']}%");
+        }
+        if (!empty($params['keyword'])) {
+            $keyword = $params['keyword'];
+            $user    = $user->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
+        }
+        if (!empty($params['country_code'])) {
+            $user    = $user->where('users_countries.country', strtolower($params['country_code']));
+        }
+
+        $start = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 00:00:00')->addHours(8)->toDateTimeString();
+        $end   = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 23:59:59')->addHours(8)->toDateTimeString();
+        $user  = $user->whereBetween($table.'.chat_created_at', [$start, $end]);
+        $user  = $user->groupBy($table.'.'.$field)->orderBy($table.'.'.$sort, 'DESC');
+
+        if ($export===false) {
+            $result = $user->paginate(10);
+        } else {
+            $result  = $user->get();
+        }
+        $userIds = $result->pluck('user_id')->toArray();
+        $chat_id = $field=='chat_from_id' ? 'chat_to_id' : 'chat_from_id';
+        $chatFrom= $field=='chat_from_id' ? 'receive'    : 'send';
+        $messages= DB::connection('lovbee')->table($table)->select($chat_id, DB::raw("count(chat_id) as num"))->whereIn($chat_id, $userIds)->groupBy($chat_id)->get();
+
+        $result = $this->friend($result);
+        foreach ($result as $item) {
+            $item->$chatFrom = 0;
+            foreach ($messages as $message) {
+                if ($message->$chat_id==$item->user_id) {
+                    $item->$chatFrom = $message->num;
+                }
+            }
+        }
+        return $result;
+
+
     }
 
     public function export($params)

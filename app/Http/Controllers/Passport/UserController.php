@@ -50,6 +50,24 @@ class UserController extends Controller
         $params['users']=$users;
         return view('backstage.passport.user.index' , $params);
     }
+    public function msgExport(Request $request)
+    {
+        ini_set('memory_limit','256M');
+        $now = Carbon::now();
+        $startDate = $now->startOfDay()->toDateTimeString();
+        $endDate = $now->endOfDay()->toDateTimeString();
+        $params = $request->all();
+        $date = $request->input('dateTime' , $startDate.' - '.$endDate);
+        $allDate = explode(' - ' , $date);
+        $start = array_shift($allDate);
+        $end = array_pop($allDate);
+        if(empty($start)||empty($end))
+        {
+            $start = $startDate;
+            $end = $endDate;
+        }
+        return  Excel::download(new UsersExport($params), 'user-'.$start.'-'.$end.'.xlsx');
+    }
 
     public function export(Request $request)
     {
@@ -68,6 +86,23 @@ class UserController extends Controller
             $end = $endDate;
         }
         return  Excel::download(new UsersExport($params), 'user-'.$start.'-'.$end.'.xlsx');
+    }
+
+    public function message(Request $request)
+    {
+        $params = $request->all();
+        $params['appends'] = $params;
+        $counties = config('country');
+        $params['counties']=$counties;
+        $users = $this->user->findMessage($params);
+
+        $block_users = block_user_list();
+        $users->each(function ($item) use ($block_users){
+            $item->is_block = intval(in_array($item->user_id , array_keys($block_users)));
+            $item->user_format_created_at = Carbon::parse($item->user_created_at)->addHours(8)->toDateTimeString();
+        });
+        $params['users']=$users;
+        return view('backstage.passport.user.message' , $params);
     }
 
     public function friend(int $userId)

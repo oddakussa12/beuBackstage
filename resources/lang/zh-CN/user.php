@@ -11,6 +11,8 @@ return [
             'user_gender'=>'性别',
             'phone'=>'手机号',
             'friend_count'=>'好友数',
+            'message_received'=>'收到消息数',
+            'message_send'=>'发送消息数',
             'user_nick_name'=>'昵称',
             'user_email_code'=>'EMAIL码',
             'user_device_id'=>'设备ID',
@@ -110,6 +112,7 @@ return [
             'user_created_at'=>'请选择日期',
             'date'=>'日期',
             'friend_list' => '好友列表',
+            'sort'=>'排序',
 
         ],
         'placeholder'=>[

@@ -16,6 +16,24 @@
                         @endforeach
                     </select>
                 </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">Recommend:</label>
+                <div class="layui-input-inline">
+                    <select  name="recommend">
+                        <option value="">All</option>
+                            <option value="1" @if(isset($recommend) && $recommend=='1') selected @endif>YES</option>
+                            <option value="0" @if(isset($recommend) && $recommend=='0') selected @endif>NO</option>
+                    </select>
+                </div>
+                <label class="layui-form-label">Hot:</label>
+                <div class="layui-input-inline">
+                    <select  name="hot">
+                        <option value="">All</option>
+                        <option value="1" @if(isset($hot) && $hot=='1') selected @endif>YES</option>
+                        <option value="0" @if(isset($hot) && $hot=='0') selected @endif>NO</option>
+                    </select>
+                </div>
                 <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
                 <div class="layui-btn layui-btn-primary">{{$data->total()}}</div>
                 <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>

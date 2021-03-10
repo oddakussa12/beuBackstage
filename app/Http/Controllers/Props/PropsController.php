@@ -31,6 +31,12 @@ class PropsController extends Controller
         if (!empty($params['category'])) {
             $props = $props->where('category', $params['category']);
         }
+        if (isset($params['recommend'])) {
+            $props = $props->where('recommendation', $params['recommend']);
+        }
+        if (isset($params['hot'])) {
+            $props = $props->where('hot', $params['hot']);
+        }
         $props = $props->paginate(10);
         $params['data']    = $props;
 
