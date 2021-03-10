@@ -63,5 +63,8 @@ return [
             'normal'=>'normal',
             'suspend'=>'suspend',
         ]
+    ],
+    'pagination'=>[
+        'total'=>'Total:total',
     ]
 ];

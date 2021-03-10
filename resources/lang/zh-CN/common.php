@@ -89,5 +89,8 @@ return [
             'ok'=>'是',
             'no'=>'否',
         ],
+    ],
+    'pagination'=>[
+        'total'=>'共:total个',
     ]
 ];

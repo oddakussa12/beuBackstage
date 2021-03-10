@@ -32,6 +32,8 @@
         @else
             <li class="disabled"><span>&raquo;</span></li>
         @endif
+        <li class="disabled"><span>{{trans('common.pagination.total' , ['total' => $paginator->total()])}}</span></li>
+
     </ul>
 @endif
 
