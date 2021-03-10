@@ -102,32 +102,32 @@ class PropsController extends Controller
     public function update(Request $request, int $id)
     {
         $params = $request->all();
-        $param  = $request->except('_token');
-
-        if (isset($params['hot']) && in_array($params['hot'], ['on', 'off'])) {
-            $param['hot']  = $params['hot']=='on' ? 1 : 0;
-        } elseif (isset($params['is_delete']) && in_array($params['is_delete'], ['on', 'off'])) {
-            $param['is_delete']  = $params['is_delete']=='off' ? 1 : 0;
-            $param['deleted_at'] = $params['is_delete']=='off' ? date('Y-m-d H:i:s') : null;
-        } elseif (isset($params['recommendation']) && in_array($params['recommendation'], ['on', 'off'])) {
-            $param['recommendation'] = $params['recommendation']=='on' ? 1 : 0;
-        } elseif (isset($params['default']) && in_array($params['default'], ['on', 'off'])) {
-            $param['default'] = $params['default']=='on' ? 1 : 0;
-        } else {
+        $data  = $request->except(['_token' , 'id']);
+        if(isset($params['id']))
+        {
             $this->validate($request, [
                 'name'  => 'required|string',
                 'hash'  => 'required|string',
                 'cover' => 'required|string',
                 'url'   => 'required|string',
             ]);
+        }else{
+            if (isset($params['hot']) && in_array($params['hot'], ['on', 'off'])) {
+                $data['hot']  = $params['hot']=='on' ? 1 : 0;
+            } elseif (isset($params['is_delete']) && in_array($params['is_delete'], ['on', 'off'])) {
+                $data['is_delete']  = $params['is_delete']=='off' ? 1 : 0;
+                $data['deleted_at'] = $params['is_delete']=='off' ? date('Y-m-d H:i:s') : null;
+            } elseif (isset($params['recommendation']) && in_array($params['recommendation'], ['on', 'off'])) {
+                $data['recommendation'] = $params['recommendation']=='on' ? 1 : 0;
+            } elseif (isset($params['sort'])) {
+                $data['sort'] = intval($params['sort']);
+            }
         }
-        $param['updated_at'] = date('Y-m-d H:i:s');
-
-        if (!empty($param['hash'])) {
-            $param['hash'] = strtolower($param['hash']);
+        if(blank($data))
+        {
+            $data['updated_at'] = date('Y-m-d H:i:s');
+            Props::where('id', $id)->update($data);
         }
-
-        Props::where('id', $id)->update($param);
         return response()->json(['result' => 'success']);
     }
 
