@@ -13,11 +13,13 @@
         <div style="width: 35%; float: left;">
             <section id="videoPlayer">
                 <video id="my-player" style="width: 100%" class="video-js" controls muted data-setup='{"autoplay": true,"preload": "true"}'>
+                    @if(!empty($messages['message_content']))
                         @if(preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$messages['message_content']))
                         <source src="{{$messages['message_content']}}"></source>
                         @else
                         <source src="https://media.helloo.cn.mantouhealth.com/{{$messages['message_content']}}"></source>
                         @endif
+                    @endif
                     <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
                         <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
                     </p>
@@ -68,19 +70,19 @@
                 </tr>
                 <tr>
                     <td class="text-right">ID</td>
-                    <td><span id="userId">{{$from->user_id}}</span></td>
+                    <td><span id="userId">@if(!empty($from->user_id)){{$from->user_id}}@endif</span></td>
                 </tr>
                 <tr>
                     <td class="text-right">User Name</td>
-                    <td><span id="userName">{{$from->user_name}}</span></td>
+                    <td><span id="userName">@if(!empty($from->user_name)){{$from->user_name}}@endif</span></td>
                 </tr>
                 <tr>
                     <td class="text-right">User Nick Name</td>
-                    <td><span id="userNickName">{{$from->user_nick_name}}</span></td>
+                    <td><span id="userNickName">@if(!empty($from->user_nick_name)){{$from->user_nick_name}}@endif</span></td>
                 </tr>
                 <tr>
                     <td class="text-right">Send Time</td>
-                    <td><span id="createdAt">{{$messages['created_at']}}</span></td>
+                    <td><span id="createdAt">@if(!empty($messages['created_at'])){{$messages['created_at']}}@endif</span></td>
                 </tr>
                 <tr>
                     <td colspan="2">Remark Column</td>
@@ -88,8 +90,8 @@
                 <tr>
                     <td colspan="2">
                         <form class="layui-form">
-                            <input type="hidden" id="id" name="id" value="{{$messages['id']}}">
-                            <textarea id="comment" name="comment" style="width: 100%;height: 53px; padding: 5px;">{{$messages['comment']}}</textarea>
+                            <input type="hidden" id="id" name="id" value="@if(!empty($messages['id'])){{$messages['id']}}@endif">
+                            <textarea id="comment" name="comment" style="width: 100%;height: 53px; padding: 5px;">@if(!empty($messages['comment'])){{$messages['comment']}}@endif</textarea>
                             <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="submit">Submit</button>
                         </form>
                     </td>
@@ -254,16 +256,19 @@
                 $('#comment').text(result.comment);
             }
             function get(page, month, obj='', select=0) {
+
                 common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month , {} , function(res){
                     layer.closeAll();
                     console.log(res);
                     if(JSON.stringify(res.messages) !== '[]') {
                         let result = res.messages.result;
                         let uri    = result.message_content;
+                        if (uri===undefined) {
+                            return;
+                        }
                         let player = videojs('my-player');
                         let protocol = uri.substr(0,5).toLowerCase();
-                        if(protocol=='https'||protocol=='http')
-                        {
+                        if (protocol=='https'||protocol=='http') {
                             player.src(uri);
                         }else{
                             player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
@@ -284,6 +289,7 @@
                     $("input[name='prev']").val(page);
                     $("input[name='next']").val(page);
                 } , 'GET');
+
                 window.history.pushState(null, null, "?page="+page+"&month="+month);
 
             }
