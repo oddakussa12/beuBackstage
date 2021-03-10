@@ -264,7 +264,7 @@
                         let result = res.messages.result;
                         let uri    = result.message_content;
                         let player = videojs('my-player');
-                        let protocol = uri.substr(0,7).toLowerCase();
+                        let protocol = uri.substr(0,5).toLowerCase();
                         if(protocol=='https'||protocol=='http')
                         {
                             player.src(uri);
