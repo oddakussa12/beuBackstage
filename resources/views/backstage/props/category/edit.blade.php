@@ -41,6 +41,12 @@
                             </tr>
                         @endforeach
                 @endforeach
+            @else
+                <tr id="clo">
+                    <td class="td"></td>
+                    <td> <input id="language[]" name="language[]" value="en" /></td>
+                    <td> <input id="category[]" name="category[]" value="{{$data->name}}" /></td>
+                </tr>
             @endif
             </tbody>
             <a href="javascript:;" id="addCol" name="addCol" class="layui-btn layui-btn-xs">Add</a>
@@ -79,12 +85,12 @@
             });
             //删除一行
             function del(){
-                $("table tr:not(:first):not(:first):last").remove();//移除最后一行,并且保留前两行
+                $("#layui-table tr:not(:first):not(:first):last").remove();//移除最后一行,并且保留前两行
             }
             //添加一行
             function fun(){
                 let $td = $("#clo").clone();       //增加一行,克隆第一个对象
-                $(".layui-table").append($td);
+                $("#layui-table").append($td);
                 let i = 1;
                 $(".td").each(function(){       //增加一行后重新更新序号1,2,3......
                     $(this).html(i++);

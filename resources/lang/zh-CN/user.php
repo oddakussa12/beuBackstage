@@ -3,12 +3,15 @@ return [
     'table' => [
         'header'=>[
             'user_id'=>'ID',
-            'user_name'=>'账号',
+            'user_name'=>'用户名',
             'user_email'=>'邮箱',
             'user_school'=>'学校',
             'user_first_name'=>'姓',
             'user_last_name'=>'名',
             'user_gender'=>'性别',
+            'phone'=>'手机号',
+            'friend_count'=>'好友数',
+            'user_nick_name'=>'昵称',
             'user_email_code'=>'EMAIL码',
             'user_device_id'=>'设备ID',
             'user_language'=>'语言',
@@ -25,7 +28,7 @@ return [
             'user_active'=>'状态',
             'user_verified'=>'实名',
             'user_last_active'=>'最后活动',
-            'user_registered'=>'注册',
+            'user_registered'=>'注册时间',
             'user_country_id'=>'国家',
             'user_is_pro'=>'会员',
             'user_imports'=>'导入',
@@ -39,7 +42,10 @@ return [
             'user_two_factor'=>'二次验证',
             'user_ip_address'=>'IP',
             'user_deleted'=>'注销',
-            'user_block'=>'封号',
+            'last_avtive_time'=>'最近活跃时间',
+            'last_avtive_ip'=>'最近活跃IP',
+            'user_activation'=>'激活',
+            'user_friend_time'=>'加好友时间',
             'user_unblock'=>'解封',
             'user_level'=>'加V',
             'user_op'=>'操作',
@@ -103,6 +109,8 @@ return [
             'user_active_expire'=>'过期时间',
             'user_created_at'=>'请选择日期',
             'date'=>'日期',
+            'friend_list' => '好友列表',
+
         ],
         'placeholder'=>[
             'user_name'=>'请输入账号',
@@ -129,8 +137,6 @@ return [
             'user_age_changed'=>'请输入年龄变更',
             'user_donation_paypal_email'=>'请输入捐赠',
             'user_upload_limit'=>'请输入上传限制',
-
-
         ],
     ],
     'page'=>[

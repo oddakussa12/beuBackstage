@@ -52,18 +52,18 @@
         <table class="layui-table"  lay-filter="user_table">
             <thead>
             <tr>
-                <th  lay-data="{field:'user_id', width:130 ,fixed: 'left'}">用户{{trans('user.table.header.user_id')}}</th>
-                <th  lay-data="{field:'user_avatar', width:80}">头像</th>
-                <th  lay-data="{field:'user_nick_name', minWidth:150}">用户昵称</th>
-                <th  lay-data="{field:'user_name', minWidth:190}">用户名</th>
-                <th  lay-data="{field:'user_phone', minWidth:180}">手机号</th>
-                <th  lay-data="{field:'friends', minWidth:100,sort:true}">好友数</th>
-                <th  lay-data="{field:'user_gender', width:70}">性别</th>
-                <th  lay-data="{field:'country', width:80}">国家</th>
-                <th  lay-data="{field:'time', width:160,sort:true}">最近登录时间</th>
-                <th  lay-data="{field:'ip', width:160}">最近登录IP</th>
+                <th  lay-data="{field:'user_id', width:130 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
+                <th  lay-data="{field:'user_avatar', width:80}">{{trans('user.table.header.user_avatar')}}</th>
+                <th  lay-data="{field:'user_nick_name', minWidth:150}">{{trans('user.table.header.user_nick_name')}}</th>
+                <th  lay-data="{field:'user_name', minWidth:190}">{{trans('user.table.header.user_name')}}</th>
+                <th  lay-data="{field:'user_phone', minWidth:180}">{{trans('user.table.header.phone')}}</th>
+                <th  lay-data="{field:'friends', minWidth:100,sort:true}">{{trans('user.table.header.friend_count')}}</th>
+                <th  lay-data="{field:'user_gender', width:70}">{{trans('user.table.header.user_gender')}}</th>
+                <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
+                <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_avtive_time')}}</th>
+                <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_avtive_ip')}}</th>
 
-                <th  lay-data="{field:'activation', width:70}">激活</th>
+                <th  lay-data="{field:'activation', width:70}">{{trans('user.table.header.user_activation')}}</th>
                 <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
                 <th  lay-data="{field:'user_op', minWidth:200 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
@@ -77,11 +77,11 @@
                     <td>{{$user->user_name}}</td>
                     <td>{{$user->user_phone_country}} {{$user->user_phone}}</td>
                     <td>{{$user->friends}}</td>
-                    <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1)未知@elseif($user->user_gender==0)女@else男@endif</span></td>
+                    <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1){{trans('common.cast.sex.other')}}@elseif($user->user_gender==0){{trans('common.cast.sex.female')}}@else{{trans('common.cast.sex.male')}}@endif</span></td>
                     <td>{{ $user->country }}</td>
                     <td>{{$user->time}}</td>
                     <td>{{$user->ip}}</td>
-                    <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) 是 @else 否 @endif</span></td>
+                    <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) YES @else NO @endif</span></td>
                     <td>{{ $user->user_format_created_at }}</td>
                     <td></td>
                 </tr>
@@ -135,7 +135,7 @@
                 if(layEvent === 'friend'){ //好友
                     layer.open({
                         type: 2,
-                        title: '好友列表',
+                        title: "{{trans('user.form.label.friend_list')}}",
                         shadeClose: true,
                         shade: 0.8,
                         area: ['70%','90%'],
@@ -144,10 +144,10 @@
                         content: '/backstage/passport/user/friend/'+data.user_id,
                     });
                 }
-                if(layEvent === 'history'){ //登录历史
+                if(layEvent === 'history'){ //活跃历史
                     layer.open({
                         type: 2,
-                        title: 'Login History',
+                        title: "{{trans('common.table.button.history')}}",
                         shadeClose: true,
                         shade: 0.8,
                         area: ['70%','90%'],
