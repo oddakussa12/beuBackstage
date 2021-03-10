@@ -123,7 +123,7 @@ class PropsController extends Controller
                 $data['sort'] = intval($params['sort']);
             }
         }
-        if(blank($data))
+        if(!blank($data))
         {
             $data['updated_at'] = date('Y-m-d H:i:s');
             Props::where('id', $id)->update($data);
