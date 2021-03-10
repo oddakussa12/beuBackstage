@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Props\PropsCategory;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -51,28 +52,30 @@ class CategoryController extends Controller
         $params = $request->except('_token');
 
         $this->validate($request, [
-            'name'      => 'required|string|max:30',
+            'name'      => [
+                'required',
+                'alpha',
+                'max:30',
+                'unique:lovbee.props_categories,name',
+            ],
             'category'  => 'required|array',
-            'language'  => 'required|array',
+            'language'  => [
+                'required',
+                'array',
+                function ($attribute, $value, $fail){
+                    if(!in_array('en', $value))
+                    {
+                        $fail('English name is missing');
+                    }
+                }
+            ]
         ]);
-
-        $result = PropsCategory::where('name', $params['category'][0])->first();
-
-        if ($result) {
-            return ['code'=>200, 'result'=>'name existed'];
-        }
-
-        if (!in_array('en', $params['language']) || empty($params['category'])) {
-            return ['code'=>200, 'result'=>'英文>>分类名称必须存在'];
-        }
         foreach ($params['language'] as $key=>$language) {
             $ext[] = [$language=>$params['category'][$key]];
         }
-
-        $insert['language'] = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
-        $insert['name']     = $this->filter($params['name']);
-
-        PropsCategory::create($insert);
+        $data['language'] = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
+        $data['name']     = $params['name'];
+        PropsCategory::create($data);
         return response()->json(['result'=>'success']);
     }
 
@@ -89,7 +92,6 @@ class CategoryController extends Controller
         if (!empty($data)) {
             $data['language'] = json_decode($data['language'], true);
         }
-
         return view('backstage.props.category.edit')->with(['data' => $data, 'counties'=>config('country')]);
     }
 
@@ -115,19 +117,31 @@ class CategoryController extends Controller
         if($request->has('name'))
         {
             $this->validate($request, [
-                'name'      => 'required|string|alpha|max:30',
+                'name'      => [
+                    'required',
+                    'alpha',
+                    'max:30',
+                    Rule::unique('lovbee.props_categories')->ignore($id, 'id'),
+                ],
                 'category'  => 'required|array',
-                'language'  => 'required|array',
+                'language'  => [
+                    'required',
+                    'array',
+                    function ($attribute, $value, $fail){
+                        if(!in_array('en', $value))
+                        {
+                            $fail('English name is missing');
+                        }
+                    }
+                ]
             ]);
-            $languages = $request->input('language');
-            $category = $request->input('category');
-            if (in_array('en', $languages) && !empty($category)) {
-                foreach ($languages as $key=>$language) {
-                    $ext[] = [$language=>$category[$key]];
-                }
-                $data['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
-                $data['name']       = $request->input('name');
+            $languages = (array)$request->input('language');
+            $category = (array)$request->input('category');
+            foreach ($languages as $key=>$language) {
+                $ext[] = [$language=>$category[$key]];
             }
+            $data['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
+            $data['name']       = $request->input('name');
         }
         if(!blank($data))
         {

@@ -8,6 +8,7 @@ use App\Models\Props\PropsCategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class PropsController extends Controller
 {
@@ -60,19 +61,27 @@ class PropsController extends Controller
     {
 
         $params = $request->except('_token');
-
-        Log::info('提交参数', $request->all());
         $this->validate($request, [
-            'name'  => 'required|string',
-            'cover' => 'required|string',
-            'url'   => 'required|string',
-            'hash'  => 'required|string',
+            'name'  => [
+                'required',
+                'alpha',
+                'max:30',
+                Rule::unique('lovbee.props')
+            ],
+            'cover' => 'required|string|url',
+            'url'   => 'required|string|url',
+            'hash'  => [
+                'required',
+                'alpha_num',
+                'size:32',
+                Rule::unique('lovbee.props')
+            ],
         ]);
 
         if (!empty($params['hash'])) {
             $params['hash'] = strtolower($params['hash']);
         }
-        $result = Props::create($params);
+        Props::create($params);
         return response()->json([
             'result' => 'success',
         ]);
@@ -106,11 +115,22 @@ class PropsController extends Controller
         if(isset($params['id']))
         {
             $this->validate($request, [
-                'name'  => 'required|string',
-                'hash'  => 'required|string',
-                'cover' => 'required|string',
-                'url'   => 'required|string',
+                'name'  => [
+                    'required',
+                    'alpha',
+                    'max:30',
+                    Rule::unique('lovbee.props')->ignore($id, 'id'),
+                ],
+                'hash'  => [
+                    'required',
+                    'alpha_num',
+                    'size:32',
+                    Rule::unique('lovbee.props')->ignore($id, 'id'),
+                ],
+                'cover' => 'required|string|url',
+                'url'   => 'required|string|url',
             ]);
+            $data['hash'] = strtolower($data['hash']);
         }else{
             if (isset($params['hot']) && in_array($params['hot'], ['on', 'off'])) {
                 $data['hot']  = $params['hot']=='on' ? 1 : 0;
