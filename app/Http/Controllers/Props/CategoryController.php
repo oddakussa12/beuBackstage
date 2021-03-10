@@ -108,6 +108,10 @@ class CategoryController extends Controller
             $is_delete = $request->input('is_delete' , 'on');
             $data['is_delete'] = $is_delete=='on'?1:0;
         }
+        if($request->has('sort'))
+        {
+            $data['sort'] = intval($request->input('sort' , 0));
+        }
         if($request->has('name'))
         {
             $this->validate($request, [
