@@ -14,9 +14,9 @@
             <section id="videoPlayer">
                 <video id="my-player" style="width: 100%" class="video-js" controls muted data-setup='{"autoplay": true,"preload": "true"}'>
                         @if(preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$messages['message_content']))
-                        1<source src="{{$messages['message_content']}}"></source>
+                        <source src="{{$messages['message_content']}}"></source>
                         @else
-                        2<source src="https://media.helloo.cn.mantouhealth.com/{{$messages['message_content']}}"></source>
+                        <source src="https://media.helloo.cn.mantouhealth.com/{{$messages['message_content']}}"></source>
                         @endif
                     <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
                         <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -264,8 +264,13 @@
                         let result = res.messages.result;
                         let uri    = result.message_content;
                         let player = videojs('my-player');
-
-                        player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
+                        let protocol = url.substr(0,7).toLowerCase();
+                        if(protocol=='https'||protocol=='http')
+                        {
+                            player.src(uri);
+                        }else{
+                            player.src("https://media.helloo.cn.mantouhealth.com/"+uri);
+                        }
                         player.play();
                         updateTime(result);
                     } else {
