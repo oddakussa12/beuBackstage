@@ -170,21 +170,18 @@
                 var page = parseInt($("input[name='prev']").val())-1;
                 var month = parseInt($("select[name='month']").val());
                 get(page, month);
-                window.history.pushState(null, null, "?page="+page+"&month="+month);
             });
 
             $('#prev').on('click' , function(){
                 var page = parseInt($("input[name='prev']").val());
                 var month = parseInt($("select[name='month']").val());
                 get(page, month);
-                window.history.pushState(null, null, "?page="+page+"&month="+month);
             });
 
             $('#next').on('click' , function(){
                 let page = parseInt($("input[name='next']").val());
                 var month = parseInt($("select[name='month']").val());
                 get(page, month);
-                window.history.pushState(null, null, "?page="+page+"&month="+month);
             });
 
             $('#right').on('click' , function(){
@@ -287,6 +284,8 @@
                     $("input[name='prev']").val(page);
                     $("input[name='next']").val(page);
                 } , 'GET');
+                window.history.pushState(null, null, "?page="+page+"&month="+month);
+
             }
 
         });
