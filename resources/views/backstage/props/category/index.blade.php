@@ -76,6 +76,44 @@
                     });
                 }
             });
+
+            //监听单元格编辑
+            table.on('edit(category_table)', function(obj){
+                var that = this;
+                var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field //得到字段
+                    ,original = $(this).prev().text(); //得到字段
+                var params = d = {};
+                d[field] = original;
+                @if(!Auth::user()->can('props::category.update'))
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
+                obj.update(d);
+                $(this).val(original);
+                table.render();
+                return true;
+                @endif
+                    params[field] = value;
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax("{{url('/backstage/props/category')}}/"+data.id , params , function(res){
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                        table.render();
+                    } , 'PATCH' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            obj.update(d);
+                            $(that).val(original);
+                            table.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                    d[field] = original;
+                    obj.update(d);
+                    $(that).val(original);
+                    table.render();
+                });
+            });
+
             form.on('switch(switchAll)', function(data){
                 var checked = data.elem.checked;
                 var categoryId = data.othis.parents('tr').find("td :first").text();
