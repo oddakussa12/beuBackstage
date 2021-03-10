@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Props;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Props\PropsCategory;
 use App\Http\Controllers\Controller;
@@ -100,30 +102,39 @@ class CategoryController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $params = $request->all();
-
-        if (isset($params['is_delete']) && in_array($params['is_delete'], ['on', 'off'])) {
-            $update['is_delete'] = $params['is_delete'] == 'off' ? 1 : 0;
-            $update['deleted_at'] = date('Y-m-d H:i:s');
-        } elseif(isset($params['field'])) {
-            $update[$params['field']] = $params['value'];
-        } else {
+        $data = array();
+        if($request->has('is_delete'))
+        {
+            $is_delete = $request->input('is_delete' , 'on');
+            $data['is_delete'] = $is_delete=='on'?1:0;
+        }
+        if($request->has('sort'))
+        {
+            $data['sort'] = intval($request->input('sort' , 0));
+        }
+        if($request->has('name'))
+        {
             $this->validate($request, [
-                'name'      => 'required|string|max:30',
+                'name'      => 'required|string|alpha|max:30',
                 'category'  => 'required|array',
                 'language'  => 'required|array',
             ]);
-            if (!in_array('en', $params['language']) || empty($params['category'])) {
-                return ['code'=>200, 'result'=>'英文>>分类名称必须存在'];
+            $languages = $request->input('language');
+            $category = $request->input('category');
+            if (in_array('en', $languages) && !empty($category)) {
+                foreach ($languages as $key=>$language) {
+                    $ext[] = [$language=>$category[$key]];
+                }
+                $data['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
+                $data['name']       = $request->input('name');
             }
-            foreach ($params['language'] as $key=>$language) {
-                $ext[] = [$language=>$params['category'][$key]];
-            }
-            $update['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
-            $update['name']       = $this->filter($params['name']);
-            $update['updated_at'] = date('Y-m-d H:i:s');
         }
-        !blank($update)&&PropsCategory::where('id', $id)->update($update);
+        if(!blank($data))
+        {
+            $data['updated_at'] = Carbon::now()->toDateTimeString();
+            PropsCategory::where('id', $id)->update($data);
+        }
+        !blank($data)&&PropsCategory::where('id', $id)->update($data);
         return response()->json(['result' => 'success']);
     }
 
