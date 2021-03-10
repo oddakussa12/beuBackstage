@@ -119,8 +119,8 @@ class CategoryController extends Controller
                 'category'  => 'required|array',
                 'language'  => 'required|array',
             ]);
-            $languages = $request->has('language');
-            $category = $request->has('category');
+            $languages = $request->input('language');
+            $category = $request->input('category');
             if (in_array('en', $languages) && !empty($category)) {
                 foreach ($languages as $key=>$language) {
                     $ext[] = [$language=>$category[$key]];
