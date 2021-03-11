@@ -71,7 +71,7 @@ class CategoryController extends Controller
             ]
         ]);
         foreach ($params['language'] as $key=>$language) {
-            $ext[] = [$language=>$params['category'][$key]];
+            $ext[$language] = $params['category'][$key];
         }
         $data['language'] = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
         $data['name']     = $params['name'];
@@ -138,7 +138,7 @@ class CategoryController extends Controller
             $languages = (array)$request->input('language');
             $category = (array)$request->input('category');
             foreach ($languages as $key=>$language) {
-                $ext[] = [$language=>$category[$key]];
+                $ext[$language] = $category[$key];
             }
             $data['language']   = json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
             $data['name']       = $request->input('name');

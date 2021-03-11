@@ -32,14 +32,14 @@
             </thead>
             <tbody>
             @if(!empty($data->language))
+                {{$i=1}}
                 @foreach($data->language as $key=>$value)
-                        @foreach($value as $kk=>$vv)
-                            <tr @if($kk==0) id="clo" @endif>
-                                <td class="td">{{$key+1}}</td>
-                                <td> <input id="language[]" name="language[]" value="{{$kk}}" /></td>
-                                <td> <input id="category[]" name="category[]" value="{{$vv}}" /></td>
-                            </tr>
-                        @endforeach
+                    <tr @if($i==1) id="clo" @endif>
+                        <td class="td">{{$i}}</td>
+                        <td> <input id="language[]" name="language[]" value="{{$key}}" /></td>
+                        <td> <input id="category[]" name="category[]" value="{{$value}}" /></td>
+                    </tr>
+                    {{$i++}}
                 @endforeach
             @else
                 <tr id="clo">
