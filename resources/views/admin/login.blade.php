@@ -82,7 +82,7 @@
                         });
                     } , 'post' , function (e,xhr,opt) {
                         var msg = 'Unknown error';
-                        if((opt=='Unprocessable Entity'&&e.status==422)||e.status==423)
+                        if(e.status==422||e.status==423)
                         {
                             var res = e.responseJSON;
                             msg = res.errors.email[0];
