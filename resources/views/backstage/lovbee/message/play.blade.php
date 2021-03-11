@@ -282,7 +282,7 @@
                         player.play();
                         updateTime(result);
                     } else {
-                        if (select==1) {
+                        if (select===1) {
                             let beforeMonth = GetQueryString('month');
                             $(obj.elem).val(beforeMonth);
                             layui.form.render('select');
@@ -291,10 +291,9 @@
                     if (JSON.stringify(res.from) !== '[]') {
                         updateUser(res.from);
                     }
-
-                    $("input[name='prev']").val(page);
-                    $("input[name='next']").val(page);
                 } , 'GET');
+                $("input[name='prev']").val(page);
+                $("input[name='next']").val(page);
                 Storage.set('month' , month);
                 Storage.set('page' , page);
                 window.history.pushState(null, null, "?page="+page+"&month="+month);
