@@ -109,8 +109,8 @@
             }, 200000);
             @if($jump==1)
             setTimeout(function() {
-                location.href="http://62.234.26.29:8000/targets";
-            }, 300000);
+                location.href="http://62.234.26.29:8000/dau";
+            }, 60000);
             @endif
         })
     </script>
