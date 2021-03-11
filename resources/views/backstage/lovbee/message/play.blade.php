@@ -140,6 +140,17 @@
             Storage.set = function(name, val) {
                 localStorage.setItem(name, val);
             };
+            layer.ready(function(){
+                let month = Storage.get('month');
+                let page  = Storage.get('page');
+                if (month!==undefined) {
+                    $("select[name='month']").val(month);
+                    $("input[name='prev']").val(page);
+                    $("input[name='next']").val(page);
+                    form.render();
+                    window.history.pushState(null, null, "?page="+page+"&month="+month);
+                }
+            });
 
             let player = videojs('my-player', {
                 "autoplay":true,
