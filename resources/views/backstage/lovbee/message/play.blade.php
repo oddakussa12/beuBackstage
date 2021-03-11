@@ -60,10 +60,10 @@
                     <td class="text-right">
                         <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="left"><i class="layui-icon layui-icon-left"></i></button>
                         <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="prev"><i class="layui-icon layui-icon-prev"></i></button>
-                        <input  style="float: left; width: 40px; height: 30px; margin-left: 10px; " type="text" name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
+                        <input  style="float: left; width: 40px; height: 30px; margin-left: 10px; " type="text" id="prev" name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
                     </td>
                     <td>
-                        <input style="width: 40px; height: 30px; margin-right: 10px; float: left;" type="text" name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
+                        <input style="width: 40px; height: 30px; margin-right: 10px; float: left;" type="text" id="next" name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
                         <button type="button" class="layui-btn layui-btn-sm" id="next"><i class="layui-icon layui-icon-next"></i></button>
                         <button type="button" class="layui-btn layui-btn-sm" id="right"><i class="layui-icon layui-icon-right"></i></button>
                     </td>
@@ -125,8 +125,8 @@
                 form = layui.form,
                 layer = layui.layer,
                 common = layui.common,
-                laydate = layui.laydate;
-            laydate.render({
+                layDate = layui.laydate;
+            layDate.render({
                 elem: '#dateTime'
                 ,range: true
                 ,max : 'today'
@@ -169,20 +169,20 @@
             });
 
             $('#left').on('click' , function(){
-                var page = parseInt($("input[name='prev']").val())-1;
-                var month = parseInt($("select[name='month']").val());
+                let page   = parseInt($("input[name='prev']").val())-1;
+                let month  = parseInt($("select[name='month']").val());
                 get(page, month);
             });
 
             $('#prev').on('click' , function(){
-                var page = parseInt($("input[name='prev']").val());
-                var month = parseInt($("select[name='month']").val());
+                let page = parseInt($("input[name='prev']").val());
+                let month = parseInt($("select[name='month']").val());
                 get(page, month);
             });
 
             $('#next').on('click' , function(){
                 let page = parseInt($("input[name='next']").val());
-                var month = parseInt($("select[name='month']").val());
+                let month = parseInt($("select[name='month']").val());
                 get(page, month);
             });
 
@@ -202,14 +202,10 @@
 
             $('#export').on('click' , function(){
                 $("#exportForm").submit();
-                /*let dateTime = $("#dateTime").val();
-                common.ajax("/backstage/lovbee/message/export", {"dateTime":dateTime} , function(res){
-                    layer.closeAll();
-                } , 'GET');*/
             });
 
             form.on('select(month)', function(obj){
-                var month = obj.value;
+                let month = obj.value;
                 let page = GetQueryString('page');
                 get(page, month, obj);
             });
@@ -223,8 +219,8 @@
             });
 
             function GetQueryString(name) {
-                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-                var r = window.location.search.substr(1).match(reg);
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                let r = window.location.search.substr(1).match(reg);
                 if(r != null){
                     //解决中文乱码
                     return decodeURI(r[2]);
@@ -235,7 +231,7 @@
             if (window.history && window.history.pushState) {
                 //监听浏览器前进后退事件
                 $(window).on('popstate', function () {
-                    var month = GetQueryString('month');
+                    let month = GetQueryString('month');
                     let page = GetQueryString('page');
                     get(page, month);
                 });
@@ -245,18 +241,17 @@
                 form.render();
             }
 
-            var updateUser = function (user){
+            let updateUser = function (user){
                 $('#userId').text(user.user_id);
                 $('#userName').text(user.user_name);
                 $('#userNickName').text(user.user_nick_name);
             };
-            var updateTime = function (result) {
+            let updateTime = function (result) {
                 $('#id').val(result.id);
                 $('#createdAt').text(result.created_at);
                 $('#comment').text(result.comment);
             }
-            function get(page, month, obj='', select=0) {
-
+            function get(page, month, num=0, obj='', select=0) {
                 common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month , {} , function(res){
                     layer.closeAll();
                     console.log(res);
@@ -289,7 +284,8 @@
                     $("input[name='prev']").val(page);
                     $("input[name='next']").val(page);
                 } , 'GET');
-
+                Storage.set('month' , month);
+                Storage.set('page' , page);
                 window.history.pushState(null, null, "?page="+page+"&month="+month);
 
             }
