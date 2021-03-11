@@ -22,6 +22,9 @@ return [
             'admin_sex'=>'性别',
             'admin_status'=>'状态',
             'admin_role'=>'角色',
+            'old_password'=>'旧密码',
+            'new_password'=>'新密码',
+            'confirm_password'=>'确认新密码',
             'admin_permission'=>'权限',
         ],
         'placeholder'=>[
