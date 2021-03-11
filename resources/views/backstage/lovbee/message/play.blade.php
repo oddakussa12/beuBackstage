@@ -143,7 +143,7 @@
             layer.ready(function(){
                 let month = Storage.get('month');
                 let page  = Storage.get('page');
-                if (month!==undefined) {
+                if (month!==null) {
                     $("select[name='month']").val(month);
                     $("input[name='prev']").val(page);
                     $("input[name='next']").val(page);
