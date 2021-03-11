@@ -60,10 +60,10 @@
                     <td class="text-right">
                         <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="left"><i class="layui-icon layui-icon-left"></i></button>
                         <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="prev"><i class="layui-icon layui-icon-prev"></i></button>
-                        <input  style="float: left; width: 40px; height: 30px; margin-left: 10px; " type="text" id="prev" name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
+                        <input  style="float: left; width: 40px; height: 30px; margin-left: 10px; " type="text" name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
                     </td>
                     <td>
-                        <input style="width: 40px; height: 30px; margin-right: 10px; float: left;" type="text" id="next" name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
+                        <input style="width: 40px; height: 30px; margin-right: 10px; float: left;" type="text" name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
                         <button type="button" class="layui-btn layui-btn-sm" id="next"><i class="layui-icon layui-icon-next"></i></button>
                         <button type="button" class="layui-btn layui-btn-sm" id="right"><i class="layui-icon layui-icon-right"></i></button>
                     </td>
@@ -146,7 +146,7 @@
                 if (month!==null) {
                     $("select[name='month']").val(month);
                     $("input[name='prev']").val(page);
-                    $("input[name='next']").val(page);
+                    $(" [name='next']").val(page);
                     form.render();
                     window.history.pushState(null, null, "?page="+page+"&month="+month);
                 }
