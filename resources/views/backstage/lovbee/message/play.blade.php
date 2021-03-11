@@ -125,8 +125,8 @@
                 form = layui.form,
                 layer = layui.layer,
                 common = layui.common,
-                laydate = layui.laydate;
-            laydate.render({
+                layDate = layui.laydate;
+            layDate.render({
                 elem: '#dateTime'
                 ,range: true
                 ,max : 'today'
@@ -140,6 +140,17 @@
             Storage.set = function(name, val) {
                 localStorage.setItem(name, val);
             };
+            layer.ready(function(){
+                let month = Storage.get('month');
+                let page  = Storage.get('page');
+                if (month!==null) {
+                    $("select[name='month']").val(month);
+                    $("input[name='prev']").val(page);
+                    $(" [name='next']").val(page);
+                    form.render();
+                    window.history.pushState(null, null, "?page="+page+"&month="+month);
+                }
+            });
 
             let player = videojs('my-player', {
                 "autoplay":true,
@@ -169,20 +180,20 @@
             });
 
             $('#left').on('click' , function(){
-                var page = parseInt($("input[name='prev']").val())-1;
-                var month = parseInt($("select[name='month']").val());
+                let page   = parseInt($("input[name='prev']").val())-1;
+                let month  = parseInt($("select[name='month']").val());
                 get(page, month);
             });
 
             $('#prev').on('click' , function(){
-                var page = parseInt($("input[name='prev']").val());
-                var month = parseInt($("select[name='month']").val());
+                let page = parseInt($("input[name='prev']").val());
+                let month = parseInt($("select[name='month']").val());
                 get(page, month);
             });
 
             $('#next').on('click' , function(){
                 let page = parseInt($("input[name='next']").val());
-                var month = parseInt($("select[name='month']").val());
+                let month = parseInt($("select[name='month']").val());
                 get(page, month);
             });
 
@@ -202,14 +213,10 @@
 
             $('#export').on('click' , function(){
                 $("#exportForm").submit();
-                /*let dateTime = $("#dateTime").val();
-                common.ajax("/backstage/lovbee/message/export", {"dateTime":dateTime} , function(res){
-                    layer.closeAll();
-                } , 'GET');*/
             });
 
             form.on('select(month)', function(obj){
-                var month = obj.value;
+                let month = obj.value;
                 let page = GetQueryString('page');
                 get(page, month, obj);
             });
@@ -223,8 +230,8 @@
             });
 
             function GetQueryString(name) {
-                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-                var r = window.location.search.substr(1).match(reg);
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                let r = window.location.search.substr(1).match(reg);
                 if(r != null){
                     //解决中文乱码
                     return decodeURI(r[2]);
@@ -235,7 +242,7 @@
             if (window.history && window.history.pushState) {
                 //监听浏览器前进后退事件
                 $(window).on('popstate', function () {
-                    var month = GetQueryString('month');
+                    let month = GetQueryString('month');
                     let page = GetQueryString('page');
                     get(page, month);
                 });
@@ -245,18 +252,17 @@
                 form.render();
             }
 
-            var updateUser = function (user){
+            let updateUser = function (user){
                 $('#userId').text(user.user_id);
                 $('#userName').text(user.user_name);
                 $('#userNickName').text(user.user_nick_name);
             };
-            var updateTime = function (result) {
+            let updateTime = function (result) {
                 $('#id').val(result.id);
                 $('#createdAt').text(result.created_at);
                 $('#comment').text(result.comment);
             }
-            function get(page, month, obj='', select=0) {
-
+            function get(page, month, num=0, obj='', select=0) {
                 common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month , {} , function(res){
                     layer.closeAll();
                     console.log(res);
@@ -289,7 +295,8 @@
                     $("input[name='prev']").val(page);
                     $("input[name='next']").val(page);
                 } , 'GET');
-
+                Storage.set('month' , month);
+                Storage.set('page' , page);
                 window.history.pushState(null, null, "?page="+page+"&month="+month);
 
             }

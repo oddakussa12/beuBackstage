@@ -24,6 +24,7 @@ Route::group(['prefix'=>'backstage'] , function(){
 
         Route::get('/', 'BackstageController@index');
         Route::group(['namespace'=>'Auth'] , function (){
+            Route::resource('user', 'UserController');
             Route::resource('admin', 'AdminController');
             Route::resource('permission', 'PermissionController');
             Route::resource('role', 'RoleController');

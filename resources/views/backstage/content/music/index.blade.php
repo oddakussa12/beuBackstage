@@ -303,11 +303,11 @@
                 ,url:'/backstage/content/music/index'
                 // ,toolbar: true
                 ,cols: [[
-                    {field:'id', title:'ID', maxWidth:50}
-                    ,{field:'name', title:'Name', maxWidth:120 , edit:'text'}
-                    ,{field:'hash', title:'Hash', minWidth:120}
-                    ,{field:'time', title:'Time', minWidth:120 , edit:'text'}
-                    ,{field:'status', title:'Status', minWidth:120 ,templet:function(d){
+                    {field:'id', title:'ID', minWidth:50}
+                    ,{field:'name', title:'Name', minWidth:120 , edit:'text'}
+                    ,{field:'hash', title:'Hash', minWidth:300}
+                    ,{field:'time', title:'Time', minWidth:80 , edit:'text'}
+                    ,{field:'status', title:'Status', minWidth:80 ,templet:function(d){
                             if(d.status==1)
                             {
                                 return '<input type="checkbox" checked name="status" lay-skin="switch" lay-filter="switchAll" >';
@@ -315,7 +315,7 @@
                                 return '<input type="checkbox"  name="status" lay-skin="switch" lay-filter="switchAll" >';
                             }
                         }}
-                    ,{field:'recommendation', title:'Recommendation', minWidth:120 ,templet:function(d){
+                    ,{field:'recommendation', title:'Recommendation', minWidth:130 ,templet:function(d){
                             if(d.recommendation==1)
                             {
                                 return '<input type="checkbox" checked name="recommendation" lay-skin="switch" lay-filter="switchAll" >';
@@ -323,8 +323,8 @@
                                 return '<input type="checkbox"  name="recommendation" lay-skin="switch" lay-filter="switchAll" >';
                             }
                         }}
-                    ,{field:'sort', title:'Sort', minWidth:120 , edit:'text'}
-                    ,{field:'created_at', title:'CreatedAt', minWidth:120}
+                    ,{field:'sort', title:'Sort', minWidth:80 , edit:'text'}
+                    ,{field:'created_at', title:'CreatedAt', minWidth:180}
                     ,{field:'op', minWidth:120 , templet: '#operateTpl'}
                 ]]
                 ,page: true

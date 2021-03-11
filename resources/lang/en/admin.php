@@ -22,6 +22,9 @@ return [
             'admin_sex'=>'SEX',
             'admin_status'=>'STATUS',
             'admin_role'=>'ROLE',
+            'old_password'=>'Old Password',
+            'new_password'=>'New Password',
+            'confirm_password'=>'Confirm Password',
             'admin_permission'=>'PERMISSION',
         ],
         'placeholder'=>[
