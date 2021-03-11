@@ -50,6 +50,7 @@ class UserController extends Controller
             $this->admin->update($user, $fields);
             return ['code'=>$code ?? 0, 'result'=>trans('common.ajax.result.prompt.operate')];
         }
+        return response()->json(['result' => 'success']);
     }
 
 
