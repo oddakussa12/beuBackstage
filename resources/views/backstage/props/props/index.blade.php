@@ -16,6 +16,14 @@
                         @endforeach
                     </select>
                 </div>
+                <label class="layui-form-label">Sort:</label>
+                <div class="layui-input-inline">
+                    <select  name="sort">
+                        <option value="">All</option>
+                        <option value="desc" @if(isset($sort) && $sort=='desc') selected @endif>DESC</option>
+                        <option value="asc" @if(isset($sort) && $sort=='asc') selected @endif>ASC</option>
+                    </select>
+                </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">Recommend:</label>

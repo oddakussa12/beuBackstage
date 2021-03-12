@@ -23,8 +23,14 @@ class PropsController extends Controller
     {
         $params = $request->all();
         $params['appends'] = $params;
-        $props  = Props::orderByDesc('id');
+        $props  = new Props();
 
+        if (!empty($params['sort'])) {
+            $sort  = $params['sort'] == 'desc' ? 'desc' : 'asc';
+            $props = $props->orderBy('sort', $sort);
+        } else {
+            $props = $props->orderByDesc('id');
+        }
         if (!empty($params['name'])) {
             $props = $props->where('name', 'like', "%{$params['name']}%");
         }
@@ -37,9 +43,9 @@ class PropsController extends Controller
         if (isset($params['hot'])) {
             $props = $props->where('hot', $params['hot']);
         }
+
         $props = $props->paginate(10);
         $params['data']    = $props;
-
         $params['categories'] = PropsCategory::where('is_delete', 0)->get();
 
         return view('backstage.props.props.index', $params);
