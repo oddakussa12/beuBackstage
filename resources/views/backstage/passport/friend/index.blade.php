@@ -18,7 +18,7 @@
                     <label class="layui-form-label">{{trans('user.table.header.friend_count')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="num" lay-verify="">
-                            <option value="0">{{trans('comment.form.placeholder.comment_country_id')}}</option>
+                            <option value="0">All</option>
                             @for($i=1;$i<=10;$i++)
                                 <option value="{{$i}}" @if(isset($num)&&$num==$i) selected @endif>{{$i}}</option>
                             @endfor
