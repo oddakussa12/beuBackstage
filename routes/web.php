@@ -52,6 +52,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user/chat' , 'UserController@chat')->name('user.chat');
             Route::get('user/msgExport' , 'UserController@msgExport')->name('user.msgExport');
             Route::resource('user', 'UserController');
+            Route::resource('friend', 'FriendController');
+
         });
 
         Route::group(['namespace'=>'Lovbee','prefix'=>'lovbee' , 'as' => 'lovbee::'] , function (){

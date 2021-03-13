@@ -158,6 +158,43 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
 
     }
 
+    public function friendManage($params)
+    {
+        $user = DB::connection('lovbee')->table('users_friends');
+        $user = $user->select(DB::raw("
+                `t_users`.user_id,`t_users`.user_name, `t_users`.user_nick_name, `t_users`.user_avatar, `t_users`.user_gender,`t_users`.user_created_at,
+                count(`t_users_friends`.`id`) as friends,
+                `t_users_countries`.country,
+                `t_users_phones`.user_phone_country, `t_users_phones`.user_phone"));
+        $user = $user
+            ->join('users', 'users.user_id', '=', 'users_friends.user_id')
+            ->join('users_countries', 'users.user_id', '=', 'users_countries.user_id')
+            ->join('users_phones', 'users.user_id', '=', 'users_phones.user_id');
+
+        /*if (!empty($params['phone'])) {
+            $user    = $user->where('users_phones.user_phone', 'like', "%{$params['phone']}%");
+        }
+        if (!empty($params['keyword'])) {
+            $keyword = $params['keyword'];
+            $user    = $user->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
+        }
+        if (!empty($params['dateTime'])) {
+            $allDate = explode(' - ' , $params['dateTime']);
+            $start = strtotime(array_shift($allDate))+3600*8;
+            $end   = strtotime(array_pop($allDate))+3600*8;
+            $user  = $user->whereBetween('users_friends.created_at', [$start, $end]);
+        }*/
+        if (!empty($params['country_code'])) {
+            $user = $user->where('users_countries.country', strtolower($params['country_code']));
+        }
+
+        if (!empty($params['num'])) {
+            $user = $user->having(DB::raw("count(t_users_friends.id)"), '>', $params['num']);
+        }
+        $user   = $user->groupBy('users_friends.user_id');
+        return $user->paginate(10);
+    }
+
     public function export($params)
     {
 
