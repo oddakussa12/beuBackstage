@@ -189,7 +189,7 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         }
 
         if (!empty($params['num'])) {
-            $user = $user->having(DB::raw("count(t_users_friends.id)"), '>', $params['num']);
+            $user = $user->having(DB::raw("count(t_users_friends.id)"), '>=', $params['num']);
         }
         $user   = $user->groupBy('users_friends.user_id');
         return $user->paginate(10);
