@@ -88,7 +88,7 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         return $result;
     }
 
-    public function findMessage($params, $export=false)
+    public function findMessage($params, $detail=false, $export=false)
     {
         $sort = !empty($params['sort']) ? $params['sort'] : 'chat_from_id';
         $field= $sort == 'chat_to_id' ? 'chat_to_id' : 'chat_from_id';
@@ -98,7 +98,7 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
 
         $table= 'ry_chats_'.$date;
         $user = DB::connection('lovbee')->table($table);
-        $user = $user->select(DB::raw("DISTINCT `t_$table`.$field,
+        $user = $user->select(DB::raw("`t_$table`.$field,
                 `t_users`.user_id,`t_users`.user_name, `t_users`.user_nick_name, `t_users`.user_avatar, `t_users`.user_gender,`t_users`.user_created_at,
                 count(`t_$table`.`chat_id`) as $num,
                 `t_users_countries`.country,
@@ -125,17 +125,24 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         $start = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 00:00:00')->addHours(8)->toDateTimeString();
         $end   = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 23:59:59')->addHours(8)->toDateTimeString();
         $user  = $user->whereBetween($table.'.chat_created_at', [$start, $end]);
-        $user  = $user->groupBy($table.'.'.$field)->orderBy($table.'.'.$sort, 'DESC');
+        if (empty($detail)) {
+            $user = $user->groupBy($table.'.'.$field);
+        } else {
+            $chat = $field=='chat_from_id' ? 'chat_to_id' : 'chat_from_id';
+            $user = $user->groupBy($table.'.'.$chat);
+        }
+        $user  = $user->orderBy($table.'.'.$sort, 'DESC');
 
         if ($export===false) {
             $result = $user->paginate(10);
         } else {
             $result  = $user->get();
         }
-        $userIds = $result->pluck('user_id')->toArray();
         $chat_id = $field=='chat_from_id' ? 'chat_to_id' : 'chat_from_id';
+
+        $userIds = $result->pluck('chat_from_id')->toArray();
         $chatFrom= $field=='chat_from_id' ? 'receive'    : 'send';
-        $messages= DB::connection('lovbee')->table($table)->select($chat_id, DB::raw("count(chat_id) as num"))->whereIn($chat_id, $userIds)->groupBy($chat_id)->get();
+        $messages= DB::connection('lovbee')->table($table)->select($chat_id, DB::raw("count(chat_id) as num"))->whereIn($chat_id, $userIds)->groupBy($field)->get();
 
         $result = $this->friend($result);
         foreach ($result as $item) {

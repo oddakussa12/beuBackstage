@@ -105,6 +105,19 @@ class UserController extends Controller
         return view('backstage.passport.user.message' , $params);
     }
 
+    public function chat(Request $request)
+    {
+        $params = $request->all();
+        $params['appends'] = $params;
+        if (empty($params['user_id'])) {
+            $params['users'] = [];
+        } else {
+            $users = $this->user->findMessage($params, true);
+            $params['users'] = $users;
+        }
+        return view('backstage.passport.user.chat', $params);
+    }
+
     public function friend(int $userId)
     {
         $friend = DB::connection('lovbee')->table('users_friends')->select( DB::raw('t_users.*'), 'users_friends.created_at')

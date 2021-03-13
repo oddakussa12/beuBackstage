@@ -41,6 +41,7 @@ return [
             'unpopular'=>'冷宫',
             'friend'=>'好友数',
             'history'=>'活跃历史',
+            'chat'=>'聊天历史'
         ],
         'header'=>[
             'status'=>'状态',

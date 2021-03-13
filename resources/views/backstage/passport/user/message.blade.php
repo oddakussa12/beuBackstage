@@ -38,7 +38,6 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('user.form.label.user_created_at')}}:</label>
                     <div class="layui-input-inline">
-                        {{--                    <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>--}}
                         <input type="text" class="layui-input" id="dateTime" name="dateTime" placeholder="yyyy-MM-dd" value="@if(!empty($dateTime)){{$dateTime}}@else{{date('Y-m-d', time())}}@endif">
                     </div>
                 </div>
@@ -119,52 +118,34 @@
         }).extend({
             common: 'lay/modules/admin/common',
             timePicker: 'lay/modules/admin/timePicker',
-        }).use(['common' , 'table' , 'layer' , 'flow' , 'laydate' , 'timePicker'], function () {
-            let table = layui.table,
+        }).use(['common' , 'table' , 'layer', 'flow' , 'laydate' , 'timePicker'], function () {
+            let $ = layui.jquery,
+                table = layui.table,
                 flow = layui.flow,
-                laydate = layui.laydate,
-                timePicker = layui.timePicker;
+                laydate = layui.laydate;
             table.init('user_table', { //转化静态表格
                 page:false
             });
             laydate.render({
                 elem: '#dateTime'
             });
-            /*timePicker.render({
-                elem: '#dateTime', //定义输入框input对象
-                options:{      //可选参数timeStamp，format
-                    timeStamp:false,//true开启时间戳 开启后format就不需要配置，false关闭时间戳 //默认false
-                    format:'YYYY-MM-DD HH:ss:mm',//格式化时间具体可以参考moment.js官网 默认是YYYY-MM-DD HH:ss:mm
-                },
-            });*/
-
             table.on('tool(user_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 let tr = obj.tr; //获得当前行 tr 的DOM对象
-                if(layEvent === 'friend'){ //好友
-                    layer.open({
-                        type: 2,
-                        title: "{{trans('user.form.label.friend_list')}}",
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['70%','90%'],
-                        offset: 'auto',
-                        'scrollbar':true,
-                        content: '/backstage/passport/user/friend/'+data.user_id,
-                    });
-                }
+                let time = $('#dateTime').val();
                 if(layEvent === 'history'){ //活跃历史
                     layer.open({
                         type: 2,
-                        title: "{{trans('common.table.button.history')}}",
+                        title: "{{trans('common.table.button.chat')}}",
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['70%','90%'],
+                        area: ['70%','100%'],
                         offset: 'auto',
-                        'scrollbar':true,
-                        content: '/backstage/passport/user/history/'+data.user_id
-                    });                }
+                        scrollbar:true,
+                        content: '/backstage/passport/user/chat?user_id='+data.user_id+'&dateTime='+time
+                    });
+                }
             });
             table.init('user_table', { //转化静态表格
                 page:false,

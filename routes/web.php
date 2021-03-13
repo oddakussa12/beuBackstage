@@ -49,6 +49,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user/friend/{userId}' , 'UserController@friend')->name('user.friend');
             Route::get('user/history/{userId}' , 'UserController@history')->name('user.history');
             Route::get('user/message' , 'UserController@message')->name('user.message');
+            Route::get('user/chat' , 'UserController@chat')->name('user.chat');
             Route::get('user/msgExport' , 'UserController@msgExport')->name('user.msgExport');
             Route::resource('user', 'UserController');
         });

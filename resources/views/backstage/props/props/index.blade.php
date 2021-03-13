@@ -52,15 +52,15 @@
             <tr>
                 <th lay-data="{field:'id', width:80 , fixed: 'left'}">ID</th>
                 <th lay-data="{field:'cover', width:80, fixed: 'left'}">Image</th>
-                <th lay-data="{field:'name', width:150,sort:true, fixed: 'left'}">Name</th>
+                <th lay-data="{field:'name', minWidth:150,sort:true, fixed: 'left'}">Name</th>
                 <th lay-data="{field:'recommendation', width:120}">Recommend</th>
-                <th lay-data="{field:'category', width:100}">Category</th>
+                <th lay-data="{field:'category', minWidth:120}">Category</th>
                 <th lay-data="{field:'camera', width:80}">Camera</th>
                 <th lay-data="{field:'hot', width:100}">Hot</th>
-                <th lay-data="{field:'hash', width:280}">Hash(MD5)</th>
-                <th lay-data="{field:'is_delete', width:100}">Status</th>
-                <th lay-data="{field:'url', width:360}">URL</th>
                 <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">Sort</th>
+                <th lay-data="{field:'is_delete', width:100}">Status</th>
+                <th lay-data="{field:'url', minWidth:360}">URL</th>
+                <th lay-data="{field:'hash', width:280}">Hash(MD5)</th>
                 <th lay-data="{field:'created_at', width:160}">Created_at</th>
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
 
@@ -77,10 +77,11 @@
                     <td>{{$value->category}}</td>
                     <td>{{$value->camera}}</td>
                     <td><input type="checkbox" @if($value->hot==1) checked @endif name="hot" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td>{{$value->hash}}</td>
+                    <td>{{$value->sort}}</td>
+
                     <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="ON|OFF"></td>
                     <td>{{$value->url}}</td>
-                    <td>{{$value->sort}}</td>
+                    <td>{{$value->hash}}</td>
                     <td>{{$value->created_at}}</td>
 {{--                    <td>{{$value->updated_at}}</td>--}}
 {{--                    <td>@if($value->deleted_at=='0000-00-00 00:00:00')@else{{$value->deleted_at}}@endif</td>--}}
