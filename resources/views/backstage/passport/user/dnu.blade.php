@@ -173,6 +173,7 @@
             };
 
             element.on('tab(dnu', function(data){
+                console.log(data);
                 if(data.index==1)
                 {
                     autoContainer();
