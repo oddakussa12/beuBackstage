@@ -45,7 +45,7 @@ class FriendController extends Controller
         });
 
         $params['users']  = $users;
-        
+
         $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
         $start  = !empty($time) ? strtotime(array_shift($time)) : time()-86400*31;
         $end    = !empty($time) ? strtotime(array_shift($time)) : time();
