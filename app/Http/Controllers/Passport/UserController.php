@@ -746,7 +746,7 @@ class UserController extends Controller
             ->groupBy('created_at')
             ->get()->map(function ($value) {
                 return (array)$value;
-            })->keyBy('date')->toArray();
+            })->keyBy('created_at')->toArray();
         dd($list);
     }
 }

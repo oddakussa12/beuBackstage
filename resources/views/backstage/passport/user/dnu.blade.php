@@ -26,37 +26,44 @@
                 <div class="layui-tab-item ">
                     <div class="layui-fluid">
                         <form class="layui-form" action="">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">Type:</label>
-                                <div class="layui-inline">
-                                    <select name="country_code" lay-verify="" lay-search>
-                                        <option value=""></option>
-                                        <option value="country" @if($country_code=='Country') selected @endif>Country</option>
-                                        <option value="school" @if($country_code=='School') selected @endif>School</option>
-                                    </select>
+                            <div class="layui-inline">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">Type:</label>
+                                    <div class="layui-inline">
+                                        <select name="country_code" lay-verify="" lay-search>
+                                            <option value=""></option>
+                                            <option value="country" @if($country_code=='Country') selected @endif>Country</option>
+                                            <option value="school" @if($country_code=='School') selected @endif>School</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+
                             @if(Auth::user()->hasRole('administrator'))
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
-                                <div class="layui-inline">
-                                    <select name="country_code" lay-verify="" lay-search>
-                                        <option value="">{{trans('user.form.placeholder.user_country')}}</option>
-                                        <option value="all" @if($country_code=='all') selected @endif>All</option>
-                                        @foreach($counties  as $country)
-                                            <option value="{{strtolower($country['code'])}}" @if($country_code==strtolower($country['code'])) selected @endif>{{$country['name']}}</option>
-                                        @endforeach
-                                    </select>
+                            <div class="layui-inline">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
+                                    <div class="layui-inline">
+                                        <select name="country_code" lay-verify="" lay-search>
+                                            <option value="">{{trans('user.form.placeholder.user_country')}}</option>
+                                            <option value="all" @if($country_code=='all') selected @endif>All</option>
+                                            @foreach($counties  as $country)
+                                                <option value="{{strtolower($country['code'])}}" @if($country_code==strtolower($country['code'])) selected @endif>{{$country['name']}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             @endif
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" class="layui-input" name="start" id="start" readonly="" placeholder="yyyy-MM-dd" value="{{$startTime}}">
-                                </div>
-                                <div class="layui-inline">
-                                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                            <div class="layui-inline">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" name="start" id="start" readonly="" placeholder="yyyy-MM-dd" value="{{$startTime}}">
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                                    </div>
                                 </div>
                             </div>
                         </form>
