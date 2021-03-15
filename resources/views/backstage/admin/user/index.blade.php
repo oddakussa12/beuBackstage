@@ -121,7 +121,7 @@
                     }
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/user')}}/"+params.admin_id , params , function(res){
+                common.ajax("{{url('/backstage/admin/user/update')}}", params , function(res){
                     console.log(res);
                     common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't' ,function () {
                         if (res.code!== undefined) {

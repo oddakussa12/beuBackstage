@@ -1,23 +1,6 @@
-@extends('layouts.app')
-@section('title', trans('common.header.title'))
-@section('content')
-    <div class="layui-header">
-        <!-- 引入头部 -->
-        @include('layouts.nav')
-    </div>
-    <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree">
-                @include('layouts.side')
-            </ul>
-        </div>
-    </div>
-    <div class="layui-body">
-        <!-- 内容主体区域 -->
-            @include('layouts.bread_crumb')
-
-        <div class="layui-tab" lay-filter="dau">
+@extends('layouts.dashboard')
+@section('layui-content')
+        <div class="layui-tab" lay-filter="tab">
             <ul class="layui-tab-title">
                 <li class="layui-this"  lay-id="0">Versions</li>
                 <li  lay-id="1">Charts</li>
@@ -136,7 +119,6 @@
                 series: @json($line)
             };
 
-
             if (option && typeof option === 'object') {
                 myChart.setOption(option);
                 window.onresize = function () {//用于使chart自适应高度和宽度
@@ -145,27 +127,14 @@
                 };
             }
             let autoContainer = function () {
-                //container.clientWidth和container.clientHeight //自适应容器宽和高
-                // window.innerWidth和window.innerHeight//自适应浏览器宽和高
-                // myChart.style.height = $(".layui-body").clientHeight + 'px';
-                // $('#layui-echarts').style.height =  $(".layui-body").clientHeight + 'px';
                 console.log($('.layui-body').height());
                 $('#layui-echarts').height($('.layui-body').height()-200);
-                // console.log($('#layui-echarts').clientHeight);
                 myChart.resize();
-                //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
             };
-            element.on('collapse(dau)', function(data){
-                // console.log(data.show); //得到当前面板的展开状态，true或者false
-                // console.log(data.title); //得到当前点击面板的标题区域DOM对象
-                // console.log(data.content); //得到当前点击面板的内容区域DOM对象
-                // if(data.show)
-                // {
-                //     autoContainer();//重置容器高宽
-                // }
+            element.on('collapse(tab)', function(data){
             });
 
-            element.on('tab(dau)', function(data){
+            element.on('tab(tab)', function(data){
                 if(data.index==1)
                 {
                     autoContainer();

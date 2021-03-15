@@ -43,8 +43,25 @@ class FriendController extends Controller
             $item->is_block = intval(in_array($item->user_id , array_keys($block_users)));
             $item->user_format_created_at = Carbon::parse($item->user_created_at)->addHours(8)->toDateTimeString();
         });
-        $params['users']=$users;
-        return view('backstage.passport.friend.index' , $params);
+
+        $params['users']  = $users;
+        
+        $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
+        $start  = !empty($time) ? strtotime(array_shift($time)) : time()-86400*31;
+        $end    = !empty($time) ? strtotime(array_shift($time)) : time();
+        $list   = DB::connection('lovbee')->table('users_friends')->select(DB::raw('count(DISTINCT(user_id)) num, FROM_UNIXTIME(`created_at`, "%Y-%m-%d") date'));
+        $list   = $list->whereBetween('created_at', [$start, $end])->groupBy(DB::raw('FROM_UNIXTIME(created_at, "%Y-%m-%d")'))->get()->toArray();
+        $dates  = collect($list)->pluck('date')->toArray();
+        $num    = collect($list)->pluck('num')->toArray();
+
+        $params['dates']  = $dates;
+        $params['line'][] = [
+            "name" => 'Friend Count',
+            "type"=> "line",
+            "data"=> $num ?? [],
+            "areaStyle"=> [],
+        ];
+        return view('backstage.passport.friend.index', $params);
     }
 
     public function msgExport(Request $request)

@@ -53,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         $this->menuComposer();
         $this->setLocalesConfigurations();
-        \DB::listen(function ($query) {
+       /* \DB::listen(function ($query) {
             $tmp = str_replace('?', '"'.'%s'.'"', $query->sql);
             $qBindings = [];
             foreach ($query->bindings as $key => $value) {
@@ -75,7 +75,7 @@ class AppServiceProvider extends ServiceProvider
             if ($flag) {
                 \Log::info(' execution time: '.$query->time.'ms; '.$tmp."\n\n\t");
             }
-        });
+        })*/;
 
     }
 

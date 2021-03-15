@@ -9,7 +9,7 @@
             {{ Auth::user()->admin_email }}
         </a>
         <dl class="layui-nav-child">
-            <dd><a href="{{url(App::getLocale().'/backstage/user') }}">{{ trans('common.button.personal_information') }}</a></dd>
+            <dd><a href="{{url(App::getLocale().'/backstage/admin/user') }}">{{ trans('common.button.personal_information') }}</a></dd>
         </dl>
     </li>
     <li class="layui-nav-item">
