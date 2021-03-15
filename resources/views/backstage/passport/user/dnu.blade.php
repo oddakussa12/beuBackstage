@@ -172,8 +172,7 @@
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
             };
 
-            element.on('tab(dnu', function(data){
-                console.log(data);
+            element.on('tab(dnu)', function(data){
                 if(data.index==1)
                 {
                     autoContainer();
