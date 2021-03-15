@@ -17,10 +17,10 @@
         <!-- 内容主体区域 -->
             @include('layouts.bread_crumb')
 
-        <div class="layui-tab" lay-filter="dau">
+        <div class="layui-tab" lay-filter="dnu">
             <ul class="layui-tab-title">
-                <li class="layui-this"  lay-id="0">DAU</li>
-                <li  lay-id="1">DAU</li>
+                <li class="layui-this"  lay-id="0">DNU</li>
+                <li  lay-id="1">DNU</li>
 
             </ul>
             <div class="layui-tab-content">
@@ -42,7 +42,7 @@
                             <div class="layui-form-item">
                                 <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" class="layui-input" name="period" id="period" readonly="" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$period}}">
+                                    <input type="text" class="layui-input" name="start" id="start" readonly="" placeholder="yyyy-MM-dd" value="{{$start}}">
                                 </div>
                                 <div class="layui-inline">
                                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
@@ -53,49 +53,14 @@
                             <thead>
                             <tr>
                                 <th>Day</th>
-                                <th>DAU</th>
-                                <th>0NUM</th>
-                                <th>0NUM%</th>
-                                <th>1NUM</th>
-                                <th>1NUM%</th>
-                                <th>2NUM</th>
-                                <th>2NUM%</th>
-                                <th>>3NUM</th>
-                                <th>>3NUM%</th>
+                                <th>DNU</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($list as $l)
                                 <tr>
                                     <td>{{$l['date']}}</td>
-                                    <td>{{$l['dau']}}</td>
-                                    <td>{{$l['zero']}}</td>
-                                    @if ($l['dau']==0)
-                                        <td>0%</td>
-                                    @else
-                                        <td>{{round($l['zero']/$l['dau']*100 , 2)}}%</td>
-                                    @endif
-
-                                    <td>{{$l['one']}}</td>
-                                    @if ($l['dau']==0)
-                                        <td>0%</td>
-                                    @else
-                                        <td>{{round($l['one']/$l['dau']*100 , 2)}}%</td>
-                                    @endif
-
-                                    <td>{{$l['two']}}</td>
-                                    @if ($l['dau']==0)
-                                        <td>0%</td>
-                                    @else
-                                        <td>{{round($l['two']/$l['dau']*100 , 2)}}%</td>
-                                    @endif
-
-                                    <td>{{$l['gt3']}}</td>
-                                    @if ($l['dau']==0)
-                                        <td>0%</td>
-                                    @else
-                                        <td>{{round($l['gt3']/$l['dau']*100 , 2)}}%</td>
-                                    @endif
+                                    <td>{{$l['dnu']}}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -138,12 +103,11 @@
                 echarts = layui.echarts,
                 laydate = layui.laydate;
             laydate.render({
-                elem: '#period'
-                ,range: true
-                ,max : 'today'
+                elem: '#start'
+                ,range: false
+                ,max : -2
                 ,lang: 'en'
             });
-
 
             var dom = document.getElementById("container");
             var myChart = echarts.init(dom);
@@ -158,7 +122,7 @@
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['dau', 'zero', 'one', 'two', 'gt3']
+                    data: ['dnu']
                 },
                 grid: {
                     left: '3%',
@@ -181,29 +145,9 @@
                 },
                 series: [
                     {
-                        name: 'dau',
+                        name: 'dnu',
                         type: 'line',
-                        data: @json($dau)
-                    },
-                    {
-                        name: 'zero',
-                        type: 'line',
-                        data: @json($zero)
-                    },
-                    {
-                        name: 'one',
-                        type: 'line',
-                        data: @json($one)
-                    },
-                    {
-                        name: 'two',
-                        type: 'line',
-                        data: @json($two)
-                    },
-                    {
-                        name: 'gt3',
-                        type: 'line',
-                        data: @json($gt3)
+                        data: @json($dnu)
                     }
                 ]
             };
@@ -227,46 +171,13 @@
                 myChart.resize();
                 //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
             };
-            element.on('collapse(dau)', function(data){
-                // console.log(data.show); //得到当前面板的展开状态，true或者false
-                // console.log(data.title); //得到当前点击面板的标题区域DOM对象
-                // console.log(data.content); //得到当前点击面板的内容区域DOM对象
-                // if(data.show)
-                // {
-                //     autoContainer();//重置容器高宽
-                // }
-            });
 
-            element.on('tab(dau)', function(data){
+            element.on('tab(dnu', function(data){
                 if(data.index==1)
                 {
                     autoContainer();
                 }
             });
-            var str = [
-                {
-                    "国家":"东帝汶",
-                    "时区":"Asia/Dili",
-                    "当地时间":"{{$utc}}",
-                    "格林威治时间":"{{$Dili}}",
-                    "北京时间":"{{$DiliBj}}",
-                },
-                {
-                    "国家":"格林纳达",
-                    "时区":"America/Grenada",
-                    "当地时间":"{{$utc}}",
-                    "格林威治时间":"{{$Grenada}}",
-                    "北京时间":"{{$GrenadaBj}}",
-                },
-                {
-                    "国家":"毛里求斯",
-                    "时区":"Indian/Mauritius",
-                    "当地时间":"{{$utc}}",
-                    "格林威治时间":"{{$Mauritius}}",
-                    "北京时间":"{{$MauritiusBj}}",
-                }
-            ];
-            console.table(str);
         })
     </script>
     <style>

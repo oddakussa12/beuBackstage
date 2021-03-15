@@ -607,7 +607,7 @@ class UserController extends Controller
         $list = array();
         $v = $request->input('v' , 0);
         $start = $request->input('start' , '');
-        $country = strtolower(strval($request->input('country_code' , 'tl')));
+        $country = $country_code = strtolower(strval($request->input('country_code' , 'tl')));
         $dates = array();
         if(blank($start))
         {
@@ -684,11 +684,13 @@ class UserController extends Controller
                 );
             }
         }
-        dump($list);
         $list[$oneDaysAgo] = array('date'=>$oneDaysAgo , 'num'=>$yesterdayCount);
         $list[$today] = array('date'=>$today , 'num'=>$todayCount);
         $counties = config('country');
-        dump($list);
-//        return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list' , 'v'));
+        $list = collect($list)->sortBy('date')->toArray();
+
+        $dnu = collect($list)->pluck('dau');
+        $xAxis = array_keys($list);
+        return  view('backstage.passport.user.dnu' , compact('start' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
     }
 }
