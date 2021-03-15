@@ -32,7 +32,6 @@
                                 <div class="layui-inline">
                                     <select name="country_code" lay-verify="" lay-search>
                                         <option value="">{{trans('user.form.placeholder.user_country')}}</option>
-                                        <option value="all" @if($country_code=='all') selected @endif>All</option>
                                         @foreach($counties  as $country)
                                             <option value="{{strtolower($country['code'])}}" @if($country_code==strtolower($country['code'])) selected @endif>{{$country['name']}}</option>
                                         @endforeach
