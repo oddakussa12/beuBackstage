@@ -682,6 +682,7 @@ class UserController extends Controller
             if(!isset($list[$date]))
             {
                 $list[$date] = array(
+                    'date'=>$date,
                     'num'=>0,
                 );
             }
