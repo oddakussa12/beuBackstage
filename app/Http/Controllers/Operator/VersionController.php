@@ -13,8 +13,9 @@ class VersionController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
-        $start  = !empty($params['dateTime']) ? array_shift($params['dateTime']) : date('Y-m-d', time()-86400*7);
-        $end    = !empty($params['dateTime']) ? array_shift($params['dateTime']) : date('Y-m-d', time());
+        $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
+        $start  = !empty($time) ? array_shift($time) : date('Y-m-d', $time-86400*7);
+        $end    = !empty($time) ? array_shift($time) : date('Y-m-d', $time);
         $month  = $end ? date('Ym', strtotime($end)) : date('Ym');
         $table  = 'visit_logs_'.$month;
 
@@ -49,7 +50,7 @@ class VersionController extends Controller
             "areaStyle"=> [],
         ];
 
-        return view('backstage.operator.version.index', compact('list', 'version', 'dates','line'));
+        return view('backstage.operator.version.index', compact('params','list', 'version', 'dates','line'));
     }
 
     /**

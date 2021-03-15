@@ -30,7 +30,7 @@
                             <div class="layui-form-item">
                                 <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder="yyyy-MM-dd - yyyy-MM-dd" value="@if(!empty($dateTime)){{$dateTime}}@endif">
+                                    <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder="yyyy-MM-dd - yyyy-MM-dd" @if(!empty($params['dateTime']))value="{{$params['dateTime']}}"@endif>
                                 </div>
                                 <div class="layui-inline">
                                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
