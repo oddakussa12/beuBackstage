@@ -594,15 +594,24 @@ class UserController extends Controller
             'thirty'=>$thirty,
             'thirtyKeep'=>collect($thirtyKeep)->toArray(),
         );
-//        dump($thirty);
-//        dump($thirtyKeep);
-//        dump($list);
         return response($list);
 
     }
 
 
     public function dnu(Request $request)
+    {
+        $type = $request->input('type' , 'country');
+        if($type=='country')
+        {
+            return $this->countryDnu($request);
+        }elseif ($type=='school')
+        {
+
+        }
+    }
+
+    public function countryDnu($request)
     {
         $list = array();
         $v = $request->input('v' , 0);
@@ -713,5 +722,10 @@ class UserController extends Controller
         $dnu = collect($list)->pluck('num');
         $xAxis = array_keys($list);
         return  view('backstage.passport.user.dnu' , compact('startTime' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
+    }
+
+    public function schoolDnu($request)
+    {
+
     }
 }

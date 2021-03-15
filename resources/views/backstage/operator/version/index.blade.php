@@ -17,7 +17,7 @@
         <!-- 内容主体区域 -->
             @include('layouts.bread_crumb')
 
-        <div class="layui-tab" lay-filter="dau">
+        <div class="layui-tab" lay-filter="version">
             <ul class="layui-tab-title">
                 <li class="layui-this"  lay-id="0">Versions</li>
                 <li  lay-id="1">Charts</li>
@@ -40,17 +40,17 @@
                         <table class="layui-table">
                             <thead>
                             <tr>
-                                <th>Number</th>
-                                <th>Version</th>
                                 <th>Time</th>
+                                <th>Version</th>
+                                <th>Number</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($list as $l)
                                 <tr>
-                                    <td>{{$l->num}}</td>
-                                    <td>{{$l->version}}</td>
                                     <td>{{$l->date}}</td>
+                                    <td>{{$l->version}}</td>
+                                    <td>{{$l->num}}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -101,7 +101,7 @@
             let myChart = echarts.init(dom);
 
             let option = {
-                color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
+                // color: ['#80FFA5', '#00ddff', '#37A2FF', '#FF0087', '#FFBF00'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -145,32 +145,19 @@
                 };
             }
             let autoContainer = function () {
-                //container.clientWidth和container.clientHeight //自适应容器宽和高
-                // window.innerWidth和window.innerHeight//自适应浏览器宽和高
-                // myChart.style.height = $(".layui-body").clientHeight + 'px';
-                // $('#layui-echarts').style.height =  $(".layui-body").clientHeight + 'px';
                 console.log($('.layui-body').height());
                 $('#layui-echarts').height($('.layui-body').height()-200);
-                // console.log($('#layui-echarts').clientHeight);
                 myChart.resize();
-                //cityChart.style.height = $(".layui-col-sm12").clientHeight + 'px';
-            };
-            element.on('collapse(dau)', function(data){
-                // console.log(data.show); //得到当前面板的展开状态，true或者false
-                // console.log(data.title); //得到当前点击面板的标题区域DOM对象
-                // console.log(data.content); //得到当前点击面板的内容区域DOM对象
-                // if(data.show)
-                // {
-                //     autoContainer();//重置容器高宽
-                // }
-            });
 
-            element.on('tab(dau)', function(data){
+            };
+
+            element.on('tab(version)', function(data){
                 if(data.index==1)
                 {
                     autoContainer();
                 }
             });
+            autoContainer();
         })
     </script>
     <style>
