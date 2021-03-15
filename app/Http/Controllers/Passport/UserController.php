@@ -709,7 +709,6 @@ class UserController extends Controller
 
         $dnu = collect($list)->pluck('num');
         $xAxis = array_keys($list);
-        dd($list);
         return  view('backstage.passport.user.dnu' , compact('startTime' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
     }
 }
