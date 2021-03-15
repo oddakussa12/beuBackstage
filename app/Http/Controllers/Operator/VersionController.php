@@ -50,6 +50,7 @@ class VersionController extends Controller
             "areaStyle"=> [],
         ];
 
+        $params['dateTime'] = $start. ' - '.$end;
         return view('backstage.operator.version.index', compact('params','list', 'version', 'dates','line'));
     }
 
