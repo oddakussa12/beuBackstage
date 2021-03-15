@@ -37,7 +37,7 @@
                                 </div>
                             </div>
                         </form>
-                        <table class="layui-table" >
+                        <table class="layui-table">
                             <thead>
                             <tr>
                                 <th>Number</th>
@@ -85,10 +85,9 @@
         }).extend({
             common: 'lay/modules/admin/common',
             echarts: 'lay/modules/echarts',
-        }).use(['element','common' , 'table', 'laydate' , 'echarts'], function () {
+        }).use(['element','common', 'laydate' , 'echarts'], function () {
             let $ = layui.jquery,
                 element = layui.element,
-                table = layui.table,
                 echarts = layui.echarts,
                 laydate = layui.laydate;
             laydate.render({
@@ -96,10 +95,6 @@
                 ,range: true
                 ,max : 'today'
                 ,lang: 'en'
-            });
-
-            table.init('user_table', { //转化静态表格
-                page:false
             });
 
             let dom = document.getElementById("container");

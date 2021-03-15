@@ -14,15 +14,15 @@ class VersionController extends Controller
     {
         $params = $request->all();
         $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
-        $start  = !empty($time) ? array_shift($time) : date('Y-m-d', $time-86400*7);
-        $end    = !empty($time) ? array_shift($time) : date('Y-m-d', $time);
+        $start  = !empty($time) ? array_shift($time) : date('Y-m-d', time()-86400*7);
+        $end    = !empty($time) ? array_shift($time) : date('Y-m-d', time());
         $month  = $end ? date('Ym', strtotime($end)) : date('Ym');
         $table  = 'visit_logs_'.$month;
 
         $list   = DB::connection('lovbee')->table($table)->select(DB::raw('version, count(DISTINCT(user_id)) num, created_at date'));
         $list   = $list->where('version', '>', 0)->whereBetween('created_at', [$start, $end])->groupBy(DB::raw('created_at,version'))->get();
 
-        $version= collect($list)->pluck('version')->unique()->values()->sort()->toArray();
+        $version= collect($list)->pluck('version')->unique()->values()->toArray();
         $dates  = collect($list)->pluck('date')->unique()->values()->sort()->toArray();
 
         foreach ($dates as $date) {
@@ -50,6 +50,7 @@ class VersionController extends Controller
             "areaStyle"=> [],
         ];
 
+        $params['dateTime'] = $start. ' - '.$end;
         return view('backstage.operator.version.index', compact('params','list', 'version', 'dates','line'));
     }
 
