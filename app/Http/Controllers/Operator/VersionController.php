@@ -14,8 +14,8 @@ class VersionController extends Controller
     {
         $params = $request->all();
         $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
-        $start  = !empty($time) ? array_shift($time) : date('Y-m-d', $time-86400*7);
-        $end    = !empty($time) ? array_shift($time) : date('Y-m-d', $time);
+        $start  = !empty($time) ? array_shift($time) : date('Y-m-d', time()-86400*7);
+        $end    = !empty($time) ? array_shift($time) : date('Y-m-d', time());
         $month  = $end ? date('Ym', strtotime($end)) : date('Ym');
         $table  = 'visit_logs_'.$month;
 
