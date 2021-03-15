@@ -741,7 +741,6 @@ class UserController extends Controller
             ->where('user_sl' , $school)
             ->where('user_created_at' , '>=' , $start)
             ->where('user_created_at' , '<=' , $end)
-            ->orderBy('date')
             ->select(DB::raw("count(`user_id`) as `num`") , DB::raw("DATE_FORMAT(`user_created_at` , 'Y-m-d') as `created_at`"))
             ->groupBy('created_at')
             ->get()->map(function ($value) {
