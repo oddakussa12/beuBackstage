@@ -638,13 +638,13 @@ class UserController extends Controller
         $oneDaysAgo = Carbon::now('Asia/Shanghai')->subDays(1)->toDateString();
         $oneDaysStart = Carbon::createFromFormat('Y-m-d' , $oneDaysAgo , $tz)->startOfDay()->timestamp;
         $oneDaysEnd = Carbon::createFromFormat('Y-m-d' , $oneDaysAgo , $tz)->endOfDay()->timestamp;
-        $oneStart = Carbon::createFromTimestamp($oneDaysStart)->toDateTimeString();
-        $oneEnd = Carbon::createFromTimestamp($oneDaysEnd)->toDateTimeString();
+        $oneStart = Carbon::createFromTimestamp($oneDaysStart, new \DateTimeZone("UTC"))->toDateTimeString();
+        $oneEnd = Carbon::createFromTimestamp($oneDaysEnd, new \DateTimeZone("UTC"))->toDateTimeString();
 
         $today = Carbon::now('Asia/Shanghai')->toDateString();
 
-        $todayStart = Carbon::createFromTimestamp(Carbon::createFromFormat('Y-m-d' , $today , $tz)->startOfDay()->timestamp)->toDateTimeString();
-        $todayEnd = Carbon::createFromTimestamp(Carbon::createFromFormat('Y-m-d' , $today , $tz)->endOfDay()->timestamp)->toDateTimeString();
+        $todayStart = Carbon::createFromTimestamp(Carbon::createFromFormat('Y-m-d' , $today , $tz)->startOfDay()->timestamp , new \DateTimeZone("UTC"))->toDateTimeString();
+        $todayEnd = Carbon::createFromTimestamp(Carbon::createFromFormat('Y-m-d' , $today , $tz)->endOfDay()->timestamp, new \DateTimeZone("UTC"))->toDateTimeString();
 
 
         $connection = DB::connection('lovbee');
@@ -656,8 +656,9 @@ class UserController extends Controller
             ->where('created_at' , '<=' , $oneEnd)
             ->count();
         dump($oneStart);
-        dump($todayStart);
         dump($oneEnd);
+
+        dump($todayStart);
         dump($todayEnd);
         $todayCount = $connection->table('users_countries')
             ->where('country' , $country)
