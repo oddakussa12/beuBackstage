@@ -2,22 +2,15 @@
 
 namespace App\Http\Controllers\Passport;
 
-use App\Exports\MessageExport;
-use App\Models\Passport\BlackUser;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
+use Fenos\Tests\Models\Car;
 use Illuminate\Http\Request;
 use App\Exports\UsersExport;
-use App\Models\Passport\User;
-use App\Models\Passport\Follow;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use GuzzleHttp\Exception\GuzzleException;
-use App\Repositories\Contracts\UserRepository;
-use App\Http\Requests\Passport\UpdateUserRequest;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Repositories\Contracts\UserRepository;
 
 class UserController extends Controller
 {
@@ -30,10 +23,12 @@ class UserController extends Controller
     {
         $this->user = $user;
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
@@ -42,9 +37,7 @@ class UserController extends Controller
         $counties = config('country');
         $params['counties']=$counties;
         $users = $this->user->findByWhere($params);
-        $block_users = block_user_list();
-        $users->each(function ($item) use ($block_users){
-            $item->is_block = intval(in_array($item->user_id , array_keys($block_users)));
+        $users->each(function ($item){
             $item->user_format_created_at = Carbon::parse($item->user_created_at)->addHours(8)->toDateTimeString();
         });
         $params['users']=$users;
@@ -132,321 +125,6 @@ class UserController extends Controller
         $history = DB::connection('lovbee')->table('status_logs')->where('user_id', $userId)->orderByDesc('id')->paginate(10);
         $params['users'] = $history;
         return view('backstage.passport.user.history' , $params);
-    }
-
-    public function videoView($id)
-    {
-        $videoViews = $this->user->videoViews($id);
-        dd($videoViews);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        $user = $this->user->find($id);
-        return view('backstage.passport.user.edit' , compact('user' , 'id'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  App\Http\Requests\Passport\UpdateUserRequest  $request
-     * @param  App\Models\Passport\User  $user
-     * @return Response
-     */
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        $this->user->update($user, $request->only(['user_level' , 'user_avatar']));
-        if($request->has('user_level'))
-        {
-            $this->updateUserCache($user->user_id);
-        }
-        return response()->json([
-            'result' => 'success',
-        ]);
-    }
-
-    public function updateUserCache($id)
-    {
-        $time = time();
-        $client = new Client();
-        $params = array(
-            'user_id'=>$id,
-            'time_stamp'=>$time
-        );
-        $signature = common_signature($params);
-        $params['signature'] = $signature;
-        $url = front_url('api/bk/set/user/level');
-        $data = [
-            'form_params' => $params
-        ];
-        try {
-            $response = $client->request('POST', $url, $data);
-        } catch (GuzzleException $e) {
-            abort(400 , $e->getMessage());
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function actionStatistics(Request $request)
-    {
-        $defaultDate = date('Y-m-d' , time());
-        $defaultDiffDate = $defaultDate.' - '.$defaultDate;
-        $duration = '0秒';
-        $dailyNumber = $newUser = $startTurn = $yt = array();
-        $app = array(
-            array(
-                'newUsers'=>0,
-                'totalUsers'=>0,
-                'activityUsers'=>0,
-                'launches'=>0
-            ),
-            array(
-                'newUsers'=>0,
-                'totalUsers'=>0,
-                'activityUsers'=>0,
-                'launches'=>0,
-                'duration'=>'0秒'
-            )
-        );
-        $type = $request->input('type');
-        if($type=='duration'||$type=='app')
-        {
-            $dateTime = $request->input('dateTime' , date('Y-m-d' , time()));
-            if($dateTime>date('Y-m-d' , time()))
-            {
-                $dateTime = date('Y-m-d' , time());
-            }
-
-            if($type=='duration')
-            {
-//                $duration = \json_decode($this->duration($dateTime) , true);
-//                $time = $duration['result'];
-//                $d = floor($time / (3600*24));
-//                $h = floor(($time % (3600*24)) / 3600);
-//                $m = floor((($time % (3600*24)) % 3600) / 60);
-//                $s = $time-$d*86400-$h*3600-$m*60;
-//                if($d>'0'){
-//                    $duration = $d.'天'.$h.'小时'.$m.'分'.$s.'秒';
-//                }else{
-//                    if($h!='0'){
-//                        $duration = $h.'小时'.$m.'分'.$s.'秒';
-//                    }else{
-//                        $duration = $m.'分'.$s.'秒';
-//                    }
-//                }
-            }else{
-                $ios = \json_decode($this->app($dateTime , 0) , true);
-                $android = \json_decode($this->app($dateTime , 1) , true);
-
-                $app[0] = $ios['result'];
-                $app[1] = $android['result'];
-
-
-                $duration = \json_decode($this->duration($dateTime) , true);
-                $time = $duration['result'];
-                $d = floor($time / (3600*24));
-                $h = floor(($time % (3600*24)) / 3600);
-                $m = floor((($time % (3600*24)) % 3600) / 60);
-                $s = $time-$d*86400-$h*3600-$m*60;
-                if($d>'0'){
-                    $duration = $d.'天'.$h.'小时'.$m.'分'.$s.'秒';
-                }else{
-                    if($h!='0'){
-                        $duration = $h.'小时'.$m.'分'.$s.'秒';
-                    }else{
-                        $duration = $m.'分'.$s.'秒';
-                    }
-                }
-                $app['1']['duration'] = $duration;
-            }
-        }elseif ($type=='dailyNumber'||$type=='newUser'||$type=='startTurn')
-        {
-            $dateTime = $request->input('dateTime' , date('Y-m-d' , time()).' - '.date('Y-m-d' , time()));
-            $allDate = explode(' - ' , $dateTime);
-            $startDate = array_shift($allDate);
-            $endDate = array_pop($allDate);
-            if($endDate>date('Y-m-d' , time()))
-            {
-                $endDate = date('Y-m-d' , time());
-            }
-            if($startDate>date('Y-m-d' , time()))
-            {
-                $startDate = date('Y-m-d' , time());
-            }
-
-            if($startDate>$endDate)
-            {
-                $startDate = $endDate;
-            }
-
-
-            if($type=='dailyNumber')
-            {
-                $dailyNumber = \json_decode($this->dailyNumber($startDate , $endDate) , true);
-                foreach ($dailyNumber as $k => $v)
-                {
-                    $dailyNumber[$k]['value'] = $v['value']+200;
-                }
-            }elseif ($type=='newUser')
-            {
-                $newUser[0] = \json_decode($this->newUser($startDate , $endDate , 0) , true);
-                $newUser[1] = \json_decode($this->newUser($startDate , $endDate) , true);
-
-            }else{
-                $startTurn = \json_decode($this->startTurn($startDate , $endDate) , true);
-            }
-
-        }else{
-            $android = \json_decode($this->yt() , true);
-            $ios = \json_decode($this->yt(0) , true);
-            $yt[0] = $ios['result'];
-            $yt[1] = $android['result'];
-        }
-
-        return view('backstage.passport.user.statistics' , compact('type' , 'dateTime' , 'defaultDate' , 'defaultDiffDate' , 'dailyNumber' , 'duration' , 'yt' , 'newUser' , 'startTurn' , 'app'));
-    }
-
-    public function app($date, $type=1)
-    {
-        $url = "http://test.api.mmantou.cn/Haca9cb27e73e4ea2b94de94375144a6dM/app.php?type={$type}&date={$date}";
-        return file_get_contents($url);
-    }
-
-    public function startTurn($startDate , $endDate)
-    {
-        $url = "http://test.api.mmantou.cn/Haca9cb27e73e4ea2b94de94375144a6dM/startTurn.php?type=1&startDate={$startDate}&endDate={$endDate}";
-        return file_get_contents($url);
-    }
-
-    public function newUser($startDate , $endDate , $type=1)
-    {
-        $url = "http://test.api.mmantou.cn/Haca9cb27e73e4ea2b94de94375144a6dM/newUser.php?type={$type}&startDate={$startDate}&endDate={$endDate}";
-        return file_get_contents($url);
-    }
-
-    protected function yt($type=1)
-    {
-        $url = "http://test.api.mmantou.cn/Haca9cb27e73e4ea2b94de94375144a6dM/yt.php?type={$type}";
-        return file_get_contents($url);
-    }
-
-    protected function dailyNumber($startDate , $endDate)
-    {
-        $url = "http://test.api.mmantou.cn/Haca9cb27e73e4ea2b94de94375144a6dM/dailynumber.php?type=1&startDate={$startDate}&endDate={$endDate}";
-        return file_get_contents($url);
-    }
-    protected function duration($date)
-    {
-        $url = "http://test.api.mmantou.cn/Haca9cb27e73e4ea2b94de94375144a6dM/duration.php?type=1&date={$date}";
-        return file_get_contents($url);
-    }
-
-    public function differenceKeep(Request $request)
-    {
-        set_time_limit(0);
-        $addDay = $request->input('deadline' , 0);
-        $dateTime = $request->input('startDate' , date('Y-m-d' , time()).' - '.date('Y-m-d' , time()));
-        $date = explode(' - ' , $dateTime);
-        $startTime = $date[0];
-        $endTime = $date[1];
-        $type = $request->input('type' , 2);
-        $o = array_keys($request->input('o' , array('r'=>'on')));
-        $counties = config('country');
-        $country_code = $request->input('country_code' , '');
-        $codes = collect($counties)->pluck('code')->all();
-        $k = array_search($country_code , $codes);
-        $country = $k===false?0:intval($k+1);
-
-        $data = array();
-        while ($startTime<=$endTime)
-        {
-            $data[$startTime] = $this->keepDifferenceLoop($addDay , $startTime , $type , $o , $country);
-            $startTime = date('Y-m-d 00:00:00' , strtotime('+1 day' , strtotime($startTime)));
-        }
-        $userCount = collect($data)->sum('reg_count');
-        $viewNum = collect($data)->sum('view_count');
-        $postNum = collect($data)->sum('post_count');
-        $commentNum = collect($data)->sum('comment_count');
-        $likeNum = collect($data)->sum('like_count');
-        $messageNum = collect($data)->sum('message_count');
-        return view('backstage.passport.user.keep' , compact('addDay' ,'dateTime' , 'type' , 'o' , 'data' , 'userCount' , 'viewNum' ,'postNum' , 'commentNum' , 'likeNum' , 'messageNum' , 'country_code' , 'counties'));
-    }
-
-    public function block($id)
-    {
-        $user   = User::where('user_id', $id)->first();
-        $client = new Client();
-        $params = array(
-            'user_id'   => $id,
-            'time_stamp'=> time(),
-            'desc'      => '后台封禁',
-            'operator'  => auth()->user()->admin_username,
-        );
-
-        $params['signature'] = common_signature($params);
-        $url  = front_url('api/ry/set/block');
-        $data = ['form_params' => $params];
-        try {
-            $response = $client->request('POST', $url, $data);
-            $body = $response->getBody();
-            $result = \json_decode($body->getContents(),true);
-            if($result['code']==200) {
-                block_user($id);
-            }
-        } catch (GuzzleException $e) {
-            abort(400 , $e->getMessage());
-        }
-        return response()->json([
-            'result' => 'success',
-        ]);
-    }
-
-    public function unblock($id)
-    {
-        $time = time();
-        $client = new Client();
-        $params = array(
-            'user_id'=>$id,
-            'time_stamp'=>$time,
-            'operator'  => auth()->user()->admin_username,
-        );
-        $signature = common_signature($params);
-        $params['signature'] = $signature;
-        $url = front_url('api/ry/set/unblock');
-        $data = [
-            'form_params' => $params
-        ];
-        try {
-            $response = $client->request('POST', $url, $data);
-            $body = $response->getBody();
-            $result = \json_decode($body->getContents(),true);
-
-            if($result['code']==200)
-            {
-                unblock_user($id);
-            }
-        } catch (GuzzleException $e) {
-            abort(400 , $e->getMessage());
-        }
-        return response()->json([
-            'result' => 'success',
-        ]);
     }
 
     public function keep(Request $request)
@@ -923,4 +601,94 @@ class UserController extends Controller
 
     }
 
+
+    public function dnu(Request $request)
+    {
+        $list = array();
+        $v = $request->input('v' , 0);
+        $start = $request->input('start' , '');
+        $country = strtolower(strval($request->input('country_code' , 'tl')));
+        $dates = array();
+        if(blank($start))
+        {
+            $start = Carbon::now('Asia/Shanghai')->subDays(30)->toDateString();
+        }else{
+            $start = Carbon::createFromFormat('Y-m-d' , $start , 'Asia/Shanghai')->toDateString();
+        }
+        $end = Carbon::now('Asia/Shanghai')->subDays(2)->toDateString();
+        if($country=='tl')
+        {
+            $tz = "Asia/Dili";
+        }elseif ($country=='gd')
+        {
+            $tz = "America/Grenada";
+        }elseif ($country=='mu')
+        {
+            $tz = "Indian/Mauritius";
+        }elseif ($country=='id')
+        {
+            $tz = "Asia/Jakarta";
+        }elseif ($country=='et')
+        {
+            $tz = "Africa/Addis_Ababa";
+        }else{
+            return;
+        }
+
+        $oneDaysAgo = Carbon::now('Asia/Shanghai')->subDays(1)->toDateString();
+        $oneDaysStart = Carbon::createFromFormat('Y-m-d' , $oneDaysAgo , $tz)->startOfDay()->timestamp;
+        $oneDaysEnd = Carbon::createFromFormat('Y-m-d' , $oneDaysAgo , $tz)->endOfDay()->timestamp;
+        $oneStart = Carbon::createFromTimestamp($oneDaysStart)->toDateTimeString();
+        $oneEnd = Carbon::createFromTimestamp($oneDaysEnd)->toDateTimeString();
+
+        $today = Carbon::now('Asia/Shanghai')->toDateString();
+
+        $todayStart = Carbon::createFromTimestamp(Carbon::createFromFormat('Y-m-d' , $today , $tz)->startOfDay()->timestamp)->toDateTimeString();
+        $todayEnd = Carbon::createFromTimestamp(Carbon::createFromFormat('Y-m-d' , $today , $tz)->endOfDay()->timestamp)->toDateTimeString();
+
+
+        $connection = DB::connection('lovbee');
+
+        $yesterdayCount = $connection->table('users_countries')
+            ->where('country' , $country)
+            ->where('activation' , 1)
+            ->where('created_at' , '>=' , $oneStart)
+            ->where('created_at' , '<=' , $oneEnd)
+            ->count();
+
+        $todayCount = $connection->table('users_countries')
+            ->where('country' , $country)
+            ->where('activation' , 1)
+            ->where('created_at' , '>=' , $todayStart)
+            ->where('created_at' , '<=' , $todayEnd)
+            ->count();
+        do{
+            array_push($dates , $start);
+            $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
+        }while($start <= $end);
+
+        $list = $connection->table('data_retentions')
+            ->where('country' , $country)
+            ->whereIn('date' , $dates)->orderBy('date')
+            ->select('date' , 'new as num')
+            ->get()->map(function ($value) {
+                return (array)$value;
+            })->keyBy('date')->toArray();
+
+        foreach ($dates as $date)
+        {
+            if(!isset($list[$date]))
+            {
+                $list[$date] = array(
+                    'num'=>0,
+                );
+            }
+        }
+        dump($list);
+        $list[$oneDaysAgo] = array('date'=>$oneDaysAgo , 'num'=>$yesterdayCount);
+        $list[$today] = array('date'=>$today , 'num'=>$todayCount);
+        $counties = config('country');
+        dump($list);
+//        return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list' , 'v'));
+    }
 }
