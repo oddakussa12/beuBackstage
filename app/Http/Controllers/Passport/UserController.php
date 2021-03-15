@@ -607,7 +607,7 @@ class UserController extends Controller
             return $this->countryDnu($request);
         }elseif ($type=='school')
         {
-
+            $this->schoolDnu($request);
         }
     }
 
@@ -726,6 +726,27 @@ class UserController extends Controller
 
     public function schoolDnu($request)
     {
-
+        $list = array();
+        $school = strval($request->input('school' , ''));
+        $start = $request->input('start' , '');
+        $end = Carbon::now('Asia/Shanghai')->endOfDay()->subHours(8)->toDateTimeString();
+        if(blank($start))
+        {
+            $start = $startTime = Carbon::now('Asia/Shanghai')->subDays(30)->startOfDay()->subHours(8)->toDateTimeString();
+        }else{
+            $start = $startTime = Carbon::createFromFormat('Y-m-d' , $start , 'Asia/Shanghai')->startOfDay()->subHours(8)->toDateTimeString();
+        }
+        $connection = DB::connection('lovbee');
+        $list = $connection->table('users')
+            ->where('user_sl' , $school)
+            ->where('user_created_at' , '>=' , $start)
+            ->where('user_created_at' , '<=' , $end)
+            ->orderBy('date')
+            ->select(DB::raw("count(`user_id`) as `num`") , DB::raw("DATE_FORMAT(`user_created_at` , 'Y-m-d') as `created_at`"))
+            ->groupBy('created_at')
+            ->get()->map(function ($value) {
+                return (array)$value;
+            })->keyBy('date')->toArray();
+        dd($list);
     }
 }
