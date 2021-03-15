@@ -24,7 +24,8 @@ Route::group(['prefix'=>'backstage'] , function(){
 
         Route::get('/', 'BackstageController@index');
         Route::group(['namespace'=>'Auth'] , function (){
-            Route::resource('user', 'UserController');
+            Route::get('admin/user', 'AdminController@userInfo')->name('admin.user');
+            Route::patch('admin/user/update', 'AdminController@userInfoUpdate')->name('admin.user.update');
             Route::resource('admin', 'AdminController');
             Route::resource('permission', 'PermissionController');
             Route::resource('role', 'RoleController');

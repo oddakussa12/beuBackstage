@@ -1,22 +1,5 @@
-@extends('layouts.app')
-@section('title', trans('common.header.title'))
-@section('content')
-    <div class="layui-header">
-        <!-- 引入头部 -->
-        @include('layouts.nav')
-    </div>
-    <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree">
-                @include('layouts.side')
-            </ul>
-        </div>
-    </div>
-    <div class="layui-body">
-        <!-- 内容主体区域 -->
-            @include('layouts.bread_crumb')
-
+@extends('layouts.dashboard')
+@section('layui-content')
         <div class="layui-tab" lay-filter="version">
             <ul class="layui-tab-title">
                 <li class="layui-this"  lay-id="0">Versions</li>
