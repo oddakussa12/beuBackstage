@@ -611,9 +611,9 @@ class UserController extends Controller
         $dates = array();
         if(blank($start))
         {
-            $start = Carbon::now('Asia/Shanghai')->subDays(30)->toDateString();
+            $start = $startTime = Carbon::now('Asia/Shanghai')->subDays(30)->toDateString();
         }else{
-            $start = Carbon::createFromFormat('Y-m-d' , $start , 'Asia/Shanghai')->toDateString();
+            $start = $startTime = Carbon::createFromFormat('Y-m-d' , $start , 'Asia/Shanghai')->toDateString();
         }
         $end = Carbon::now('Asia/Shanghai')->subDays(2)->toDateString();
         if($country=='tl')
@@ -691,6 +691,6 @@ class UserController extends Controller
 
         $dnu = collect($list)->pluck('num');
         $xAxis = array_keys($list);
-        return  view('backstage.passport.user.dnu' , compact('start' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
+        return  view('backstage.passport.user.dnu' , compact('startTime' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
     }
 }

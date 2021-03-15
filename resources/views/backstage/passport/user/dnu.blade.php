@@ -42,7 +42,7 @@
                             <div class="layui-form-item">
                                 <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" class="layui-input" name="start" id="start" readonly="" placeholder="yyyy-MM-dd" value="{{$start}}">
+                                    <input type="text" class="layui-input" name="start" id="start" readonly="" placeholder="yyyy-MM-dd" value="{{$startTime}}">
                                 </div>
                                 <div class="layui-inline">
                                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
