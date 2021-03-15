@@ -22,7 +22,7 @@ class VersionController extends Controller
         $list   = DB::connection('lovbee')->table($table)->select(DB::raw('version, count(DISTINCT(user_id)) num, created_at date'));
         $list   = $list->where('version', '>', 0)->whereBetween('created_at', [$start, $end])->groupBy(DB::raw('created_at,version'))->get();
 
-        $version= collect($list)->pluck('version')->unique()->values()->sort()->toArray();
+        $version= collect($list)->pluck('version')->unique()->values()->toArray();
         $dates  = collect($list)->pluck('date')->unique()->values()->sort()->toArray();
 
         foreach ($dates as $date) {
