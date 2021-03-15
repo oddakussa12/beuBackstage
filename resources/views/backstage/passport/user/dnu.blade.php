@@ -19,12 +19,11 @@
 
         <div class="layui-tab" lay-filter="dnu">
             <ul class="layui-tab-title">
-                <li class="layui-this"  lay-id="0">DNU</li>
-                <li  lay-id="1">DNU</li>
-
+                <li lay-id="0">DNU</li>
+                <li class="layui-this" lay-id="1">DNU</li>
             </ul>
             <div class="layui-tab-content">
-                <div class="layui-tab-item layui-show">
+                <div class="layui-tab-item ">
                     <div class="layui-fluid">
                         <form class="layui-form" action="" lay-filter="keep">
                             <div class="layui-form-item">
@@ -67,10 +66,9 @@
                         </table>
                     </div>
                 </div>
-                <div class="layui-tab-item"  id="layui-echarts">
+                <div class="layui-tab-item layui-show"  id="layui-echarts">
                     <div id="container" style="height: 100%">
                 </div>
-
             </div>
         </div>
     </div>
