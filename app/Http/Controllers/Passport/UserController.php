@@ -655,18 +655,13 @@ class UserController extends Controller
             ->where('created_at' , '>=' , $oneStart)
             ->where('created_at' , '<=' , $oneEnd)
             ->count();
-        dump($oneStart);
-        dump($oneEnd);
 
-        dump($todayStart);
-        dump($todayEnd);
         $todayCount = $connection->table('users_countries')
             ->where('country' , $country)
             ->where('activation' , 1)
             ->where('created_at' , '>=' , $todayStart)
             ->where('created_at' , '<=' , $todayEnd)
-            ->toSql();
-        echo $todayCount;die;
+            ->count();
         do{
             array_push($dates , $start);
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
