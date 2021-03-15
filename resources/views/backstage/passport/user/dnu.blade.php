@@ -26,7 +26,7 @@
                 <div class="layui-tab-item ">
                     <div class="layui-fluid">
                         <form class="layui-form" action="" lay-filter="keep">
-                            @if(Auth::user()->hasRole('admin'))
+                            @if(Auth::user()->hasRole('administrator'))
                             <div class="layui-form-item">
                                 <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                                 <div class="layui-inline">
