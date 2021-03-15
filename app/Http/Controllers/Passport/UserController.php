@@ -607,7 +607,12 @@ class UserController extends Controller
         $list = array();
         $v = $request->input('v' , 0);
         $start = $request->input('start' , '');
-        $country = $country_code = strtolower(strval($request->input('country_code' , 'tl')));
+        if(auth()->user()->hasRole('administrator'))
+        {
+            $country = $country_code = strtolower(strval($request->input('country_code' , 'all')));
+        }else{
+            $country = $country_code = auth()->user()->admin_country;
+        }
         $dates = array();
         if(blank($start))
         {
@@ -632,7 +637,7 @@ class UserController extends Controller
         {
             $tz = "Africa/Addis_Ababa";
         }else{
-            return;
+            $tz = new \DateTimeZone("UTC");
         }
 
         $oneDaysAgo = Carbon::now('Asia/Shanghai')->subDays(1)->toDateString();
