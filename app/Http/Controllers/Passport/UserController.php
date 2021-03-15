@@ -677,6 +677,7 @@ class UserController extends Controller
                     return (array)$value;
                 })->keyBy('date')->toArray();
         }
+        dd($list);
         foreach ($dates as $date)
         {
             if(!isset($list[$date]))
