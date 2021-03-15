@@ -145,7 +145,27 @@
                     {
                         name: 'dnu',
                         type: 'line',
-                        data: @json($dnu)
+                        data: @json($dnu),
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: 'MAX'},
+                                {type: 'min', name: 'MIN'}
+                            ]
+                        },
+                        markLine: {
+                            silent: false,
+                            precision: 2,
+                            label: {
+                                "show": true,
+                                "position": "top",
+                                "margin": 8
+                            },
+                            data: [
+                                {
+                                    type: "average"
+                                }
+                            ]
+                        }
                     }
                 ]
             };
