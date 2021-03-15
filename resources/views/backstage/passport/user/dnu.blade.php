@@ -25,7 +25,17 @@
             <div class="layui-tab-content">
                 <div class="layui-tab-item ">
                     <div class="layui-fluid">
-                        <form class="layui-form" action="" lay-filter="keep">
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Type:</label>
+                                <div class="layui-inline">
+                                    <select name="country_code" lay-verify="" lay-search>
+                                        <option value=""></option>
+                                        <option value="country" @if($country_code=='Country') selected @endif>Country</option>
+                                        <option value="school" @if($country_code=='School') selected @endif>School</option>
+                                    </select>
+                                </div>
+                            </div>
                             @if(Auth::user()->hasRole('administrator'))
                             <div class="layui-form-item">
                                 <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>

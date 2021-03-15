@@ -594,15 +594,24 @@ class UserController extends Controller
             'thirty'=>$thirty,
             'thirtyKeep'=>collect($thirtyKeep)->toArray(),
         );
-//        dump($thirty);
-//        dump($thirtyKeep);
-//        dump($list);
         return response($list);
 
     }
 
 
     public function dnu(Request $request)
+    {
+        $type = $request->input('type' , 'country');
+        if($type=='country')
+        {
+            return $this->countryDnu($request);
+        }elseif ($type=='school')
+        {
+
+        }
+    }
+
+    public function countryDnu($request)
     {
         $list = array();
         $v = $request->input('v' , 0);
@@ -659,7 +668,7 @@ class UserController extends Controller
             array_push($dates , $start);
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
         }while($start <= $end);
-
+        $counties = config('country');
         if($country!='all')
         {
             $list = $connection->table('data_retentions')
@@ -671,17 +680,20 @@ class UserController extends Controller
                 })->keyBy('date')->toArray();
         }else{
             $list = $connection->table('data_retentions')
+                ->whereIn('country' , collect($counties)->pluck('code')->toArray())
                 ->whereIn('date' , $dates)->orderBy('date')
                 ->select('date' , 'new as num')
                 ->get()->map(function ($value) {
                     return (array)$value;
                 })->keyBy('date')->toArray();
         }
+
         foreach ($dates as $date)
         {
             if(!isset($list[$date]))
             {
                 $list[$date] = array(
+                    'date'=>$date,
                     'num'=>0,
                 );
             }
@@ -704,11 +716,16 @@ class UserController extends Controller
             $list[$oneDaysAgo] = array('date'=>$oneDaysAgo , 'num'=>$yesterdayCount);
             $list[$today] = array('date'=>$today , 'num'=>$todayCount);
         }
-        $counties = config('country');
+
         $list = collect($list)->sortBy('date')->toArray();
 
         $dnu = collect($list)->pluck('num');
         $xAxis = array_keys($list);
         return  view('backstage.passport.user.dnu' , compact('startTime' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
+    }
+
+    public function schoolDnu($request)
+    {
+
     }
 }

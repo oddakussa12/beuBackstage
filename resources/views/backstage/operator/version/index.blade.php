@@ -1,6 +1,23 @@
-@extends('layouts.dashboard')
-@section('layui-content')
-        <div class="layui-tab" lay-filter="tab">
+@extends('layouts.app')
+@section('title', trans('common.header.title'))
+@section('content')
+    <div class="layui-header">
+        <!-- 引入头部 -->
+        @include('layouts.nav')
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree">
+                @include('layouts.side')
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+            @include('layouts.bread_crumb')
+
+        <div class="layui-tab" lay-filter="version">
             <ul class="layui-tab-title">
                 <li class="layui-this"  lay-id="0">Versions</li>
                 <li  lay-id="1">Charts</li>
@@ -23,17 +40,17 @@
                         <table class="layui-table">
                             <thead>
                             <tr>
-                                <th>Number</th>
-                                <th>Version</th>
                                 <th>Time</th>
+                                <th>Version</th>
+                                <th>Number</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($list as $l)
                                 <tr>
-                                    <td>{{$l->num}}</td>
-                                    <td>{{$l->version}}</td>
                                     <td>{{$l->date}}</td>
+                                    <td>{{$l->version}}</td>
+                                    <td>{{$l->num}}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -84,7 +101,7 @@
             let myChart = echarts.init(dom);
 
             let option = {
-                color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
+                // color: ['#80FFA5', '#00ddff', '#37A2FF', '#FF0087', '#FFBF00'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -119,6 +136,7 @@
                 series: @json($line)
             };
 
+
             if (option && typeof option === 'object') {
                 myChart.setOption(option);
                 window.onresize = function () {//用于使chart自适应高度和宽度
@@ -130,16 +148,16 @@
                 console.log($('.layui-body').height());
                 $('#layui-echarts').height($('.layui-body').height()-200);
                 myChart.resize();
-            };
-            element.on('collapse(tab)', function(data){
-            });
 
-            element.on('tab(tab)', function(data){
+            };
+
+            element.on('tab(version)', function(data){
                 if(data.index==1)
                 {
                     autoContainer();
                 }
             });
+            autoContainer();
         })
     </script>
     <style>
