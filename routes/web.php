@@ -41,6 +41,10 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::post('music' , 'MusicController@store')->name('music.store');
         });
 
+        Route::group(['namespace'=>'Operator','prefix'=>'operator' , 'as' => 'operator::'] , function (){
+            Route::get('version' , 'VersionController@index')->name('version.index');
+        });
+
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){
 
             Route::get('user/keep' , 'UserController@keep')->name('user.keep');
