@@ -176,7 +176,7 @@
                     autoContainer();
                 }
             });
-            myChart.resize();
+            autoContainer();
         })
     </script>
     <style>
