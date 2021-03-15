@@ -60,7 +60,7 @@
                             @foreach($list as $l)
                                 <tr>
                                     <td>{{$l['date']}}</td>
-                                    <td>{{$l['dnu']}}</td>
+                                    <td>{{$l['num']}}</td>
                                 </tr>
                             @endforeach
                             </tbody>

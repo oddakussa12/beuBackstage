@@ -689,7 +689,7 @@ class UserController extends Controller
         $counties = config('country');
         $list = collect($list)->sortBy('date')->toArray();
 
-        $dnu = collect($list)->pluck('dau');
+        $dnu = collect($list)->pluck('num');
         $xAxis = array_keys($list);
         return  view('backstage.passport.user.dnu' , compact('start' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
     }
