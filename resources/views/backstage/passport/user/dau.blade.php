@@ -145,6 +145,7 @@
             });
 
 
+
             var dom = document.getElementById("container");
             var myChart = echarts.init(dom);
             var app = {};

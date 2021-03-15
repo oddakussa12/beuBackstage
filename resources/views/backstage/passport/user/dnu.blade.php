@@ -153,19 +153,13 @@
                             ]
                         },
                         markLine: {
-                            silent: false,
-                            precision: 2,
-                            label: {
-                                "show": true,
-                                "position": "top",
-                                "margin": 8
-                            },
                             data: [
                                 {
                                     type: "average"
                                 }
                             ]
-                        }
+                        },
+                        itemStyle : { normal: {label : {show: true}}}
                     }
                 ]
             };
