@@ -649,32 +649,29 @@ class UserController extends Controller
 
         $connection = DB::connection('lovbee');
 
-        $yesterdayCount = $connection->table('users_countries')
-            ->where('country' , $country)
-            ->where('activation' , 1)
-            ->where('created_at' , '>=' , $oneStart)
-            ->where('created_at' , '<=' , $oneEnd)
-            ->count();
 
-        $todayCount = $connection->table('users_countries')
-            ->where('country' , $country)
-            ->where('activation' , 1)
-            ->where('created_at' , '>=' , $todayStart)
-            ->where('created_at' , '<=' , $todayEnd)
-            ->count();
         do{
             array_push($dates , $start);
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
         }while($start <= $end);
 
-        $list = $connection->table('data_retentions')
-            ->where('country' , $country)
-            ->whereIn('date' , $dates)->orderBy('date')
-            ->select('date' , 'new as num')
-            ->get()->map(function ($value) {
-                return (array)$value;
-            })->keyBy('date')->toArray();
-
+        if($country!='all')
+        {
+            $list = $connection->table('data_retentions')
+                ->where('country' , $country)
+                ->whereIn('date' , $dates)->orderBy('date')
+                ->select('date' , 'new as num')
+                ->get()->map(function ($value) {
+                    return (array)$value;
+                })->keyBy('date')->toArray();
+        }else{
+            $list = $connection->table('data_retentions')
+                ->whereIn('date' , $dates)->orderBy('date')
+                ->select('date' , 'new as num')
+                ->get()->map(function ($value) {
+                    return (array)$value;
+                })->keyBy('date')->toArray();
+        }
         foreach ($dates as $date)
         {
             if(!isset($list[$date]))
@@ -684,8 +681,24 @@ class UserController extends Controller
                 );
             }
         }
-        $list[$oneDaysAgo] = array('date'=>$oneDaysAgo , 'num'=>$yesterdayCount);
-        $list[$today] = array('date'=>$today , 'num'=>$todayCount);
+        if($country!='all')
+        {
+            $yesterdayCount = $connection->table('users_countries')
+                ->where('country' , $country)
+                ->where('activation' , 1)
+                ->where('created_at' , '>=' , $oneStart)
+                ->where('created_at' , '<=' , $oneEnd)
+                ->count();
+
+            $todayCount = $connection->table('users_countries')
+                ->where('country' , $country)
+                ->where('activation' , 1)
+                ->where('created_at' , '>=' , $todayStart)
+                ->where('created_at' , '<=' , $todayEnd)
+                ->count();
+            $list[$oneDaysAgo] = array('date'=>$oneDaysAgo , 'num'=>$yesterdayCount);
+            $list[$today] = array('date'=>$today , 'num'=>$todayCount);
+        }
         $counties = config('country');
         $list = collect($list)->sortBy('date')->toArray();
 
