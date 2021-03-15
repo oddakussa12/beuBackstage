@@ -26,6 +26,7 @@
                 <div class="layui-tab-item ">
                     <div class="layui-fluid">
                         <form class="layui-form" action="" lay-filter="keep">
+                            @if(Auth::user()->hasRole('admin'))
                             <div class="layui-form-item">
                                 <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                                 <div class="layui-inline">
@@ -38,6 +39,7 @@
                                     </select>
                                 </div>
                             </div>
+                            @endif
                             <div class="layui-form-item">
                                 <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
                                 <div class="layui-input-inline">
