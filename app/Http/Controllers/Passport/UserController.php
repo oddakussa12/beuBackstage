@@ -659,7 +659,7 @@ class UserController extends Controller
             array_push($dates , $start);
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
         }while($start <= $end);
-
+        $counties = config('country');
         if($country!='all')
         {
             $list = $connection->table('data_retentions')
@@ -671,13 +671,14 @@ class UserController extends Controller
                 })->keyBy('date')->toArray();
         }else{
             $list = $connection->table('data_retentions')
+                ->whereIn('country' , collect($counties)->pluck('code')->toArray())
                 ->whereIn('date' , $dates)->orderBy('date')
                 ->select('date' , 'new as num')
                 ->get()->map(function ($value) {
                     return (array)$value;
                 })->keyBy('date')->toArray();
         }
-        dd($list);
+
         foreach ($dates as $date)
         {
             if(!isset($list[$date]))
@@ -706,7 +707,7 @@ class UserController extends Controller
             $list[$oneDaysAgo] = array('date'=>$oneDaysAgo , 'num'=>$yesterdayCount);
             $list[$today] = array('date'=>$today , 'num'=>$todayCount);
         }
-        $counties = config('country');
+
         $list = collect($list)->sortBy('date')->toArray();
 
         $dnu = collect($list)->pluck('num');
