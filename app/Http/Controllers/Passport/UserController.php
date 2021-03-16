@@ -679,10 +679,11 @@ class UserController extends Controller
                     return (array)$value;
                 })->keyBy('date')->toArray();
         }else{
+
             $list = $connection->table('data_retentions')
 //                ->whereIn('country' , collect($counties)->pluck('code')->toArray())
                 ->whereIn('date' , $dates)->orderBy('date')
-                ->select('date' , 'sum(new) as num')
+                ->select('date' , 'sum(`new`) as `num`')
                 ->get()->map(function ($value) {
                     return (array)$value;
                 })->keyBy('date')->toArray();
