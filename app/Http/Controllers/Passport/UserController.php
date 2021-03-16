@@ -602,26 +602,32 @@ class UserController extends Controller
     public function dnu(Request $request)
     {
         $type = $request->input('type' , 'country');
-        if($type=='country')
-        {
-            return $this->countryDnu($request);
-        }elseif ($type=='school')
-        {
-            $this->schoolDnu($request);
-        }
-    }
-
-    public function countryDnu($request)
-    {
-        $list = array();
+        $school = strval($request->input('school' , ''));
         $v = $request->input('v' , 0);
         $start = $request->input('start' , '');
-        if(auth()->user()->hasRole('administrator'))
+        $country = strtolower(strval($request->input('country_code' , 'all')));
+        if($type=='country')
         {
-            $country = $country_code = strtolower(strval($request->input('country_code' , 'all')));
+            if(!auth()->user()->hasRole('administrator'))
+            {
+                $country = $country_code = auth()->user()->admin_country;
+            }
+            $data =  $this->countryDnu($country , $start);
         }else{
-            $country = $country_code = auth()->user()->admin_country;
+            $data = $this->schoolDnu($school , $start);
         }
+        $data['v'] = $v;
+        $data['school'] = $school;
+        $data['counties'] = config('country');
+        $data['country_code'] = $country;
+        $data['type'] = $type;
+
+        return  view('backstage.passport.user.dnu' , $data);
+
+    }
+
+    public function countryDnu($country , $start)
+    {
         $dates = array();
         if(blank($start))
         {
@@ -654,21 +660,15 @@ class UserController extends Controller
         $oneDaysEnd = Carbon::createFromFormat('Y-m-d' , $oneDaysAgo , $tz)->endOfDay()->timestamp;
         $oneStart = Carbon::createFromTimestamp($oneDaysStart, new \DateTimeZone("UTC"))->toDateTimeString();
         $oneEnd = Carbon::createFromTimestamp($oneDaysEnd, new \DateTimeZone("UTC"))->toDateTimeString();
-
         $today = Carbon::now('Asia/Shanghai')->toDateString();
-
         $todayStart = Carbon::createFromTimestamp(Carbon::createFromFormat('Y-m-d' , $today , $tz)->startOfDay()->timestamp , new \DateTimeZone("UTC"))->toDateTimeString();
         $todayEnd = Carbon::createFromTimestamp(Carbon::createFromFormat('Y-m-d' , $today , $tz)->endOfDay()->timestamp, new \DateTimeZone("UTC"))->toDateTimeString();
-
-
         $connection = DB::connection('lovbee');
-
 
         do{
             array_push($dates , $start);
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
         }while($start <= $end);
-        $counties = config('country');
         if($country!='all')
         {
             $list = $connection->table('data_retentions')
@@ -680,7 +680,7 @@ class UserController extends Controller
                 })->keyBy('date')->toArray();
         }else{
             $list = $connection->table('data_retentions')
-                ->whereIn('country' , collect($counties)->pluck('code')->toArray())
+//                ->whereIn('country' , collect($counties)->pluck('code')->toArray())
                 ->whereIn('date' , $dates)->orderBy('date')
                 ->select('date' , 'new as num')
                 ->get()->map(function ($value) {
@@ -721,31 +721,52 @@ class UserController extends Controller
 
         $dnu = collect($list)->pluck('num');
         $xAxis = array_keys($list);
-        return  view('backstage.passport.user.dnu' , compact('startTime' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
+        return compact('startTime'   , 'list'  , 'dnu' , 'xAxis');
+//        return  view('backstage.passport.user.dnu' , compact('startTime' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
     }
 
-    public function schoolDnu($request)
+    public function schoolDnu($school , $start)
     {
-        $list = array();
-        $school = strval($request->input('school' , ''));
-        $start = $request->input('start' , '');
         $end = Carbon::now('Asia/Shanghai')->endOfDay()->subHours(8)->toDateTimeString();
+        $endTime = Carbon::now('Asia/Shanghai')->toDateTimeString();
         if(blank($start))
         {
-            $start = $startTime = Carbon::now('Asia/Shanghai')->subDays(30)->startOfDay()->subHours(8)->toDateTimeString();
+            $startTime = $startDate = Carbon::now('Asia/Shanghai')->subDays(30)->toDateString();
+            $start = Carbon::now('Asia/Shanghai')->subDays(30)->startOfDay()->subHours(8)->toDateTimeString();
         }else{
-            $start = $startTime = Carbon::createFromFormat('Y-m-d' , $start , 'Asia/Shanghai')->startOfDay()->subHours(8)->toDateTimeString();
+            $startTime = $startDate = Carbon::createFromFormat('Y-m-d' , $start , 'Asia/Shanghai')->toDateString();
+            $start = Carbon::createFromFormat('Y-m-d' , $start , 'Asia/Shanghai')->startOfDay()->subHours(8)->toDateTimeString();
         }
+        $dates = array();
+
+        do{
+            array_push($dates , $startDate);
+            $startDate = Carbon::createFromFormat('Y-m-d' , $startDate)->addDays(1)->toDateString();
+        }while($startDate <= $endTime);
         $connection = DB::connection('lovbee');
         $list = $connection->table('users')
             ->where('user_sl' , $school)
+            ->where('user_activation' , 1)
             ->where('user_created_at' , '>=' , $start)
             ->where('user_created_at' , '<=' , $end)
-            ->select(DB::raw("count(`user_id`) as `num`") , DB::raw("DATE_FORMAT(`user_created_at` , '%Y-%m-%d') as `created_at`"))
-            ->groupBy('created_at')
+            ->select(DB::raw("count(`user_id`) as `num`") , DB::raw("DATE_FORMAT(`user_created_at` , '%Y-%m-%d') as `date`"))
+            ->groupBy('date')
             ->get()->map(function ($value) {
                 return (array)$value;
-            })->keyBy('created_at')->toArray();
-        dd($list);
+            })->keyBy('date')->toArray();
+        foreach ($dates as $date)
+        {
+            if(!isset($list[$date]))
+            {
+                $list[$date] = array(
+                    'date'=>$date,
+                    'num'=>0,
+                );
+            }
+        }
+        $list = collect($list)->sortBy('date')->toArray();
+        $dnu = collect($list)->pluck('num');
+        $xAxis = array_keys($list);
+        return compact('startTime'  , 'list' , 'dnu' , 'xAxis');
     }
 }

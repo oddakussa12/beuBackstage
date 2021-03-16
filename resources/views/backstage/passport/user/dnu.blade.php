@@ -30,17 +30,23 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">Type:</label>
                                     <div class="layui-inline">
-                                        <select name="country_code" lay-verify="" lay-search>
-                                            <option value=""></option>
-                                            <option value="country" @if($country_code=='Country') selected @endif>Country</option>
-                                            <option value="school" @if($country_code=='School') selected @endif>School</option>
+                                        <select name="type"  lay-filter="type" lay-search>
+                                            <option value="country" @if($type=='country') selected @endif>Country</option>
+                                            <option value="school" @if($type=='school') selected @endif>School</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="layui-inline"  @if($type!='school') style="display: none;"  @endif id="school">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">School:</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="school" lay-verify="required" autocomplete="off" class="layui-input" id="school" placeholder="" value="{{$school}}">
+                                    </div>
+                                </div>
+                            </div>
                             @if(Auth::user()->hasRole('administrator'))
-                            <div class="layui-inline">
+                            <div class="layui-inline"   style="display: none;" id="country">
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                                     <div class="layui-inline">
@@ -114,6 +120,7 @@
             echarts: 'lay/modules/echarts',
         }).use(['element','common' , 'table', 'laydate' , 'echarts'], function () {
             var $ = layui.jquery,
+                form = layui.form,
                 element = layui.element,
                 table = layui.table,
                 common = layui.common,
@@ -210,6 +217,22 @@
                 }
             });
             autoContainer();
+            form.render();
+            form.on('select(type)', function (data) {
+                if (data.value == 'country') {
+                    $("#school").hide();
+                    $("#school").attr("disabled", "true");
+                    $("#country").show();
+                    $("#country").removeAttr("disabled");
+                }else{
+                    $("#country").hide();
+                    $("#country").attr("disabled", "true");
+                    $("#school").show();
+                    $("#school").removeAttr("disabled");
+                }
+                form.render('select');
+                console.log(data);
+            });
         })
     </script>
     <style>
