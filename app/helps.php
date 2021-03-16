@@ -357,5 +357,19 @@ if (!function_exists('sortArrByManyField')) {
         call_user_func_array('array_multisort', $args);
         return array_pop($args);
     }
+
+}
+
+if (!function_exists('printDates')) {
+    function printDates($start, $end): array
+    {
+        $dt_start = strpos($start, '-') !== false ? strtotime($start) : $start;
+        $dt_end = strpos($end, '-') !== false ? strtotime($end) : $end;
+        while ($dt_start <= $dt_end) {
+            $date[] = date('Y-m-d', $dt_start);
+            $dt_start = strtotime('+1 day', $dt_start);
+        }
+        return $date ?? [];
+    }
 }
 

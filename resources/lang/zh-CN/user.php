@@ -47,6 +47,7 @@ return [
             'last_avtive_time'=>'最近活跃时间',
             'last_avtive_ip'=>'最近活跃IP',
             'user_activation'=>'激活',
+            'user_time' =>'时间',
             'user_friend_time'=>'加好友时间',
             'user_unblock'=>'解封',
             'user_level'=>'加V',

@@ -82,17 +82,9 @@
 
             let dom = document.getElementById("container");
             let myChart = echarts.init(dom);
-
             let option = {
-                // color: ['#80FFA5', '#00ddff', '#37A2FF', '#FF0087', '#FFBF00'],
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            backgroundColor: '#6a7985'
-                        }
-                    }
                 },
                 legend: {
                     data: @json($version)
@@ -118,8 +110,6 @@
                 yAxis: [{type: 'value'}],
                 series: @json($line)
             };
-
-
             if (option && typeof option === 'object') {
                 myChart.setOption(option);
                 window.onresize = function () {//用于使chart自适应高度和宽度
