@@ -683,7 +683,7 @@ class UserController extends Controller
             $list = $connection->table('data_retentions')
 //                ->whereIn('country' , collect($counties)->pluck('code')->toArray())
                 ->whereIn('date' , $dates)->orderBy('date')
-                ->select('date' , DB::raw('count(`new`) as `num`'))
+                ->select('date' , DB::raw('sum(`new`) as `num`'))
                 ->get()->map(function ($value) {
                     return (array)$value;
                 })->keyBy('date')->toArray();
