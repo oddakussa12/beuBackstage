@@ -679,6 +679,11 @@ class UserController extends Controller
                     return (array)$value;
                 })->keyBy('date')->toArray();
         }else{
+            dump($dates);
+            echo $connection->table('data_retentions')
+//                ->whereIn('country' , collect($counties)->pluck('code')->toArray())
+                ->whereIn('date' , $dates)->orderBy('date')
+                ->select('date' , 'new as num')->toSql();die;
             $list = $connection->table('data_retentions')
 //                ->whereIn('country' , collect($counties)->pluck('code')->toArray())
                 ->whereIn('date' , $dates)->orderBy('date')
