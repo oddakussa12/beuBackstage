@@ -170,6 +170,9 @@
             let myChart = echarts.init(dom);
 
             let option = {
+                tooltip: {
+                    trigger: 'axis',
+                },
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
