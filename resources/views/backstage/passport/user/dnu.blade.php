@@ -220,7 +220,7 @@
             form.render();
             form.on('select(type)', function (data) {
                 if (data.value == 'country') {
-                    $("#schoolDev").hide();
+                    $("#schoolDiv").hide();
                     $("#school").attr("disabled", "true");
                     $("#countryDiv").show();
                     $("#country").removeAttr("disabled");
