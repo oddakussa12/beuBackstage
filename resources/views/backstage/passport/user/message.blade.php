@@ -28,7 +28,7 @@
                     <div class="layui-input-inline">
                         <select  name="country_code" lay-verify="" lay-search  >
                             <option value="">{{trans('comment.form.placeholder.comment_country_id')}}</option>
-                            @foreach($counties  as $country)
+                            @foreach($countries  as $country)
                                 <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
                             @endforeach
                         </select>

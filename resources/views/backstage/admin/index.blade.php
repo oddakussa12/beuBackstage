@@ -6,8 +6,8 @@
             <tr>
                 <th  lay-data="{field:'admin_id', width:100}">{{trans('admin.table.header.admin_id')}}</th>
                 <th  lay-data="{field:'admin_auth', hide:true}"></th>
-                <th  lay-data="{field:'admin_username', width:200}">{{trans('admin.table.header.admin_username')}}</th>
-                <th  lay-data="{field:'admin_email', width:200}">{{trans('admin.table.header.admin_email')}}</th>
+                <th  lay-data="{field:'admin_username', width:100}">{{trans('admin.table.header.admin_username')}}</th>
+                <th  lay-data="{field:'admin_email', width:160}">{{trans('admin.table.header.admin_email')}}</th>
                 <th  lay-data="{field:'admin_sex', templet: function(field){
                     @php
                         $sex_list = config("common.sex");
@@ -18,6 +18,7 @@
                     var sex_list = JSON.parse('{{json_encode($sex_list)}}');
                     return '<span>'+ sex_list[field.admin_sex] +'</span>';
                 } , width:80 }">{{trans('admin.table.header.admin_sex')}}</th>
+                <th  lay-data="{field:'admin_country', width:160}">{{trans('user.table.header.user_country')}}</th>
                 <th  lay-data="{field:'admin_status',templet:function(field){
                     @php
                         $status_list = config("common.status");
@@ -38,7 +39,7 @@
                 } , width:200}">{{trans('admin.table.header.admin_role')}}</th>
                 <th  lay-data="{field:'admin_realname', width:100}">{{trans('admin.table.header.admin_name')}}</th>
 {{--                <th  lay-data="{field:'admin_created_at', width:180}">{{trans('admin.table.header.admin_created_at')}}</th>--}}
-                <th  lay-data="{field:'admin_op', minWidth:100 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                <th  lay-data="{field:'admin_op', minWidth:150 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -49,6 +50,7 @@
                 <td>{{$admin->admin_username}}</td>
                 <td>{{$admin->admin_email}}</td>
                 <td>{{$admin->admin_sex}}</td>
+                <td>{{$admin->admin_country}}</td>
                 <td>{{$admin->admin_status}}</td>
                 <td>{{$admin->admin_roles}}</td>
                 <td>{{$admin->admin_realname}}</td>
@@ -89,6 +91,19 @@
                     <label class="layui-form-label">{{trans('admin.form.label.admin_realname')}}</label>
                     <div class="layui-input-block">
                         <input type="text" name="admin_realname"  placeholder="{{trans('admin.form.placeholder.admin_realname')}}" lay-verify="admin_realname" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('user.table.header.user_country')}}</label>
+                    <div class="layui-input-block">
+                        <select  name="admin_country" lay-verify="" lay-search  >
+                            <option value="">{{trans('comment.form.placeholder.comment_country_id')}}</option>
+                            @foreach($countries  as $country)
+                                <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -257,6 +272,7 @@
                         ,"admin_realname": data.admin_realname
                         ,"admin_email": data.admin_email
                         ,"admin_sex": data.admin_sex
+                        ,"admin_country": data.admin_country
                         ,"admin_status": data.admin_status
                     });
                     tree.reload('permission_tree');

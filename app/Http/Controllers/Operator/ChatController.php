@@ -54,7 +54,7 @@ class ChatController extends Controller
         }
 
         $params['chart']    = $chart;
-        $params['counties'] = config('country');
+        $params['countries'] = config('country');
         $params['dateTime'] = $start.' - '.$end;
         $params['header']   = ['Video', 'Chat'];
         $params['dates']    = $dates;

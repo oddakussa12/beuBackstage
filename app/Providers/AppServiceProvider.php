@@ -65,16 +65,16 @@ class AppServiceProvider extends ServiceProvider
                     $tmp = str_replace(':'.$key, '"'.$value.'"', $tmp);
                 }
             }
+            $flag  = true;
             $tmp   = vsprintf($tmp, $qBindings);
             $tmp   = str_replace('YY-mm-dd', '%Y-%m-%d', $tmp);
             $tmp   = str_replace("\\", "", $tmp);
-            $admin = ['bs_roles', 'bs_translations', 'bs_menus_translations', 'bs_permissions', 'bs_menus', 'information_schema', 'bs_audits', 'bs_admins'];
-            $flag  = true;
+            /*$admin = ['bs_roles', 'bs_translations', 'bs_menus_translations', 'bs_permissions', 'bs_menus', 'information_schema', 'bs_audits', 'bs_admins'];
             foreach ($admin as $item) {
                 if (stripos($query->sql, $item)) {
                     $flag = false;
                 }
-            }
+            }*/
             if ($flag) {
                 \Log::info(' execution time: '.$query->time.'ms; '.$tmp."\n\n\t");
             }

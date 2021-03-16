@@ -41,7 +41,8 @@ class AdminController extends Controller
             $admins[$k]['admin_permissions'] = json_encode($permissions);
             $admins[$k]['admin_roles'] = json_encode($admin->getRoleNames());
         }
-        return view('backstage.admin.index' , compact('admins' , 'sortPermissions' , 'roles'));
+        $countries = config('country');
+        return view('backstage.admin.index' , compact('admins' , 'sortPermissions' , 'roles', 'countries'));
 
     }
 

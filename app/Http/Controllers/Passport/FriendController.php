@@ -28,8 +28,8 @@ class FriendController extends Controller
     {
         $params = $request->all();
         $params['appends'] = $params;
-        $counties = config('country');
-        $params['counties']=$counties;
+        $countries = config('country');
+        $params['countries']=$countries;
         $users = $this->user->friendManage($params);
         $block_users = block_user_list();
         $users->each(function ($item) use ($block_users){
