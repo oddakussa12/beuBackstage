@@ -20,7 +20,7 @@ class VersionController extends Controller
         $table  = 'visit_logs_'.$month;
 
         $list   = DB::connection('lovbee')->table($table)->select(DB::raw('version, count(DISTINCT(user_id)) num, created_at date'));
-        $list   = $list->where('version', '>', 0)->whereBetween('created_at', [$start, $end])->groupBy(DB::raw('created_at,version'))->orderByDesc('created_at')->get();
+        $list   = $list->where('version', '>', 0)->whereBetween('created_at', [$start, $end])->groupBy(DB::raw('created_at,version'))->get();
 
         $version= collect($list)->pluck('version')->unique()->values()->toArray();
         $dates  = collect($list)->pluck('date')->unique()->values()->sort()->toArray();
