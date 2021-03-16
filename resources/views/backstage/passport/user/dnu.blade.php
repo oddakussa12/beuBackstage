@@ -41,12 +41,12 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">School:</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="school" lay-verify="required" autocomplete="off" class="layui-input" id="school" placeholder="" value="{{$school}}">
+                                        <input type="text" name="school" @if($type=='school') lay-verify="required" @endif id="school" autocomplete="off" class="layui-input" id="school" placeholder="" value="{{$school}}">
                                     </div>
                                 </div>
                             </div>
                             @if(Auth::user()->hasRole('administrator'))
-                            <div class="layui-inline"   style="display: none;" id="country">
+                            <div class="layui-inline"  @if($type!='country') style="display: none;"  @endif id="country">
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                                     <div class="layui-inline">
@@ -224,11 +224,13 @@
                     $("#school").attr("disabled", "true");
                     $("#country").show();
                     $("#country").removeAttr("disabled");
+                    $("#school").removeAttr("lay-verify");
                 }else{
                     $("#country").hide();
                     $("#country").attr("disabled", "true");
                     $("#school").show();
                     $("#school").removeAttr("disabled");
+                    $("#school").attr("lay-verify", "required");
                 }
                 form.render('select');
                 console.log(data);
