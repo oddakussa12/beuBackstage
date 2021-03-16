@@ -33,7 +33,7 @@ class ChatController extends Controller
 
         $params['list'] = $list;
 
-        $chart = DB::connection('lovbee')->table($table)->select(DB::raw('count(id) num'), 'video', 'country', 'school', 'time')->whereBetween('time', [$start, $end]);
+        $chart = DB::connection('lovbee')->table($table)->select(DB::raw('count(id) num, sum(video) video'), 'country', 'school', 'time')->whereBetween('time', [$start, $end]);
         if (!empty($params['country_code'])) {
             $chart = $chart->where('country', strtolower($params['country_code']));
         }
