@@ -13,6 +13,8 @@ class ChatController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
+        $params['appends'] = $params;
+
         $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
         $start  = !empty($time) ? array_shift($time) : date('Y-m-d', time()-86400*7);
         $end    = !empty($time) ? array_shift($time) : date('Y-m-d', time());
