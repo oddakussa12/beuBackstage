@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <div class="layui-tab" lay-filter="chat">
+    <div class="layui-tab" lay-filter="tab">
         <ul class="layui-tab-title">
             <li class="layui-this"  lay-id="0">Chat</li>
             <li  lay-id="1">Charts</li>
@@ -92,7 +92,6 @@
             <div class="layui-tab-item"  id="layui-echarts">
                 <div id="container" style="height: 100%">
                 </div>
-
             </div>
         </div>
     </div>
@@ -175,7 +174,7 @@
 
             };
 
-            element.on('tab(version)', function(data){
+            element.on('tab(tab)', function(data){
                 if(data.index==1)
                 {
                     autoContainer();
