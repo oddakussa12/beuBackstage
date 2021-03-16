@@ -49,19 +49,39 @@ class FriendController extends Controller
         $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
         $start  = !empty($time) ? strtotime(array_shift($time)) : time()-86400*31;
         $end    = !empty($time) ? strtotime(array_shift($time)) : time();
-        $list   = DB::connection('lovbee')->table('users_friends')->select(DB::raw('count(DISTINCT(user_id)) num, FROM_UNIXTIME(`created_at`, "%Y-%m-%d") date'));
-        $list   = $list->whereBetween('created_at', [$start, $end])->groupBy(DB::raw('FROM_UNIXTIME(created_at, "%Y-%m-%d")'))->get()->toArray();
-        $dates  = collect($list)->pluck('date')->toArray();
-        $num    = collect($list)->pluck('num')->toArray();
+        $list   = DB::connection('lovbee')->table('users_friends')->select(DB::raw("count(DISTINCT(t_users_friends.user_id)) num, FROM_UNIXTIME(t_users_friends.created_at, '%Y-%m-%d') date"));
+        $list   = $list->join('users_countries', 'users_countries.user_id', '=', 'users_friends.user_id');
+        if (!empty($params['num'])) {
+            $list = $list->having(DB::raw("count(DISTINCT(t_users_friends.user_id))"), '>=', (int)$params['num']);
+        }
+        if (!empty($params['country_code'])) {
+            $list = $list->where('users_countries.country', strtolower($params['country_code']));
+        }
+        $list   = $list->whereBetween('users_friends.created_at', [$start, $end])->groupBy(DB::raw("FROM_UNIXTIME(t_users_friends.created_at, '%Y-%m-%d')"))->get()->toArray();
+        $dates  = $this->printDates($start,$end);
 
+        foreach ($dates as $date) {
+            $res = collect($list)->where('date', $date)->pluck('num')->toArray();
+            $num[] = !empty($res) ? current($res) : 0;
+        }
         $params['dates']  = $dates;
         $params['line'][] = [
             "name" => 'Friend Count',
-            "type"=> "line",
-            "data"=> $num ?? [],
-            "areaStyle"=> [],
+            "type" => "line",
+            "data" => $num ?? [],
         ];
         return view('backstage.passport.friend.index', $params);
+    }
+
+    public function printDates($start,$end): array
+    {
+        $dt_start = strpos($start, '-')!==false ? strtotime($start) : $start;
+        $dt_end   = strpos($end, '-')!==false   ? strtotime($end)   : $end;
+        while ($dt_start<=$dt_end){
+             $date[]  = date('Y-m-d',$dt_start);
+            $dt_start = strtotime('+1 day',$dt_start);
+        }
+        return $date ?? [];
     }
 
     public function msgExport(Request $request)
