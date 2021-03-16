@@ -37,20 +37,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-inline"  @if($type!='school') style="display: none;"  @endif id="school">
+                            <div class="layui-inline"  @if($type!='school') style="display: none;"  @endif id="schoolDiv">
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">School:</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="school" @if($type=='school') lay-verify="required" @endif id="school" autocomplete="off" class="layui-input" id="school" placeholder="" value="{{$school}}">
+                                        <input type="text" name="school" @if($type=='school') lay-verify="required" @endif id="school" autocomplete="off" class="layui-input"  placeholder="" value="{{$school}}">
                                     </div>
                                 </div>
                             </div>
                             @if(Auth::user()->hasRole('administrator'))
-                            <div class="layui-inline"  @if($type!='country') style="display: none;"  @endif id="country">
+                            <div class="layui-inline"  @if($type!='country') style="display: none;"  @endif id="countryDiv">
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                                     <div class="layui-inline">
-                                        <select name="country_code" lay-verify="" lay-search>
+                                        <select name="country_code" lay-verify="" lay-search id="country">
                                             <option value="">{{trans('user.form.placeholder.user_country')}}</option>
                                             <option value="all" @if($country_code=='all') selected @endif>All</option>
                                             @foreach($counties  as $country)
@@ -220,15 +220,17 @@
             form.render();
             form.on('select(type)', function (data) {
                 if (data.value == 'country') {
-                    $("#school").hide();
+                    $("#schoolDev").hide();
                     $("#school").attr("disabled", "true");
-                    $("#country").show();
+                    $("#countryDiv").show();
                     $("#country").removeAttr("disabled");
                     $("#school").removeAttr("lay-verify");
+                    $("#country").attr("lay-verify", "required");
                 }else{
-                    $("#country").hide();
+                    $("#countryDiv").hide();
                     $("#country").attr("disabled", "true");
-                    $("#school").show();
+                    $("#country").removeAttr("lay-verify");
+                    $("#schoolDiv").show();
                     $("#school").removeAttr("disabled");
                     $("#school").attr("lay-verify", "required");
                 }
