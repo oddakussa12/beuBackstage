@@ -69,6 +69,9 @@ class FriendController extends Controller
             "name" => 'Friend Count',
             "type" => "line",
             "data" => $num ?? [],
+            'markPoint' => ['data' =>[['type'=>'max', 'name'=>'MAX'], ['type'=>'min', 'name'=>'MIN']]],
+            'markLine'  => ['data' =>[['type'=>'average']]],
+            'itemStyle' => ['normal'=>['label'=>['show'=>true]]]
         ];
         return view('backstage.passport.friend.index', $params);
     }

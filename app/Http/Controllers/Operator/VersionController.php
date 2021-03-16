@@ -38,9 +38,11 @@ class VersionController extends Controller
         foreach ($forList as $key=>$value) {
             $line[] = [
                 "name" => $key,
-                "type"=> "line",
-                "data"=> $value,
-                "areaStyle"=> [],
+                "type" => "line",
+                "data" => $value,
+                'markPoint' => ['data' =>[['type'=>'max', 'name'=>'MAX'], ['type'=>'min', 'name'=>'MIN']]],
+                'markLine'  => ['data' =>[['type'=>'average']]],
+                'itemStyle' => ['normal'=>['label'=>['show'=>true]]]
             ];
         }
         $line[] = [
