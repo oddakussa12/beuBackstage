@@ -41,7 +41,44 @@ class UserController extends Controller
             $item->user_format_created_at = Carbon::parse($item->user_created_at)->addHours(8)->toDateTimeString();
         });
         $params['users']=$users;
+        $params = $this->userChart($params);
         return view('backstage.passport.user.index' , $params);
+    }
+
+    public function userChart(&$params)
+    {
+        $gender = DB::connection('lovbee')->table('users')->select(DB::raw('count(user_gender) num, user_gender'))->groupBy('user_gender')->get()->toArray();
+        foreach ($gender as $item) {
+            $sexDate[] = [
+                'name' => $item->user_gender == -1 ? 'Other' : ($item->user_gender == 1 ? 'Male' : 'Female'),
+                'value'=> $item->num
+            ];
+        }
+
+        $country = DB::connection('lovbee')->table('users_countries')->select(DB::raw('count(country) value, country name'))->groupBy('country')->get()->toArray();
+        $country = array_map(function($value) {return (array)$value;}, $country);
+        $params['gender'][]  = [
+            'name'   =>'Gender identity',
+            'type'   => 'pie',
+            'radius' => '50%',
+            'data'   => $sexDate ?? [],
+            'label'  => ['normal'=>['formatter'=>"{b}: {c} {d}%"]]
+        ];
+        $params['chartCountry'][]  = [
+            'name'   => 'Gender 111',
+            'type'   => 'pie',
+            'radius' => '50%',
+            'data'   => $country ?? [],
+            'label'  => ['normal'=>['formatter'=>"{b}: {c} {d}%"]]
+        ];
+        /*$params['country'][]  = [
+            'name'=>'Country',
+            'type'   => 'pie',
+            'radius' => '50%',
+            'data'   => $country,
+            'label'  => ['normal'=>['formatter'=>'{a}{b}{c}{d}%']]
+        ];*/
+        return $params;
     }
     public function msgExport(Request $request)
     {
