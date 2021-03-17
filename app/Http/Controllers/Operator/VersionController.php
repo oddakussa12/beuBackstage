@@ -41,7 +41,7 @@ class VersionController extends Controller
                 "type" => "line",
                 "data" => $value,
                 'markPoint' => ['data' =>[['type'=>'max', 'name'=>'MAX'], ['type'=>'min', 'name'=>'MIN']]],
-                'markLine'  => ['data' =>[['type'=>'average']]],
+                //'markLine'  => ['data' =>[['type'=>'average']]],
                 'itemStyle' => ['normal'=>['label'=>['show'=>true]]]
             ];
         }
