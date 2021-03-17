@@ -31,11 +31,6 @@ class FriendController extends Controller
         $countries = config('country');
         $params['countries']=$countries;
         $users = $this->user->friendManage($params);
-        $block_users = block_user_list();
-        $users->each(function ($item) use ($block_users){
-            $item->is_block = intval(in_array($item->user_id , array_keys($block_users)));
-            $item->user_format_created_at = Carbon::parse($item->user_created_at)->addHours(8)->toDateTimeString();
-        });
 
         $params['users']  = $users;
 
@@ -44,6 +39,7 @@ class FriendController extends Controller
         $end    = !empty($time) ? strtotime(array_shift($time)) : time();
         $list   = DB::connection('lovbee')->table('users_friends')->select(DB::raw("count(DISTINCT(t_users_friends.user_id)) num, FROM_UNIXTIME(t_users_friends.created_at, '%Y-%m-%d') date"));
         $list   = $list->join('users_countries', 'users_countries.user_id', '=', 'users_friends.user_id');
+
         if (!empty($params['num'])) {
             $list = $list->having(DB::raw("count(DISTINCT(t_users_friends.user_id))"), '>=', (int)$params['num']);
         }

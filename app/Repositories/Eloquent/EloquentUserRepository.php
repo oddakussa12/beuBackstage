@@ -122,8 +122,8 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             $user    = $user->where('users_countries.country', strtolower($params['country_code']));
         }
 
-        $start = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 00:00:00')->addHours(8)->toDateTimeString();
-        $end   = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 23:59:59')->addHours(8)->toDateTimeString();
+        $start = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 00:00:00')->subHours(8)->toDateTimeString();
+        $end   = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 23:59:59')->subHours(8)->toDateTimeString();
         $user  = $user->whereBetween($table.'.chat_created_at', [$start, $end]);
         if (empty($detail)) {
             $user = $user->groupBy($table.'.'.$field);
