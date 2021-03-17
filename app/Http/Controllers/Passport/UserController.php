@@ -58,14 +58,12 @@ class UserController extends Controller
         $country = DB::connection('lovbee')->table('users_countries')->select(DB::raw('count(country) value, country name'))->groupBy('country')->get()->toArray();
         $country = array_map(function($value) {return (array)$value;}, $country);
         $params['gender'][]  = [
-            'name'   =>'Gender identity',
             'type'   => 'pie',
             'radius' => '50%',
             'data'   => $sexDate ?? [],
             'label'  => ['normal'=>['formatter'=>"{b}: {c} {d}%"]]
         ];
         $params['chartCountry'][]  = [
-            'name'   => 'Gender 111',
             'type'   => 'pie',
             'radius' => '50%',
             'data'   => $country ?? [],
