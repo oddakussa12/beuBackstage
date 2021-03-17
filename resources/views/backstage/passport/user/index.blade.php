@@ -224,14 +224,14 @@
                 window.onresize = function () {//用于使chart自适应高度和宽度
                     autoContainer();//重置容器高宽
                     myChart.resize();
-                    myChart2.setOption(option2);
+                    myChart2.resize();
                 };
             }
             let autoContainer = function () {
                 console.log($('.layui-body').height());
                 $('#layui-echarts').height($('.layui-body').height()-200);
                 myChart.resize();
-                myChart2.setOption(option2);
+                myChart2.resize();
             };
 
             element.on('tab(tab)', function(data){
