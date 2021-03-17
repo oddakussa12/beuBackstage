@@ -11,15 +11,9 @@
                     <form class="layui-form">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('user.form.label.user_name')}}:</label>
+                                <label class="layui-form-label">Name/ID:</label>
                                 <div class="layui-input-inline">
                                     <input class="layui-input" placeholder="fuzzy search" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
-                                </div>
-                            </div>
-                            <div class="layui-inline">
-                                <label class="layui-form-label">UserId:</label>
-                                <div class="layui-input-inline">
-                                    <input class="layui-input" name="user_id" id="user_id"  @if(!empty($user_id)) value="{{$user_id}}" @endif />
                                 </div>
                             </div>
                             <div class="layui-inline">
