@@ -59,8 +59,8 @@
                 <th  lay-data="{field:'user_name', minWidth:150}">{{trans('user.table.header.user_name')}}</th>
                 <th  lay-data="{field:'user_phone', minWidth:180}">{{trans('user.table.header.phone')}}</th>
                 <th  lay-data="{field:'friends', minWidth:100,sort:true}">{{trans('user.table.header.friend_count')}}</th>
-                <th  lay-data="{field:'receive', minWidth:120,sort:true}">{{trans('user.table.header.message_received')}}</th>
                 <th  lay-data="{field:'send', minWidth:120,sort:true}">{{trans('user.table.header.message_send')}}</th>
+                <th  lay-data="{field:'receive', minWidth:120,sort:true}">{{trans('user.table.header.message_received')}}</th>
                 <th  lay-data="{field:'user_gender', width:70}">{{trans('user.table.header.user_gender')}}</th>
                 <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
                 <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_avtive_time')}}</th>
@@ -78,8 +78,8 @@
                     <td>{{$user->user_name}}</td>
                     <td>{{$user->user_phone_country}} {{$user->user_phone}}</td>
                     <td>{{$user->friends}}</td>
-                    <td>{{$user->receive}}</td>
                     <td>{{$user->send}}</td>
+                    <td>{{$user->receive}}</td>
                     <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1){{trans('common.cast.sex.other')}}@elseif($user->user_gender==0){{trans('common.cast.sex.female')}}@else{{trans('common.cast.sex.male')}}@endif</span></td>
                     <td>{{ $user->country }}</td>
                     <td>{{$user->time}}</td>

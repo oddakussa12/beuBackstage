@@ -131,7 +131,7 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             $chat = $field=='chat_from_id' ? 'chat_to_id' : 'chat_from_id';
             $user = $user->groupBy($table.'.'.$chat);
         }
-        $user  = $user->orderBy($table.'.'.$sort, 'DESC');
+        $user  = $user->orderByDesc(DB::raw("count(`t_$table`.`chat_id`)"));
 
         if ($export===false) {
             $result = $user->paginate(10);
@@ -192,6 +192,9 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             $user = $user->having(DB::raw("count(t_users_friends.id)"), '>=', $params['num']);
         }
         $user   = $user->groupBy('users_friends.user_id');
+        if (isset($params['sort']) && $params['sort']=='friend') {
+            $user = $user->orderByDesc(DB::raw("count(`t_users_friends`.`id`)"));
+        }
         return $user->paginate(10);
     }
 

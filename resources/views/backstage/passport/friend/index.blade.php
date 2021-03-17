@@ -33,6 +33,15 @@
                                 </div>
                             </div>
                             <div class="layui-inline">
+                                <label class="layui-form-label">{{trans('user.form.label.sort')}}:</label>
+                                <div class="layui-input-inline">
+                                    <select  name="sort">
+                                        <option value="">Default</option>
+                                        <option value="friend" @if(!empty($sort)&&$sort=='friend') selected @endif>Friend</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
                                 <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
                                 {{--<a href="{{route('passport::user.export')}}@if(!empty($query))?{{$query}}@endif" class="layui-btn" target="_blank">{{trans('common.form.button.export')}}</a>--}}
                                 <div class="layui-btn layui-btn-primary">{{$users->total()}}</div>
