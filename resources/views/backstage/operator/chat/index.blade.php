@@ -10,7 +10,6 @@
                 <div class="layui-fluid">
                     <form class="layui-form" action="" lay-filter="keep">
                         <div class="layui-form-item">
-
                             <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('user.form.label.user_name')}}:</label>
                                 <div class="layui-input-inline">
@@ -54,6 +53,7 @@
                             <th>{{trans('user.table.header.user_nick_name')}}</th>
                             <th>Video</th>
                             <th>Chat Num</th>
+                            <th>Amount</th>
                             <th>Type</th>
                             <th>{{trans('user.table.header.user_country')}}</th>
                             <th>{{trans('user.table.header.user_school')}}</th>
@@ -68,6 +68,7 @@
                                 <td>{{$l->user_nick_name}}</td>
                                 <td>{{$l->video}}</td>
                                 <td>{{$l->num}}</td>
+                                <td>{{$l->amount}}</td>
                                 <td>{{$l->type}}</td>
                                 <td>{{$l->country}}</td>
                                 <td>{{$l->school}}</td>
@@ -97,12 +98,6 @@
 @endsection
 @section('footerScripts')
     @parent
-    <script type="text/html" id="operateTpl">
-        <div class="layui-table-cell laytable-cell-1-6">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
-        </div>
-    </script>
 
     <script>
         layui.config({

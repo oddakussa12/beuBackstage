@@ -19,7 +19,7 @@ class ChatController extends Controller
         $start  = !empty($time) ? array_shift($time) : date('Y-m-d', time()-86400*7);
         $end    = !empty($time) ? array_shift($time) : date('Y-m-d', time());
         $table  = 'chat_layers';
-        $list   = DB::connection('lovbee')->table($table)->select("$table.user_id", "$table.video", "$table.num", "$table.type", "$table.country", "$table.school", "$table.time", 'users.user_name','users.user_nick_name');
+        $list   = DB::connection('lovbee')->table($table)->select("$table.user_id", "$table.video", "$table.num", "$table.type", "$table.country", "$table.school", "$table.time", "$table.amount", 'users.user_name','users.user_nick_name');
         $list   = $list->leftJoin('users', 'users.user_id', '=', "$table.user_id")->whereBetween('time', [$start, $end]);
         if (!empty($params['country_code'])) {
             $list = $list->where("$table.country", strtolower($params['country_code']));
@@ -35,7 +35,7 @@ class ChatController extends Controller
 
         $params['list'] = $list;
 
-        $chart = DB::connection('lovbee')->table($table)->select(DB::raw('count(id) num, sum(video) video'), 'country', 'school', 'time')->whereBetween('time', [$start, $end]);
+        $chart = DB::connection('lovbee')->table($table)->select(DB::raw('count(id) num, sum(video) video, sum(amount) amount'), 'country', 'school', 'time')->whereBetween('time', [$start, $end]);
         if (!empty($params['country_code'])) {
             $chart = $chart->where('country', strtolower($params['country_code']));
         }
@@ -49,29 +49,29 @@ class ChatController extends Controller
         foreach ($dates as $date) {
             $video = collect($chart)->where('time', $date)->pluck('video')->toArray();
             $num   = collect($chart)->where('time', $date)->pluck('num')->toArray();
-            $count['num'][]   = !empty($num) ? current($num) : 0;
-            $count['video'][] = !empty($video) ? current($video) : 0;
+            $amount= collect($chart)->where('time', $date)->pluck('amount')->toArray();
+            $count['Chat'][]   = !empty($num) ? current($num) : 0;
+            $count['Video'][]  = !empty($video) ? current($video) : 0;
+            $count['Amount'][] = !empty($amount) ? current($amount) : 0;
         }
 
         $params['chart']    = $chart;
         $params['countries'] = config('country');
         $params['dateTime'] = $start.' - '.$end;
-        $params['header']   = ['Video', 'Chat'];
+        $params['header']   = array_keys($count);
         $params['dates']    = $dates;
 
         foreach ($count as $key=>$value) {
-            $title = $key=='num' ? 'Chat' : 'Video';
             $params['line'][] = [
-                "name" => $title,
+                "name" => $key,
                 "type" => "line",
                 "data" => $value,
+                'areaStyle' => [],
                 'markPoint' => ['data' =>[['type'=>'max', 'name'=>'MAX'], ['type'=>'min', 'name'=>'MIN']]],
                 'markLine'  => ['data' =>[['type'=>'average']]],
                 'itemStyle' => ['normal'=>['label'=>['show'=>true]]]
             ];
         }
-
-
         return view('backstage.operator.chat.index', $params);
     }
 
