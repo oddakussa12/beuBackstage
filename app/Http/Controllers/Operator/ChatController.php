@@ -31,7 +31,7 @@ class ChatController extends Controller
             $keyword = trim($params['keyword']);
             $list    = $list->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
         }
-        $list = $list->orderByDesc('time')->paginate(10);
+        $list = $list->orderByDesc('time')->orderByDesc('amount')->paginate(10);
 
         $params['list'] = $list;
 
