@@ -34,8 +34,8 @@ class UserController extends Controller
     {
         $params = $request->all();
         $params['appends'] = $params;
-        $counties = config('country');
-        $params['counties']=$counties;
+        $countries = config('country');
+        $params['countries']=$countries;
         $users = $this->user->findByWhere($params);
         $users->each(function ($item){
             $item->user_format_created_at = Carbon::parse($item->user_created_at)->addHours(8)->toDateTimeString();
@@ -85,8 +85,8 @@ class UserController extends Controller
     {
         $params = $request->all();
         $params['appends'] = $params;
-        $counties = config('country');
-        $params['counties']=$counties;
+        $countries = config('country');
+        $params['countries']=$countries;
         $users = $this->user->findMessage($params);
 
         $block_users = block_user_list();
@@ -338,8 +338,8 @@ class UserController extends Controller
             }
         }
 
-        $counties = config('country');
-        return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list' , 'v'));
+        $countries = config('country');
+        return  view('backstage.passport.user.keep' , compact('period' , 'countries' , 'country_code' , 'list' , 'v'));
     }
 
     public function keepV2(Request $request)
@@ -401,8 +401,8 @@ class UserController extends Controller
             'thirtyNum'=>$thirtyNum,
              */
         }
-        $counties = config('country');
-        return  view('backstage.passport.user.keep' , compact('period' , 'counties' , 'country_code' , 'list' , 'v'));
+        $countries = config('country');
+        return  view('backstage.passport.user.keep' , compact('period' , 'countries' , 'country_code' , 'list' , 'v'));
     }
 
     public function allDau(Request $request)
@@ -494,7 +494,7 @@ class UserController extends Controller
         $gt3 = collect($list)->pluck('gt3');
 
         $xAxis = array_keys($list);
-        $counties = config('country');
+        $countries = config('country');
 
 
         $utc = Carbon::tomorrow('Asia/Shanghai')->format('Y-m-d 01:00:00');
@@ -514,7 +514,7 @@ class UserController extends Controller
         $MauritiusBj = Carbon::createFromTimestamp($mauritiusT , 'Asia/Shanghai')->toDateTimeString();
 
 
-        return  view('backstage.passport.user.dau' , compact('utc' ,'Grenada' ,'Dili' ,'Mauritius' ,'GrenadaBj' ,'DiliBj' ,'MauritiusBj' ,'period' , 'counties' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
+        return  view('backstage.passport.user.dau' , compact('utc' ,'Grenada' ,'Dili' ,'Mauritius' ,'GrenadaBj' ,'DiliBj' ,'MauritiusBj' ,'period' , 'countries' , 'country_code' , 'list' , 'dau' , 'zero' , 'one' , 'two' , 'gt3' , 'xAxis'));
     }
 
     public function yesterdayView(Request $request)
@@ -618,7 +618,7 @@ class UserController extends Controller
         }
         $data['v'] = $v;
         $data['school'] = $school;
-        $data['counties'] = config('country');
+        $data['countries'] = config('country');
         $data['country_code'] = $country;
         $data['type'] = $type;
 
@@ -680,7 +680,7 @@ class UserController extends Controller
                 })->keyBy('date')->toArray();
         }else{
             $list = $connection->table('data_retentions')
-//                ->whereIn('country' , collect($counties)->pluck('code')->toArray())
+//                ->whereIn('country' , collect($countries)->pluck('code')->toArray())
                 ->whereIn('date' , $dates)->orderBy('date')
                 ->select('date' , DB::raw('sum(`new`) as `num`'))
                 ->groupBy('date')
@@ -723,7 +723,7 @@ class UserController extends Controller
         $dnu = collect($list)->pluck('num');
         $xAxis = array_keys($list);
         return compact('startTime'   , 'list'  , 'dnu' , 'xAxis');
-//        return  view('backstage.passport.user.dnu' , compact('startTime' , 'counties' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
+//        return  view('backstage.passport.user.dnu' , compact('startTime' , 'countries' , 'country_code' , 'list' , 'v' , 'dnu' , 'xAxis'));
     }
 
     public function schoolDnu($school , $start)

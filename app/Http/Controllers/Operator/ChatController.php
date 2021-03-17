@@ -13,6 +13,8 @@ class ChatController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
+        $params['appends'] = $params;
+
         $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
         $start  = !empty($time) ? array_shift($time) : date('Y-m-d', time()-86400*7);
         $end    = !empty($time) ? array_shift($time) : date('Y-m-d', time());
@@ -33,7 +35,7 @@ class ChatController extends Controller
 
         $params['list'] = $list;
 
-        $chart = DB::connection('lovbee')->table($table)->select(DB::raw('count(id) num'), 'video', 'country', 'school', 'time')->whereBetween('time', [$start, $end]);
+        $chart = DB::connection('lovbee')->table($table)->select(DB::raw('count(id) num, sum(video) video'), 'country', 'school', 'time')->whereBetween('time', [$start, $end]);
         if (!empty($params['country_code'])) {
             $chart = $chart->where('country', strtolower($params['country_code']));
         }
@@ -52,7 +54,7 @@ class ChatController extends Controller
         }
 
         $params['chart']    = $chart;
-        $params['counties'] = config('country');
+        $params['countries'] = config('country');
         $params['dateTime'] = $start.' - '.$end;
         $params['header']   = ['Video', 'Chat'];
         $params['dates']    = $dates;

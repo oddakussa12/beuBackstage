@@ -38,7 +38,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('backstage.props.category.create', ['data' => null, 'counties'=>config('country')]);
+        return view('backstage.props.category.create', ['data' => null, 'countries'=>config('country')]);
     }
 
     /**
@@ -92,7 +92,7 @@ class CategoryController extends Controller
         if (!empty($data)) {
             $data['language'] = json_decode($data['language'], true);
         }
-        return view('backstage.props.category.edit')->with(['data' => $data, 'counties'=>config('country')]);
+        return view('backstage.props.category.edit')->with(['data' => $data, 'countries'=>config('country')]);
     }
 
     /**

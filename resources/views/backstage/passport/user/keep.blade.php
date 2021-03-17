@@ -10,7 +10,7 @@
                         @if($v==0))
                         <option value="all" @if($country_code=='all')) selected @endif>ALL</option>
                         @endif
-                        @foreach($counties  as $country)
+                        @foreach($countries  as $country)
                             <option value="{{strtolower($country['code'])}}" @if($country_code==strtolower($country['code'])) selected @endif>{{$country['name']}}</option>
                         @endforeach
                     </select>

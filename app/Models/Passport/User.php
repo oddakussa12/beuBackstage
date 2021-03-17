@@ -74,11 +74,11 @@ class User extends Base
 
     public function getUserCountryAttribute()
     {
-        $counties = config('country');
+        $countries = config('country');
         $country = ($this->user_country_id-1);
-        if(array_key_exists($country , $counties))
+        if(array_key_exists($country , $countries))
         {
-            return strtolower($counties[$country]['name']);
+            return strtolower($countries[$country]['name']);
         }
         return $country;
     }

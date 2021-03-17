@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <div class="layui-tab" lay-filter="chat">
+    <div class="layui-tab" lay-filter="tab">
         <ul class="layui-tab-title">
             <li class="layui-this"  lay-id="0">Chat</li>
             <li  lay-id="1">Charts</li>
@@ -18,12 +18,6 @@
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('user.form.phone')}}:</label>
-                                <div class="layui-input-inline">
-                                    <input class="layui-input" placeholder="fuzzy search" name="phone" id="phone"  @if(!empty($phone)) value="{{$phone}}" @endif />
-                                </div>
-                            </div>
-                            <div class="layui-inline">
                                 <label class="layui-form-label">School:</label>
                                 <div class="layui-input-inline">
                                     <input class="layui-input" name="school" id="school"  @if(!empty($school)) value="{{$school}}" @endif />
@@ -34,7 +28,7 @@
                                 <div class="layui-input-inline">
                                     <select  name="country_code" lay-verify="" lay-search  >
                                         <option value="">{{trans('comment.form.placeholder.comment_country_id')}}</option>
-                                        @foreach($counties  as $country)
+                                        @foreach($countries  as $country)
                                             <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
                                         @endforeach
                                     </select>
@@ -48,7 +42,7 @@
                             </div>
 
                             <div class="layui-inline">
-                                <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                                <button class="layui-btn" type="submit" lay-submit >{{trans('common.form.button.submit')}}</button>
                             </div>
                         </div>
                     </form>
@@ -92,7 +86,6 @@
             <div class="layui-tab-item"  id="layui-echarts">
                 <div id="container" style="height: 100%">
                 </div>
-
             </div>
         </div>
     </div>
@@ -175,7 +168,7 @@
 
             };
 
-            element.on('tab(version)', function(data){
+            element.on('tab(tab)', function(data){
                 if(data.index==1)
                 {
                     autoContainer();

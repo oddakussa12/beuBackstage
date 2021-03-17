@@ -238,9 +238,9 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
                 $query->where('user_name', 'like', "%{$key}%")->orWhere('user_nick_name', 'like', "%{$key}%");
             });
         }
-        $counties = config('country');
+        $countries = config('country');
         $country_code = $request->input('country_code' , '');
-        $codes = collect($counties)->pluck('code')->all();
+        $codes = collect($countries)->pluck('code')->all();
         $k = array_search($country_code , $codes);
         $country = $k===false?0:intval($k+1);
         if(!empty($country_code))
