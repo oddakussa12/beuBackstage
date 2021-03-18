@@ -65,5 +65,57 @@ class FriendController extends Controller
         return view('backstage.passport.friend.index', $params);
     }
 
+    public function request(Request $request)
+    {
+        $appends = array();
+        $from = strval($request->input('from' , ''));
+        $to = strval($request->input('to' , ''));
+        $connection = DB::connection('lovbee');
+        $requests = $connection->table('friends_requests');
+        if(!blank($from))
+        {
+            $appends['from'] = $from;
+            $sender = $connection->table('users')->where('user_name' , $from)->first();
+            if(blank($sender))
+            {
+                $sender = $connection->table('users')->where('user_nick_name' , $from)->first();
+            }
+            if(blank($sender))
+            {
+                $requests->where('request_from_id' , 0);
+            }else{
+                $requests->where('request_from_id' , $sender->user_id);
+            }
+        }
+
+        if(!blank($to))
+        {
+            $appends['to'] = $to;
+            $target = $connection->table('users')->where('user_name' , $to)->first();
+            if(blank($target))
+            {
+                $target = $connection->table('users')->where('user_nick_name' , $from)->first();
+            }
+            if(blank($target))
+            {
+                $requests->where('request_to_id' , 0);
+            }else{
+                $requests->where('request_to_id' , $target->user_id);
+            }
+        }
+        $users = collect();
+        $requests = $requests->orderByDesc('request_created_at')->paginate(10);
+        $sendIds = $requests->pluck('request_from_id')->toArray();
+        $targetIds = $requests->pluck('request_to_id')->toArray();
+        $userIds = array_unique(array_merge($sendIds , $targetIds));
+        !blank($userIds)&&$users = $connection->table('users')->whereIn('user_id' , $userIds)->get();
+        $requests->each(function($item , $index) use ($users){
+            $item->from = $users->where('user_id' , $item->request_from_id)->values()->first();
+            $item->to = $users->where('user_id' , $item->request_to_id)->values()->first();
+        });
+        dd($requests);
+        return view('backstage.passport.friend.request', compact('requests' , 'from' , 'to' , 'appends'));
+    }
+
 
 }

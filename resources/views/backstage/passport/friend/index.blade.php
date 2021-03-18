@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('user.form.label.sort')}}:</label>
+                                <label class="layui-form-label">{{trans('user.form.common.form.label.sort')}}:</label>
                                 <div class="layui-input-inline">
                                     <select  name="sort">
                                         <option value="">Default</option>

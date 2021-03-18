@@ -48,7 +48,6 @@ Route::group(['prefix'=>'backstage'] , function(){
         });
 
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){
-
             Route::get('user/keep' , 'UserController@keep')->name('user.keep');
             Route::get('user/dau' , 'UserController@dau')->name('user.dau');
             Route::get('user/dnu' , 'UserController@dnu')->name('user.dnu');
@@ -59,8 +58,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user/chat' , 'UserController@chat')->name('user.chat');
             Route::get('user/msgExport' , 'UserController@msgExport')->name('user.msgExport');
             Route::resource('user', 'UserController');
-            Route::resource('friend', 'FriendController');
-
+            Route::get('friend/index', 'FriendController@index')->name('friend.index');
+            Route::get('friend/request', 'FriendController@request')->name('friend.request');
         });
 
         Route::group(['namespace'=>'Lovbee','prefix'=>'lovbee' , 'as' => 'lovbee::'] , function (){

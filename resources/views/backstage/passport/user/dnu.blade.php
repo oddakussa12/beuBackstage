@@ -41,7 +41,12 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">School:</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" name="school" @if($type=='school') lay-verify="required" @endif id="school" autocomplete="off" class="layui-input"  placeholder="" value="{{$school}}">
+                                        <select name="school" lay-verify="" lay-search id="school">
+                                            <option value="">{{trans('user.form.placeholder.user_school')}}</option>
+                                            @foreach($schools  as $s)
+                                                <option value="{{$s}}" @if($s==$school) selected @endif>{{$s}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +68,7 @@
                             @endif
                             <div class="layui-inline">
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
+                                    <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                                     <div class="layui-input-inline">
                                         <input type="text" class="layui-input" name="start" id="start" readonly="" placeholder="yyyy-MM-dd" value="{{$startTime}}">
                                     </div>
@@ -222,14 +227,17 @@
                 if (data.value == 'country') {
                     $("#schoolDiv").hide();
                     $("#school").attr("disabled", "true");
+                    $("#school").removeAttr("lay-verify");
+
                     $("#countryDiv").show();
                     $("#country").removeAttr("disabled");
-                    $("#school").removeAttr("lay-verify");
                     $("#country").attr("lay-verify", "required");
                 }else{
                     $("#countryDiv").hide();
                     $("#country").attr("disabled", "true");
                     $("#country").removeAttr("lay-verify");
+
+
                     $("#schoolDiv").show();
                     $("#school").removeAttr("disabled");
                     $("#school").attr("lay-verify", "required");

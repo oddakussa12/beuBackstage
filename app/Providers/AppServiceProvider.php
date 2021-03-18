@@ -3,18 +3,13 @@
 namespace App\Providers;
 
 
-use DB;
 use App\Models\Menu;
 use App\Models\Role;
 use App\Models\Admin;
-use App\Models\Content\Post;
-use App\Models\Content\Topic;
-use App\Models\Content\PostComment;
-use App\Models\Content\Video;
-use App\Models\Content\Category;
-use App\Models\Content\Tag;
 use App\Models\Permission;
 use App\Models\Passport\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -23,23 +18,13 @@ use App\Repositories\Contracts\MenuRepository;
 use App\Repositories\Contracts\RoleRepository;
 use App\Repositories\Contracts\AdminRepository;
 use App\Repositories\Contracts\PermissionRepository;
-use App\Repositories\Contracts\Content\PostRepository;
-use App\Repositories\Contracts\Content\PostCommentRepository;
-use App\Repositories\Contracts\Content\VideoRepository;
-use App\Repositories\Contracts\Content\CategoryRepository;
-use App\Repositories\Contracts\Content\TagRepository;
 use App\Repositories\Eloquent\EloquentUserRepository;
 use App\Repositories\Eloquent\EloquentRoleRepository;
 use App\Repositories\Eloquent\EloquentMenuRepository;
 use App\Repositories\Eloquent\EloquentAdminRepository;
 use App\Repositories\Eloquent\EloquentPermissionRepository;
-use App\Repositories\Eloquent\Content\EloquentVideoRepository;
-use App\Repositories\Eloquent\Content\EloquentPostRepository;
-use App\Repositories\Eloquent\Content\EloquentPostCommentRepository;
-use App\Repositories\Eloquent\Content\EloquentCategoryRepository;
-use App\Repositories\Eloquent\Content\EloquentTagRepository;
-use App\Repositories\Contracts\Content\TopicRepository;
-use App\Repositories\Eloquent\Content\EloquentTopicRepository;
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -49,11 +34,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
         Schema::defaultStringLength(191);
         $this->menuComposer();
         $this->setLocalesConfigurations();
-        \DB::listen(function ($query) {
+        DB::listen(function ($query) {
             $tmp = str_replace('?', '"'.'%s'.'"', $query->sql);
             $tmp = str_replace('%Y-%m-%d', 'YY-mm-dd', $tmp);
 
@@ -76,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
             if ($flag) {
-                \Log::info(' execution time: '.$query->time.'ms; '.$tmp."\n\n\t");
+                Log::info(' execution time: '.$query->time.'ms; '.$tmp."\n\n\t");
             }
         });
 
@@ -115,32 +99,6 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->bind(RoleRepository::class, function () {
             $repository = new EloquentRoleRepository(new Role());
-            return $repository;
-        });
-
-        $this->app->bind(PostRepository::class, function () {
-            $repository = new EloquentPostRepository(new Post());
-            return $repository;
-        });
-        $this->app->bind(TopicRepository::class, function () {
-            $repository = new EloquentTopicRepository(new Topic());
-            return $repository;
-        });
-        $this->app->bind(PostCommentRepository::class, function () {
-            $repository = new EloquentPostCommentRepository(new PostComment());
-            return $repository;
-        });
-
-        $this->app->bind(VideoRepository::class, function ($app) {
-            $repository = new EloquentVideoRepository(new Video() , $app['request']);
-            return $repository;
-        });
-        $this->app->bind(CategoryRepository::class, function () {
-            $repository = new EloquentCategoryRepository(new Category());
-            return $repository;
-        });
-        $this->app->bind(TagRepository::class, function () {
-            $repository = new EloquentTagRepository(new Tag());
             return $repository;
         });
         $this->app->bind(UserRepository::class, function () {

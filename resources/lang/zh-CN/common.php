@@ -66,6 +66,10 @@ return [
         'placeholder'=>[
             'select_first'=>'请选择',
             'blank'=>'请输入内容',
+        ],
+        'label'=>[
+            'date'=>'日期',
+            'sort'=>'排序',
         ]
     ],
     'cast'=>[

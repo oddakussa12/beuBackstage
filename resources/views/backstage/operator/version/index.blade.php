@@ -11,7 +11,7 @@
                     <div class="layui-fluid">
                         <form class="layui-form" action="" lay-filter="keep">
                             <div class="layui-form-item">
-                                <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
+                                <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                                 <div class="layui-input-inline">
                                     <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder="yyyy-MM-dd - yyyy-MM-dd" @if(!empty($params['dateTime']))value="{{$params['dateTime']}}"@endif>
                                 </div>

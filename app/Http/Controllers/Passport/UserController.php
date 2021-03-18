@@ -654,6 +654,7 @@ class UserController extends Controller
         $data['v'] = $v;
         $data['school'] = $school;
         $data['countries'] = config('country');
+        $data['schools'] = config('school');
         $data['country_code'] = $country;
         $data['type'] = $type;
 

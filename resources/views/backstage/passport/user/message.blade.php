@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.label.sort')}}:</label>
+                    <label class="layui-form-label">{{trans('user.form.common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
                             <option value="chat_from_id" @if(!empty($sort)&&$sort=='chat_from_id') selected @endif>发送数</option>
@@ -63,8 +63,8 @@
                 <th  lay-data="{field:'receive', minWidth:120,sort:true}">{{trans('user.table.header.message_received')}}</th>
                 <th  lay-data="{field:'user_gender', width:70}">{{trans('user.table.header.user_gender')}}</th>
                 <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
-                <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_avtive_time')}}</th>
-                <th  lay-data="{field:'ip', width:130}">{{trans('user.table.header.last_avtive_ip')}}</th>
+                <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_active_time')}}</th>
+                <th  lay-data="{field:'ip', width:130}">{{trans('user.table.header.last_active_ip')}}</th>
                 <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
                 <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>

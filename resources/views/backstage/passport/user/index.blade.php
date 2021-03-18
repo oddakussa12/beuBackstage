@@ -61,8 +61,8 @@
                             <th  lay-data="{field:'friends', minWidth:100,sort:true}">{{trans('user.table.header.friend_count')}}</th>
                             <th  lay-data="{field:'user_gender', width:70}">{{trans('user.table.header.user_gender')}}</th>
                             <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
-                            <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_avtive_time')}}</th>
-                            <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_avtive_ip')}}</th>
+                            <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_active_time')}}</th>
+                            <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_active_ip')}}</th>
 
                             <th  lay-data="{field:'activation', width:70}">{{trans('user.table.header.user_activation')}}</th>
                             <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
