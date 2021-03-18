@@ -43,31 +43,8 @@
                             </div>
                             <div class="layui-inline">
                                 <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                                {{--<a href="{{route('passport::user.export')}}@if(!empty($query))?{{$query}}@endif" class="layui-btn" target="_blank">{{trans('common.form.button.export')}}</a>--}}
                                 <div class="layui-btn layui-btn-primary">{{$users->total()}}</div>
                             </div>
-                        </div>
-                        <div class="layui-form-item">
-                        <!--
-                <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.label.user_name')}}:</label>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" placeholder="fuzzy search" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.phone')}}:</label>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" placeholder="fuzzy search" name="phone" id="phone"  @if(!empty($phone)) value="{{$phone}}" @endif />
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.label.user_created_at')}}:</label>
-                    <div class="layui-input-inline" style="width: 300px;">
-                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
-                    </div>
-                </div>-->
-
                         </div>
                     </form>
                     <table class="layui-table"  lay-filter="user_table">

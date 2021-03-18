@@ -92,20 +92,13 @@ class QuestionController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $params   = $request->all();
         $question = Question::find($id);
         if ($request->has('title')) {
             $this->validate($request, [
                 'title'    => ['required', 'string'],
                 'category' => 'required|array',
-                'language' => ['required', 'array',
-                    function ($value, $fail){
-                        if(!in_array('en', $value)) {
-                            $fail('English title is missing');
-                        }
-                    }
-                ]
             ]);
-            $params = $request->all();
 
             $languages = (array)$request->input('language');
             $category  = (array)$request->input('category');
@@ -113,12 +106,14 @@ class QuestionController extends Controller
                 $ext[$language] = $category[$key];
             }
         }
-        $question->content =  empty($ext)              ? $question->content : json_encode($ext ?? [], JSON_UNESCAPED_UNICODE);
-        $question->title   = !empty($params['title'])  ? $params['title']     : $question->title;
-        $question->url     = !empty($params['url'])    ? $params['url']       : $question->url;
-        $question->sort    = !empty($params['sort'])   ? $params['sort']      : $question->sort;
-        $question->status  = !empty($params['status']) ? $params['status']    : $question->status;
-
+        $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
+        $question->content =  empty($content)            ? $question->content   : json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
+        $question->title   = !empty($params['title'])    ? $params['title']     : $question->title;
+        $question->category= !empty($params['category']) ? $params['category']  : $question->category;
+        $question->url     = !empty($params['url'])      ? $params['url']       : $question->url;
+        $question->sort    = !empty($params['sort'])     ? $params['sort']      : $question->sort;
+        $question->status  = !empty($params['status'])   ? $params['status']    : $question->status;
+        $question->save();
 
         return response()->json(['result' => 'success']);
     }

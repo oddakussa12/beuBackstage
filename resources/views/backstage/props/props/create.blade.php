@@ -20,10 +20,9 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">Category：</label>
                 <div class="layui-inline">
-                    <input id="id" name="id" type="hidden" value="{{$data['id']}}" />
                     <select  name="category">
                         @foreach($categories as $category)
-                            <option value="{{$category->name}}" @if($data['category']==$category->name)  selected @endif>{{$category->name}}</option>
+                            <option value="{{$category->name}}">{{$category->name}}</option>
                         @endforeach;
                     </select>
                 </div>
