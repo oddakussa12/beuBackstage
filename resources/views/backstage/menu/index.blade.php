@@ -264,7 +264,7 @@
             });
             form.on('submit(form_submit_update)', function(data){
                 var current_menu_id = data.field.menu_id;
-                console.log(current_menu_id); return  false;
+                // console.log(current_menu_id); return  false;
                 if(current_menu_id==''||current_menu_id==undefined||current_menu_id==0)
                 {
                     common.prompt("{{trans('menu.prompt.menu_id_required')}}" , 5 , 1000 , 1 , 't');return false;
