@@ -63,7 +63,6 @@
                             <div class="layui-form-item layui-form-text">
                                 <div class="layui-input-block">
                                     <div id="div{{$language}}">
-                                        <p>欢迎使用 <b>wangEditor</b> 富文本编辑器{{$key}}</p>
                                     </div>
                                     <textarea id="{{$language}}" name="{{$language}}" style="min-width: 1000px; min-height: 300px; display: none;"></textarea>
                                 </div>
@@ -144,39 +143,44 @@
 
             const E = window.wangEditor
             const editor = new E("#diven")
-            const $text1 = $('#en')
-            editor.config.onchange = function (html) {
-                $text1.val(html)
-            }
-            editor.config.customUploadImg = function (resultFiles, insertImgFn) {
-                console.log(resultFiles);
-                console.log(insertImgFn);
+            editor.config.uploadImgServer = "https://up-z1.qiniup.com/";
+            editor.config.uploadImgParams = {
+                token: "{{$qn_token['token']}}"
+            };
+            editor.config.uploadFileName = 'file';
+            editor.config.uploadImgHooks = {
+                // 上传图片之前
+                before: function(xhr) {
 
-                // resultFiles 是 input 中选中的文件列表
-                // insertImgFn 是获取图片 url 后，插入到编辑器的方法
+                },
+                // 图片上传并返回了结果，图片插入已成功
+                success: function(xhr) {
+                    console.log('success', xhr)
+                },
+                // 图片上传并返回了结果，但图片插入时出错了
+                fail: function(xhr, editor, resData) {
+                    console.log('fail', resData)
+                },
+                // 上传图片出错，一般为 http 请求的错误
+                error: function(xhr, editor, resData) {
+                    console.log('error', xhr, resData)
+                },
+                // 上传图片超时
+                timeout: function(xhr) {
+                    console.log('timeout')
+                },
+                // 图片上传并返回了结果，想要自己把图片插入到编辑器中
+                // 例如服务器端返回的不是 { errno: 0, data: [...] } 这种格式，可使用 customInsert
+                customInsert: function(insertImgFn, result) {
+                    // result 即服务端返回的接口
+                    console.log('customInsert', result)
 
-                // 上传图片，返回结果，将图片插入到编辑器中
-                // insertImgFn(imgUrl)
+                    // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
+                    insertImgFn(result.url+result.name);
+                }
             }
-            editor.create()
-            $text1.val(editor.txt.html())
 
-            const editor2 = new E("#divzh-CN")
-            const $text2 = $('#zh-CN')
-            editor.config.onchange = function (html) {
-                $text2.val(html)
-            }
-            editor2.config.customUploadImg = function (resultFiles, insertImgFn) {
-                console.log(resultFiles);
-                console.log(insertImgFn);
-                // resultFiles 是 input 中选中的文件列表
-                // insertImgFn 是获取图片 url 后，插入到编辑器的方法
-
-                // 上传图片，返回结果，将图片插入到编辑器中
-                // insertImgFn(imgUrl)
-            }
-            editor2.create()
-            $text2.val(editor2.txt.html())
+            editor.create();
         });
 
         function upload(btn) {
