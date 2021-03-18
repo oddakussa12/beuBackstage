@@ -65,7 +65,7 @@
                             <div class="layui-form-item layui-form-text">
                                 <div class="layui-input-block">
                                     <div id="div{{$language}}"></div>
-                                    <textarea id="{{$language}}" name="{{$language}}" style="min-width: 1000px; min-height: 30px; display: ;">{{$data->content[$language]}}</textarea>
+                                    <textarea id="{{$language}}" name="{{$language}}" style="min-width: 1000px; min-height: 30px; display: none;">{{$data->content[$language]}}</textarea>
                                 </div>
                             </div>
                         </div>
