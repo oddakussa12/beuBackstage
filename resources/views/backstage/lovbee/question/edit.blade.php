@@ -11,7 +11,8 @@
             border:none; /* 输入框不要边框 */
             font-family:Arial;
         }
-        .layui-form-select {z-index: 100;}
+        .layui-form-select {z-index: 11000;}
+        .layui-input, .layui-form-select {min-width: 300px;}
         .layui-table td, .layui-table th {padding: 5px;}
         .layui-layout-body {max-height: 600px; overflow-y: scroll;}
     </style>
@@ -19,35 +20,30 @@
         <form class="layui-form layui-tab-content">
             {{ csrf_field() }}
             <div class="layui-form-item">
-                <label class="layui-form-label">Category：</label>
-                <div class="layui-inline">
-                    <select  name="category">
-                        @foreach($categories as $category)
-                            <option value="{{$category->name}}" @if($data->category==$category->name) selected @endif>{{$category->name}}</option>
-                        @endforeach;
-                    </select>
-                </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Title：</label>
                     <div class="layui-input-block">
+                        <input type="hidden" id="id" name="id" value="{{$data->id}}">
                         <input type="text" style="min-width: 300px;" id="title" name="title" required="required" autocomplete="off" class="layui-input" value="{{$data->title}}">
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item" style="margin-bottom: 100px;">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">Sort：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="sort" name="sort" required="required" autocomplete="off" class="layui-input" value="{{$data->sort}}">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-bottom: 50px;">
                 <div class="layui-inline">
                     <label class="layui-form-label">Status：</label>
                     <div class="layui-input-block">
                         <select name="status">
-                            <option value="0" @if($data->status==0) selected @endif>DOWN</option>
-                            <option value="1" @if($data->status==1) selected @endif>UP</option>
+                            <option value="0" @if($data->status==0) selected @endif>OFFLINE</option>
+                            <option value="1" @if($data->status==1) selected @endif>ONLINE</option>
                         </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">Sort：</label>
-                    <div class="layui-input-block">
-                        <input type="text" style="min-width: 300px;" id="sort" name="sort" required="required" autocomplete="off" class="layui-input" value="{{$data->sort}}">
                     </div>
                 </div>
             </div>
@@ -62,10 +58,8 @@
                         <div class="layui-tab-item @if($key==0) layui-show @endif">
                             <div class="layui-form-item layui-form-text">
                                 <div class="layui-input-block">
-                                    <div id="div{{$language}}">
-                                        {{$data->content[$language]}}111111
-                                    </div>
-                                    <textarea id="{{$language}}" name="{{$language}}" style="min-width: 1000px; min-height: 300px; display: none;">{{$data->content[$language]}}</textarea>
+                                    <div id="div{{$language}}"></div>
+                                    <textarea id="{{$language}}" name="{{$language}}" style="min-width: 1000px; min-height: 30px; display: none;">{{$data->content[$language]}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +75,6 @@
     <script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 
 @endsection
-
 @section('footerScripts')
     @parent
     <script type="text/javascript">
@@ -92,43 +85,16 @@
             loadBar: 'lay/modules/admin/loadBar',
             formSelects: 'lay/modules/formSelects-v4'
         }).use(['common', 'table', 'layer', 'form', 'upload', 'element'], function () {
-            let table = layui.table,
-                form = layui.form,
+            let form = layui.form,
                 common = layui.common,
-                $=layui.jquery,
-                upload = layui.upload;
-            //前面的序号1,2,3......
-            let i = 1;
-            $(".td").each(function(){
-                $(this).html(i++);
-            });
-            $("#addCol").on('click', function () {
-                fun();
-            });
-            $("#delCol").on('click', function () {
-                del();
-            });
-            //删除一行
-            function del(){
-                $("#layui-table tr:not(:first):not(:first):last").remove();//移除最后一行,并且保留前两行
-            }
-            //添加一行
-            function fun(){
-                let $td = $("#clo").clone();       //增加一行,克隆第一个对象
-                $("#layui-table").append($td);
-                let i = 1;
-                $(".td").each(function(){       //增加一行后重新更新序号1,2,3......
-                    $(this).html(i++);
-                })
-                $("table tr:last").find(":input").val('');   //将尾行元素克隆来的保存的值清空
-            }
+                $=layui.jquery;
             form.on('submit(admin_form)', function(data){
                 let params = {};
                 $.each(data.field , function (k ,v) {
-                    if(v==''||v==undefined) {return true;}
+                    if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/lovbee/question')}}/"+params.id, params, function(res){
+                common.ajax("{{url('/backstage/lovbee/question')}}/", params, function(res){
                     console.log(res);
                     console.log(res.code);
                     if (res.code!== undefined) {
@@ -138,79 +104,101 @@
                         });
                     }
                     parent.location.reload();
-                } , 'patch');
+                } , 'post');
                 return false;
             });
 
-            const E = window.wangEditor
-            const editor = new E("#diven")
-            const $text1 = $('#en')
-            editor.config.onchange = function (html) {
-                $text1.val(html)
-                console.log(111)
-                alert($('#diven').html());
-                alert($('#en').html());
-            }
-            editor.config.customUploadImg = function (resultFiles, insertImgFn) {
-                console.log(resultFiles);
-                console.log(insertImgFn);
-
-                // resultFiles 是 input 中选中的文件列表
-                // insertImgFn 是获取图片 url 后，插入到编辑器的方法
-
-                // 上传图片，返回结果，将图片插入到编辑器中
-                // insertImgFn(imgUrl)
-            }
-            editor.create()
-            $text1.val(editor.txt.html())
-
-            const editor2 = new E("#divzh-CN")
-            const $text2 = $('#zh-CN')
-            editor.config.onchange = function (html) {
-                $text2.val(html)
-            }
-            editor2.config.customUploadImg = function (resultFiles, insertImgFn) {
-                // resultFiles 是 input 中选中的文件列表
-                // insertImgFn 是获取图片 url 后，插入到编辑器的方法
-
-                // 上传图片，返回结果，将图片插入到编辑器中
-                // insertImgFn(imgUrl)
-            }
-            editor2.create()
-            $text2.val(editor2.txt.html())
-        });
-
-        function upload(btn) {
-            let file='';
-            upload.render({
-                elem: btn //绑定元素
-                , url: 'https://up-z1.qiniup.com/' //上传接口
-                , method: 'post'
-                , accept: 'file'
-                , exts: 'jpg|png|jpeg|gif'
-                , data: {
+                const E = window.wangEditor
+                const en = new E("#diven")
+            en.config.uploadImgServer = "https://up-z1.qiniup.com/";
+                en.config.uploadImgParams = {
                     token: "{{$qn_token['token']}}"
-                },choose: function (obj) {
-                    let files = obj.pushFile();
-                    obj.preview(function (index, file, result) {
+                };
+                en.config.uploadFileName = 'file';
+                en.config.uploadImgHooks = {
+                    // 上传图片之前
+                    before: function(xhr) {
 
-                    })
+                    },
+                    // 图片上传并返回了结果，图片插入已成功
+                    success: function(xhr) {
+                        console.log('success', xhr)
+                    },
+                    // 图片上传并返回了结果，但图片插入时出错了
+                    fail: function(xhr, en, resData) {
+                        console.log('fail', resData)
+                    },
+                    // 上传图片出错，一般为 http 请求的错误
+                    error: function(xhr, en, resData) {
+                        console.log('error', xhr, resData)
+                    },
+                    // 上传图片超时
+                    timeout: function(xhr) {
+                        console.log('timeout', xhr)
+                    },
+                    // 图片上传并返回了结果，想要自己把图片插入到编辑器中
+                    // 例如服务器端返回的不是 { errno: 0, data: [...] } 这种格式，可使用 customInsert
+                    customInsert: function(insertImgFn, result) {
+                        // result 即服务端返回的接口
+                        console.log('customInsert', result)
+
+                        // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
+                        insertImgFn(result.url+result.name);
+                    }
                 }
-                , done: function (res, index, upload) {
-                    console.log(res);
-                    let param = {};
-                    param.image = res.name;
-                    file = "https://qneventsource.mmantou.cn/"+res.name;
+                en.create();
+                const texten = $("#en")
+                en.txt.html(texten.val());
+                en.config.onchange = function (html) {
+                    texten.val(html)
                 }
-                , error: function () {
-                    //演示失败状态，并实现重传
-                    loadBar.error();
-                    return layer.msg('error');
+                texten.val(en.txt.html())
+
+            const cn = new E("#divzh-CN")
+            cn.config.uploadImgServer = "https://up-z1.qiniup.com/";
+            cn.config.uploadImgParams = {
+                token: "{{$qn_token['token']}}"
+            };
+            cn.config.uploadFileName = 'file';
+            cn.config.uploadImgHooks = {
+                // 上传图片之前
+                before: function(xhr) {
+                    console.log('before', xhr)
+                },
+                // 图片上传并返回了结果，图片插入已成功
+                success: function(xhr) {
+                    console.log('success', xhr)
+                },
+                // 图片上传并返回了结果，但图片插入时出错了
+                fail: function(xhr, cn, resData) {
+                    console.log('fail', resData)
+                },
+                // 上传图片出错，一般为 http 请求的错误
+                error: function(xhr, cn, resData) {
+                    console.log('error', xhr, resData)
+                },
+                // 上传图片超时
+                timeout: function(xhr) {
+                    console.log('timeout', xhr)
+                },
+                // 图片上传并返回了结果，想要自己把图片插入到编辑器中
+                // 例如服务器端返回的不是 { errno: 0, data: [...] } 这种格式，可使用 customInsert
+                customInsert: function(insertImgFn, result) {
+                    // result 即服务端返回的接口
+                    console.log('customInsert', result)
+
+                    // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
+                    insertImgFn(result.url+result.name);
                 }
-            });
-            console.log(file);
-            return file;
-        }
+            }
+            cn.create();
+            const textcn = $("#zh-CN")
+            cn.txt.html(textcn.val());
+            cn.config.onchange = function (html) {
+                textcn.val(html)
+            }
+            textcn.val(cn.txt.html())
+        });
 
     </script>
 @endsection

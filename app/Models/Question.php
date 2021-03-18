@@ -11,8 +11,7 @@ class Question extends Model
     protected $connection = 'lovbee';
 
     protected $primaryKey = 'id';
-    const CREATED_AT = 'created_at';
 
-    protected $fillable = ['title', 'content', 'category', 'sort', 'status', 'created_at'];
+    protected $fillable = ['title', 'content', 'sort', 'status', 'created_at'];
 
 }
