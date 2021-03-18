@@ -91,20 +91,19 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
     public function findMessage($params, $detail=false, $export=false)
     {
         $sort = !empty($params['sort']) ? $params['sort'] : 'chat_from_id';
-        $field= $sort == 'chat_to_id' ? 'chat_to_id' : 'chat_from_id';
         $time = !empty($params['dateTime']) ? $params['dateTime'] : date('Y-m-d', time());
         $date = !empty($params['dateTime']) ? date('Ym', strtotime($params['dateTime'])) : date('Ym');
-        $num  = $field=='chat_from_id' ? 'send' : 'receive';
+        $num  = $sort=='chat_from_id' ? 'send' : 'receive';
 
         $table= 'ry_chats_'.$date;
         $user = DB::connection('lovbee')->table($table);
-        $user = $user->select(DB::raw("`t_$table`.$field,
+        $user = $user->select(DB::raw("`t_$table`.$sort,
                 `t_users`.user_id,`t_users`.user_name, `t_users`.user_nick_name, `t_users`.user_avatar, `t_users`.user_gender,`t_users`.user_created_at,
                 count(`t_$table`.`chat_id`) as $num,
                 `t_users_countries`.country,
                 `t_users_phones`.user_phone_country, `t_users_phones`.user_phone"));
         $user = $user
-            ->join('users', 'users.user_id', '=', $table.'.'.$field)
+            ->join('users', 'users.user_id', '=', $table.'.'.$sort)
             ->join('users_countries', 'users.user_id', '=', 'users_countries.user_id')
             ->join('users_phones', 'users.user_id', '=', 'users_phones.user_id');
 
@@ -126,9 +125,9 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         $end   = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 23:59:59')->subHours(8)->toDateTimeString();
         $user  = $user->whereBetween($table.'.chat_created_at', [$start, $end]);
         if (empty($detail)) {
-            $user = $user->groupBy($table.'.'.$field);
+            $user = $user->groupBy($table.'.'.$sort);
         } else {
-            $chat = $field=='chat_from_id' ? 'chat_to_id' : 'chat_from_id';
+            $chat = $sort=='chat_from_id' ? 'chat_to_id' : 'chat_from_id';
             $user = $user->groupBy($table.'.'.$chat);
         }
         $user  = $user->orderByDesc(DB::raw("count(`t_$table`.`chat_id`)"));
@@ -138,11 +137,12 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         } else {
             $result  = $user->get();
         }
-        $chat_id = $field=='chat_from_id' ? 'chat_to_id' : 'chat_from_id';
+        $chat_id = $sort=='chat_from_id' ? 'chat_to_id' : 'chat_from_id';
 
-        $userIds = $result->pluck('chat_from_id')->toArray();
-        $chatFrom= $field=='chat_from_id' ? 'receive'    : 'send';
-        $messages= DB::connection('lovbee')->table($table)->select($chat_id, DB::raw("count(chat_id) as num"))->whereIn($chat_id, $userIds)->groupBy($field)->get();
+        $userIds = $result->pluck($sort)->toArray();
+        $chatFrom= $sort=='chat_from_id' ? 'receive'    : 'send';
+        $messages= DB::connection('lovbee')->table($table)->select($chat_id, DB::raw("count(chat_id) as num"))
+            ->whereIn($chat_id, $userIds)->whereBetween($table.'.chat_created_at', [$start, $end])->groupBy($chat_id)->get();
 
         $result = $this->friend($result);
         foreach ($result as $item) {
