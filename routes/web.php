@@ -70,6 +70,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('message/video' , 'MessageController@video')->name('message.video');
             Route::post('message/comment' , 'MessageController@comment')->name('message.comment');
             Route::get('message/export' , 'MessageController@export')->name('message.export');
+            Route::resource('question' , 'QuestionController');
         });
 
         Route::group(['namespace'=>'Props','prefix'=>'props' , 'as' => 'props::'] , function (){
