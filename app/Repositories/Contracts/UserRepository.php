@@ -5,8 +5,6 @@ namespace App\Repositories\Contracts;
 
 interface UserRepository extends BaseRepository
 {
-    public function isDeletedUser($name);
-
-    public function isBlackUser($user_id);
-
+    public function findByWhere($params);
+    public function export($params);
 }
