@@ -32,6 +32,9 @@ class QuestionController extends Controller
     {
         $params = $request->all();
         $result = Question::orderByDesc('id')->paginate(10);
+        foreach ($result as $item) {
+            $item['content'] = json_decode($item['content'], true);
+        }
         $params['appends'] = $params;
         $params['data']    = $result;
         return view('backstage.lovbee.question.index', $params);
@@ -45,8 +48,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        $category = PropsCategory::where('is_delete', 0)->get();
-        return view('backstage.lovbee.question.create', ['languages'=>['en', 'zh-CN'], 'categories'=>$category]);
+        return view('backstage.lovbee.question.create', ['languages'=>['en', 'zh-CN']]);
     }
 
     /**
@@ -79,8 +81,7 @@ class QuestionController extends Controller
         if (!empty($data)) {
             $data['content'] = json_decode($data['content'], true);
         }
-        $category = PropsCategory::where('is_delete', 0)->get();
-        return view('backstage.lovbee.question.edit', ['data' => $data, 'languages'=>['en', 'zh-CN'], 'categories'=>$category]);
+        return view('backstage.lovbee.question.edit', ['data' => $data, 'languages'=>['en', 'zh-CN']]);
     }
 
     /**
@@ -96,23 +97,15 @@ class QuestionController extends Controller
         $question = Question::find($id);
         if ($request->has('title')) {
             $this->validate($request, [
-                'title'    => ['required', 'string'],
-                'category' => 'required|array',
+                'title' => 'required|string',
+                'en'    => 'required|string',
             ]);
-
-            $languages = (array)$request->input('language');
-            $category  = (array)$request->input('category');
-            foreach ($languages as $key=>$language) {
-                $ext[$language] = $category[$key];
-            }
+            $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
         }
-        $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
-        $question->content =  empty($content)            ? $question->content   : json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
-        $question->title   = !empty($params['title'])    ? $params['title']     : $question->title;
-        $question->category= !empty($params['category']) ? $params['category']  : $question->category;
-        $question->url     = !empty($params['url'])      ? $params['url']       : $question->url;
-        $question->sort    = !empty($params['sort'])     ? $params['sort']      : $question->sort;
-        $question->status  = !empty($params['status'])   ? $params['status']    : $question->status;
+        $question->content =  empty($content)          ? $question->content   : json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
+        $question->title   = !empty($params['title'])  ? $params['title']     : $question->title;
+        $question->sort    = !empty($params['sort'])   ? (int)$params['sort'] : $question->sort;
+        $question->status  = !empty($params['status']) ? $params['status']    : $question->status;
         $question->save();
 
         return response()->json(['result' => 'success']);

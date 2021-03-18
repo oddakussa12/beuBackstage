@@ -13,18 +13,11 @@
         }
         .layui-form-select {z-index: 11000;}
         .layui-table td, .layui-table th {padding: 5px;}
-        .layui-layout-body {max-height: 600px; overflow-y: scroll;}
     </style>
     <div class="layui-fluid">
         <form class="layui-form layui-tab-content">
             {{ csrf_field() }}
             <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">Sort：</label>
-                    <div class="layui-input-block">
-                        <input type="text" style="min-width: 300px;" id="sort" name="sort" required="required" autocomplete="off" class="layui-input" value="0">
-                    </div>
-                </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Title：</label>
                     <div class="layui-input-block">
@@ -32,25 +25,24 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item" style="margin-bottom: 100px;">
-                <label class="layui-form-label">Category：</label>
+            <div class="layui-form-item">
                 <div class="layui-inline">
-                    <select  name="category">
-                        @foreach($categories as $category)
-                            <option value="{{$category->name}}">{{$category->name}}</option>
-                        @endforeach;
-                    </select>
+                    <label class="layui-form-label">Sort：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="sort" name="sort" required="required" autocomplete="off" class="layui-input" value="0">
+                    </div>
                 </div>
+            </div>
+            <div class="layui-form-item" style="margin-bottom: 50px;">
                 <div class="layui-inline">
                     <label class="layui-form-label">Status：</label>
                     <div class="layui-input-block">
                         <select  name="status">
-                            <option value="0">DOWN</option>
-                            <option value="1">UP</option>
+                            <option value="0">OFFLINE</option>
+                            <option value="1">ONLINE</option>
                         </select>
                     </div>
                 </div>
-
             </div>
             <div class="layui-tab" lay-filter="translation">
                 <ul class="layui-tab-title">
@@ -95,31 +87,6 @@
             let form = layui.form,
                 common = layui.common,
                 $=layui.jquery;
-            //前面的序号1,2,3......
-            let i = 1;
-            $(".td").each(function(){
-                $(this).html(i++);
-            });
-            $("#addCol").on('click', function () {
-                fun();
-            });
-            $("#delCol").on('click', function () {
-                del();
-            });
-            //删除一行
-            function del(){
-                $("#layui-table tr:not(:first):not(:first):last").remove();//移除最后一行,并且保留前两行
-            }
-            //添加一行
-            function fun(){
-                let $td = $("#clo").clone();       //增加一行,克隆第一个对象
-                $("#layui-table").append($td);
-                let i = 1;
-                $(".td").each(function(){       //增加一行后重新更新序号1,2,3......
-                    $(this).html(i++);
-                })
-                $("table tr:last").find(":input").val('');   //将尾行元素克隆来的保存的值清空
-            }
             form.on('submit(admin_form)', function(data){
                 let params = {};
                 $.each(data.field , function (k ,v) {

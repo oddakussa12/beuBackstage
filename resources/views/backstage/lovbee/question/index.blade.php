@@ -12,12 +12,11 @@
             <thead>
             <tr>
                 <th lay-data="{field:'id', width:100}">ID</th>
-                <th lay-data="{field:'title', width:150,sort:true}">Title</th>
-                <th lay-data="{field:'category', width:200}">Category</th>
+                <th lay-data="{field:'title', minWidth:200,sort:true}">Title</th>
                 <th lay-data="{field:'status', minWidth:150,}">Status</th>
                 <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">Sort</th>
                 <th lay-data="{field:'content', width:500,sort:true}">Language</th>
-                <th lay-data="{field:'created_at', width:160}">CreatedAt</th>
+                <th lay-data="{field:'created_at', minWidth:160}">CreatedAt</th>
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
@@ -26,10 +25,14 @@
                 <tr>
                     <td>{{$value->id}}</td>
                     <td>{{$value->title}}</td>
-                    <td>{{$value->catetory}}</td>
                     <td><input type="checkbox" @if($value->status==1) checked @endif name="status" lay-skin="switch" lay-filter="switchAll" lay-text="ONLINE|OFFLINE"></td>
                     <td>{{$value->sort}}</td>
-                    <td>{{$value->content}}</td>
+                    <td>@foreach($value->content as $key=>$item)
+                            {{$key}}
+                            {{$item}}
+                        @endforeach
+                    </td>
+{{--                    <td>{{$value->content}}</td>--}}
                     <td>{{$value->created_at}}</td>
                     <td></td>
                 </tr>

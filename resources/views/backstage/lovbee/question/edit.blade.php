@@ -27,28 +27,22 @@
                         <input type="text" style="min-width: 300px;" id="title" name="title" required="required" autocomplete="off" class="layui-input" value="{{$data->title}}">
                     </div>
                 </div>
+            </div>
+            <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">Sort：</label>
                     <div class="layui-input-block">
-                        <input type="text" style="min-width: 300px;" id="sort" name="sort" required="required" autocomplete="off" class="layui-input" value="{{$data->sort}}">
+                        <input type="text" id="sort" name="sort" required="required" autocomplete="off" class="layui-input" value="{{$data->sort}}">
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item" style="margin-bottom: 100px;">
-                <label class="layui-form-label">Category：</label>
-                <div class="layui-inline">
-                    <select  name="category">
-                        @foreach($categories as $category)
-                            <option value="{{$category->name}}" @if($data->category==$category->name) selected @endif>{{$category->name}}</option>
-                        @endforeach;
-                    </select>
-                </div>
+            <div class="layui-form-item" style="margin-bottom: 50px;">
                 <div class="layui-inline">
                     <label class="layui-form-label">Status：</label>
                     <div class="layui-input-block">
                         <select name="status">
-                            <option value="0" @if($data->status==0) selected @endif>DOWN</option>
-                            <option value="1" @if($data->status==1) selected @endif>UP</option>
+                            <option value="0" @if($data->status==0) selected @endif>OFFLINE</option>
+                            <option value="1" @if($data->status==1) selected @endif>ONLINE</option>
                         </select>
                     </div>
                 </div>
