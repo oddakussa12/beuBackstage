@@ -90,7 +90,7 @@
             form.on('submit(admin_form)', function(data){
                 let params = {};
                 $.each(data.field , function (k ,v) {
-                    if(v==''||v==undefined) {return true;}
+                    if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
                 common.ajax("{{url('/backstage/lovbee/question')}}/", params, function(res){

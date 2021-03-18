@@ -28,8 +28,8 @@
                     <td><input type="checkbox" @if($value->status==1) checked @endif name="status" lay-skin="switch" lay-filter="switchAll" lay-text="ONLINE|OFFLINE"></td>
                     <td>{{$value->sort}}</td>
                     <td>@foreach($value->content as $key=>$item)
-                            {{$key}}
-                            {{$item}}
+                            {{$key}}{{$item}} <br />
+
                         @endforeach
                     </td>
 {{--                    <td>{{$value->content}}</td>--}}
@@ -82,20 +82,20 @@
             //监听单元格编辑
             table.on('edit(table)', function(obj){
                 var that = this;
-                var value = obj.value //得到修改后的值
+                let value = obj.value //得到修改后的值
                     ,data = obj.data //得到所在行所有键值
                     ,field = obj.field //得到字段
                     ,original = $(this).prev().text(); //得到字段
-                var params = d = {};
+                let params = d = {};
                 d[field] = original;
                 @if(!Auth::user()->can('props::category.update'))
-                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
-                obj.update(d);
-                $(this).val(original);
-                table.render();
-                return true;
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
+                    obj.update(d);
+                    $(this).val(original);
+                    table.render();
+                    return true;
                 @endif
-                    params[field] = value;
+                params[field] = value;
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
                     common.ajax("{{url('/backstage/lovbee/question')}}/"+data.id , params , function(res){
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
@@ -117,20 +117,17 @@
             });
 
             form.on('switch(switchAll)', function(data){
-                var checked = data.elem.checked;
-                var categoryId = data.othis.parents('tr').find("td :first").text();
+                let checked = data.elem.checked;
+                let categoryId = data.othis.parents('tr').find("td :first").text();
                 data.elem.checked = !checked;
                 @if(!Auth::user()->can('lovbee::question.update'))
-                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
-                form.render();
-                return false;
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
+                    form.render();
+                    return false;
                 @endif;
-                var name = $(data.elem).attr('name');
-                if(checked) {
-                    var params = '{"'+name+'":"on"}';
-                }else {
-                    var params = '{"'+name+'":"off"}';
-                }
+                let name = $(data.elem).attr('name');
+                let val  = checked ? 1 : 0;
+                let params = '{"'+name+'":"'+val+'"}';
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
                     common.ajax("{{url('/backstage/lovbee/question')}}/"+categoryId , JSON.parse(params) , function(res){

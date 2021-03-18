@@ -88,35 +88,10 @@
             let form = layui.form,
                 common = layui.common,
                 $=layui.jquery;
-            //前面的序号1,2,3......
-            let i = 1;
-            $(".td").each(function(){
-                $(this).html(i++);
-            });
-            $("#addCol").on('click', function () {
-                fun();
-            });
-            $("#delCol").on('click', function () {
-                del();
-            });
-            //删除一行
-            function del(){
-                $("#layui-table tr:not(:first):not(:first):last").remove();//移除最后一行,并且保留前两行
-            }
-            //添加一行
-            function fun(){
-                let $td = $("#clo").clone();       //增加一行,克隆第一个对象
-                $("#layui-table").append($td);
-                let i = 1;
-                $(".td").each(function(){       //增加一行后重新更新序号1,2,3......
-                    $(this).html(i++);
-                })
-                $("table tr:last").find(":input").val('');   //将尾行元素克隆来的保存的值清空
-            }
             form.on('submit(admin_form)', function(data){
                 let params = {};
                 $.each(data.field , function (k ,v) {
-                    if(v==''||v==undefined) {return true;}
+                    if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
                 common.ajax("{{url('/backstage/lovbee/question')}}/", params, function(res){
@@ -159,7 +134,7 @@
                     },
                     // 上传图片超时
                     timeout: function(xhr) {
-                        console.log('timeout')
+                        console.log('timeout', xhr)
                     },
                     // 图片上传并返回了结果，想要自己把图片插入到编辑器中
                     // 例如服务器端返回的不是 { errno: 0, data: [...] } 这种格式，可使用 customInsert
