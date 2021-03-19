@@ -12,8 +12,6 @@ return [
             'message_received'=>'收到消息数',
             'message_send'=>'发送消息数',
             'user_nick_name'=>'昵称',
-            'user_email_code'=>'EMAIL码',
-            'user_device_id'=>'设备ID',
             'user_language'=>'语言',
             'user_avatar'=>'头像',
             'user_cover'=>'背景',
@@ -31,26 +29,9 @@ return [
             'user_activation'=>'激活',
             'user_time' =>'时间',
             'user_friend_time'=>'加好友时间',
-            'user_level'=>'加V',
-            'user_op'=>'操作',
-        ],
-        'button'=>[
-
         ]
     ],
     'form'=>[
-        'phone'=>'手机号',
-        'select'=>[
-            'query'=>[
-                'user_key'=>'关键字',
-                'user_id'=>'ID ',
-                'user_name'=>'账号',
-            ]
-        ],
-        'button'=>[
-          'submit'=>'查询',
-          'export'=>'导出'
-        ],
         'label'=>[
             'user_name'=>'用户名',
             'user_email'=>'邮箱',
@@ -69,9 +50,7 @@ return [
             'user_active_time'=>'活动次数',
             'user_active_expire'=>'过期时间',
             'user_created_at'=>'请选择日期',
-            'date'=>'日期',
             'friend_list' => '好友列表',
-
         ],
         'placeholder'=>[
             'user_name'=>'请输入账号',
@@ -79,15 +58,6 @@ return [
             'user_country'=>'请选择国家',
             'user_school'=>'请选择学校',
         ],
-    ],
-    'page'=>[
-        'edit'=>[
-            'bread_crumb'=>[
-                'passport'=>'账户管理',
-                'user'=>'账号',
-                'edit'=>'编辑'
-            ]
-        ]
     ]
 
 ];

@@ -12,6 +12,6 @@ class Question extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = ['title', 'content', 'sort', 'status', 'created_at'];
+    protected $fillable = ['title', 'content', 'sort', 'status', 'url', 'created_at'];
 
 }

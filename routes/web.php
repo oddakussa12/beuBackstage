@@ -69,6 +69,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('message/video' , 'MessageController@video')->name('message.video');
             Route::post('message/comment' , 'MessageController@comment')->name('message.comment');
             Route::get('message/export' , 'MessageController@export')->name('message.export');
+            Route::get('question/upload/{id}' , 'QuestionController@upload')->name('question.upload');
             Route::resource('question' , 'QuestionController');
         });
 

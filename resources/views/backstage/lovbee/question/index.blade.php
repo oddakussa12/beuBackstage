@@ -15,9 +15,10 @@
                 <th lay-data="{field:'title', minWidth:200,sort:true}">Title</th>
                 <th lay-data="{field:'status', minWidth:150,}">Status</th>
                 <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">Sort</th>
+                <th lay-data="{field:'url', minWidth:250,edit: 'text'}">Url</th>
                 <th lay-data="{field:'content', width:500,sort:true}">Language</th>
                 <th lay-data="{field:'created_at', minWidth:160}">CreatedAt</th>
-                <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', minWidth:160, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -27,9 +28,13 @@
                     <td>{{$value->title}}</td>
                     <td><input type="checkbox" @if($value->status==1) checked @endif name="status" lay-skin="switch" lay-filter="switchAll" lay-text="ONLINE|OFFLINE"></td>
                     <td>{{$value->sort}}</td>
+                    <td>@if(is_array($value->url))@foreach($value->url as $key=>$item)
+                            {{$key}}： {{$item}} <br />
+                            @endforeach
+                            @endif
+                    </td>
                     <td>@foreach($value->content as $key=>$item)
                             {{$key}}{{$item}} <br />
-
                         @endforeach
                     </td>
 {{--                    <td>{{$value->content}}</td>--}}
@@ -61,11 +66,12 @@
                 table = layui.table,
                 common = layui.common;
             table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-               if(layEvent === 'edit'){ //编辑
-                    var id = data.id;
+                let data = obj.data; //获得当前行数据
+                let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                let tr = obj.tr; //获得当前行 tr 的DOM对象
+                let id = data.id;
+
+                if(layEvent === 'edit'){ //编辑
                     layer.open({
                         type: 2,
                         title: 'Category',
@@ -76,7 +82,21 @@
                         'scrollbar':true,
                         content: '/backstage/lovbee/question/'+id+'/edit',
                     });
-                }
+                } else {
+                    common.confirm("{{trans('common.confirm.update')}}" , function(){
+                        common.ajax("{{url('/backstage/lovbee/question/upload')}}/"+data.id , '' , function(res){
+                            common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                            table.render();
+                        } , 'get' , function (event,xhr,options,exc) {
+                            setTimeout(function(){
+                                common.init_error(event,xhr,options,exc);
+                                table.render();
+                                },100);
+                        });
+                    } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                        table.render();
+                    });
+               }
             });
 
             //监听单元格编辑
@@ -162,5 +182,6 @@
     </script>
     <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
+        <a class="layui-btn layui-btn-xs" lay-event="upload">{{trans('common.table.button.upload')}}</a>
     </script>
 @endsection

@@ -16,11 +16,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
+use Qiniu\Storage\FormUploader;
+use Qiniu\Storage\UploadManager;
 use function Sodium\compare;
 
 class QuestionController extends Controller
 {
 
+    private $language = ['en', 'zh-CN'];
     /**
      * Display a listing of the resource.
      *
@@ -34,6 +37,7 @@ class QuestionController extends Controller
         $result = Question::orderByDesc('id')->paginate(10);
         foreach ($result as $item) {
             $item['content'] = json_decode($item['content'], true);
+            $item['url']     = json_decode($item['url'], true);
         }
         $params['appends'] = $params;
         $params['data']    = $result;
@@ -109,5 +113,50 @@ class QuestionController extends Controller
         $question->save();
 
         return response()->json(['result' => 'success']);
+    }
+
+    public function upload($id)
+    {
+        $question = Question::find($id);
+
+        $title = [
+            'en' => '常见问题',
+            'zh-CN' => '常见问题',
+        ];
+        $header = [
+            'en' => '请选择问题发生的场景',
+            'zh-CN' => '请选择问题发生的场景',
+        ];
+
+        $content = json_decode($question['content'], true);
+
+        $url = [];
+        foreach ($content as $key=>$item) {
+            $fileName = $key.$question['id'].'.html';
+            $html  = '<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">';
+            $html .= "<title>{$title[$key]}</title><style> body { word-break:break-word;}</style><body ontouchstart=''><div id='container' class='container'><div>{$header[$key]}</div>";
+            $html .= $item;
+            $html .= '</div></body>';
+            file_put_contents($fileName, $html);
+            $result = $this->uploadQiNiu($fileName);
+            if (!empty($result) && !empty($result['name'])) {
+                $url[$key] = $result['url'].$result['name'];
+            }
+        }
+        if (!empty($url)) {
+            $question->url = json_encode($url);
+            $question->save();
+        }
+
+        return response()->json(['result', 'success']);
+    }
+
+    public function uploadQiNiu($filename)
+    {
+        $qn_token  = qnToken('qn_event_source');
+        $file      = realpath($filename);
+        $upManager = new UploadManager();
+        list($ret, $error) = $upManager->putFile($qn_token['token'], 'formPutFile', $file, null, 'text/plain', null);
+        return $ret;
     }
 }
