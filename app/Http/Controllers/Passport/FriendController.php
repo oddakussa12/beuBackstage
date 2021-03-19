@@ -112,6 +112,8 @@ class FriendController extends Controller
         $requests->each(function($item , $index) use ($users){
             $item->from = $users->where('user_id' , $item->request_from_id)->values()->first();
             $item->to = $users->where('user_id' , $item->request_to_id)->values()->first();
+            $item->request_created_at = Carbon::createFromTimestamp($item->request_created_at , 'Asia/Shanghai')->toDateTimeString();
+            $item->request_updated_at = Carbon::createFromTimestamp($item->request_updated_at , 'Asia/Shanghai')->toDateTimeString();
         });
         return view('backstage.passport.friend.request', compact('requests' , 'from' , 'to' , 'appends'));
     }

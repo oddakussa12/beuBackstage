@@ -12,7 +12,9 @@ return [
             'updated_at'=>'更新时间',
         ],
         'button'=>[
-
+            'accept'=>'接受',
+            'ignore'=>'忽略',
+            'refuse'=>'拒绝',
         ]
     ],
     'form'=>[

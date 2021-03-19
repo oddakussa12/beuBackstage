@@ -41,7 +41,15 @@
                     <td>{{$request->from->user_nick_name}}</td>
                     <td>{{$request->to->user_name}}</td>
                     <td>{{$request->to->user_nick_name}}</td>
-                    <td>{{$request->request_state}}</td>
+                    <td>
+                        @if($request->request_state==0)
+                            <span class="layui-badge layui-bg-gray">{{trans('friend.table.button.ignore')}}</span>
+                        @endif($request->request_state==1)
+                            <span class="layui-badge layui-bg-blue">{{trans('friend.table.button.accept')}}</span>
+                        @else
+                            <span class="layui-badge layui-bg-orange">{{trans('friend.table.button.refuse')}}</span>
+                        @endif
+                    </td>
                     <td>{{$request->request_created_at}}</td>
                     <td>{{$request->request_updated_at}}</td>
                 </tr>
