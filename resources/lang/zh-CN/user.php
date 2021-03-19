@@ -61,6 +61,7 @@ return [
             'user_cover'=>'背景',
             'user_src'=>'来源',
             'user_country'=>'国家',
+            'user_school'=>'学校',
             'user_age'=>'年龄',
             'user_about'=>'简介',
             'user_active'=>'状态',

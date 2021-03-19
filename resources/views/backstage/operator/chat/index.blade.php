@@ -16,12 +16,19 @@
                                     <input class="layui-input" placeholder="fuzzy search" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
                                 </div>
                             </div>
+
                             <div class="layui-inline">
                                 <label class="layui-form-label">School:</label>
                                 <div class="layui-input-inline">
-                                    <input class="layui-input" name="school" id="school"  @if(!empty($school)) value="{{$school}}" @endif />
+                                    <select  name="school" lay-verify="" lay-search  id="school">
+                                        <option value="">{{trans('user.form.placeholder.label.user_school')}}</option>
+                                        @foreach($schools  as $s)
+                                            <option value="{{$s}}" @if(!empty($school)&&$school==$s) selected @endif>{{$s}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+
                             <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('comment.form.placeholder.comment_country_id')}}:</label>
                                 <div class="layui-input-inline">
@@ -33,6 +40,7 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="layui-inline">
                             <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                             <div class="layui-input-inline">

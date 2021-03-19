@@ -45,7 +45,7 @@ class ChatController extends Controller
 
         $chart  = $chart->whereBetween('time', [$start, $end])->groupBy('time')->get()->toArray();
         $dates  = printDates($start,$end);
-
+        $count = array();
         foreach ($dates as $date) {
             $video = collect($chart)->where('time', $date)->pluck('video')->toArray();
             $num   = collect($chart)->where('time', $date)->pluck('num')->toArray();
@@ -57,6 +57,7 @@ class ChatController extends Controller
 
         $params['chart']    = $chart;
         $params['countries'] = config('country');
+        $params['schools'] = config('school');
         $params['dateTime'] = $start.' - '.$end;
         $params['header']   = array_keys($count);
         $params['dates']    = $dates;
