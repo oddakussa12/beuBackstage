@@ -44,7 +44,7 @@
                     <td>
                         @if($request->request_state==0)
                             <span class="layui-badge layui-bg-gray">{{trans('friend.table.button.ignore')}}</span>
-                        @endif($request->request_state==1)
+                        @elseif($request->request_state==1)
                             <span class="layui-badge layui-bg-blue">{{trans('friend.table.button.accept')}}</span>
                         @else
                             <span class="layui-badge layui-bg-orange">{{trans('friend.table.button.refuse')}}</span>
