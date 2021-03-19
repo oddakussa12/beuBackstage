@@ -82,7 +82,7 @@
                                 <td>{{ $user->country }}</td>
                                 <td>{{$user->time}}</td>
                                 <td>{{$user->ip}}</td>
-                                <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) YES @else NO @endif</span></td>
+                                <td><span class="layui-btn layui-btn-xs">@if($user->activation==1) YES @else NO @endif</span></td>
                                 <td>{{ $user->user_format_created_at }}</td>
                                 <td></td>
                             </tr>
