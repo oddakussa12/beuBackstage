@@ -23,15 +23,14 @@
         <table class="layui-table"  lay-filter="common_table">
             <thead>
             <tr>
-                <th  lay-data="{field:'id', width:130 ,fixed: 'left'}">{{trans('friend.table.header.id')}}</th>
-                <th  lay-data="{field:'from_name', width:130 ,fixed: 'left'}">{{trans('friend.table.header.from_name')}}</th>
-                <th  lay-data="{field:'from_nick_name', width:130 ,fixed: 'left'}">{{trans('friend.table.header.from_nick_name')}}</th>
-                <th  lay-data="{field:'to_name', width:130}">{{trans('friend.table.header.to_name')}}</th>
-                <th  lay-data="{field:'to_nick_name', width:130}">{{trans('friend.table.header.to_nick_name')}}</th>
-                <th  lay-data="{field:'status', width:130}">{{trans('friend.table.header.status')}}</th>
-                <th  lay-data="{field:'to_nick_name', width:130}">{{trans('friend.table.header.user_nick_name')}}</th>
-                <th  lay-data="{field:'created_at', width:130}">{{trans('friend.table.header.created_at')}}</th>
-                <th  lay-data="{field:'updated_at', width:130}">{{trans('friend.table.header.updated_at')}}</th>
+                <th  lay-data="{field:'id', width:200 ,fixed: 'left'}">{{trans('friend.table.header.id')}}</th>
+                <th  lay-data="{field:'from_name', minWidth:220 ,fixed: 'left'}">{{trans('friend.table.header.from_name')}}</th>
+                <th  lay-data="{field:'from_nick_name', minWidth:300 ,fixed: 'left'}">{{trans('friend.table.header.from_nick_name')}}</th>
+                <th  lay-data="{field:'to_name', minWidth:200}">{{trans('friend.table.header.to_name')}}</th>
+                <th  lay-data="{field:'to_nick_name', minWidth:300}">{{trans('friend.table.header.to_nick_name')}}</th>
+                <th  lay-data="{field:'status', width:100}">{{trans('friend.table.header.status')}}</th>
+                <th  lay-data="{field:'created_at', width:200}">{{trans('friend.table.header.created_at')}}</th>
+                <th  lay-data="{field:'updated_at', width:200}">{{trans('friend.table.header.updated_at')}}</th>
             </tr>
             </thead>
             <tbody>
