@@ -3,13 +3,13 @@ return [
     'table' => [
         'header'=>[
             'id'=>'ID',
-            'name'=>'Name',
+            'name'=>'歌曲名',
             'hash'=>'Hash',
-            'time'=>'Time',
-            'is_delete'=>'Deleted',
-            'recommendation'=>'Recommendation',
-            'sort'=>'Sort',
-            'created_at'=>'CreatedAt'
+            'time'=>'时长',
+            'is_delete'=>'删除',
+            'recommendation'=>'推荐',
+            'sort'=>'排序',
+            'created_at'=>'创建时间'
         ],
         'button'=>[
 
@@ -17,8 +17,8 @@ return [
     ],
     'form'=>[
         'label'=>[
-            'name'=>'Name',
-            'time'=>'Time',
+            'name'=>'名字',
+            'time'=>'时长',
         ],
         'placeholder'=>[
         ],

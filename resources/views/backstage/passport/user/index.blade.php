@@ -109,8 +109,8 @@
     @parent
     <script type="text/html" id="operateTpl">
         <div class="layui-table-cell laytable-cell-1-6">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend">{{trans('common.table.button.friend')}}</a>
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="history">{{trans('common.table.button.history')}}</a>
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend">{{trans('user.table.button.friend')}}</a>
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="history">{{trans('user.table.button.history')}}</a>
         </div>
     </script>
 
@@ -161,7 +161,7 @@
                 if(layEvent === 'history'){ //活跃历史
                     layer.open({
                         type: 2,
-                        title: "{{trans('common.table.button.history')}}",
+                        title: "{{trans('user.table.button.history')}}",
                         shadeClose: true,
                         shade: 0.8,
                         area: ['70%','90%'],

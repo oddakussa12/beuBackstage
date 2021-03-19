@@ -87,7 +87,6 @@ return [
     'unique'               => ':attribute 已存在',
     'uploaded'             => ':attribute 上传失败',
     'url'                  => ':attribute 无效的格式',
-    'mobile'                  => ':attribute 手机号码无效',
 
     /*
     |--------------------------------------------------------------------------

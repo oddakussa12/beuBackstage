@@ -13,7 +13,12 @@ return [
         'personal_information'=>'Personal information',
     ],
     'confirm'=>[
-        'delete'=>'Are you sure you want to delete?'
+        'operate'=>'Are you sure you want to continue?',
+        'delete'=>'Are you sure you want to delete?',
+        'update'=>'Are you sure you want to update?',
+        'unpopular'=>'Are you sure you want to go into the cold palace?',
+        'yes'=>'Yes',
+        'cancel'=>'Cancel',
     ],
     'ajax'=>[
         'result'=>[
@@ -21,7 +26,8 @@ return [
                 'delete'=>'successfully deleted',
                 'update'=>'update completed',
                 'add'=>'Added successfully',
-                'no_permission'=>'No permission to operate!'
+                'no_permission'=>'No permission to operate!',
+                'operate'=>'Operation successful'
             ]
         ]
     ],
@@ -29,28 +35,37 @@ return [
         'button'=>[
             'edit'=>'edit',
             'delete'=>'delete',
-        ],
-        'button'=>[
-            'edit'=>'edit',
-            'delete'=>'delete',
             'detail'=>'detail',
             'check'=>'check',
-            'unpopular'=>'unpopular',
-            'friend'=>'friendCount',
-            'login'=>'loginHistory',
+            'unpopular'=>'unpopular'
         ],
         'header'=>[
+            'status'=>'Status',
             'op'=>'operate',
+            'created_at'=>'CreatedAt',
+            'updated_at'=>'UpdatedAt',
+        ],
+        'tool'=>[
+            'button'=>[
+                'create'=>'Create',
+            ],
         ]
     ],
     'form'=>[
         'button'=>[
-            'add'=>'add',
-            'update'=>'update',
-            'reset'=>'reset',
+            'submit'=>'Submit',
+            'export'=>'Export',
+            'add'=>'Add',
+            'update'=>'Update',
+            'reset'=>'Reset',
         ],
         'placeholder'=>[
             'select_first'=>'please choose',
+            'blank'=>'Please enter content',
+        ],
+        'label'=>[
+            'date'=>'Date',
+            'sort'=>'Sort',
         ]
     ],
     'cast'=>[
@@ -62,7 +77,19 @@ return [
         'status'=>[
             'normal'=>'normal',
             'suspend'=>'suspend',
-        ]
+        ],
+        'switch'=>[
+            'on'=>'On',
+            'off'=>'Off',
+        ],
+        'active'=>[
+            'online'=>'Online',
+            'offline'=>'Offline',
+        ],
+        'common_state'=>[
+            'ok'=>'Ok',
+            'no'=>'No',
+        ],
     ],
     'pagination'=>[
         'total'=>'Total:total',
