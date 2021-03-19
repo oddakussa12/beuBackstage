@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.label.user_created_at')}}:</label>
+                    <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input" id="dateTime" name="dateTime" placeholder="yyyy-MM-dd" value="@if(!empty($dateTime)){{$dateTime}}@else{{date('Y-m-d', time())}}@endif">
                     </div>
