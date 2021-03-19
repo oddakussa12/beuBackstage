@@ -10,7 +10,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.table.header.phone')}}:</label>
+                    <label class="layui-form-label">{{trans('user.table.label.phone')}}:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" placeholder="fuzzy search" name="phone" id="phone"  @if(!empty($phone)) value="{{$phone}}" @endif />
                     </div>
@@ -18,7 +18,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.placeholder.user_country')}}:</label>
+                    <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="country_code" lay-verify="" lay-search  >
                             <option value="">{{trans('user.form.placeholder.user_country')}}</option>
