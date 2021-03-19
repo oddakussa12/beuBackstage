@@ -18,10 +18,10 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('comment.form.placeholder.comment_country_id')}}:</label>
+                    <label class="layui-form-label">{{trans('user.form.placeholder.user_country')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="country_code" lay-verify="" lay-search  >
-                            <option value="">{{trans('comment.form.placeholder.comment_country_id')}}</option>
+                            <option value="">{{trans('user.form.placeholder.user_country')}}</option>
                             @foreach($countries  as $country)
                                 <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
                             @endforeach
@@ -36,11 +36,11 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.common.form.label.sort')}}:</label>
+                    <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
-                            <option value="chat_from_id" @if(!empty($sort)&&$sort=='chat_from_id') selected @endif>发送数</option>
-                            <option value="chat_to_id" @if(!empty($sort)&&$sort=='chat_to_id') selected @endif>接收数</option>
+                            <option value="chat_from_id" @if(!empty($sort)&&$sort=='chat_from_id') selected @endif>Quantity sent</option>
+                            <option value="chat_to_id" @if(!empty($sort)&&$sort=='chat_to_id') selected @endif>Quantity received</option>
                         </select>
                     </div>
                 </div>
