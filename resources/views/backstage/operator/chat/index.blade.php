@@ -16,23 +16,31 @@
                                     <input class="layui-input" placeholder="fuzzy search" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
                                 </div>
                             </div>
+
                             <div class="layui-inline">
-                                <label class="layui-form-label">School:</label>
+                                <label class="layui-form-label">{{trans('user.form.label.user_school')}}:</label>
                                 <div class="layui-input-inline">
-                                    <input class="layui-input" name="school" id="school"  @if(!empty($school)) value="{{$school}}" @endif />
+                                    <select  name="school" lay-verify="" lay-search  id="school">
+                                        <option value="">{{trans('user.form.placeholder.user_school')}}</option>
+                                        @foreach($schools  as $s)
+                                            <option value="{{$s}}" @if(!empty($school)&&$school==$s) selected @endif>{{$s}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+
                             <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('comment.form.placeholder.comment_country_id')}}:</label>
+                                <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                                 <div class="layui-input-inline">
                                     <select  name="country_code" lay-verify="" lay-search  >
-                                        <option value="">{{trans('comment.form.placeholder.comment_country_id')}}</option>
+                                        <option value="">{{trans('user.form.placeholder.user_country')}}</option>
                                         @foreach($countries  as $country)
                                             <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
+
                             <div class="layui-inline">
                             <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                             <div class="layui-input-inline">
