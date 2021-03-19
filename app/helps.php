@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Support\Facades\Log;
+
 if (! function_exists('locale')) {
     function locale($locale = null)
     {
@@ -372,4 +375,56 @@ if (!function_exists('printDates')) {
         return $date ?? [];
     }
 }
+
+/**
+ * curl request
+ */
+if (!function_exists('curl_https_request')) {
+    function curl_https_request($url, $data=[], $method='GET', $header=[])
+    {
+        Log::info('curl_https_request enter url:' . $url . __FUNCTION__ . ':' . __LINE__);
+        $ch = curl_init($url);
+
+        $data = is_array($data) ? http_build_query($data, null) : $data;
+        Log::info('curl_https_request enter url:' . $data . __FUNCTION__ . ':' . __LINE__);
+
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        Log::info('curl_https_request curl send headers:' . json_encode($header) . __FUNCTION__ . ':' . __LINE__);
+
+        // resolve SSL: no alternative certificate subject name matches target host name
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // check verify
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        // curl_setopt($ch, CURLOPT_NOBODY, TRUE); // 不输出内容
+
+        if ($method == 'POST') {
+            curl_setopt($ch, CURLOPT_POST, 1); // regular post request
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data); // Post submit data
+        }
+
+
+        Log::info('curl_https_request curl send body:'  .  __FUNCTION__ . ':' . __LINE__);
+
+        $ret = @curl_exec($ch);
+        if ($ret === false) {
+            return null;
+        }
+        /*if (!curl_errno($ch)) {
+            $info = curl_getinfo($ch);
+            dump($info); // 打印curl信息
+        }*/
+
+        $info = curl_getinfo($ch);
+
+        Log::info('curl_https_request curl send info:' . json_encode($info) . __FUNCTION__ . ':' . __LINE__);
+
+        curl_close($ch);
+
+        return $ret;
+    }
+}
+
 

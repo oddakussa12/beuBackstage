@@ -16,10 +16,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
+use Qiniu\Storage\FormUploader;
+use Qiniu\Storage\UploadManager;
 use function Sodium\compare;
 
 class QuestionController extends Controller
 {
+    private $language = ['en', 'zh-CN'];
 
     /**
      * Display a listing of the resource.
@@ -34,6 +37,7 @@ class QuestionController extends Controller
         $result = Question::orderByDesc('id')->paginate(10);
         foreach ($result as $item) {
             $item['content'] = json_decode($item['content'], true);
+            $item['url']     = json_decode($item['url'], true);
         }
         $params['appends'] = $params;
         $params['data']    = $result;
@@ -48,7 +52,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        return view('backstage.lovbee.question.create', ['languages'=>['en', 'zh-CN']]);
+        return view('backstage.lovbee.question.create', ['languages'=>$this->language]);
     }
 
     /**
@@ -63,7 +67,9 @@ class QuestionController extends Controller
         $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
         $params['content'] = json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
         $params['created_at'] = date('Y-m-d H:i:s');
-        unset($params['en'], $params['zh-CN']);
+        foreach ($this->language as $item) {
+            unset($params[$item]);
+        }
         Question::create($params);
         return response()->json(['result'=>'success']);
     }
@@ -81,7 +87,7 @@ class QuestionController extends Controller
         if (!empty($data)) {
             $data['content'] = json_decode($data['content'], true);
         }
-        return view('backstage.lovbee.question.edit', ['data' => $data, 'languages'=>['en', 'zh-CN']]);
+        return view('backstage.lovbee.question.edit', ['data' => $data, 'languages'=>$this->language]);
     }
 
     /**
@@ -109,5 +115,55 @@ class QuestionController extends Controller
         $question->save();
 
         return response()->json(['result' => 'success']);
+    }
+
+    public function upload($id)
+    {
+        $question = Question::find($id);
+
+        $title = [
+            'en' => 'Help Center',
+            'zh-CN' => '常见问题',
+        ];
+        $header = [
+            'en' => 'Popular Topics',
+            'zh-CN' => '请选择问题发生的场景',
+        ];
+
+        $content = json_decode($question['content'], true);
+
+        $url = [];
+        foreach ($content as $key=>$item) {
+            $fileName = $key.$question['id'].'.html';
+            $html  = '<!DOCTYPE html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">';
+            $html .= "<title>{$title[$key]}</title><style> body { word-break:break-word;}</style></head><body ontouchstart=''><div id='container' class='container'><div>{$header[$key]}</div>";
+            $html .= $item;
+            $html .= '</div></body>';
+            file_put_contents($fileName, ($html));
+            $result = $this->uploadQiNiu($fileName);
+            if (!empty($result) && !empty($result['name'])) {
+                $url[$key] = $result['url'].$result['name'];
+            }
+            unlink($fileName);
+        }
+        if (!empty($url)) {
+            $question->url = json_encode($url);
+            $question->save();
+        }
+
+        return response()->json(['result', 'success']);
+    }
+
+    public function uploadQiNiu($filename)
+    {
+        $qn_token  = qnToken('qn_event_source');
+        $file      = realpath($filename);
+        $upManager = new UploadManager();
+        try {
+            list($ret, $error) = $upManager->putFile($qn_token['token'], 'formPutFile', $file);
+        } catch (\Exception $e) {
+            Log::error('Upload File Exception:'. $e->getMessage());
+        }
+        return $ret ?? [];
     }
 }

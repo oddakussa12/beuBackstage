@@ -34,18 +34,6 @@ return [
         ]
     ],
     'form'=>[
-        'phone'=>'手机号',
-        'select'=>[
-            'query'=>[
-                'user_key'=>'关键字',
-                'user_id'=>'ID ',
-                'user_name'=>'账号',
-            ]
-        ],
-        'button'=>[
-          'submit'=>'查询',
-          'export'=>'导出'
-        ],
         'label'=>[
             'user_name'=>'用户名',
             'user_email'=>'邮箱',
@@ -63,7 +51,6 @@ return [
             'user_registered'=>'注册日期',
             'date'=>'日期',
             'friend_list' => '好友列表',
-
         ],
         'placeholder'=>[
             'user_name'=>'请输入账号',
@@ -71,15 +58,6 @@ return [
             'user_country'=>'请选择国家',
             'user_school'=>'请选择学校',
         ],
-    ],
-    'page'=>[
-        'edit'=>[
-            'bread_crumb'=>[
-                'passport'=>'账户管理',
-                'user'=>'账号',
-                'edit'=>'编辑'
-            ]
-        ]
     ]
 
 ];
