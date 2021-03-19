@@ -63,6 +63,7 @@ return [
             'user_registered'=>'Registration time',
             'date'=>'Date',
             'friend_list' => 'Friends List',
+            'phone'=>'Phone',
 
         ],
         'placeholder'=>[

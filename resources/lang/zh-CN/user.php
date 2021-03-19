@@ -51,6 +51,7 @@ return [
             'user_registered'=>'注册日期',
             'date'=>'日期',
             'friend_list' => '好友列表',
+            'phone'=>'手机号',
         ],
         'placeholder'=>[
             'user_name'=>'请输入账号',

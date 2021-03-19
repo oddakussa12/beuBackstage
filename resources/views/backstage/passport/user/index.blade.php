@@ -17,7 +17,7 @@
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('user.table.header.phone')}}:</label>
+                                <label class="layui-form-label">{{trans('user.form.label.phone')}}:</label>
                                 <div class="layui-input-inline">
                                     <input class="layui-input" placeholder="fuzzy search" name="phone" id="phone"  @if(!empty($phone)) value="{{$phone}}" @endif />
                                 </div>
@@ -25,7 +25,7 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('user.form.placeholder.user_country')}}:</label>
+                                <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                                 <div class="layui-input-inline">
                                     <select  name="country_code" lay-verify="" lay-search  >
                                         <option value="">{{trans('user.form.placeholder.user_country')}}</option>
@@ -37,9 +37,9 @@
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('user.form.label.user_created_at')}}:</label>
+                                <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
                                 <div class="layui-input-inline" style="width: 300px;">
-                                    <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
+                                    <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                                 </div>
                             </div>
 

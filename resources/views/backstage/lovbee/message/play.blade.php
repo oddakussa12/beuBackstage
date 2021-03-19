@@ -33,7 +33,7 @@
                     <td>Choose Date</td>
                     <td>
                         <form id="exportForm" method="get" action="/backstage/lovbee/message/export" class="layui-form">
-                            <input style="width: 200px; height: 30px; float: left;" type="text" class="layui-input" name="dateTime" id="dateTime" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$dateTime}}">
+                            <input style="width: 200px; height: 30px; float: left;" readonly type="text" class="layui-input" name="dateTime" id="dateTime" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$dateTime}}">
                             <button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-sm" name="export" id="export">Export</button>
                         </form>
                     </td>
