@@ -25,7 +25,11 @@
             @foreach($data as $value)
                 <tr>
                     <td>{{$value->id}}</td>
-                    <td>{{$value->title}}</td>
+                    <td>@if(is_array($value->title))@foreach($value->title as $key=>$item)
+                            {{$key}}： {{$item}} <br />
+                        @endforeach
+                        @endif
+                    </td>
                     <td><input type="checkbox" @if($value->status==1) checked @endif name="status" lay-skin="switch" lay-filter="switchAll" lay-text="ONLINE|OFFLINE"></td>
                     <td>{{$value->sort}}</td>
                     <td>@if(is_array($value->url))@foreach($value->url as $key=>$item)

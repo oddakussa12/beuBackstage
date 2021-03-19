@@ -36,6 +36,7 @@ class QuestionController extends Controller
         $params = $request->all();
         $result = Question::orderByDesc('id')->paginate(10);
         foreach ($result as $item) {
+            $item['title']   = json_decode($item['title'], true);
             $item['content'] = json_decode($item['content'], true);
             $item['url']     = json_decode($item['url'], true);
         }
@@ -88,6 +89,7 @@ class QuestionController extends Controller
         $data = Question::find($id);
         if (!empty($data)) {
             $data['content'] = json_decode($data['content'], true);
+            $data['title']   = json_decode($data['title'], true);
         }
         return view('backstage.lovbee.question.edit', ['data' => $data, 'languages'=>$this->language]);
     }
@@ -103,15 +105,16 @@ class QuestionController extends Controller
     {
         $params   = $request->all();
         $question = Question::find($id);
-        if ($request->has('title')) {
+        if ($request->has('title_en')) {
             $this->validate($request, [
-                'title' => 'required|string',
+                'title_en' => 'required|string',
                 'en'    => 'required|string',
             ]);
+            $title   = ['en'=>$params['title_en'], 'zh-CN'=>$params['title_zh-CN']];
             $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
         }
         $question->content =  empty($content)          ? $question->content   : json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
-        $question->title   = !empty($params['title'])  ? $params['title']     : $question->title;
+        $question->title   =  empty($title)            ? $question->title     : json_encode($title   ?? [], JSON_UNESCAPED_UNICODE);
         $question->sort    = !empty($params['sort'])   ? (int)$params['sort'] : $question->sort;
         $question->status  = !empty($params['status']) ? $params['status']    : $question->status;
         $question->save();

@@ -6,7 +6,7 @@
     @endphp
     <style type="text/css">
         table input{ /*可输入区域样式*/
-            width:100%;
+            width: 300px;
             height: 25px;
             border:none; /* 输入框不要边框 */
             font-family:Arial;
@@ -20,12 +20,19 @@
             {{ csrf_field() }}
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Title：</label>
+                    <label class="layui-form-label">TitleEN：</label>
                     <div class="layui-input-block">
-                        <input type="text" style="min-width: 300px;" id="title" name="title" required="required" autocomplete="off" class="layui-input" value="">
+                        <input type="text" style="min-width: 300px;" id="title_en" name="title_en" placeholder="Only English"  required="required" autocomplete="off" class="layui-input" value="">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">TitleCN：</label>
+                    <div class="layui-input-block">
+                        <input type="text" style="min-width: 300px;" id="title_cn" name="title_cn" placeholder="仅可中文"  required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">Sort：</label>
@@ -33,8 +40,6 @@
                         <input type="text" id="sort" name="sort" required="required" autocomplete="off" class="layui-input" value="0">
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item" style="margin-bottom: 50px;">
                 <div class="layui-inline">
                     <label class="layui-form-label">Status：</label>
                     <div class="layui-input-block">

@@ -6,7 +6,7 @@
     @endphp
     <style type="text/css">
         table input{ /*可输入区域样式*/
-            width:100%;
+            width: 300px;
             height: 25px;
             border:none; /* 输入框不要边框 */
             font-family:Arial;
@@ -21,10 +21,16 @@
             {{ csrf_field() }}
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Title：</label>
+                    <label class="layui-form-label">TitleEN：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="id" name="id" value="{{$data->id}}">
-                        <input type="text" style="min-width: 300px;" id="title" name="title" required="required" autocomplete="off" class="layui-input" value="{{$data->title}}">
+                        <input type="text" id="title_en" name="title_en" required="required" placeholder="Only English" autocomplete="off" class="layui-input" value="{{$data->title['en']}}">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">TitleCN：</label>
+                    <div class="layui-input-block">
+                        <input type="text" style="min-width: 300px;" id="title_zh-CN" name="title_zh-CN" placeholder="仅可中文"  required="required" autocomplete="off" class="layui-input" value="{{$data->title['zh-CN']}}">
                     </div>
                 </div>
             </div>
