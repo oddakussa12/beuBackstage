@@ -13,6 +13,7 @@
         }
         .layui-form-select {z-index: 11000;}
         .layui-table td, .layui-table th {padding: 5px;}
+        .layui-fluid {height: 600px; overflow-y: scroll}
     </style>
     <div class="layui-fluid">
         <form class="layui-form layui-tab-content">

@@ -36,7 +36,8 @@ return [
             'edit'=>'编辑',
             'delete'=>'删除',
             'detail'=>'查看',
-            'check'=>'审核'
+            'check'=>'审核',
+            'upload'=>'上传'
         ],
         'header'=>[
             'status'=>'状态',

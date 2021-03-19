@@ -15,6 +15,7 @@
         .layui-input, .layui-form-select {min-width: 300px;}
         .layui-table td, .layui-table th {padding: 5px;}
         .layui-layout-body {max-height: 600px; overflow-y: scroll;}
+        .layui-fluid {height: 600px; overflow-y: scroll}
     </style>
     <div class="layui-fluid">
         <form class="layui-form layui-tab-content">
@@ -94,7 +95,7 @@
                     if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/lovbee/question')}}/", params, function(res){
+                common.ajax("{{url('/backstage/lovbee/question')}}/"+params.id, params, function(res){
                     console.log(res);
                     console.log(res.code);
                     if (res.code!== undefined) {
@@ -104,7 +105,7 @@
                         });
                     }
                     parent.location.reload();
-                } , 'post');
+                } , 'patch');
                 return false;
             });
 

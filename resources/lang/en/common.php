@@ -37,7 +37,8 @@ return [
             'delete'=>'delete',
             'detail'=>'detail',
             'check'=>'check',
-            'unpopular'=>'unpopular'
+            'unpopular'=>'unpopular',
+            'upload'=>'upload'
         ],
         'header'=>[
             'status'=>'Status',

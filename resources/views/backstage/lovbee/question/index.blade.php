@@ -18,7 +18,7 @@
                 <th lay-data="{field:'url', minWidth:300}">Url</th>
                 <th lay-data="{field:'content', width:500,sort:true}">Language</th>
                 <th lay-data="{field:'created_at', minWidth:160}">CreatedAt</th>
-                <th lay-data="{fixed: 'right', minWidth:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', minWidth:160, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -33,11 +33,11 @@
                             @endforeach
                             @endif
                     </td>
-                    <td>@foreach($value->content as $key=>$item)
+                    <td>@if(is_array($value->content))@foreach($value->content as $key=>$item)
                             {{$key}}{{$item}} <br />
                         @endforeach
+                        @endif
                     </td>
-{{--                    <td>{{$value->content}}</td>--}}
                     <td>{{$value->created_at}}</td>
                     <td></td>
                 </tr>
@@ -74,7 +74,6 @@
                 if(layEvent === 'edit'){ //编辑
                     layer.open({
                         type: 2,
-                        title: 'Category',
                         shadeClose: true,
                         shade: 0.8,
                         area: ['90%','100%'],
@@ -108,7 +107,7 @@
                     ,original = $(this).prev().text(); //得到字段
                 let params = d = {};
                 d[field] = original;
-                @if(!Auth::user()->can('props::category.update'))
+                @if(!Auth::user()->can('lovbee::question.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
                     obj.update(d);
                     $(this).val(original);
