@@ -18,7 +18,7 @@
                 <th lay-data="{field:'url', minWidth:300}">Url</th>
                 <th lay-data="{field:'content', width:500,sort:true}">Language</th>
                 <th lay-data="{field:'created_at', minWidth:160}">CreatedAt</th>
-                <th lay-data="{fixed: 'right', minWidth:160, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', minWidth:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>

@@ -136,7 +136,7 @@ class QuestionController extends Controller
         foreach ($content as $key=>$item) {
             $fileName = $key.$question['id'].'.html';
             $html  = '<!DOCTYPE html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">';
-            $html .= "<title>{$title[$key]}</title><style> body { word-break:break-word;}</style></head><body ontouchstart=''><div id='container' class='container'><div>{$header[$key]}</div>";
+            $html .= "<title>{$title[$key]}</title><style> body { word-break:break-word;margin-top: 16px;margin-bottom: 3px;padding-left: 16px;padding-right: 16px;}.title{margin-top: 16px;margin-bottom: 3px;padding-left: 16px;padding-right: 16px;color: rgba(0,0,0,.5);font-size: 14px;line-height: 1.4;}</style></head><body ontouchstart=''><div id='container' class='container'><div class='title'>{$header[$key]}</div>";
             $html .= $item;
             $html .= '</div></body>';
             file_put_contents($fileName, ($html));
