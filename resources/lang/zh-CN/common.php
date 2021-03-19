@@ -17,7 +17,6 @@ return [
         'delete'=>'确认要删除吗？',
         'update'=>'确认要更新吗？',
         'unpopular'=>'确认要打入冷宫吗？',
-        'clearCache'=>'确认要清空缓存吗？',
         'yes'=>'确认',
         'cancel'=>'取消',
     ],
@@ -37,12 +36,7 @@ return [
             'edit'=>'编辑',
             'delete'=>'删除',
             'detail'=>'查看',
-            'check'=>'审核',
-            'unpopular'=>'冷宫',
-            'friend'=>'好友数',
-            'history'=>'活跃历史',
-            'chat'=>'聊天历史',
-            'upload'=>'上传'
+            'check'=>'审核'
         ],
         'header'=>[
             'status'=>'状态',

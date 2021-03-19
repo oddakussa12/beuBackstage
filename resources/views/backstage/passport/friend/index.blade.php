@@ -136,7 +136,7 @@
                 if(layEvent === 'history'){ //活跃历史
                     layer.open({
                         type: 2,
-                        title: "{{trans('common.table.button.history')}}",
+                        title: "{{trans('user.table.button.history')}}",
                         shadeClose: true,
                         shade: 0.8,
                         area: ['70%','90%'],
