@@ -5,7 +5,7 @@
             @foreach($menu_path as $menu_id)
                 @foreach($native_menus as $menu)
                     @if($menu_id==$menu['menu_id'])
-                        <a href="javascript:;">{{$menu['menu_name']}}</a>
+                        <a href="javascript:;">{{isset($menu['menu_name'])?$menu['menu_name']:''}}</a>
                     @endif
                 @endforeach
             @endforeach
