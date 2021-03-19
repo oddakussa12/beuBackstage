@@ -12,10 +12,10 @@
             <thead>
             <tr>
                 <th lay-data="{field:'id', width:100}">ID</th>
-                <th lay-data="{field:'title', minWidth:200,sort:true}">Title</th>
+                <th lay-data="{field:'title', minWidth:200}">Title</th>
                 <th lay-data="{field:'status', minWidth:150,}">Status</th>
                 <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">Sort</th>
-                <th lay-data="{field:'url', minWidth:250,edit: 'text'}">Url</th>
+                <th lay-data="{field:'url', minWidth:300}">Url</th>
                 <th lay-data="{field:'content', width:500,sort:true}">Language</th>
                 <th lay-data="{field:'created_at', minWidth:160}">CreatedAt</th>
                 <th lay-data="{fixed: 'right', minWidth:160, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
