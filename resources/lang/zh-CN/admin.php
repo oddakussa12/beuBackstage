@@ -10,6 +10,7 @@ return [
             'admin_status'=>'状态',
             'admin_role'=>'角色',
             'admin_name'=>'真实姓名',
+            'admin_country'=>'国家',
             'admin_created_at'=>'添加时间',
             'admin_op'=>'操作',
         ]
@@ -19,6 +20,7 @@ return [
             'admin_username'=>'昵称',
             'admin_realname'=>'真实姓名',
             'admin_email'=>'邮箱',
+            'admin_country'=>'国家',
             'admin_sex'=>'性别',
             'admin_status'=>'状态',
             'admin_role'=>'角色',
@@ -31,6 +33,7 @@ return [
             'admin_username'=>'请输入账号',
             'admin_email'=>'请输入邮箱',
             'admin_realname'=>'请输入真实姓名',
+            'admin_country'=>'请选择国家',
             'admin_sex'=>'请输入性别',
             'admin_status'=>'请输入状态'
         ],

@@ -10,6 +10,7 @@ return [
             'admin_status'=>'STATUS',
             'admin_role'=>'ROLE',
             'admin_name'=>'REAL_NAME',
+            'admin_country'=>'COUNTRY',
             'admin_created_at'=>'UPDATED_AT',
             'admin_op'=>'OPERATE',
         ]
@@ -19,6 +20,7 @@ return [
             'admin_username'=>'NICK_NAME',
             'admin_realname'=>'REAL_NAME',
             'admin_email'=>'EMAIL',
+            'admin_country'=>'COUNTRY',
             'admin_sex'=>'SEX',
             'admin_status'=>'STATUS',
             'admin_role'=>'ROLE',
@@ -31,6 +33,7 @@ return [
             'admin_username'=>'please input Username',
             'admin_email'=>'please input your email',
             'admin_realname'=>'please enter your real name',
+            'admin_country'=>'Please select a country',
             'admin_sex'=>'please enter gender',
             'admin_status'=>'please enter the status'
         ],

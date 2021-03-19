@@ -96,10 +96,10 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.table.header.user_country')}}</label>
+                    <label class="layui-form-label">{{trans('admin.table.header.admin_country')}}</label>
                     <div class="layui-input-block">
                         <select  name="admin_country" lay-verify="" lay-search  >
-                            <option value="">{{trans('comment.form.placeholder.comment_country_id')}}</option>
+                            <option value="">{{trans('admin.form.placeholder.admin_country')}}</option>
                             @foreach($countries  as $country)
                                 <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
                             @endforeach
