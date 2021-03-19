@@ -113,7 +113,6 @@ class FriendController extends Controller
             $item->from = $users->where('user_id' , $item->request_from_id)->values()->first();
             $item->to = $users->where('user_id' , $item->request_to_id)->values()->first();
         });
-        dd($requests);
         return view('backstage.passport.friend.request', compact('requests' , 'from' , 'to' , 'appends'));
     }
 

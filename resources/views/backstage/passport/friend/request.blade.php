@@ -4,18 +4,17 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">From:</label>
+                    <label class="layui-form-label">{{trans('friend.form.label.from')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" placeholder="fuzzy search" name="from" id="from"  @if(!empty($from)) value="{{$from}}" @endif />
+                        <input class="layui-input" placeholder="" name="from" id="from"  @if(!empty($from)) value="{{$from}}" @endif />
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">To:</label>
+                    <label class="layui-form-label">{{trans('friend.form.label.to')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" placeholder="fuzzy search" name="to" id="to"  @if(!empty($to)) value="{{$to}}" @endif />
+                        <input class="layui-input" placeholder="" name="to" id="to"  @if(!empty($to)) value="{{$to}}" @endif />
                     </div>
                 </div>
-
                 <div class="layui-inline">
                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
                 </div>
@@ -24,17 +23,28 @@
         <table class="layui-table"  lay-filter="common_table">
             <thead>
             <tr>
-                <th  lay-data="{field:'user_id', width:130 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
-                <th  lay-data="{field:'user_name', width:130 ,fixed: 'left'}">{{trans('user.table.header.user_name')}}</th>
-                <th  lay-data="{field:'user_nick_name', width:130 ,fixed: 'left'}">{{trans('user.table.header.user_nick_name')}}</th>
-
+                <th  lay-data="{field:'id', width:130 ,fixed: 'left'}">{{trans('friend.table.header.id')}}</th>
+                <th  lay-data="{field:'from_name', width:130 ,fixed: 'left'}">{{trans('friend.table.header.from_name')}}</th>
+                <th  lay-data="{field:'from_nick_name', width:130 ,fixed: 'left'}">{{trans('friend.table.header.from_nick_name')}}</th>
+                <th  lay-data="{field:'to_name', width:130}">{{trans('friend.table.header.to_name')}}</th>
+                <th  lay-data="{field:'to_nick_name', width:130}">{{trans('friend.table.header.to_nick_name')}}</th>
+                <th  lay-data="{field:'status', width:130}">{{trans('friend.table.header.status')}}</th>
+                <th  lay-data="{field:'to_nick_name', width:130}">{{trans('friend.table.header.user_nick_name')}}</th>
+                <th  lay-data="{field:'created_at', width:130}">{{trans('friend.table.header.created_at')}}</th>
+                <th  lay-data="{field:'updated_at', width:130}">{{trans('friend.table.header.updated_at')}}</th>
             </tr>
             </thead>
             <tbody>
             @foreach($requests as $request)
                 <tr>
-                    <td>{{$request->request_from_id}}</td>
-                    <td>{{$request->request_from_id}}</td>
+                    <td>{{$request->request_id}}</td>
+                    <td>{{$request->from->user_name}}</td>
+                    <td>{{$request->from->user_nick_name}}</td>
+                    <td>{{$request->to->user_name}}</td>
+                    <td>{{$request->to->user_nick_name}}</td>
+                    <td>{{$request->request_state}}</td>
+                    <td>{{$request->request_created_at}}</td>
+                    <td>{{$request->request_updated_at}}</td>
                 </tr>
             @endforeach
             </tbody>
@@ -55,13 +65,10 @@
             common: 'lay/modules/admin/common',
             echarts: 'lay/modules/echarts',
             timePicker: 'lay/modules/admin/timePicker',
-        }).use(['common' , 'table' , 'layer' , 'element' , 'element', 'flow' , 'laydate' , 'timePicker', 'echarts'], function () {
+        }).use(['common' , 'table' , 'element'], function () {
             let $ = layui.jquery,
-                table = layui.table,
-                flow = layui.flow,
-                echarts = layui.echarts,
-                element = layui.element,
-                timePicker = layui.timePicker;
+                table = layui.table;
+
             table.init('common_table', { //转化静态表格
                 page:false
             });
