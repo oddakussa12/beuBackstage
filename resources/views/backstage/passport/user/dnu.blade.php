@@ -1,22 +1,5 @@
-@extends('layouts.app')
-@section('title', trans('common.header.title'))
-@section('content')
-    <div class="layui-header">
-        <!-- 引入头部 -->
-        @include('layouts.nav')
-    </div>
-    <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree">
-                @include('layouts.side')
-            </ul>
-        </div>
-    </div>
-    <div class="layui-body">
-        <!-- 内容主体区域 -->
-            @include('layouts.bread_crumb')
-
+@extends('layouts.dashboard')
+@section('layui-content')
         <div class="layui-tab" lay-filter="dnu">
             <ul class="layui-tab-title">
                 <li lay-id="0">DNU</li>
@@ -24,89 +7,78 @@
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item ">
-                    <div class="layui-fluid">
-                        <form class="layui-form" action="">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item">
                             <div class="layui-inline">
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">Type:</label>
-                                    <div class="layui-inline">
-                                        <select name="type"  lay-filter="type" lay-search>
-                                            <option value="country" @if($type=='country') selected @endif>Country</option>
-                                            <option value="school" @if($type=='school') selected @endif>School</option>
-                                        </select>
-                                    </div>
+                                <label class="layui-form-label">Type:</label>
+                                <div class="layui-input-inline">
+                                    <select name="type"  lay-filter="type" lay-search>
+                                        <option value="country" @if($type=='country') selected @endif>Country</option>
+                                        <option value="school" @if($type=='school') selected @endif>School</option>
+                                    </select>
                                 </div>
                             </div>
+
                             <div class="layui-inline"  @if($type!='school') style="display: none;"  @endif id="schoolDiv">
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">School:</label>
-                                    <div class="layui-input-inline">
-                                        <select name="school" lay-verify="" lay-search id="school">
-                                            <option value="">{{trans('user.form.placeholder.user_school')}}</option>
-                                            @foreach($schools  as $s)
-                                                <option value="{{$s}}" @if($s==$school) selected @endif>{{$s}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                <label class="layui-form-label">School:</label>
+                                <div class="layui-input-inline">
+                                    <select name="school" lay-verify="" lay-search id="school">
+                                        <option value="">{{trans('user.form.placeholder.user_school')}}</option>
+                                        @foreach($schools  as $s)
+                                            <option value="{{$s}}" @if($s==$school) selected @endif>{{$s}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             @if(Auth::user()->hasRole('administrator'))
                             <div class="layui-inline"  @if($type!='country') style="display: none;"  @endif id="countryDiv">
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
-                                    <div class="layui-inline">
-                                        <select name="country_code" lay-verify="" lay-search id="country">
-                                            <option value="">{{trans('user.form.placeholder.user_country')}}</option>
-                                            <option value="all" @if($country_code=='all') selected @endif>All</option>
-                                            @foreach($countries  as $country)
-                                                <option value="{{strtolower($country['code'])}}" @if($country_code==strtolower($country['code'])) selected @endif>{{$country['name']}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
+                                <div class="layui-input-inline">
+                                    <select name="country_code" lay-verify="" lay-search id="country">
+                                        <option value="">{{trans('user.form.placeholder.user_country')}}</option>
+                                        <option value="all" @if($country_code=='all') selected @endif>All</option>
+                                        @foreach($countries  as $country)
+                                            <option value="{{strtolower($country['code'])}}" @if($country_code==strtolower($country['code'])) selected @endif>{{$country['name']}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             @endif
                             <div class="layui-inline">
-                                <div class="layui-form-item">
-                                    <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" class="layui-input" name="start" id="start" readonly="" placeholder="yyyy-MM-dd" value="{{$startTime}}">
-                                    </div>
-                                    <div class="layui-inline">
-                                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                                    </div>
+                                <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" name="start" id="start" readonly="" placeholder="yyyy-MM-dd" value="{{$startTime}}">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
                                 </div>
                             </div>
-                        </form>
-                        <table class="layui-table" >
-                            <thead>
+
+                        </div>
+                    </form>
+                    <table class="layui-table"  class="layui-table"  lay-filter="common_table">
+                        <thead>
+                        <tr>
+                            <th lay-data="{field:'Day', width:120 ,fixed: 'left'}">Day</th>
+                            <th lay-data="{field:'DNU', minWidth:100}">DNU</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($list as $l)
                             <tr>
-                                <th>Day</th>
-                                <th>DNU</th>
+                                <td>{{$l['date']}}</td>
+                                <td>{{$l['num']}}</td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($list as $l)
-                                <tr>
-                                    <td>{{$l['date']}}</td>
-                                    <td>{{$l['num']}}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
                 <div class="layui-tab-item layui-show"  id="layui-echarts">
                     <div id="container" style="height: 100%">
                 </div>
             </div>
         </div>
-    </div>
-    <div class="layui-footer">
-        <!-- 底部固定区域 -->
-        © {{ trans('common.company_name') }}
-    </div>
-
+        </div>
 @endsection
 @section('footerScripts')
     @parent
@@ -137,7 +109,9 @@
                 ,max : -2
                 ,lang: 'en'
             });
-
+            table.init('common_table', {
+                page:false,
+            });
             var dom = document.getElementById("container");
             var myChart = echarts.init(dom);
             var app = {};

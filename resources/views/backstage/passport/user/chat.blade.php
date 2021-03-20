@@ -6,21 +6,19 @@
             <div class="layui-inline">
                 <label class="layui-form-label">{{trans('user.form.label.user_created_at')}}:</label>
                 <div class="layui-input-inline">
-                    {{--                    <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>--}}
                     <input type="hidden" id="user_id" name="user_id" value="{{$user_id}}">
                     <input type="text" class="layui-input" id="dateTime" name="dateTime" placeholder="yyyy-MM-dd" value="@if(!empty($dateTime)){{$dateTime}}@else{{date('Y-m-d', time())}}@endif">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">{{trans('user.form.common.form.label.sort')}}:</label>
+                <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                 <div class="layui-input-inline">
                     <select  name="sort">
-                        <option value="chat_from_id" @if(!empty($sort)&&$sort=='chat_from_id') selected @endif>发送数</option>
-                        <option value="chat_to_id" @if(!empty($sort)&&$sort=='chat_to_id') selected @endif>接收数</option>
+                        <option value="chat_from_id" @if(!empty($sort)&&$sort=='chat_from_id') selected @endif>Quantity sent</option>
+                        <option value="chat_to_id" @if(!empty($sort)&&$sort=='chat_to_id') selected @endif>Quantity received</option>
                     </select>
                 </div>
             </div>
-
             <div class="layui-inline">
                 <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
             </div>

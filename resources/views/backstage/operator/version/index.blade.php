@@ -9,13 +9,15 @@
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <div class="layui-fluid">
-                        <form class="layui-form" action="" lay-filter="keep">
-                            <div class="layui-form-item">
+                        <form class="layui-form" action="" lay-filter="static_table">
+                            <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                                 <div class="layui-input-inline">
                                     <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder="yyyy-MM-dd - yyyy-MM-dd" @if(!empty($params['dateTime']))value="{{$params['dateTime']}}"@endif>
                                 </div>
-                                <div class="layui-inline">
+                            </div>
+                            <div class="layui-inline">
+                                <div class="layui-input-inline">
                                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
                                 </div>
                             </div>
@@ -23,9 +25,9 @@
                         <table class="layui-table">
                             <thead>
                             <tr>
-                                <th>Time</th>
-                                <th>Version</th>
-                                <th>Number</th>
+                                <th   lay-data="{field:'time', width:110}">Time</th>
+                                <th   lay-data="{field:'version', width:110}">Version</th>
+                                <th   lay-data="{field:'number', width:110}">Number</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -68,8 +70,9 @@
         }).extend({
             common: 'lay/modules/admin/common',
             echarts: 'lay/modules/echarts',
-        }).use(['element','common', 'laydate' , 'echarts'], function () {
+        }).use(['element','common', 'laydate' , 'echarts' , 'table'], function () {
             let $ = layui.jquery,
+                table = layui.table,
                 element = layui.element,
                 echarts = layui.echarts,
                 laydate = layui.laydate;
@@ -78,6 +81,9 @@
                 ,range: true
                 ,max : 'today'
                 ,lang: 'en'
+            });
+            table.init('static_table', {
+                page:false
             });
 
             let dom = document.getElementById("container");

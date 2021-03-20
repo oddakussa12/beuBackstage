@@ -3,21 +3,18 @@
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-inline">
-{{--                <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>--}}
-                <div class="layui-btn layui-btn-primary">{{$data->total()}}</div>
                 <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
             </div>
         </form>
         <table class="layui-table"   lay-filter="category_table" id="category_table" >
             <thead>
             <tr>
-                <th lay-data="{field:'id', width:100}">ID</th>
+                <th lay-data="{field:'id', width:100 ,fixed: 'left'}">ID</th>
                 <th lay-data="{field:'name', width:150,sort:true}">Name</th>
                 <th lay-data="{field:'language', width:500,sort:true}">Language</th>
-                <th lay-data="{field:'is_delete', maxWidth:200,}">Status</th>
+                <th lay-data="{field:'is_delete', width:100,}">Status</th>
                 <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">Sort</th>
                 <th lay-data="{field:'created_at', width:160}">CreatedAt</th>
-{{--                <th lay-data="{field:'updated_at', width:160}">UpdatedAt</th>--}}
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
@@ -27,11 +24,9 @@
                     <td>{{$value->id}}</td>
                     <td>{{$value->name}}</td>
                     <td>{{$value->language}}</td>
-                    <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="ONLINE|OFFLINE"></td>
+                    <td><input type="checkbox" @if($value->is_delete==0) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll"></td>
                     <td>{{$value->sort}}</td>
                     <td>{{$value->created_at}}</td>
-{{--                    <td>{{$value->updated_at}}</td>--}}
-{{--                    <td>@if($value->deleted_at=='0000-00-00 00:00:00')@else{{$value->deleted_at}}@endif</td>--}}
                     <td></td>
                 </tr>
             @endforeach
@@ -66,12 +61,11 @@
                     var id = data.id;
                     layer.open({
                         type: 2,
-                        title: 'Category',
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['50%','90%'],
+                        area: ['80%','80%'],
                         offset: 'auto',
-                        'scrollbar':true,
+                        scrollbar:true,
                         content: '/backstage/props/category/'+id+'/edit',
                     });
                 }
@@ -150,7 +144,7 @@
                     title: 'Category',
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['50%','90%'],
+                    area: ['80%','80%'],
                     offset: 'auto',
                     content: '/backstage/props/category/create',
                 });

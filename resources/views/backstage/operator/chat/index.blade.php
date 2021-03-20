@@ -7,90 +7,88 @@
         </ul>
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
-                <div class="layui-fluid">
-                    <form class="layui-form" action="" lay-filter="keep">
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('user.form.label.user_name')}}:</label>
-                                <div class="layui-input-inline">
-                                    <input class="layui-input" placeholder="fuzzy search" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('user.form.label.user_school')}}:</label>
-                                <div class="layui-input-inline">
-                                    <select  name="school" lay-verify="" lay-search  id="school">
-                                        <option value="">{{trans('user.form.placeholder.user_school')}}</option>
-                                        @foreach($schools  as $s)
-                                            <option value="{{$s}}" @if(!empty($school)&&$school==$s) selected @endif>{{$s}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
-                                <div class="layui-input-inline">
-                                    <select  name="country_code" lay-verify="" lay-search  >
-                                        <option value="">{{trans('user.form.placeholder.user_country')}}</option>
-                                        @foreach($countries  as $country)
-                                            <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-inline">
-                            <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">{{trans('user.form.label.user_name')}}:</label>
                             <div class="layui-input-inline">
-                                <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder="yyyy-MM-dd - yyyy-MM-dd" @if(!empty($dateTime))value="{{$dateTime}}"@endif>
-                            </div>
-                            </div>
-
-                            <div class="layui-inline">
-                                <button class="layui-btn" type="submit" lay-submit >{{trans('common.form.button.submit')}}</button>
+                                <input class="layui-input" placeholder="fuzzy search" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
                             </div>
                         </div>
-                    </form>
-                    <table class="layui-table">
-                        <thead>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">{{trans('user.form.label.user_school')}}:</label>
+                            <div class="layui-input-inline">
+                                <select  name="school" lay-verify="" lay-search  id="school">
+                                    <option value="">{{trans('user.form.placeholder.user_school')}}</option>
+                                    @foreach($schools  as $s)
+                                        <option value="{{$s}}" @if(!empty($school)&&$school==$s) selected @endif>{{$s}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
+                            <div class="layui-input-inline">
+                                <select  name="country_code" lay-verify="" lay-search  >
+                                    <option value="">{{trans('user.form.placeholder.user_country')}}</option>
+                                    @foreach($countries  as $country)
+                                        <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                        <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder="yyyy-MM-dd - yyyy-MM-dd" @if(!empty($dateTime))value="{{$dateTime}}"@endif>
+                        </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn" type="submit" lay-submit >{{trans('common.form.button.submit')}}</button>
+                        </div>
+                    </div>
+                </form>
+                <table class="layui-table"   lay-filter="static_table">
+                    <thead>
+                    <tr>
+                        <th  lay-data="{field:'user_id', width:110 ,fixed: 'left'}">ID</th>
+                        <th  lay-data="{field:'user_name', width:190}">{{trans('user.table.header.user_name')}}</th>
+                        <th  lay-data="{field:'user_nickname', width:190}">{{trans('user.table.header.user_nick_name')}}</th>
+                        <th  lay-data="{field:'video', width:80}">Video</th>
+                        <th  lay-data="{field:'num', width:100}">Chat Num</th>
+                        <th  lay-data="{field:'amount', width:100}">Amount</th>
+                        <th  lay-data="{field:'type', width:80}">Type</th>
+                        <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
+                        <th  lay-data="{field:'school', minWidth:200}">{{trans('user.table.header.user_school')}}</th>
+                        <th  lay-data="{field:'user_time', width:150}">{{trans('user.table.header.user_time')}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($list as $l)
                         <tr>
-                            <th>ID</th>
-                            <th>{{trans('user.table.header.user_name')}}</th>
-                            <th>{{trans('user.table.header.user_nick_name')}}</th>
-                            <th>Video</th>
-                            <th>Chat Num</th>
-                            <th>Amount</th>
-                            <th>Type</th>
-                            <th>{{trans('user.table.header.user_country')}}</th>
-                            <th>{{trans('user.table.header.user_school')}}</th>
-                            <th>{{trans('user.table.header.user_time')}}</th>
+                            <td>{{$l->user_id}}</td>
+                            <td>{{$l->user_name}}</td>
+                            <td>{{$l->user_nick_name}}</td>
+                            <td>{{$l->video}}</td>
+                            <td>{{$l->num}}</td>
+                            <td>{{$l->amount}}</td>
+                            <td>{{$l->type}}</td>
+                            <td>{{$l->country}}</td>
+                            <td>{{$l->school}}</td>
+                            <td>{{$l->time}}</td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($list as $l)
-                            <tr>
-                                <td>{{$l->user_id}}</td>
-                                <td>{{$l->user_name}}</td>
-                                <td>{{$l->user_nick_name}}</td>
-                                <td>{{$l->video}}</td>
-                                <td>{{$l->num}}</td>
-                                <td>{{$l->amount}}</td>
-                                <td>{{$l->type}}</td>
-                                <td>{{$l->country}}</td>
-                                <td>{{$l->school}}</td>
-                                <td>{{$l->time}}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    @if(empty($appends))
-                        {{ $list->links('vendor.pagination.default') }}
-                    @else
-                        {{ $list->appends($appends)->links('vendor.pagination.default') }}
-                    @endif
-                </div>
+                    @endforeach
+                    </tbody>
+                </table>
+                @if(empty($appends))
+                    {{ $list->links('vendor.pagination.default') }}
+                @else
+                    {{ $list->appends($appends)->links('vendor.pagination.default') }}
+                @endif
             </div>
             <div class="layui-tab-item"  id="layui-echarts">
                 <div id="container" style="height: 100%">
@@ -113,11 +111,10 @@
         }).extend({
             common: 'lay/modules/admin/common',
             echarts: 'lay/modules/echarts',
-        }).use(['element','common' , 'table', 'laydate' , 'echarts'], function () {
+        }).use(['element' , 'table', 'laydate' , 'echarts'], function () {
             let $ = layui.jquery,
                 element = layui.element,
                 table = layui.table,
-                common = layui.common,
                 echarts = layui.echarts,
                 laydate = layui.laydate;
             laydate.render({
@@ -125,6 +122,10 @@
                 ,range: true
                 ,max : 'today'
                 ,lang: 'en'
+            });
+
+            table.init('static_table', {
+                page:false
             });
 
             let dom = document.getElementById("container");

@@ -3,56 +3,67 @@
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-form-item">
-                <label class="layui-form-label">Name:</label>
-                <div class="layui-input-inline">
-                    <input class="layui-input" name="name" id="name" value="@if(!empty($name)){{$name}}@endif" />
+                <div class="layui-inline">
+                    <label class="layui-form-label">Name:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="name" id="name" value="@if(!empty($name)){{$name}}@endif" />
+                    </div>
                 </div>
-                <label class="layui-form-label">Category:</label>
-                <div class="layui-input-inline">
-                    <select  name="category">
-                        <option value="">All</option>
-                        @foreach($categories as $cate)
-                            <option value="{{$cate->name}}" @if(isset($category) && $category==$cate->name) selected @endif>{{$cate->name}}</option>
-                        @endforeach
-                    </select>
+                <div class="layui-inline">
+                    <label class="layui-form-label">Category:</label>
+                    <div class="layui-input-inline">
+                        <select  name="category">
+                            <option value="">All</option>
+                            @foreach($categories as $cate)
+                                <option value="{{$cate->name}}" @if(isset($category) && $category==$cate->name) selected @endif>{{$cate->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                <label class="layui-form-label">Sort:</label>
-                <div class="layui-input-inline">
-                    <select  name="sort">
-                        <option value="">All</option>
-                        <option value="desc" @if(isset($sort) && $sort=='desc') selected @endif>DESC</option>
-                        <option value="asc" @if(isset($sort) && $sort=='asc') selected @endif>ASC</option>
-                    </select>
+                <div class="layui-inline">
+                    <label class="layui-form-label">Sort:</label>
+                    <div class="layui-input-inline">
+                        <select  name="sort">
+                            <option value="">All</option>
+                            <option value="desc" @if(isset($sort) && $sort=='desc') selected @endif>DESC</option>
+                            <option value="asc" @if(isset($sort) && $sort=='asc') selected @endif>ASC</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">Recommend:</label>
-                <div class="layui-input-inline">
-                    <select  name="recommend">
-                        <option value="">All</option>
+                <div class="layui-inline">
+                    <label class="layui-form-label">Recommend:</label>
+                    <div class="layui-input-inline">
+                        <select  name="recommend">
+                            <option value="">All</option>
                             <option value="1" @if(isset($recommend) && $recommend=='1') selected @endif>YES</option>
                             <option value="0" @if(isset($recommend) && $recommend=='0') selected @endif>NO</option>
-                    </select>
+                        </select>
+                    </div>
                 </div>
-                <label class="layui-form-label">Hot:</label>
-                <div class="layui-input-inline">
-                    <select  name="hot">
-                        <option value="">All</option>
-                        <option value="1" @if(isset($hot) && $hot=='1') selected @endif>YES</option>
-                        <option value="0" @if(isset($hot) && $hot=='0') selected @endif>NO</option>
-                    </select>
+                <div class="layui-inline">
+                    <label class="layui-form-label">Hot:</label>
+                    <div class="layui-input-inline">
+                        <select  name="hot">
+                            <option value="">All</option>
+                            <option value="1" @if(isset($hot) && $hot=='1') selected @endif>YES</option>
+                            <option value="0" @if(isset($hot) && $hot=='0') selected @endif>NO</option>
+                        </select>
+                    </div>
                 </div>
-                <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                <div class="layui-btn layui-btn-primary">{{$data->total()}}</div>
-                <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
+                <div class="layui-inline">
+                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
+                </div>
             </div>
         </form>
         <table class="layui-table"   lay-filter="props_table" id="props_table" >
             <thead>
             <tr>
                 <th lay-data="{field:'id', width:80 , fixed: 'left'}">ID</th>
-                <th lay-data="{field:'cover', width:80, fixed: 'left'}">Image</th>
-                <th lay-data="{field:'name', minWidth:150,sort:true, fixed: 'left'}">Name</th>
+                <th lay-data="{field:'name', minWidth:100,sort:true, fixed: 'left'}">Name</th>
+                <th lay-data="{field:'cover', width:80}">Image</th>
                 <th lay-data="{field:'recommendation', width:120}">Recommend</th>
                 <th lay-data="{field:'category', minWidth:120}">Category</th>
                 <th lay-data="{field:'camera', width:80}">Camera</th>
@@ -70,9 +81,8 @@
             @foreach($data as $value)
                 <tr>
                     <td>{{$value->id}}</td>
-                    <td><img style="width: 33px;" src="{{$value->cover}}"></td>
                     <td>{{$value->name}}</td>
-{{--                    <td>{{$value->type}}</td>--}}
+                    <td><img style="width: 33px;" src="{{$value->cover}}"></td>
                     <td><input type="checkbox" @if($value->recommendation==1) checked @endif name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>{{$value->category}}</td>
                     <td>{{$value->camera}}</td>
@@ -122,9 +132,7 @@
                         title: 'Props settings',
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['60%','90%'],
-                        offset: 'auto',
-                        'scrollbar':true,
+                        area: ['80%','500px'],
                         content: '/backstage/props/props/'+id+'/edit',
                     });
                 }
@@ -203,7 +211,7 @@
                     title: 'Props settings',
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['60%','90%'],
+                    area: ['60%','500px'],
                     offset: 'auto',
                     content: '/backstage/props/props/create',
                 });

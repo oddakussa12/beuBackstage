@@ -4,31 +4,23 @@
     @php
         $qn_token = qnToken('qn_event_source');
     @endphp
-    {{--    <meta name="csrf-token" content="{{ csrf_token() }}">--}}
-    <fieldset class="layui-elem-field layui-field-title">
-        <legend></legend>
-    </fieldset>
-    <div class="layui-container">
-        <style>
-            .layui-layout-body {overflow: auto;}
-            .layui-form-label {padding:9px; width: 112px;}
-            .layui-input {width: 200px;}
-            .layui-input-block {width:200px; padding-left:20px;}
-        </style>
-        <form class="layui-form layui-tab-content">
+    <div class="layui-card">
+        <form class="layui-form layui-card-body">
             {{ csrf_field() }}
             <div class="layui-form-item">
-                <label class="layui-form-label">Category：</label>
                 <div class="layui-inline">
-                    <select  name="category">
-                        @foreach($categories as $category)
-                            <option value="{{$category->name}}">{{$category->name}}</option>
-                        @endforeach;
-                    </select>
+                    <label class="layui-form-label">Category：</label>
+                    <div class="layui-input-inline">
+                        <select  name="category">
+                            @foreach($categories as $category)
+                                <option value="{{$category->name}}">{{$category->name}}</option>
+                            @endforeach;
+                        </select>
+                    </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Camera：</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <select  name="camera">
                             <option value="front">front</option>
                             <option value="back">back</option>
@@ -39,7 +31,7 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">Recommendation：</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <select  name="recommendation" >
                             <option value="0">NO</option>
                             <option value="1">YES</option>
@@ -48,7 +40,7 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Status：</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <select  name="is_delete" >
                             <option value="1">ONLINE</option>
                             <option value="0">OFFLINE</option>
@@ -59,14 +51,14 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">Name：</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <input type="hidden" id="hash" name="hash" value="">
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Hotting：</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <select  name="hot" >
                             <option value="0">NO</option>
                             <option value="1">YES</option>
@@ -77,14 +69,14 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">Image：</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <input type="hidden" id="cover" name="cover" />
                         <button type="button" id="upload" name="upload" class="layui-btn"><i class="layui-icon"></i>Upload Image</button>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label"></label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <img style="width:200px;display:none;" id="show" name="show" />
                     </div>
                 </div>
@@ -92,7 +84,7 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">Bundle：</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <input type="hidden" id="url" name="url" />
                         <button type="button" id="uploads" name="uploads" class="layui-btn"><i class="layui-icon"></i>Upload Bundle</button>
                         <span style="" id="bundle" name="bundle"></span>
