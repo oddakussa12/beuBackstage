@@ -126,15 +126,12 @@ class QuestionController extends Controller
     {
         $question = Question::find($id);
 
-        $title = [
-            'en' => 'Help Center',
-            'zh-CN' => '常见问题',
-        ];
-        $header = [
-            'en' => 'Popular Topics',
-            'zh-CN' => '请选择问题发生的场景',
-        ];
+        /*foreach ($this->language as $item) {
+            $title[$item]  = $item=='en' ? 'Help Center' : '常见问题';
+            $header[$item] = $item=='en' ? 'Popular Topics' : '请选择问题发生的场景';
+        }*/
 
+        $title   = json_decode($question['title'], true);
         $content = json_decode($question['content'], true);
 
         $url = [];
@@ -142,7 +139,7 @@ class QuestionController extends Controller
             $fileName = $key.$question['id'].'.html';
             $html  = '<!DOCTYPE html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">';
             $html .= "<title>{$title[$key]}</title><style> body { word-break:break-word;margin-top: 16px;margin-bottom: 3px;padding-left: 16px;padding-right: 16px;}.title{color: rgba(0,0,0,.5);font-size: 14px;line-height: 1.4;}</style></head><body ontouchstart=''>";
-            $html .= "<div id='container' class='container'><div class='title'>{$header[$key]}</div><div class='content'></div>";
+            $html .= "<div id='container' class='container'><div class='title'>{$title[$key]}</div><div class='content'></div>";
             $html .= $item;
             $html .= '</div></div></body>';
 
