@@ -1,8 +1,10 @@
 @extends('layouts.dashboard')
 @section('layui-content')
+    <style> .url{margin-right: 20px;color: #01AAED}</style>
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-inline">
+                <div class="layui-btn layui-btn-primary">{{$data->total()}}</div>
                 <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
             </div>
         </form>
@@ -31,7 +33,7 @@
                     <td><input type="checkbox" @if($value->status==1) checked @endif name="status" lay-skin="switch" lay-filter="switchAll" lay-text="ONLINE|OFFLINE"></td>
                     <td>{{$value->sort}}</td>
                     <td>@if(is_array($value->url))@foreach($value->url as $key=>$item)
-                            <a target="_blank" href="{{$item}}">{{$key}}</a>
+                            <a class="url" target="_blank" href="{{$item}}">{{$key}}</a>
                             @endforeach
                             @endif
                     </td>
@@ -88,6 +90,7 @@
                         common.ajax("{{url('/backstage/lovbee/question/upload')}}/"+data.id , '' , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                             table.render();
+                            location.reload();
                         } , 'get' , function (event,xhr,options,exc) {
                             setTimeout(function(){
                                 common.init_error(event,xhr,options,exc);

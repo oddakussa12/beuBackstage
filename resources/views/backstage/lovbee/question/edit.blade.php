@@ -4,38 +4,37 @@
         $qn_token = qnToken('qn_event_source');
     @endphp
     <style type="text/css">
-        table input{ /*可输入区域样式*/
-            width:100%;
-            height: 25px;
-            border:none; /* 输入框不要边框 */
-            font-family:Arial;
-        }
+        .layui-input { width: 300px;}
         .layui-form-select {z-index: 11000;}
         .layui-input, .layui-form-select {min-width: 300px;}
         .layui-table td, .layui-table th {padding: 5px;}
-        .layui-layout-body {max-height: 600px; overflow-y: scroll;}
+        .layui-layout-body {max-height: 95%; overflow-y: scroll;}
     </style>
     <div class="layui-fluid">
         <form class="layui-form layui-tab-content">
             {{ csrf_field() }}
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Title：</label>
+                    <label class="layui-form-label">Title EN：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="id" name="id" value="{{$data->id}}">
-                        <input type="text" style="min-width: 300px;" id="title" name="title" required="required" autocomplete="off" class="layui-input" value="{{$data->title}}">
+                        <input type="text" id="title_en" name="title_en" required="required" placeholder="Only English" autocomplete="off" class="layui-input" value="{{$data->title['en']}}">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">Title CN：</label>
+                    <div class="layui-input-block">
+                        <input type="text" style="min-width: 300px;" id="title_zh-CN" name="title_zh-CN" placeholder="仅可中文"  required="required" autocomplete="off" class="layui-input" value="{{$data->title['zh-CN']}}">
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item" style="margin-bottom: 50px;">
                 <div class="layui-inline">
                     <label class="layui-form-label">Sort：</label>
                     <div class="layui-input-block">
                         <input type="text" id="sort" name="sort" required="required" autocomplete="off" class="layui-input" value="{{$data->sort}}">
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item" style="margin-bottom: 50px;">
                 <div class="layui-inline">
                     <label class="layui-form-label">Status：</label>
                     <div class="layui-input-block">
@@ -93,7 +92,7 @@
                     if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/lovbee/question')}}/", params, function(res){
+                common.ajax("{{url('/backstage/lovbee/question')}}/"+params.id, params, function(res){
                     console.log(res);
                     console.log(res.code);
                     if (res.code!== undefined) {
@@ -103,7 +102,7 @@
                         });
                     }
                     parent.location.reload();
-                } , 'post');
+                } , 'patch');
                 return false;
             });
 

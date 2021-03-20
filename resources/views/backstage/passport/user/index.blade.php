@@ -60,7 +60,6 @@
                         <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
                         <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_active_time')}}</th>
                         <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_active_ip')}}</th>
-
                         <th  lay-data="{field:'activation', width:70}">{{trans('user.table.header.user_activation')}}</th>
                         <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
                         <th  lay-data="{field:'user_op', minWidth:150 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>

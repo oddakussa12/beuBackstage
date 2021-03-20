@@ -36,6 +36,7 @@ class QuestionController extends Controller
         $params = $request->all();
         $result = Question::orderByDesc('id')->paginate(10);
         foreach ($result as $item) {
+            $item['title']   = json_decode($item['title'], true);
             $item['content'] = json_decode($item['content'], true);
             $item['url']     = json_decode($item['url'], true);
         }
@@ -67,9 +68,11 @@ class QuestionController extends Controller
         $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
         $params['content'] = json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
         $params['created_at'] = date('Y-m-d H:i:s');
+
         foreach ($this->language as $item) {
             unset($params[$item]);
         }
+
         Question::create($params);
         return response()->json(['result'=>'success']);
     }
@@ -86,6 +89,7 @@ class QuestionController extends Controller
         $data = Question::find($id);
         if (!empty($data)) {
             $data['content'] = json_decode($data['content'], true);
+            $data['title']   = json_decode($data['title'], true);
         }
         return view('backstage.lovbee.question.edit', ['data' => $data, 'languages'=>$this->language]);
     }
@@ -101,15 +105,16 @@ class QuestionController extends Controller
     {
         $params   = $request->all();
         $question = Question::find($id);
-        if ($request->has('title')) {
+        if ($request->has('title_en')) {
             $this->validate($request, [
-                'title' => 'required|string',
+                'title_en' => 'required|string',
                 'en'    => 'required|string',
             ]);
+            $title   = ['en'=>$params['title_en'], 'zh-CN'=>$params['title_zh-CN']];
             $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
         }
         $question->content =  empty($content)          ? $question->content   : json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
-        $question->title   = !empty($params['title'])  ? $params['title']     : $question->title;
+        $question->title   =  empty($title)            ? $question->title     : json_encode($title   ?? [], JSON_UNESCAPED_UNICODE);
         $question->sort    = !empty($params['sort'])   ? (int)$params['sort'] : $question->sort;
         $question->status  = !empty($params['status']) ? $params['status']    : $question->status;
         $question->save();
@@ -121,26 +126,26 @@ class QuestionController extends Controller
     {
         $question = Question::find($id);
 
-        $title = [
-            'en' => 'Help Center',
-            'zh-CN' => '常见问题',
-        ];
-        $header = [
-            'en' => 'Popular Topics',
-            'zh-CN' => '请选择问题发生的场景',
-        ];
+        /*foreach ($this->language as $item) {
+            $title[$item]  = $item=='en' ? 'Help Center' : '常见问题';
+            $header[$item] = $item=='en' ? 'Popular Topics' : '请选择问题发生的场景';
+        }*/
 
+        $title   = json_decode($question['title'], true);
         $content = json_decode($question['content'], true);
 
         $url = [];
         foreach ($content as $key=>$item) {
             $fileName = $key.$question['id'].'.html';
             $html  = '<!DOCTYPE html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">';
-            $html .= "<title>{$title[$key]}</title><style> body { word-break:break-word;margin-top: 16px;margin-bottom: 3px;padding-left: 16px;padding-right: 16px;}.title{margin-top: 16px;margin-bottom: 3px;padding-left: 16px;padding-right: 16px;color: rgba(0,0,0,.5);font-size: 14px;line-height: 1.4;}</style></head><body ontouchstart=''><div id='container' class='container'><div class='title'>{$header[$key]}</div>";
+            $html .= "<title>{$title[$key]}</title><style> body { word-break:break-word;margin-top: 16px;margin-bottom: 3px;padding-left: 16px;padding-right: 16px;}.title{color: rgba(0,0,0,.5);font-size: 14px;line-height: 1.4;}</style></head><body ontouchstart=''>";
+            $html .= "<div id='container' class='container'><div class='title'>{$title[$key]}</div><div class='content'></div>";
             $html .= $item;
-            $html .= '</div></body>';
+            $html .= '</div></div></body>';
+
             file_put_contents($fileName, ($html));
             $result = $this->uploadQiNiu($fileName);
+
             if (!empty($result) && !empty($result['name'])) {
                 $url[$key] = $result['url'].$result['name'];
             }
