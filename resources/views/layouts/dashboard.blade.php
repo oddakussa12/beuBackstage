@@ -17,14 +17,18 @@
         </div>
     </div>
 
-        <div class="layui-body">
-            <!-- 内容主体区域 -->
-            <div class="layui-fluid">
-                @include('layouts.bread_crumb')
-                @yield('layui-content')
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="layui-fluid">
+            @include('layouts.bread_crumb')
+            @yield('layui-content')
+            <div class="site-tree-mobile layui-hide">
+                <i class="layui-icon">&#xe602;</i>
             </div>
-
+            <div class="site-mobile-shade"></div>
         </div>
+    </div>
+
 
     <div class="layui-footer">
         <!-- 底部固定区域 -->

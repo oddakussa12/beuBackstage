@@ -1,102 +1,134 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <style>
-        .layui-form-switch { width: 50px;}
-        .layui-input, .layui-form-select, .layui-form-selected{width: 100px; height: 30px;}
-        .layui-edge {right:0;left: 77px;}
-        .layui-input-block {padding:0px;margin-left: 10px}
-        .layui-form-switch {width: 60px; margin: 0px;}
-        /*.layui-form-switch i {top: 7px;}*/
-        .text-right {text-align: left; width: 35%}
-    </style>
     <div  class="layui-fluid">
-        <div style="width: 35%; float: left;">
-            <section id="videoPlayer">
-                <video id="my-player" style="width: 100%" class="video-js" controls muted data-setup='{"autoplay": true,"preload": "true"}'>
-                    @if(!empty($messages['message_content']))
-                        @if(preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$messages['message_content']))
-                        <source src="{{$messages['message_content']}}"></source>
-                        @else
-                        <source src="https://media.helloo.cn.mantouhealth.com/{{$messages['message_content']}}"></source>
+        <div class="layui-row">
+            <div class="layui-col-md3">
+                <section id="videoPlayer">
+                    <video id="my-player" style="width: 100%" class="video-js" controls muted data-setup='{"autoplay": true,"preload": "true"}'>
+                        @if(!empty($messages['message_content']))
+                            @if(preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$messages['message_content']))
+                            <source src="{{$messages['message_content']}}"></source>
+                            @else
+                            <source src="https://media.helloo.cn.mantouhealth.com/{{$messages['message_content']}}"></source>
+                            @endif
                         @endif
-                    @endif
-                    <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
-                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                    </p>
-                </video>
-                <input type="hidden" value="{{$page}}" name="page" id="page">
-            </section>
-        </div>
-        <div style="width:59%; float: left; margin-left: 1%;">
-            <table style="margin: 0px;" class="layui-table" lay-filter="post_table">
-                <tr>
-                    <td>Choose Date</td>
-                    <td>
-                        <form id="exportForm" method="get" action="/backstage/lovbee/message/export" class="layui-form">
-                            <input style="width: 200px; height: 30px; float: left;" readonly type="text" class="layui-input" name="dateTime" id="dateTime" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$dateTime}}">
-                            <button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-sm" name="export" id="export">Export</button>
-                        </form>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right">Choose Month </td>
-                    <td>
-                        <form class="layui-form">
-                            <select style="width: 100px;" name="month" lay-filter="month">
-                                @for($i=1; $i<=date('m'); $i++)
-                                    <option value="{{$i}}" @if(!empty($month) && $i==$month) selected @endif>{{$i}}</option>
-                                @endfor
-                            </select>
-                        </form>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right">AutoPlay</td>
-                    <td>
-                        <form class="layui-form"><input type="checkbox" name="auto" lay-filter="auto" lay-skin="switch" lay-text="ON|OFF"></form>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right">
-                        <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="left"><i class="layui-icon layui-icon-left"></i></button>
-                        <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="prev"><i class="layui-icon layui-icon-prev"></i></button>
-                        <input  style="float: left; width: 40px; height: 30px; margin-left: 10px; " type="text" name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
-                    </td>
-                    <td>
-                        <input style="width: 40px; height: 30px; margin-right: 10px; float: left;" type="text" name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
-                        <button type="button" class="layui-btn layui-btn-sm" id="next"><i class="layui-icon layui-icon-next"></i></button>
-                        <button type="button" class="layui-btn layui-btn-sm" id="right"><i class="layui-icon layui-icon-right"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right">ID</td>
-                    <td><span id="userId">@if(!empty($from->user_id)){{$from->user_id}}@endif</span></td>
-                </tr>
-                <tr>
-                    <td class="text-right">User Name</td>
-                    <td><span id="userName">@if(!empty($from->user_name)){{$from->user_name}}@endif</span></td>
-                </tr>
-                <tr>
-                    <td class="text-right">User Nick Name</td>
-                    <td><span id="userNickName">@if(!empty($from->user_nick_name)){{$from->user_nick_name}}@endif</span></td>
-                </tr>
-                <tr>
-                    <td class="text-right">Send Time</td>
-                    <td><span id="createdAt">@if(!empty($messages['created_at'])){{$messages['created_at']}}@endif</span></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Remark Column</td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <form class="layui-form">
-                            <input type="hidden" id="id" name="id" value="@if(!empty($messages['id'])){{$messages['id']}}@endif">
-                            <textarea id="comment" name="comment" style="width: 100%;height: 53px; padding: 5px;">@if(!empty($messages['comment'])){{$messages['comment']}}@endif</textarea>
-                            <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="submit">Submit</button>
-                        </form>
-                    </td>
-                </tr>
-            </table>
+                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
+                            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                        </p>
+                    </video>
+                    <input type="hidden" value="{{$page}}" name="page" id="page">
+                </section>
+            </div>
+            <div class="layui-col-md9">
+                <table class="layui-table">
+                    <tr>
+                        <td>Choose Date</td>
+                        <td>
+                            <form id="exportForm" method="get" action="/backstage/lovbee/message/export" class="layui-form">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <input  readonly type="text" class="layui-input" name="dateTime" id="dateTime" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$dateTime}}">
+                                    </div>
+                                    <div class="layui-inline">
+                                        <button type="button" class="layui-btn layui-btn-sm" name="export" id="export">Export</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Choose Month </td>
+                        <td>
+                            <form class="layui-form">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <select name="month" lay-filter="month">
+                                            @for($i=1; $i<=date('m'); $i++)
+                                                <option value="{{$i}}" @if(!empty($month) && $i==$month) selected @endif>{{$i}}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AutoPlay</td>
+                        <td>
+                            <form class="layui-form">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="auto" lay-filter="auto" lay-skin="switch" lay-text="ON|OFF">
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <form class="layui-form">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <button  type="button" class="layui-btn layui-btn-sm" id="left"><i class="layui-icon layui-icon-left"></i></button>
+                                        <button  type="button" class="layui-btn layui-btn-sm" id="prev"><i class="layui-icon layui-icon-prev"></i></button>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <div class="layui-input-inline">
+                                            <input  name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <form class="layui-form">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <button type="button" class="layui-btn layui-btn-sm" id="next"><i class="layui-icon layui-icon-next"></i></button>
+                                        <button type="button" class="layui-btn layui-btn-sm" id="right"><i class="layui-icon layui-icon-right"></i></button>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <div class="layui-input-inline">
+                                            <input  name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>ID</td>
+                        <td><span id="userId">@if(!empty($from->user_id)){{$from->user_id}}@endif</span></td>
+                    </tr>
+                    <tr>
+                        <td>User Name</td>
+                        <td><span id="userName">@if(!empty($from->user_name)){{$from->user_name}}@endif</span></td>
+                    </tr>
+                    <tr>
+                        <td>User Nick Name</td>
+                        <td><span id="userNickName">@if(!empty($from->user_nick_name)){{$from->user_nick_name}}@endif</span></td>
+                    </tr>
+                    <tr>
+                        <td>Send Time</td>
+                        <td><span id="createdAt">@if(!empty($messages['created_at'])){{$messages['created_at']}}@endif</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Remark Column</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <form class="layui-form">
+                                <input type="hidden" id="id" name="id" value="@if(!empty($messages['id'])){{$messages['id']}}@endif">
+                                <textarea id="comment" name="comment" style="width: 100%;height: 53px; padding: 5px;">@if(!empty($messages['comment'])){{$messages['comment']}}@endif</textarea>
+                                <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="submit">Submit</button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 

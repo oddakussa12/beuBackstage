@@ -23,9 +23,9 @@
         <table class="layui-table"  lay-filter="common_table">
             <thead>
             <tr>
-                <th  lay-data="{field:'id', width:200 ,fixed: 'left'}">{{trans('friend.table.header.id')}}</th>
-                <th  lay-data="{field:'from_name', minWidth:200 ,fixed: 'left'}">{{trans('friend.table.header.from_name')}}</th>
-                <th  lay-data="{field:'from_nick_name', minWidth:250 ,fixed: 'left'}">{{trans('friend.table.header.from_nick_name')}}</th>
+                <th  lay-data="{field:'from_nick_name', minWidth:120 ,fixed: 'left'}">{{trans('friend.table.header.from_nick_name')}}</th>
+                <th  lay-data="{field:'from_name', minWidth:180}">{{trans('friend.table.header.from_name')}}</th>
+                <th  lay-data="{field:'id', width:200}">{{trans('friend.table.header.id')}}</th>
                 <th  lay-data="{field:'to_name', minWidth:200}">{{trans('friend.table.header.to_name')}}</th>
                 <th  lay-data="{field:'to_nick_name', minWidth:250}">{{trans('friend.table.header.to_nick_name')}}</th>
                 <th  lay-data="{field:'status', width:100}">{{trans('friend.table.header.status')}}</th>
@@ -36,9 +36,9 @@
             <tbody>
             @foreach($requests as $request)
                 <tr>
-                    <td>{{$request->request_id}}</td>
-                    <td>{{$request->from->user_name}}</td>
                     <td>{{$request->from->user_nick_name}}</td>
+                    <td>{{$request->from->user_name}}</td>
+                    <td>{{$request->request_id}}</td>
                     <td>{{$request->to->user_name}}</td>
                     <td>{{$request->to->user_nick_name}}</td>
                     <td>

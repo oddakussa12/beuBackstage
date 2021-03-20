@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@section('title', trans('common.header.title'))
 @section('content')
     @php
         $qn_token = qnToken('qn_event_source');

@@ -3,8 +3,6 @@
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-inline">
-{{--                <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>--}}
-                <div class="layui-btn layui-btn-primary">{{$data->total()}}</div>
                 <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
             </div>
         </form>
@@ -15,29 +13,33 @@
                 <th lay-data="{field:'title', minWidth:200}">Title</th>
                 <th lay-data="{field:'status', minWidth:150,}">Status</th>
                 <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">Sort</th>
-                <th lay-data="{field:'url', minWidth:300}">Url</th>
+                <th lay-data="{field:'url', minWidth:130}">Url</th>
                 <th lay-data="{field:'content', width:500,sort:true}">Language</th>
                 <th lay-data="{field:'created_at', minWidth:160}">CreatedAt</th>
-                <th lay-data="{fixed: 'right', minWidth:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', minWidth:160, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
             @foreach($data as $value)
                 <tr>
                     <td>{{$value->id}}</td>
-                    <td>{{$value->title}}</td>
+                    <td>@if(is_array($value->title))@foreach($value->title as $key=>$item)
+                            {{$key}}： {{$item}} <br />
+                        @endforeach
+                        @endif
+                    </td>
                     <td><input type="checkbox" @if($value->status==1) checked @endif name="status" lay-skin="switch" lay-filter="switchAll" lay-text="ONLINE|OFFLINE"></td>
                     <td>{{$value->sort}}</td>
                     <td>@if(is_array($value->url))@foreach($value->url as $key=>$item)
-                            {{$key}}： {{$item}} <br />
+                            <a target="_blank" href="{{$item}}">{{$key}}</a>
                             @endforeach
                             @endif
                     </td>
-                    <td>@foreach($value->content as $key=>$item)
+                    <td>@if(is_array($value->content))@foreach($value->content as $key=>$item)
                             {{$key}}{{$item}} <br />
                         @endforeach
+                        @endif
                     </td>
-{{--                    <td>{{$value->content}}</td>--}}
                     <td>{{$value->created_at}}</td>
                     <td></td>
                 </tr>
@@ -74,7 +76,6 @@
                 if(layEvent === 'edit'){ //编辑
                     layer.open({
                         type: 2,
-                        title: 'Category',
                         shadeClose: true,
                         shade: 0.8,
                         area: ['90%','100%'],
@@ -108,7 +109,7 @@
                     ,original = $(this).prev().text(); //得到字段
                 let params = d = {};
                 d[field] = original;
-                @if(!Auth::user()->can('props::category.update'))
+                @if(!Auth::user()->can('lovbee::question.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
                     obj.update(d);
                     $(this).val(original);
@@ -138,7 +139,7 @@
 
             form.on('switch(switchAll)', function(data){
                 let checked = data.elem.checked;
-                let categoryId = data.othis.parents('tr').find("td :first").text();
+                let id = data.othis.parents('tr').find("td :first").text();
                 data.elem.checked = !checked;
                 @if(!Auth::user()->can('lovbee::question.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
@@ -150,7 +151,7 @@
                 let params = '{"'+name+'":"'+val+'"}';
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/lovbee/question')}}/"+categoryId , JSON.parse(params) , function(res){
+                    common.ajax("{{url('/backstage/lovbee/question')}}/"+id , JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
@@ -166,7 +167,6 @@
             $(document).on('click','#add',function(){
                 layer.open({
                     type: 2,
-                    title: 'Category',
                     shadeClose: true,
                     shade: 0.8,
                     area: ['90%','100%'],

@@ -40,14 +40,14 @@
                                         <option value="friend" @if(!empty($sort)&&$sort=='friend') selected @endif>Friend</option>
                                     </select>
                                 </div>
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                                </div>
                             </div>
-                            <div class="layui-inline">
-                                <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                                <div class="layui-btn layui-btn-primary">{{$users->total()}}</div>
-                            </div>
+
                         </div>
                     </form>
-                    <table class="layui-table"  lay-filter="user_table">
+                    <table class="layui-table"  lay-filter="common_table">
                         <thead>
                         <tr>
                             <th  lay-data="{field:'user_id', width:130 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
@@ -105,7 +105,7 @@
                 echarts = layui.echarts,
                 element = layui.element,
                 timePicker = layui.timePicker;
-            table.init('user_table', { //转化静态表格
+            table.init('common_table', { //转化静态表格
                 page:false
             });
 
@@ -117,7 +117,7 @@
                 },
             });
 
-            table.on('tool(user_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(common_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 let tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -145,7 +145,7 @@
                         content: '/backstage/passport/user/history/'+data.user_id
                     });                }
             });
-            table.init('user_table', { //转化静态表格
+            table.init('common_table', { //转化静态表格
                 page:false,
                 toolbar: '#toolbar'
             });

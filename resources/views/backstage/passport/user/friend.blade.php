@@ -1,7 +1,7 @@
-@extends('layouts.app')
-@section('title', trans('common.header.title'))
+@extends('layouts.dashboard')
+@section('layui-content')
 <div  class="layui-fluid">
-    <table class="layui-table"  lay-filter="user_table">
+    <table class="layui-table"  lay-filter="common_table">
         <thead>
         <tr>
             <th  lay-data="{field:'user_id', minWidth:130 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
@@ -41,10 +41,9 @@
         }).extend({
             common: 'lay/modules/admin/common',
             loadBar: 'lay/modules/admin/loadBar',
-        }).use(['common' , 'table', 'element'], function () {
-            let table = layui.table,
-                element = layui.element;
-            table.init('user_table', { //转化静态表格
+        }).use(['common' , 'table'], function () {
+            let table = layui.table;
+            table.init('common_table', {
                 page:false
             });
         })

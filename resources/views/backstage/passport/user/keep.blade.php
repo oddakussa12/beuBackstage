@@ -3,27 +3,32 @@
     <div  class="layui-fluid">
         <form class="layui-form" action="" lay-filter="keep">
             <div class="layui-form-item">
-                <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                 <div class="layui-inline">
-                    <select name="country_code" lay-verify="" lay-search>
-                        <option value="">{{trans('user.form.placeholder.user_country')}}</option>
-                        @if($v==0))
-                        <option value="all" @if($country_code=='all')) selected @endif>ALL</option>
-                        @endif
-                        @foreach($countries  as $country)
-                            <option value="{{strtolower($country['code'])}}" @if($country_code==strtolower($country['code'])) selected @endif>{{$country['name']}}</option>
-                        @endforeach
-                    </select>
+                    <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
+                    <div class="layui-input-inline">
+                        <select name="country_code" lay-verify="" lay-search>
+                            <option value="">{{trans('user.form.placeholder.user_country')}}</option>
+                            @if($v==0))
+                            <option value="all" @if($country_code=='all')) selected @endif>ALL</option>
+                            @endif
+                            @foreach($countries  as $country)
+                                <option value="{{strtolower($country['code'])}}" @if($country_code==strtolower($country['code'])) selected @endif>{{$country['name']}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input" name="period" id="period" readonly="" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$period}}">
-                </div>
                 <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="period" id="period" readonly="" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$period}}">
+                    </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
+
             </div>
         </form>
         <table class="layui-table" >
