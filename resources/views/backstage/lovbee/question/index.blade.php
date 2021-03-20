@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <style>a{margin-right: 20px;color: #01AAED}</style>
+    <style> .layui-table a{margin-right: 20px;color: #01AAED}</style>
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-inline">
