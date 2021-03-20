@@ -90,6 +90,7 @@
                         common.ajax("{{url('/backstage/lovbee/question/upload')}}/"+data.id , '' , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                             table.render();
+                            location.reload();
                         } , 'get' , function (event,xhr,options,exc) {
                             setTimeout(function(){
                                 common.init_error(event,xhr,options,exc);
