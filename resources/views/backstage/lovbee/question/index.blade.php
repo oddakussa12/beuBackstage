@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <style> .layui-table a{margin-right: 20px;color: #01AAED}</style>
+    <style> .url{margin-right: 20px;color: #01AAED}</style>
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-inline">
@@ -33,7 +33,7 @@
                     <td><input type="checkbox" @if($value->status==1) checked @endif name="status" lay-skin="switch" lay-filter="switchAll" lay-text="ONLINE|OFFLINE"></td>
                     <td>{{$value->sort}}</td>
                     <td>@if(is_array($value->url))@foreach($value->url as $key=>$item)
-                            <a target="_blank" href="{{$item}}">{{$key}}</a>
+                            <a class="url" target="_blank" href="{{$item}}">{{$key}}</a>
                             @endforeach
                             @endif
                     </td>
