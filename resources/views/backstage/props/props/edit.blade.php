@@ -5,23 +5,14 @@
         $qn_token = qnToken('qn_event_source');
     @endphp
     {{--    <meta name="csrf-token" content="{{ csrf_token() }}">--}}
-    <fieldset class="layui-elem-field layui-field-title">
-        <legend></legend>
-    </fieldset>
-    <div class="layui-container">
-        <style>
-            .layui-layout-body {overflow: auto;}
-            .layui-form-label {padding:9px; width: 112px;}
-            .layui-input {width: 200px;}
-            .layui-input-block {width:200px; padding-left:20px;}
-        </style>
+    <div class="layui-fluid">
         <form class="layui-form layui-tab-content">
             {{ csrf_field() }}
             <div class="layui-form-item">
                 <label class="layui-form-label">Category：</label>
-                <div class="layui-inline">
+                <div class="layui-input-block">
                     <input id="id" name="id" type="hidden" value="{{$data['id']}}" />
-                    <select  name="category">
+                    <select  name="category" style="width: 100px;">
                         @foreach($categories as $category)
                             <option value="{{$category->name}}" @if($data['category']==$category->name)  selected @endif>{{$category->name}}</option>
                         @endforeach;
@@ -86,7 +77,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"></label>
                     <div class="layui-input-block">
-                        <img style="width:200px;" src="{{$data->cover}}" id="show" name="show" />
+                        <img style="width:100px;height: 100px;" src="{{$data->cover}}" id="show" name="show" />
                     </div>
                 </div>
             </div>

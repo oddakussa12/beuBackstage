@@ -132,7 +132,7 @@
                         title: 'Props settings',
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['80%','500px'],
+                        area: ['360px', '100%'],
                         content: '/backstage/props/props/'+id+'/edit',
                     });
                 }
@@ -211,7 +211,7 @@
                     title: 'Props settings',
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['60%','500px'],
+                    area: ['360px', '100%'],
                     offset: 'auto',
                     content: '/backstage/props/props/create',
                 });

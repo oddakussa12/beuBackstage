@@ -2,7 +2,7 @@
 @section('layui-content')
     <div  class="layui-fluid">
         <div class="layui-row">
-            <div class="layui-col-md3">
+            <div class="layui-col-md4">
                 <section id="videoPlayer">
                     <video id="my-player" style="width: 100%" class="video-js" controls muted data-setup='{"autoplay": true,"preload": "true"}'>
                         @if(!empty($messages['message_content']))
@@ -19,7 +19,7 @@
                     <input type="hidden" value="{{$page}}" name="page" id="page">
                 </section>
             </div>
-            <div class="layui-col-md9">
+            <div class="layui-col-md8">
                 <table class="layui-table">
                     <tr>
                         <td>Choose Date</td>
@@ -70,32 +70,33 @@
                         <td>
                             <form class="layui-form">
                                 <div class="layui-form-item">
-                                    <div class="layui-inline">
+                                    <div class="layui-input-inline" style="width: 50px;margin: 4px;">
                                         <button  type="button" class="layui-btn layui-btn-sm" id="left"><i class="layui-icon layui-icon-left"></i></button>
+                                    </div>
+                                    <div class="layui-input-inline" style="width: 50px;margin: 4px;">
                                         <button  type="button" class="layui-btn layui-btn-sm" id="prev"><i class="layui-icon layui-icon-prev"></i></button>
                                     </div>
-                                    <div class="layui-inline">
-                                        <div class="layui-input-inline">
-                                            <input  name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
-                                        </div>
+                                    <div class="layui-input-inline" style="margin: 0px;">
+                                        <input  name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
                                     </div>
                                 </div>
+
                             </form>
                         </td>
                         <td>
                             <form class="layui-form">
                                 <div class="layui-form-item">
-                                    <div class="layui-inline">
+                                    <div class="layui-input-inline" style="margin: 0px;">
+                                        <input  name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
+                                    </div>
+                                    <div class="layui-input-inline" style="width: 50px;margin: 4px;">
                                         <button type="button" class="layui-btn layui-btn-sm" id="next"><i class="layui-icon layui-icon-next"></i></button>
+                                    </div>
+                                    <div class="layui-input-inline" style="width: 50px;margin: 4px;">
                                         <button type="button" class="layui-btn layui-btn-sm" id="right"><i class="layui-icon layui-icon-right"></i></button>
                                     </div>
-                                    <div class="layui-inline">
-                                        <div class="layui-input-inline">
-                                            <input  name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
-                                        </div>
-                                    </div>
-                                </div>
 
+                                </div>
                             </form>
                         </td>
                     </tr>
@@ -164,7 +165,14 @@
                 ,max : 'today'
                 ,lang: 'en'
             });
-
+            $(document).keyup(function(event){
+                if(event.keyCode ==39){
+                    $('#right').click();
+                }else if(event.keyCode ==37)
+                {
+                    $('#left').click();
+                }
+            });
             const Storage = {};
             Storage.get = function(name) {
                 return localStorage.getItem(name);

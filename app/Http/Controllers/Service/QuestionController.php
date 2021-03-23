@@ -53,7 +53,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        return view('backstage.lovbee.question.create', ['languages'=>$this->language]);
+        return view('backstage.service.question.create', ['languages'=>$this->language]);
     }
 
     /**

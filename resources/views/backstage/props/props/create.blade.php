@@ -4,8 +4,10 @@
     @php
         $qn_token = qnToken('qn_event_source');
     @endphp
-    <div class="layui-card">
-        <form class="layui-form layui-card-body">
+    <div class="layui-fluid">
+
+
+        <form class="layui-form">
             {{ csrf_field() }}
             <div class="layui-form-item">
                 <div class="layui-inline">
