@@ -65,15 +65,19 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $params  = $request->except('_token');
-        $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
-        $params['content'] = json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
-        $params['created_at'] = date('Y-m-d H:i:s');
+        $this->validate($request, [
+            'title_en' => 'required|string',
+            'en'    => 'required|string',
+        ]);
+        $title           = ['en'=>$params['title_en'], 'zh-CN'=>$params['title_cn']];
+        $content         = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
+        $data['title']   = json_encode($title   ?? [], JSON_UNESCAPED_UNICODE);
+        $data['content'] = json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
+        $data['sort']    = !empty($params['sort'])   ? $params['sort']   : 0;
+        $data['status']  = !empty($params['status']) ? $params['status'] : 0;
+        $data['created_at'] = date('Y-m-d H:i:s');
 
-        foreach ($this->language as $item) {
-            unset($params[$item]);
-        }
-
-        Question::create($params);
+        Question::create($data);
         return response()->json(['result'=>'success']);
     }
 
@@ -110,7 +114,7 @@ class QuestionController extends Controller
                 'title_en' => 'required|string',
                 'en'    => 'required|string',
             ]);
-            $title   = ['en'=>$params['title_en'], 'zh-CN'=>$params['title_zh-CN']];
+            $title   = ['en'=>$params['title_en'], 'zh-CN'=>$params['title_cn']];
             $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
         }
         $question->content =  empty($content)          ? $question->content   : json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
