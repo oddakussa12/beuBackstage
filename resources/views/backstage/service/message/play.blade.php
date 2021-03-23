@@ -24,7 +24,7 @@
                     <tr>
                         <td>Choose Date</td>
                         <td>
-                            <form id="exportForm" method="get" action="/backstage/lovbee/message/export" class="layui-form">
+                            <form id="exportForm" method="get" action="/backstage/service/message/export" class="layui-form">
                                 <div class="layui-form-item">
                                     <div class="layui-inline">
                                         <input  readonly type="text" class="layui-input" name="dateTime" id="dateTime" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$dateTime}}">
@@ -237,7 +237,7 @@
             $('#submit').on('click' , function(){
                 let id = $("#id").val();
                 let comment = $("#comment").val();
-                common.ajax("/backstage/lovbee/message/comment", {"message_id":id,"comment":comment} , function(res){
+                common.ajax("/backstage/service/message/comment", {"message_id":id,"comment":comment} , function(res){
                     console.log(res);
                     layer.closeAll();
                 } , 'POST');
@@ -295,7 +295,7 @@
                 $('#comment').text(result.comment);
             }
             function get(page, month, num=0, obj='', select=0) {
-                common.ajax("/backstage/lovbee/message/video?page="+page+"&month="+month , {} , function(res){
+                common.ajax("/backstage/service/message/video?page="+page+"&month="+month , {} , function(res){
                     layer.closeAll();
                     console.log(res);
                     if(JSON.stringify(res.messages) !== '[]') {

@@ -83,11 +83,11 @@
                         area: ['90%','100%'],
                         offset: 'auto',
                         'scrollbar':true,
-                        content: '/backstage/lovbee/question/'+id+'/edit',
+                        content: '/backstage/service/question/'+id+'/edit',
                     });
                 } else {
                     common.confirm("{{trans('common.confirm.update')}}" , function(){
-                        common.ajax("{{url('/backstage/lovbee/question/upload')}}/"+data.id , '' , function(res){
+                        common.ajax("{{url('/backstage/service/question/upload')}}/"+data.id , '' , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                             table.render();
                             location.reload();
@@ -121,7 +121,7 @@
                 @endif
                 params[field] = value;
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/lovbee/question')}}/"+data.id , params , function(res){
+                    common.ajax("{{url('/backstage/service/question')}}/"+data.id , params , function(res){
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                         table.render();
                     } , 'PATCH' , function (event,xhr,options,exc) {
@@ -154,7 +154,7 @@
                 let params = '{"'+name+'":"'+val+'"}';
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/lovbee/question')}}/"+id , JSON.parse(params) , function(res){
+                    common.ajax("{{url('/backstage/service/question')}}/"+id , JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
@@ -174,7 +174,7 @@
                     shade: 0.8,
                     area: ['90%','100%'],
                     offset: 'auto',
-                    content: '/backstage/lovbee/question/create',
+                    content: '/backstage/service/question/create',
                 });
             });
             table.init('table', { //转化静态表格

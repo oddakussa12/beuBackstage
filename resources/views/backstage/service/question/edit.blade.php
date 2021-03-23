@@ -92,7 +92,7 @@
                     if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/lovbee/question')}}/"+params.id, params, function(res){
+                common.ajax("{{url('/backstage/service/question')}}/"+params.id, params, function(res){
                     console.log(res);
                     console.log(res.code);
                     if (res.code!== undefined) {
