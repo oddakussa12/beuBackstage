@@ -1,106 +1,187 @@
 <?php
-
 namespace App\Http\Controllers\Service;
 
+use App\Exports\MessageExport;
+use App\Exports\UsersExport;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use App\Models\Service\Message;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Service\StoreMessageRequest;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MessageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     * @throws \Throwable
-     */
-    public function index()
-    {
-        $messages = Message::orderByDesc('id')->paginate(10);
-        return view('backstage.service.message.index',compact('messages'));
-    }
 
-    public function store(StoreMessageRequest $request)
-    {
-        $all = $request->only(array("type" , "value" , 'title' , 'content' , 'image'));
-        Message::create($all);
-        return response()->json([
-            'result' => 'success',
-        ]);
-    }
+    CONST BOSS_ID=290;
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * 导出
      */
-    public function update(Request $request, int $id)
+    public function export(Request $request)
     {
-        $message = Message::where('id' , $id)->first();
-        if($request->has('status'))
+        ini_set('memory_limit','256M');
+
+        $now       = Carbon::now();
+        $startDate = $now->startOfDay()->toDateTimeString();
+        $endDate   = $now->endOfDay()->toDateTimeString();
+        $params    = $request->all();
+        $date      = $request->input('dateTime' , $startDate.' - '.$endDate);
+        $allDate   = explode(' - ' , $date);
+        $start     = array_shift($allDate);
+        $end       = array_pop($allDate);
+
+        if (empty($start) || empty($end)) {
+            $start = $startDate;
+            $end   = $endDate;
+        }
+        return  Excel::download(new MessageExport($params), 'message-'.$start.'-'.$end.'.xlsx');
+    }
+
+
+    public function operation()
+    {
+        return  view('backstage.service.message.operation');
+    }
+
+    public function submit(Request $request)
+    {
+        Log::info('all' , array($request->all()));
+        $client  = new Client();
+        $image   = $request->input('image' , '');
+        $video   = $request->input('video' , '');
+        $type    = intval($request->input('type' , 0));
+        $target  = strval($request->input('target' , ''));
+        $sender  = strval($request->input('sender' , ''));
+        $country = $request->input('country' , '');
+        if(!blank($video)&&!blank($image)&&!blank($sender))
         {
-            $status = strval($request->input('status' , 'on'));
-            $readyRunMessage = Message::orderByDesc('id')->whereIn('status' , array(1 , 2))->first();
-            if(!empty($readyRunMessage))
+            if($type==0||$type==3)
             {
-                abort(403 , 'A task is preparing or running');
-            }
-            if($status=='on'&&$message->status==0)
+                $data = [
+                    'sender' => $sender,
+                    'target' => 0,
+                    'type'   => $type,
+                    'image'  => $image,
+                    'video'  => $video,
+                ];
+            } elseif ($type==1&&!blank($country))
             {
-                $message->status=1;
-                $message->save();
-                $this->setMessage($id);
+                $data = [
+                    'sender' => $sender,
+                    'target' => $country,
+                    'type' => $type,
+                    'image' => $image,
+                    'video' => $video,
+                ];
+            }elseif ($type==2&&!blank($target))
+            {
+                $data = [
+                    'sender' => $sender,
+                    'target' => $target,
+                    'type' => $type,
+                    'image' => $image,
+                    'video' => $video,
+                ];
+            }else{
+                return back();
             }
+            $response = $client->request('POST', config('common.lovbee_domain').'api/ry/push', ['form_params'=>$data]);
+
+            $statusCode = $response->getStatusCode();
+            Log::info('$statusCode' , array($statusCode));
         }
-        if($request->has('image'))
-        {
-            $oldImage = \json_decode($message->image , true);
-            $image = strval($request->input('image' , ''));
-            $locale = strval($request->input('locale' , 'en'));
-            $oldImage[$locale] = $image;
-            $message->image = \json_encode($oldImage);
-            $message->save();
-        }
-        return response()->json([
-            'result' => 'success',
-        ]);
+        return back();
     }
 
-    public function image($id)
+    /**
+     * @param Request $request
+     * @return array
+     * 添加评论
+     */
+    public function comment(Request $request)
     {
-        $message = Message::where('id' , $id)->first();
-        $images = \json_decode($message->image , true);
-        $supportLanguage = config('translatable.frontSupportedLocales');
-        return view('backstage.service.message.image',compact('id' , 'supportLanguage' , 'message' , 'images'));
-    }
+        $params = $request->all();
+        $time   = date('Y-m-d H:i:s');
+        $params['updated_at'] = $time;
 
-    private function setMessage($messageId)
-    {
-        $params = array(
-            'message_id'=>$messageId,
-            'time_stamp'=>time(),
-        );
-        $url = front_url('api/bk/service/message');
-        $signature = common_signature($params);
-        $params['signature'] = $signature;
-        $data = [
-            'form_params' => $params
-        ];
-        $client = new Client();
-        try {
-            $response = $client->request('PATCH', $url , $data);
-            $code = $response->getStatusCode();
-            if($code!=204)
-            {
-                abort($code);
-            }
-        } catch (GuzzleException $e) {
-            abort(400 , $e->getMessage());
+        $result = DB::table('message_comments')->where('message_id', $params['message_id'])->first();
+        if (!$result) {
+            $params['created_at'] = $time;
+            $result = DB::table('message_comments')->insert($params);
+        } else {
+            $result = DB::table('message_comments')->where('message_id', $params['message_id'])->update($params);
         }
+        return ['data'=>$result];
     }
 
+    public function play(Request $request)
+    {
+        $page     = intval($request->input('page' , 1));
+        $month    = intval($request->input('month' , 1));
+        $page     = $page-1;
+        $page     = $page<0?0:$page;
+        $message  = $this->message($request);
+        $messages = $message['result'];
+        $from     = $message['from'];
+        $page     = $page+1;
+        $dateTime = date('Y-m-d', time()-86400*2). ' - '. date('Y-m-d', time()-86400);
+        return  view('backstage.service.message.play' , compact('messages' , 'from' , 'page', 'month', 'dateTime'));
+    }
+
+    public function video(Request $request)
+    {
+        $message = $this->message($request);
+        $from = $message['from'];
+        return response(array('messages'=>$message , 'from'=>$from));
+    }
+
+    public function message(Request $request)
+    {
+        $month = intval($request->input('month' , 1));
+        $page  = intval($request->input('page' , 1));
+        $page  = $page-1;
+        $page  = $page<0 ? 0 : $page;
+        $month = $month>12 || $month<0 ? 1 : $month;
+        if ($month<10) {
+            $month = '0'.strval($month);
+        }
+        $table = 'ry_messages_'.date('Y').$month;
+        $cTable= 'ry_chats_'.date('Y').$month;
+        $cTable= Schema::connection('lovbee')->hasTable($cTable) ? $cTable : 'ry_chats';
+        $table = Schema::connection('lovbee')->hasTable($table)  ? $table  : 'ry_messages';
+
+        /*$chat  = DB::connection('lovbee')->table($cTable)->where('chat_from_id', $this->bossId)->orWhere('chat_to_id', $this->bossId)
+            ->select('chat_msg_uid')->get();
+        return DB::connection('lovbee')->table($table)->whereNotIn('message_id', $chat->pluck('chat_msg_uid')->toArray())
+            ->where('message_type' , 'Helloo:VideoMsg')->groupBy('message_content')->orderByDesc('id')->offset($page)->limit(1)->get();*/
+
+        $result = DB::connection('lovbee')->table($table)->where('message_type' , 'Helloo:VideoMsg')->groupBy('message_content')->orderByDesc('id')->offset($page)->limit(1)->get();
+        $msgId  = $result->pluck('message_id')->toArray();
+        $chat   = DB::connection('lovbee')->table($cTable)->where('chat_msg_uid', current($msgId))->select('chat_from_id')->first();
+
+        if (empty($chat->chat_from_id)) {
+            return array('result'=>false , 'from'=>null);
+
+        }
+        if ($chat->chat_from_id==self::BOSS_ID) {
+            $page = $page+1;
+            $request->offsetSet('page', $page);
+            return $this->message($request);
+        }
+        $from = DB::connection('lovbee')->table('users')->where('user_id', $chat->chat_from_id)->first();
+
+        $newResult = current(collect($result)->toArray());
+        if ($newResult) {
+            $result = DB::table('message_comments')->where('message_id', $newResult->id)->first();
+            $newResult->comment = !empty($result) ? $result->comment : '';
+        }
+        return array('result'=>(array)$newResult , 'from'=>$from);
+
+    }
 }

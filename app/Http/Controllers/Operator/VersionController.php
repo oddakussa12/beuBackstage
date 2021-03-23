@@ -35,6 +35,7 @@ class VersionController extends Controller
             }
             $count[] = $total ?? 0;
         }
+        $forList = array();
         foreach ($forList as $key=>$value) {
             $line[] = [
                 "name" => $key,
@@ -81,6 +82,38 @@ class VersionController extends Controller
             $end   = $endDate;
         }
         return  Excel::download(new MessageExport($params), 'message-'.$start.'-'.$end.'.xlsx');
+    }
+
+    public function upgrade()
+    {
+        $app = DB::connection('lovbee')->table('app_versions')->where('status' , 1)->first();
+        $version = array();
+        $id = 0;
+        if(!blank($app))
+        {
+            $version['Current'] = array('value'=>$app->version , 'field'=>'version');
+            $version['Lowest'] = array('value'=>$app->last , 'field'=>'last');
+            $version['Text'] = array('value'=>$app->upgrade_point , 'field'=>'upgrade_point');
+            $id = $app->id;
+        }
+        return view('backstage.operator.version.upgrade', compact('version' , 'id'));
+    }
+
+    public function update(Request $request , $id)
+    {
+        $data = array();
+        $version = strval($request->input('version' , 0));
+        $last = strval($request->input('last' , 0));
+        $upgrade_point = strval($request->input('upgrade_point' , ''));
+//        $app = DB::connection('lovbee')->table('app_versions')->where('status' , 1)->first();
+        !blank($version)&&$data['version'] = $version;
+        !blank($last)&&$data['last'] = $last;
+        !blank($upgrade_point)&&$data['upgrade_point'] = $upgrade_point;
+        !blank($data)&&DB::connection('lovbee')->table('app_versions')->where('id' , $id)->update($data);
+        return response()->json([
+            'result' => 'success',
+        ]);
+
     }
 
 }

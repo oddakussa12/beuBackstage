@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Lovbee;
+namespace App\Http\Controllers\Service;
 
 use App\Exports\MessageExport;
 use App\Exports\UsersExport;
@@ -42,7 +42,7 @@ class QuestionController extends Controller
         }
         $params['appends'] = $params;
         $params['data']    = $result;
-        return view('backstage.lovbee.question.index', $params);
+        return view('backstage.service.question.index', $params);
     }
 
     /**
@@ -91,7 +91,7 @@ class QuestionController extends Controller
             $data['content'] = json_decode($data['content'], true);
             $data['title']   = json_decode($data['title'], true);
         }
-        return view('backstage.lovbee.question.edit', ['data' => $data, 'languages'=>$this->language]);
+        return view('backstage.service.question.edit', ['data' => $data, 'languages'=>$this->language]);
     }
 
     /**

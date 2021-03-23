@@ -30,10 +30,6 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::resource('permission', 'PermissionController');
             Route::resource('role', 'RoleController');
         });
-        Route::group(['namespace'=>'Service','prefix'=>'service' , 'as' => 'service::'] , function (){
-            Route::resource('message' , 'MessageController');
-            Route::get('message/{message}/image' , 'MessageController@image')->name('message.image');
-        });
 
         Route::group(['namespace'=>'Content','prefix'=>'content' , 'as' => 'content::'] , function (){
             Route::get('music/index' , 'MusicController@index')->name('music.index');
@@ -44,6 +40,8 @@ Route::group(['prefix'=>'backstage'] , function(){
 
         Route::group(['namespace'=>'Operator','prefix'=>'operator' , 'as' => 'operator::'] , function (){
             Route::get('version' , 'VersionController@index')->name('version.index');
+            Route::patch('version/{version}' , 'VersionController@update')->name('version.update');
+            Route::get('version/upgrade' , 'VersionController@upgrade')->name('version.upgrade');
             Route::get('chat' , 'ChatController@index')->name('chat.index');
         });
 
@@ -62,7 +60,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('friend/request', 'FriendController@request')->name('friend.request');
         });
 
-        Route::group(['namespace'=>'Lovbee','prefix'=>'lovbee' , 'as' => 'lovbee::'] , function (){
+        Route::group(['namespace'=>'Service','prefix'=>'service' , 'as' => 'service::'] , function (){
             Route::get('message/operation' , 'MessageController@operation')->name('message.operation');
             Route::post('message/operation' , 'MessageController@submit')->name('message.submit');
             Route::get('message/play' , 'MessageController@play')->name('message.play');
