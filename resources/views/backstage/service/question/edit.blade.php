@@ -24,7 +24,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Title CN：</label>
                     <div class="layui-input-block">
-                        <input type="text" style="min-width: 300px;" id="title_zh-CN" name="title_zh-CN" placeholder="仅可中文"  required="required" autocomplete="off" class="layui-input" value="{{$data->title['zh-CN']}}">
+                        <input type="text" style="min-width: 300px;" id="title_cn" name="title_cn" placeholder="仅可中文"  required="required" autocomplete="off" class="layui-input" value="{{$data->title['zh-CN']}}">
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@
             </div>
         </form>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+    <script src="/js/wangEditor.min.js"></script>
 
 @endsection
 @section('footerScripts')

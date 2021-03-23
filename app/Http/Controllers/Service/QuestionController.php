@@ -65,15 +65,19 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $params  = $request->except('_token');
-        $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
-        $params['content'] = json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
-        $params['created_at'] = date('Y-m-d H:i:s');
+        $this->validate($request, [
+            'title_en' => 'required|string',
+            'en'    => 'required|string',
+        ]);
+        $title           = ['en'=>$params['title_en'], 'zh-CN'=>$params['title_cn']];
+        $content         = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
+        $data['title']   = json_encode($title   ?? [], JSON_UNESCAPED_UNICODE);
+        $data['content'] = json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
+        $data['sort']    = !empty($params['sort'])   ? $params['sort']   : 0;
+        $data['status']  = !empty($params['status']) ? $params['status'] : 0;
+        $data['created_at'] = date('Y-m-d H:i:s');
 
-        foreach ($this->language as $item) {
-            unset($params[$item]);
-        }
-
-        Question::create($params);
+        Question::create($data);
         return response()->json(['result'=>'success']);
     }
 
@@ -110,7 +114,7 @@ class QuestionController extends Controller
                 'title_en' => 'required|string',
                 'en'    => 'required|string',
             ]);
-            $title   = ['en'=>$params['title_en'], 'zh-CN'=>$params['title_zh-CN']];
+            $title   = ['en'=>$params['title_en'], 'zh-CN'=>$params['title_cn']];
             $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
         }
         $question->content =  empty($content)          ? $question->content   : json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
@@ -138,10 +142,10 @@ class QuestionController extends Controller
         foreach ($content as $key=>$item) {
             $fileName = $key.$question['id'].'.html';
             $html  = '<!DOCTYPE html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">';
-            $html .= "<title>{$title[$key]}</title><style> body { word-break:break-word;margin-top: 16px;margin-bottom: 3px;padding-left: 16px;padding-right: 16px;}.title{color: rgba(0,0,0,.5);font-size: 14px;line-height: 1.4;}</style></head><body ontouchstart=''>";
-            $html .= "<div id='container' class='container'><div class='title'>{$title[$key]}</div><div class='content'></div>";
+            $html .= "<title>{$title[$key]}</title><style>html,body,div,span,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,a,address,em,img,ol,ul,li,fieldset,form,label,legend,table,tbody,tfoot,thead,tr,th,td,i,s{margin:0;padding:0;border:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:Helvetica,Arial,sans-serif}ul,ol{list-style:none}a img{border:0;vertical-align:top}a{text-decoration:none}button{overflow:visible;padding:0;margin:0;border:0 none;background-color:transparent}button::-moz-focus-inner{padding:0}textarea,input{background:0;padding:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;-webkit-appearance:none}textarea:focus,input:focus,button:focus{outline:0}body{--BG-0:#ededed;--BG-1:#f7f7f7;--BG-2:#fff;--BG-3:#f7f7f7;--BG-4:#4c4c4c;--BG-5:#fff;--FG-0:rgba(0,0,0,0.9);--FG-HALF:rgba(0,0,0,0.9);--FG-1:rgba(0,0,0,0.5);--FG-2:rgba(0,0,0,0.3);--FG-3:rgba(0,0,0,0.1);--RED:#fa5151;--ORANGE:#fa9d3b;--YELLOW:#ffc300;--GREEN:#91d300;--LIGHTGREEN:#95ec69;--BRAND:#07c160;--BLUE:#10aeff;--INDIGO:#1485ee;--PURPLE:#6467f0;--LINK:#576b95;--TEXTGREEN:#06ae56;--FG:black;--BG:white;--BTN-DEFAULT-COLOR:#06ae56;--BTN-DISABLED-FONT-COLOR:rgba(0,0,0,0.2);--BTN-DEFAULT-BG:#f2f2f2;word-break:break-word;word-wrap:break-word;-webkit-user-select:none;user-select:none;-webkit-text-size-adjust:none}*{-webkit-tap-highlight-color:rgba(0,0,0,0)}img,canvas,iframe,svg{max-width:100%}.overflow-container{overflow-y:scroll}.container .title:before{content:\"\";position:absolute;bottom:0;left:15px;right:15px;border-bottom:1px solid #dfdfdf;-webkit-transform:scaleY(0.5);-ms-transform:scaleY(0.5);transform:scaleY(0.5);-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0;-webkit-box-sizing:border-box;box-sizing:border-box;border-color:var(--FG-3)!important}.title{margin-bottom:15px!important;color:var(--FG-0)!important;position:relative;padding:17px 15px;font-size:18px;line-height:24px;font-weight:bolder}.content{font-size:16px;line-height:24px;padding:12px 15px 0;text-align:justify;color:var(--FG-0)!important}</style></head><body ontouchstart=''>";
+            $html .= "<div id='container' class='container'><h2 class='title'>{$title[$key]}</h2><div class='content'>";
             $html .= $item;
-            $html .= '</div></div></body>';
+            $html .= '</div></div></div></body>';
 
             file_put_contents($fileName, ($html));
             $result = $this->uploadQiNiu($fileName);

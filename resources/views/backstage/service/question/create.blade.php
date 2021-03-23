@@ -70,8 +70,7 @@
             </div>
         </form>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
-
+    <script src="/js/wangEditor.min.js"></script>
 @endsection
 
 @section('footerScripts')
