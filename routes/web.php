@@ -43,6 +43,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::patch('version/{version}' , 'VersionController@update')->name('version.update');
             Route::get('version/upgrade' , 'VersionController@upgrade')->name('version.upgrade');
             Route::get('chat' , 'ChatController@index')->name('chat.index');
+            Route::get('operator/network' , 'OperatorController@network')->name('operator.network');
         });
 
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){

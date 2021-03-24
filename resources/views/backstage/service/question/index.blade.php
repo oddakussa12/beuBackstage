@@ -112,7 +112,7 @@
                     ,original = $(this).prev().text(); //得到字段
                 let params = d = {};
                 d[field] = original;
-                @if(!Auth::user()->can('lovbee::question.update'))
+                @if(!Auth::user()->can('service::question.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
                     obj.update(d);
                     $(this).val(original);
@@ -144,7 +144,7 @@
                 let checked = data.elem.checked;
                 let id = data.othis.parents('tr').find("td :first").text();
                 data.elem.checked = !checked;
-                @if(!Auth::user()->can('lovbee::question.update'))
+                @if(!Auth::user()->can('service::question.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
                     form.render();
                     return false;
