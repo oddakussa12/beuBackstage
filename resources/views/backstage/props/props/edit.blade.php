@@ -87,7 +87,9 @@
                     <div class="layui-input-block">
                         <input type="hidden" id="url" name="url" value="{{$data->url}}" />
                         <button type="button" id="uploads" name="uploads" class="layui-btn"><i class="layui-icon"></i>Upload Bundle</button>
-                        <span style="width:200px;" id="bundle" name="bundle">{{$data->url}}</span>
+                    </div>
+                    <div class="layui-input-block">
+                        <span id="bundle"  style="word-break: break-all;"  name="bundle">{{$data->url}}</span>
                     </div>
                 </div>
             </div>

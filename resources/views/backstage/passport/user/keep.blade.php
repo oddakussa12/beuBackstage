@@ -31,21 +31,21 @@
 
             </div>
         </form>
-        <table class="layui-table" >
+        <table class="layui-table" lay-filter="common_table" >
             <thead>
             <tr>
-                <th>Day</th>
-                <th>SignUp</th>
-                <th>1Day</th>
-                <th>1Day%</th>
-                <th>2Day</th>
-                <th>2Day%</th>
-                <th>3Day</th>
-                <th>3Day%</th>
-                <th>7Day</th>
-                <th>7Day%</th>
-                <th>30Day</th>
-                <th>30Day%</th>
+                <th lay-data="{field:'Day', width:120 ,fixed: 'left'}">Day</th>
+                <th lay-data="{field:'1Day', minWidth:100}">SignUp</th>
+                <th lay-data="{field:'1Day', width:100}">1Day</th>
+                <th lay-data="{field:'1Day%', width:100}">1Day%</th>
+                <th lay-data="{field:'2Day', width:100}">2Day</th>
+                <th lay-data="{field:'2Day%', width:100}">2Day%</th>
+                <th lay-data="{field:'3Day', width:100}">3Day</th>
+                <th lay-data="{field:'3Day%', width:100}">3Day%</th>
+                <th lay-data="{field:'7Day', width:100}">7Day</th>
+                <th lay-data="{field:'7Day%', width:100}">7Day%</th>
+                <th lay-data="{field:'30Day', width:100}">30Day</th>
+                <th lay-data="{field:'30Day%', width:100}">30Day%</th>
             </tr>
             </thead>
             <tbody>
@@ -107,54 +107,19 @@
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-        }).use(['common' , 'table' , 'layer' , 'flow' , 'laydate'], function () {
+        }).use(['common' , 'table' , 'laydate'], function () {
             var $ = layui.jquery,
                 table = layui.table,
-                form = layui.form,
-                common = layui.common,
-                layer = layui.layer,
-                flow = layui.flow,
                 laydate = layui.laydate;
-
             laydate.render({
                 elem: '#period'
                 ,range: true
                 ,max : 'today'
                 ,lang: 'en'
-
-
             });
-
-
-            table.init('user_table', { //转化静态表格
-                page:false
+            table.init('common_table', {
+                page:false,
             });
-
-            table.on('tool(user_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-
-                if(layEvent === 'detail'){ //查看
-                    //do somehing
-                } else if(layEvent === 'del'){ //删除
-                    layer.confirm("{{trans('common.confirm.delete')}}", function(index){
-                        common.ajax("{{url('/backstage/permission')}}/"+data.id , {} , function(res){
-                            common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
-                                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                // layer.close(index);
-                                location.reload();
-                            });
-                        } , 'delete');
-
-
-                        //向服务端发送删除指令
-                    });
-                } else if(layEvent === 'edit'){ //编辑
-                    location.href='/{{app()->getLocale()}}/backstage/passport/user/'+data.user_id+'/edit';
-                }
-            });
-            flow.lazyimg();
 
         })
     </script>

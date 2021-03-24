@@ -211,8 +211,9 @@
                     title: 'Props settings',
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['360px', '100%'],
+                    area: ['360px', '90%'],
                     offset: 'auto',
+                    scrollbar: true,
                     content: '/backstage/props/props/create',
                 });
             });

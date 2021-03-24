@@ -13,7 +13,7 @@
     </head>
 
 
-    <body class="layui-layout-body">
+    <body>
     <div class="layui-layout layui-layout-admin">
         <!-- 后台页面内容 -->
         @yield('content')

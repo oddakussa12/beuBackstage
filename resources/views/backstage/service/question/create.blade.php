@@ -3,12 +3,6 @@
     @php
         $qn_token = qnToken('qn_event_source');
     @endphp
-    <style type="text/css">
-        .layui-input { width: 300px;}
-        .layui-form-select {z-index: 11000;}
-        .layui-table td, .layui-table th {padding: 5px;}
-        .layui-layout-body {height: 95%; overflow-y: scroll}
-    </style>
     <div class="layui-fluid">
         <form class="layui-form layui-tab-content">
             {{ csrf_field() }}
@@ -16,13 +10,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Title EN：</label>
                     <div class="layui-input-block">
-                        <input type="text" style="min-width: 300px;" id="title_en" name="title_en" placeholder="Only English"  required="required" autocomplete="off" class="layui-input" value="">
+                        <input type="text" id="title_en" name="title_en" placeholder="Only English"  required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Title CN：</label>
                     <div class="layui-input-block">
-                        <input type="text" style="min-width: 300px;" id="title_cn" name="title_cn" placeholder="仅可中文"  required="required" autocomplete="off" class="layui-input" value="">
+                        <input type="text" id="title_cn" name="title_cn" placeholder="仅可中文"  required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
             </div>

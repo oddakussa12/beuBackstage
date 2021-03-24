@@ -5,8 +5,6 @@
         $qn_token = qnToken('qn_event_source');
     @endphp
     <div class="layui-fluid">
-
-
         <form class="layui-form">
             {{ csrf_field() }}
             <div class="layui-form-item">
