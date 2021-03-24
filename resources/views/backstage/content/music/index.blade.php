@@ -8,7 +8,7 @@
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
                 <table class="layui-hide" id="music_table" lay-filter="music_table"></table>
-                <div style="display:block;margin:0 80% 0 20%;width:500px;">
+                <div style="display:block;width:60%;">
                     <form  class="layui-form" lay-filter="music_form">
                         <div class="layui-form-item">
                             <div class="layui-inline">
@@ -17,8 +17,6 @@
                                     <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
-                        </div>
-                        <div class="layui-form-item">
                             <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('music.form.label.time')}}</label>
                                 <div class="layui-input-inline">
@@ -26,34 +24,34 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <div class="layui-inline">
-                                <div class="layui-upload">
-                                    <label class="layui-form-label">Upload Music</label>
-                                    <div class="layui-input-inline">
-                                        <div class="layui-upload-list">
-                                            <table class="layui-table">
-                                                <thead>
-                                                <tr>
-                                                    <th>File Name</th>
-                                                    <th>Operate</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="fileList">
+                        <div>
+                            <div class="layui-upload">
+                                <label class="layui-form-label">Upload Music</label>
+                                <div class="layui-input-block">
+                                    <div class="layui-upload-list">
+                                        <table class="layui-table"  lay-filter="static_table">
+                                            <thead>
+                                            <tr>
+                                                <th lay-data="{field:'name', width:100}">File Name</th>
+                                                <th lay-data="{field:'op', width:100}">Operate</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="fileList">
 
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button class="layui-btn" lay-submit lay-filter="form_submit_add">{{trans('common.form.button.add')}}</button>
                                 <button type="button" class="layui-btn" id="music"><i class="layui-icon"></i>Upload Music</button>
-                                {{--                            <button class="layui-btn" lay-submit lay-filter="form_submit_update">{{trans('common.form.button.update')}}</button>--}}
-                                {{--                            <button type="reset" class="layui-btn layui-btn-primary">{{trans('common.form.button.reset')}}</button>--}}
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="form_submit_add">{{trans('common.form.button.add')}}</button>
                             </div>
                         </div>
                     </form>
@@ -161,6 +159,9 @@
                 play_list = document.querySelector("#play_list"),
                 player = document.querySelector("#player"),
                 play_index = 0;
+            var fileTable = table.init('static_table', {
+                page:false
+            });
             var backward = function (){
                 if(play_index==0){
                     play_index=music_list.length-1;
@@ -213,7 +214,6 @@
                     var spanTitleTag = document.createElement("span");
                     //创建时长span标签
                     var spanDurationTag = document.createElement("span");
-                    console.log(play_list);
                     //为ul添加li标签，子节点
                     play_list.appendChild(liTag);
                     //为li标签，添加子节点
@@ -528,12 +528,18 @@
                                 }
                                 tr.find('.file-delete').on('click', function(obj){
                                     $(obj.target).closest('tr').remove();
-                                    table.render();
+                                    table.init('static_table', {
+                                        page:false
+                                    })
                                 });
                                 fileListView.append(tr);
                                 browserMD5File(file, function (err, md5) {
                                     $("input[name=hash]").val(md5);
                                 });
+                                console.log(fileTable);
+                                table.init('static_table', {
+                                    page:false
+                                })
                             },
                             error:function(){
                                 alert('upload failed');
