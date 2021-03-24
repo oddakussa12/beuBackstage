@@ -3,9 +3,12 @@ namespace App\Http\Controllers\Operator;
 
 use App\Exports\MessageExport;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class VersionController extends Controller
@@ -110,10 +113,41 @@ class VersionController extends Controller
         !blank($last)&&$data['last'] = $last;
         !blank($upgrade_point)&&$data['upgrade_point'] = $upgrade_point;
         !blank($data)&&DB::connection('lovbee')->table('app_versions')->where('id' , $id)->update($data);
+        $this->httpRequest('backStage/version/upgrade' , [] , "PATCH");
         return response()->json([
             'result' => 'success',
         ]);
 
+    }
+
+
+    /**
+     * @param $url
+     * @param $data
+     * @param string $method
+     * @param bool $json
+     * @return bool
+     * HTTP Request
+     */
+    public function httpRequest($url, $data=array(), $method='POST', $json=false)
+    {
+        try {
+            $client = new Client();
+            foreach ($data as &$datum) {
+                $datum = is_array($datum) ? json_encode($datum, JSON_UNESCAPED_UNICODE) : $datum;
+            }
+            $signature = common_signature($data);
+            $data['signature'] = $signature;
+            $data     = $json ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
+            $response = $client->request($method, front_url($url), ['form_params'=>$data]);
+            $code     = $response->getStatusCode();
+            if (!in_array($code, [200, 204])) {
+                return false;
+            }
+            return true;
+        } catch (GuzzleException $e) {
+            return false;
+        }
     }
 
 }
