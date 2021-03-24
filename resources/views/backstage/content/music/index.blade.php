@@ -32,7 +32,7 @@
                                         <table class="layui-table"  lay-filter="static_table">
                                             <thead>
                                             <tr>
-                                                <th lay-data="{field:'name', width:100}">File Name</th>
+                                                <th lay-data="{field:'name', minWidth:100}">File Name</th>
                                                 <th lay-data="{field:'op', width:100}">Operate</th>
                                             </tr>
                                             </thead>

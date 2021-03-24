@@ -90,8 +90,8 @@ Route::group(['prefix'=>'backstage'] , function(){
     });
     Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
 });
-Route::any('/' , function(){
-    return redirect('/backstage');
-});
+//Route::any('/' , function(){
+//    return redirect('/backstage');
+//});
 
 
