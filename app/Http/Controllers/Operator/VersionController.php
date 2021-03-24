@@ -102,8 +102,8 @@ class VersionController extends Controller
     public function update(Request $request , $id)
     {
         $data = array();
-        $version = strval($request->input('version' , 0));
-        $last = strval($request->input('last' , 0));
+        $version = strval($request->input('version' , ''));
+        $last = strval($request->input('last' , ''));
         $upgrade_point = strval($request->input('upgrade_point' , ''));
 //        $app = DB::connection('lovbee')->table('app_versions')->where('status' , 1)->first();
         !blank($version)&&$data['version'] = $version;
