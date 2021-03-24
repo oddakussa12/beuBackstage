@@ -18,7 +18,7 @@ return [
     'default_password'=>'oiuy1trp9',
     'mt_front_test_domain'=>env('APP_TEST_URL' , 'http://test.api.mmantou.cn/'),
     'lovbee_domain'=>env('APP_LOVBEE_URL' , 'https://api.helloo.mantouhealth.com/'),
-    'mt_front_domain'=>env('APP_TEST' , false)?env('APP_TEST_URL' , 'http://127.0.0.1:8000/'):'http://api.mmantou.cn/',
+    'mt_front_domain'=>env('APP_TEST' , false)?env('APP_TEST_URL' , 'http://127.0.0.1:8000/'):'https://api.helloo.mantouhealth.com/',
     'countries_name'   => [
         '0' => 'Select Country',
         '1' => 'United States',
