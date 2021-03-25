@@ -63,6 +63,7 @@
             <tr>
                 <th lay-data="{field:'id', width:80 , fixed: 'left'}">ID</th>
                 <th lay-data="{field:'name', minWidth:100,sort:true, fixed: 'left'}">Name</th>
+                <th lay-data="{field:'remark', width:200,edit: 'text'}">Remark</th>
                 <th lay-data="{field:'cover', width:80}">Image</th>
                 <th lay-data="{field:'recommendation', width:120}">Recommend</th>
                 <th lay-data="{field:'category', minWidth:120}">Category</th>
@@ -82,6 +83,7 @@
                 <tr>
                     <td>{{$value->id}}</td>
                     <td>{{$value->name}}</td>
+                    <td>{{$value->remark}}</td>
                     <td><img style="width: 33px;" src="{{$value->cover}}"></td>
                     <td><input type="checkbox" @if($value->recommendation==1) checked @endif name="recommendation" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>{{$value->category}}</td>

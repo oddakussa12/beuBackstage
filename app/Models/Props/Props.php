@@ -18,7 +18,7 @@ class Props extends Base
     protected $primaryKey = 'id';
 
     protected $fillable = [
-      'name', 'cover', 'url', 'category', 'hash', 'camera', 'is_default', 'recommendation', 'is_delete'
+      'name', 'cover', 'remark', 'url', 'category', 'hash', 'camera', 'is_default', 'recommendation', 'is_delete'
     ];
 
 }
