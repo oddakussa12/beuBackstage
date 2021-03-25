@@ -97,12 +97,12 @@
             function  hoverOpenImg(){
                 let img_show = null; // tips提示
                 $('td img').hover(function(){
-                    let img = "<img class='img_msg' src='"+$(this).attr('src')+"' style='height:300px;' />";
+                    let img = "<img class='img_msg' src='"+$(this).attr('src')+"' style='max-height:300px;min-height: 100px;' />";
                     img_show = layer.tips(img, this,{
                         tips:1,
                     });
                 },function(){
-                   // layer.close(img_show);
+                    layer.close(img_show);
                 });
                 $('td img').attr('style','max-width:400px');
             }
