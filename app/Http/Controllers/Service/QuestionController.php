@@ -117,10 +117,10 @@ class QuestionController extends Controller
             $title   = ['en'=>$params['title_en'], 'zh-CN'=>$params['title_cn']];
             $content = ['en'=>$params['en'], 'zh-CN'=>$params['zh-CN']];
         }
-        $question->content =  empty($content)          ? $question->content   : json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
-        $question->title   =  empty($title)            ? $question->title     : json_encode($title   ?? [], JSON_UNESCAPED_UNICODE);
-        $question->sort    = !empty($params['sort'])   ? (int)$params['sort'] : $question->sort;
-        $question->status  = !empty($params['status']) ? $params['status']    : $question->status;
+        $question->content =  empty($content)         ? $question->content     : json_encode($content ?? [], JSON_UNESCAPED_UNICODE);
+        $question->title   =  empty($title)           ? $question->title       : json_encode($title   ?? [], JSON_UNESCAPED_UNICODE);
+        $question->sort    = !empty($params['sort'])  ? (int)$params['sort']   : $question->sort;
+        $question->status  = isset($params['status']) ? (int)$params['status'] : $question->status;
         $question->save();
 
         return response()->json(['result' => 'success']);
