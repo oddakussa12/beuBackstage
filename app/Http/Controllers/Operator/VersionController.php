@@ -113,7 +113,7 @@ class VersionController extends Controller
         !blank($last)&&$data['last'] = $last;
         !blank($upgrade_point)&&$data['upgrade_point'] = $upgrade_point;
         !blank($data)&&DB::connection('lovbee')->table('app_versions')->where('id' , $id)->update($data);
-        $this->httpRequest('backStage/version/upgrade' , [] , "PATCH");
+        $this->httpRequest('api/backStage/version/upgrade' , [] , "PATCH");
         return response()->json([
             'result' => 'success',
         ]);
