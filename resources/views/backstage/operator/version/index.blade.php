@@ -92,6 +92,7 @@
                 tooltip: {
                     trigger: 'axis',
                 },
+                color: ['#ff3333','#ff00ff','#33ff33','#330099','#0066ff','#F08080','#9A32CD','#A0522D','#C2C2C2','#43CD80','#008B00','#3D3D3D','#4B0082','#8B0000'],
                 legend: {
                     data: @json($version)
                 },

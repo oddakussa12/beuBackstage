@@ -122,16 +122,8 @@ class MessageController extends Controller
 
     public function play(Request $request)
     {
-        $page     = intval($request->input('page' , 1));
-        $month    = intval($request->input('month' , 1));
-        $page     = $page-1;
-        $page     = $page<0?0:$page;
-        $message  = $this->message($request);
-        $messages = $message['result'];
-        $from     = $message['from'];
-        $page     = $page+1;
         $dateTime = date('Y-m-d', time()-86400*2). ' - '. date('Y-m-d', time()-86400);
-        return  view('backstage.service.message.play' , compact('messages' , 'from' , 'page', 'month', 'dateTime'));
+        return  view('backstage.service.message.play', compact('dateTime'));
     }
 
     public function video(Request $request)

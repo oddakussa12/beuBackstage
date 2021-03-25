@@ -25,8 +25,9 @@ class VersionController extends Controller
         $list   = DB::connection('lovbee')->table($table)->select(DB::raw('version, count(DISTINCT(user_id)) num, created_at date'));
         $list   = $list->where('version', '>', 0)->whereBetween('created_at', [$start, $end])->groupBy(DB::raw('created_at,version'))->get();
 
-        $version= collect($list)->pluck('version')->unique()->values()->toArray();
-        $dates  = collect($list)->pluck('date')->unique()->values()->sort()->toArray();
+        $version = collect($list)->pluck('version')->unique()->values()->toArray();
+        $dates   = collect($list)->pluck('date')->unique()->values()->sort()->toArray();
+        $forList = array();
 
         foreach ($dates as $date) {
             $total  = 0;
@@ -38,7 +39,6 @@ class VersionController extends Controller
             }
             $count[] = $total ?? 0;
         }
-        $forList = array();
         foreach ($forList as $key=>$value) {
             $line[] = [
                 "name" => $key,
@@ -151,6 +151,21 @@ class VersionController extends Controller
             Log::info('http_request_fail' , array('code'=>$e->getCode() , 'message'=>$e->getMessage()));
             return false;
         }
+    }
+
+
+    public function get_color_by_scale( ) {
+        $str='0123456789ABCDEF';
+        $est='';
+        $len=strlen($str);
+        for($i=1;$i<=6;$i++) {
+            $num=rand(0,$len-1);
+            $est=$est.$str[$num];
+        }
+        if($est < 0 || hexdec($est) > hexdec('ffffff')) {
+            $est = 'b4e0e1';
+        }
+        return  "#".$est;
     }
 
 }
