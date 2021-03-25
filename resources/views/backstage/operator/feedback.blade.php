@@ -22,7 +22,6 @@
             <th  lay-data="{field:'image', minWidth:100}">Image</th>
             <th  lay-data="{field:'content', minWidth:300}">Content</th>
             <th  lay-data="{field:'created_at', width:160}">CreateAT</th>
-            <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +35,6 @@
                     @endforeach
                 <td>{{$l->content}}</td>
                 <td>{{$l->created_at}}</td>
-                <td></td>
             </tr>
         @endforeach
         </tbody>
