@@ -39,14 +39,14 @@
                         <tr>
                             <th lay-data="{field:'Day', width:120 ,fixed: 'left'}">Day</th>
                             <th lay-data="{field:'DAU', minWidth:100}">DAU</th>
-                            <th lay-data="{field:'0NUM', width:100}">0NUM</th>
-                            <th lay-data="{field:'0NUM%', width:100}">0NUM%</th>
-                            <th lay-data="{field:'1NUM', width:100}">1NUM</th>
-                            <th lay-data="{field:'1NUM%', width:100}">1NUM%</th>
-                            <th lay-data="{field:'2NUM', width:100}">2NUM</th>
-                            <th lay-data="{field:'2NUM%', width:100}">2NUM%</th>
-                            <th lay-data="{field:'3NUM', width:100}">>3NUM</th>
-                            <th lay-data="{field:'3NUM%', width:100}">>3NUM%</th>
+                            <th lay-data="{field:'0NUM', width:150}">0NUM</th>
+                            <th lay-data="{field:'0NUM%', width:150}">0NUM%</th>
+                            <th lay-data="{field:'1NUM', width:150}">1NUM</th>
+                            <th lay-data="{field:'1NUM%', width:150}">1NUM%</th>
+                            <th lay-data="{field:'2NUM', width:150}">2NUM</th>
+                            <th lay-data="{field:'2NUM%', width:150}">2NUM%</th>
+                            <th lay-data="{field:'3NUM', width:150}">>3NUM</th>
+                            <th lay-data="{field:'3NUM%', width:150}">>3NUM%</th>
                         </tr>
                         </thead>
                         <tbody>
