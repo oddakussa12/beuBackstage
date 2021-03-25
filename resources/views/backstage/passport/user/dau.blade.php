@@ -38,7 +38,7 @@
                         <thead>
                         <tr>
                             <th lay-data="{field:'Day', width:120 ,fixed: 'left'}">Day</th>
-                            <th lay-data="{field:'DAU', width:100}">DAU</th>
+                            <th lay-data="{field:'DAU', minWidth:100}">DAU</th>
                             <th lay-data="{field:'0NUM', width:100}">0NUM</th>
                             <th lay-data="{field:'0NUM%', width:100}">0NUM%</th>
                             <th lay-data="{field:'1NUM', width:100}">1NUM</th>
