@@ -93,33 +93,4 @@ class OperatorController extends Controller
         return $params;
 
     }
-
-
-    public function userChart(&$params)
-    {
-        $gender = DB::connection('lovbee')->table('users')->select(DB::raw('count(user_gender) num, user_gender'))->groupBy('user_gender')->get()->toArray();
-        foreach ($gender as $item) {
-            $sexDate[] = [
-                'name' => $item->user_gender == -1 ? 'Other' : ($item->user_gender == 1 ? 'Male' : 'Female'),
-                'value'=> $item->num
-            ];
-        }
-
-        $country = DB::connection('lovbee')->table('users_countries')->select(DB::raw('count(country) value, country name'))->groupBy('country')->get()->toArray();
-        $country = array_map(function($value) {return (array)$value;}, $country);
-        $params['gender'][]  = [
-            'type'   => 'pie',
-            'radius' => '50%',
-            'data'   => $sexDate ?? [],
-            'label'  => ['normal'=>['formatter'=>"{b}: {c} {d}%"]]
-        ];
-        $params['chartCountry'][]  = [
-            'type'   => 'pie',
-            'radius' => '50%',
-            'data'   => $country ?? [],
-            'label'  => ['normal'=>['formatter'=>"{b}: {c} {d}%"]]
-        ];
-
-        return $params;
-    }
 }

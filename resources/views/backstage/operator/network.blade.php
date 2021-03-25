@@ -83,9 +83,10 @@
                         <th  lay-data="{field:'system_type', minWidth:100}">{{trans('feedback.form.label.system_type')}}</th>
                         <th  lay-data="{field:'system_version', width:100}">{{trans('feedback.form.label.system_version')}}</th>
                         <th  lay-data="{field:'carriname', width:100}">{{trans('feedback.form.label.carriname')}}</th>
-                        <th  lay-data="{field:'domain', minWidth:200}">{{trans('feedback.form.label.domain')}}</th>
+                        <th  lay-data="{field:'remote_domain', minWidth:200}">{{trans('feedback.form.label.domain')}}</th>
                         <th  lay-data="{field:'networking',width:100}">{{trans('feedback.form.label.networking')}}</th>
                         <th  lay-data="{field:'network_type',width:120}">{{trans('feedback.form.label.network_type')}}</th>
+                        <th  lay-data="{field:'real_ip',width:130}">{{trans('user.table.header.user_ip_address')}}</th>
                         <th  lay-data="{field:'local_ip',width:130}">{{trans('feedback.form.label.local_ip')}}</th>
                         <th  lay-data="{field:'local_gateway',width:130}">{{trans('feedback.form.label.local_gateway')}}</th>
                         <th  lay-data="{field:'local_dns',width:130}">{{trans('feedback.form.label.local_dns')}}</th>
@@ -106,9 +107,10 @@
                             <td>{{$l->system_type}}</td>
                             <td>{{$l->system_version}}</td>
                             <td>{{$l->carriname}}</td>
-                            <td>{{$l->domain}}</td>
+                            <td>{{$l->remote_domain}}</td>
                             <td>{{$l->networking}}</td>
                             <td>{{$l->network_type}}</td>
+                            <td>{{$l->real_ip}}</td>
                             <td>{{$l->local_ip}}</td>
                             <td>{{$l->local_gateway}}</td>
                             <td>{{$l->local_dns}}</td>
