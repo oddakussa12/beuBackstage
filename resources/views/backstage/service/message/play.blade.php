@@ -1,22 +1,18 @@
 @extends('layouts.dashboard')
 @section('layui-content')
+    <style>
+        .layui-table, .layui-table-view, .layui-form-item,.layui-form-switch { margin:0;}
+    </style>
     <div  class="layui-fluid">
         <div class="layui-row">
             <div class="layui-col-md4">
                 <section id="videoPlayer">
                     <video id="my-player" style="width: 100%" class="video-js" controls muted data-setup='{"autoplay": true,"preload": "true"}'>
-                        @if(!empty($messages['message_content']))
-                            @if(preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$messages['message_content']))
-                            <source src="{{$messages['message_content']}}"></source>
-                            @else
-                            <source src="https://media.helloo.cn.mantouhealth.com/{{$messages['message_content']}}"></source>
-                            @endif
-                        @endif
                         <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
                             <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
                         </p>
                     </video>
-                    <input type="hidden" value="{{$page}}" name="page" id="page">
+                    <input type="hidden" value="" name="page" id="page">
                 </section>
             </div>
             <div class="layui-col-md8">
@@ -77,7 +73,7 @@
                                         <button  type="button" class="layui-btn layui-btn-sm" id="prev"><i class="layui-icon layui-icon-prev"></i></button>
                                     </div>
                                     <div class="layui-input-inline" style="margin: 0px;">
-                                        <input  name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
+                                        <input  name="prev" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="">
                                     </div>
                                 </div>
 
@@ -87,7 +83,7 @@
                             <form class="layui-form">
                                 <div class="layui-form-item">
                                     <div class="layui-input-inline" style="margin: 0px;">
-                                        <input  name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="{{$page}}">
+                                        <input  name="next" lay-verify="required" placeholder="1" autocomplete="off" class="layui-input" value="">
                                     </div>
                                     <div class="layui-input-inline" style="width: 50px;margin: 4px;">
                                         <button type="button" class="layui-btn layui-btn-sm" id="next"><i class="layui-icon layui-icon-next"></i></button>
@@ -102,19 +98,19 @@
                     </tr>
                     <tr>
                         <td>ID</td>
-                        <td><span id="userId">@if(!empty($from->user_id)){{$from->user_id}}@endif</span></td>
+                        <td><span id="userId"></span></td>
                     </tr>
                     <tr>
                         <td>User Name</td>
-                        <td><span id="userName">@if(!empty($from->user_name)){{$from->user_name}}@endif</span></td>
+                        <td><span id="userName"></span></td>
                     </tr>
                     <tr>
                         <td>User Nick Name</td>
-                        <td><span id="userNickName">@if(!empty($from->user_nick_name)){{$from->user_nick_name}}@endif</span></td>
+                        <td><span id="userNickName"></span></td>
                     </tr>
                     <tr>
                         <td>Send Time</td>
-                        <td><span id="createdAt">@if(!empty($messages['created_at'])){{$messages['created_at']}}@endif</span></td>
+                        <td><span id="createdAt"></span></td>
                     </tr>
                     <tr>
                         <td colspan="2">Remark Column</td>
@@ -122,8 +118,8 @@
                     <tr>
                         <td colspan="2">
                             <form class="layui-form">
-                                <input type="hidden" id="id" name="id" value="@if(!empty($messages['id'])){{$messages['id']}}@endif">
-                                <textarea id="comment" name="comment" style="width: 100%;height: 53px; padding: 5px;">@if(!empty($messages['comment'])){{$messages['comment']}}@endif</textarea>
+                                <input type="hidden" id="id" name="id" value="">
+                                <textarea id="comment" name="comment" style="width: 100%;height: 53px; padding: 5px;"></textarea>
                                 <button style="float: left;" type="button" class="layui-btn layui-btn-sm" id="submit">Submit</button>
                             </form>
                         </td>
@@ -166,9 +162,9 @@
                 ,lang: 'en'
             });
             $(document).keyup(function(event){
-                if(event.keyCode ==39){
+                if(event.keyCode ===39){
                     $('#right').click();
-                }else if(event.keyCode ==37)
+                }else if(event.keyCode ===37)
                 {
                     $('#left').click();
                 }
@@ -183,13 +179,15 @@
             layer.ready(function(){
                 let month = Storage.get('month');
                 let page  = Storage.get('page');
-                if (month!==null) {
-                    $("select[name='month']").val(month);
-                    $("input[name='prev']").val(page);
-                    $(" [name='next']").val(page);
-                    form.render();
-                    window.history.pushState(null, null, "?page="+page+"&month="+month);
-                }
+                let date  = new Date();
+                month = month!==null ? month : date.getMonth()+1;
+                page  = page!==null  ? page  : 1;
+                $("select[name='month']").val(month);
+                $("input[name='prev']").val(page);
+                $(" [name='next']").val(page);
+                form.render();
+                get(page, month);
+
             });
 
             let player = videojs('my-player', {
