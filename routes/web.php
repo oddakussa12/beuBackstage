@@ -44,6 +44,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('version/upgrade' , 'VersionController@upgrade')->name('version.upgrade');
             Route::get('chat' , 'ChatController@index')->name('chat.index');
             Route::get('operator/network' , 'OperatorController@network')->name('operator.network');
+            Route::get('operator/feedback' , 'OperatorController@feedback')->name('operator.feedback');
         });
 
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){

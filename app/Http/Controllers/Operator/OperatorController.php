@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Operator;
 
 use App\Exports\MessageExport;
+use App\Models\Passport\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -40,57 +41,37 @@ class OperatorController extends Controller
         $list = $list->orderByDesc('time')->paginate(10);
         $params['appends']  = $params;
         $params['list']     = $list;
-        $params = $this->chart($params);
         return view('backstage.operator.network', $params);
     }
 
-    public function chart($params)
+    public function feedback(Request $request)
     {
+        $params = $request->all();
         $params['dateTime'] = $params['dateTime'] ?? date('Y-m-d', strtotime('-7day')).' - '.date('Y-m-d');
-        $time        = explode(' - ', $params['dateTime']);
-        $start       = current($time);
-        $end         = last($time);
-        $base        = DB::connection('lovbee')->table($this->table);
-        $chart       = $base->whereBetween('time', [$start, $end])->get()->toArray();
-        $appVersion  = collect($chart)->pluck('app_version')->toArray();
-        $networkType = collect($chart)->pluck('network_type')->toArray();
 
-        $dates = printDates($start, $end);
-        $count = array();
-        foreach ($dates as $date) {
-            foreach ($appVersion as $item) {
-                $num = collect($chart)->where('time',$date)->where('app_version', $item)->count();
+        $table  = 'feedback';
+        $result = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name');
+        $result = $result->leftJoin('users', 'users.user_id', '=', "$table.user_id");
+
+        if (isset($params['status'])) {
+            if (in_array($params['status'], [0, 1, '0', '1'])) {
+                $result = $result->where("$table.status", $params['status']);
             }
-            $count['appVersion'][]   = !empty($appVersion)  ? current($appVersion)  : 0;
-            $count['networkType'][]  = !empty($networkType) ? current($networkType) : 0;
+        } else {
+            $result = $result->where("$table.status", 0);
+        }
+        if (!empty($params['keyword'])) {
+            if (!empty($params['keyword'])) {
+                $keyword = trim($params['keyword']);
+                $result  = $result->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
+            }
+        }
+        $result = $result->orderByDesc('id')->paginate(10);
+        foreach ($result as $item) {
+            $item->image = !empty($item->image) ? explode(';', $item->image) : [];
         }
 
-        $params['chart']    = $chart;
-        $params['header']   = array_keys($count);
-        $params['dates']    = $dates;
-
-        foreach ($count as $key=>$value) {
-            $params['line'][] = [
-                "name" => $key,
-                "type" => "line",
-                "data" => $value,
-                'areaStyle' => [],
-                'markPoint' => ['data' =>[['type'=>'max', 'name'=>'MAX'], ['type'=>'min', 'name'=>'MIN']]],
-                'markLine'  => ['data' =>[['type'=>'average']]],
-                'itemStyle' => ['normal'=>['label'=>['show'=>true]]]
-            ];
-        }
-        $params['header'] = [];
-        $params['dates'] = [];
-        $params['line'] = [];
-
-
-        $params['appVersions']    = $base->pluck('app_version')->unique()->toArray();
-        $params['systemVersions'] = $base->pluck('system_version')->unique()->toArray();
-        $params['networks']       = $base->pluck('networking')->unique()->toArray();
-        $params['networkTypes']   = $base->pluck('network_type')->unique()->toArray();
-
-        return $params;
-
+        $params['list'] = $result;
+        return view('backstage.operator.feedback', $params);
     }
 }
