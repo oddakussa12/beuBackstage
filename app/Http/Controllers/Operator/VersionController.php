@@ -39,7 +39,6 @@ class VersionController extends Controller
             }
             $count[] = $total ?? 0;
         }
-        $forList = array();
         foreach ($forList as $key=>$value) {
             $line[] = [
                 "name" => $key,
