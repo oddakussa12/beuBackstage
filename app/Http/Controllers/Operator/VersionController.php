@@ -140,12 +140,15 @@ class VersionController extends Controller
             $data['signature'] = $signature;
             $data     = $json ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
             $response = $client->request($method, front_url($url), ['form_params'=>$data]);
-            $code     = $response->getStatusCode();
-            if (!in_array($code, [200, 204])) {
+            $code     = intval($response->getStatusCode());
+            if ($code>=300) {
+                Log::info('http_request_fail' , array('code'=>$code));
                 return false;
             }
+            Log::info('http_request_success' , array('code'=>$code));
             return true;
         } catch (GuzzleException $e) {
+            Log::info('http_request_fail' , array('code'=>$e->getCode() , 'message'=>$e->getMessage()));
             return false;
         }
     }
