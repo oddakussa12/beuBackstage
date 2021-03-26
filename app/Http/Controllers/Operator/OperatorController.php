@@ -44,6 +44,56 @@ class OperatorController extends Controller
         return view('backstage.operator.network', $params);
     }
 
+    public function chart($params)
+    {
+        $params['dateTime'] = $params['dateTime'] ?? date('Y-m-d', strtotime('-7day')).' - '.date('Y-m-d');
+        $time        = explode(' - ', $params['dateTime']);
+        $start       = current($time);
+        $end         = last($time);
+        $base        = DB::connection('lovbee')->table($this->table);
+        $chart       = $base->whereBetween('time', [$start, $end])->get()->toArray();
+        $appVersion  = collect($chart)->pluck('app_version')->toArray();
+        $networkType = collect($chart)->pluck('network_type')->toArray();
+
+        $dates = printDates($start, $end);
+        $count = array();
+        foreach ($dates as $date) {
+            foreach ($appVersion as $item) {
+                $num = collect($chart)->where('time',$date)->where('app_version', $item)->count();
+            }
+            $count['appVersion'][]   = !empty($appVersion)  ? current($appVersion)  : 0;
+            $count['networkType'][]  = !empty($networkType) ? current($networkType) : 0;
+        }
+
+        $params['chart']    = $chart;
+        $params['header']   = array_keys($count);
+        $params['dates']    = $dates;
+
+        foreach ($count as $key=>$value) {
+            $params['line'][] = [
+                "name" => $key,
+                "type" => "line",
+                "data" => $value,
+                'areaStyle' => [],
+                'markPoint' => ['data' =>[['type'=>'max', 'name'=>'MAX'], ['type'=>'min', 'name'=>'MIN']]],
+                'markLine'  => ['data' =>[['type'=>'average']]],
+                'itemStyle' => ['normal'=>['label'=>['show'=>true]]]
+            ];
+        }
+        $params['header'] = [];
+        $params['dates'] = [];
+        $params['line'] = [];
+
+
+        $params['appVersions']    = $base->pluck('app_version')->unique()->toArray();
+        $params['systemVersions'] = $base->pluck('system_version')->unique()->toArray();
+        $params['networks']       = $base->pluck('networking')->unique()->toArray();
+        $params['networkTypes']   = $base->pluck('network_type')->unique()->toArray();
+
+        return $params;
+
+    }
+
     public function feedback(Request $request)
     {
         $params = $request->all();
