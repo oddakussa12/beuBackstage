@@ -73,7 +73,7 @@
             <th  lay-data="{field:'user_name', width:150}">{{trans('user.table.header.user_name')}}</th>
             <th  lay-data="{field:'user_nickname', width:190}">{{trans('user.table.header.user_nick_name')}}</th>
             <th  lay-data="{field:'app_version', width:100}">{{trans('feedback.form.label.app_version')}}</th>
-            <th  lay-data="{field:'system_type', minWidth:100}">{{trans('feedback.form.label.system_type')}}</th>
+            <th  lay-data="{field:'system_type', minWidth:160}">{{trans('feedback.form.label.system_type')}}</th>
             <th  lay-data="{field:'system_version', width:100}">{{trans('feedback.form.label.system_version')}}</th>
             <th  lay-data="{field:'carriname', width:100}">{{trans('feedback.form.label.carriname')}}</th>
             <th  lay-data="{field:'remote_domain', minWidth:200}">{{trans('feedback.form.label.domain')}}</th>
