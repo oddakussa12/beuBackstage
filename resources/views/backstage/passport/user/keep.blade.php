@@ -31,21 +31,21 @@
 
             </div>
         </form>
-        <table class="layui-table" lay-filter="common_table" >
+        <table class="layui-table">
             <thead>
             <tr>
-                <th lay-data="{field:'Day', width:120 ,fixed: 'left'}">Day</th>
-                <th lay-data="{field:'1Day', minWidth:100}">SignUp</th>
-                <th lay-data="{field:'1Day', width:100}">1Day</th>
-                <th lay-data="{field:'1Day%', width:100}">1Day%</th>
-                <th lay-data="{field:'2Day', width:100}">2Day</th>
-                <th lay-data="{field:'2Day%', width:100}">2Day%</th>
-                <th lay-data="{field:'3Day', width:100}">3Day</th>
-                <th lay-data="{field:'3Day%', width:100}">3Day%</th>
-                <th lay-data="{field:'7Day', width:100}">7Day</th>
-                <th lay-data="{field:'7Day%', width:100}">7Day%</th>
-                <th lay-data="{field:'30Day', width:100}">30Day</th>
-                <th lay-data="{field:'30Day%', width:100}">30Day%</th>
+                <th>Day</th>
+                <th>SignUp</th>
+                <th>1Day</th>
+                <th>1Day%</th>
+                <th>2Day</th>
+                <th>2Day%</th>
+                <th>3Day</th>
+                <th>3Day%</th>
+                <th>7Day</th>
+                <th>7Day%</th>
+                <th>30Day</th>
+                <th>30Day%</th>
             </tr>
             </thead>
             <tbody>
