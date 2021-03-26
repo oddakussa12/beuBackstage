@@ -50,7 +50,7 @@ class OperatorController extends Controller
         $params['dateTime'] = $params['dateTime'] ?? date('Y-m-d', strtotime('-7day')).' - '.date('Y-m-d');
 
         $table  = 'feedback';
-        $result = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name');
+        $result = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name','users.user_avatar');
         $result = $result->leftJoin('users', 'users.user_id', '=', "$table.user_id");
 
         if (isset($params['status'])) {

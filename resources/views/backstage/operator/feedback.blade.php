@@ -17,8 +17,9 @@
         <thead>
         <tr>
             <th  lay-data="{field:'user_name', width:150 ,fixed: 'left'}">UserName</th>
-            <th  lay-data="{field:'id', minWidth:150}">UserNickName</th>
-            <th  lay-data="{field:'id', minWidth:100}">LogId</th>
+            <th  lay-data="{field:'user_avatar', width:80}">Avatar</th>
+            <th  lay-data="{field:'user_nick_name', minWidth:150}">UserNickName</th>
+            <th  lay-data="{field:'id', width:100}">LogId</th>
             <th  lay-data="{field:'image', minWidth:100}">Image</th>
             <th  lay-data="{field:'content', minWidth:300}">Content</th>
             <th  lay-data="{field:'created_at', width:160}">CreateAT</th>
@@ -28,6 +29,7 @@
         @foreach($list as $l)
             <tr>
                 <td>{{$l->user_name}}</td>
+                <td><img  style="height: 35px; width: 35px;" src="{{$l->user_avatar}}" /></td>
                 <td>{{$l->user_nick_name}}</td>
                 <td>{{$l->id}}</td>
                 <td>@foreach($l->image as $image)
@@ -102,9 +104,9 @@
                         tips:1,
                     });
                 },function(){
-                    layer.close(img_show);
+                   // layer.close(img_show);
                 });
-                $('td img').attr('style','max-width:400px');
+                //$('td img').attr('style','max-width:400px');
             }
         })
     </script>
