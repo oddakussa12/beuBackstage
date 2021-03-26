@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
 @section('layui-content')
+    <style>td img { height: 30px; width: 30px; padding-right: 2px;}</style>
     <form class="layui-form" action="">
         <div class="layui-form-item">
             <div class="layui-inline">
@@ -18,9 +19,8 @@
         <tr>
             <th  lay-data="{field:'user_name', width:150 ,fixed: 'left'}">UserName</th>
             <th  lay-data="{field:'user_avatar', width:80}">Avatar</th>
-            <th  lay-data="{field:'user_nick_name', minWidth:150}">UserNickName</th>
-            <th  lay-data="{field:'id', width:100}">LogId</th>
-            <th  lay-data="{field:'image', minWidth:100}">Image</th>
+            <th  lay-data="{field:'user_nick_name', width:150}">UserNickName</th>
+            <th  lay-data="{field:'image', width:150}">Image</th>
             <th  lay-data="{field:'content', minWidth:300}">Content</th>
             <th  lay-data="{field:'created_at', width:160}">CreateAT</th>
         </tr>
@@ -29,11 +29,10 @@
         @foreach($list as $l)
             <tr>
                 <td>{{$l->user_name}}</td>
-                <td><img  style="height: 35px; width: 35px;" src="{{$l->user_avatar}}" /></td>
+                <td><img src="{{$l->user_avatar}}" /></td>
                 <td>{{$l->user_nick_name}}</td>
-                <td>{{$l->id}}</td>
                 <td>@foreach($l->image as $image)
-                    @if(!empty($image))<img height="40px;" src="{{$image}}" />@endif
+                    @if(!empty($image))<img src="{{$image}}" />@endif
                     @endforeach
                 <td>{{$l->content}}</td>
                 <td>{{$l->created_at}}</td>
