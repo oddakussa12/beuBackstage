@@ -41,6 +41,13 @@ class OperatorController extends Controller
         $list = $list->orderByDesc('time')->paginate(10);
         $params['appends']  = $params;
         $params['list']     = $list;
+
+        $base = DB::connection('lovbee')->table($this->table);
+        $params['appVersions']    = $base->pluck('app_version')->unique()->toArray();
+        $params['systemVersions'] = $base->pluck('system_version')->unique()->toArray();
+        $params['networks']       = $base->pluck('networking')->unique()->toArray();
+        $params['networkTypes']   = $base->pluck('network_type')->unique()->toArray();
+
         return view('backstage.operator.network', $params);
     }
 
