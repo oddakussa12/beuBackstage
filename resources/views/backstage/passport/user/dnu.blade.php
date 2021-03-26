@@ -109,9 +109,9 @@
                 ,max : -2
                 ,lang: 'en'
             });
-            table.init('common_table', {
-                page:false,
-            });
+            // table.init('common_table', {
+            //     page:false,
+            // });
             var dom = document.getElementById("container");
             var myChart = echarts.init(dom);
             var app = {};

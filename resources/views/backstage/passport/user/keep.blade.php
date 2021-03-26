@@ -95,12 +95,6 @@
 @endsection
 @section('footerScripts')
     @parent
-    <script type="text/html" id="operateTpl">
-        <div class="layui-table-cell laytable-cell-1-6">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
-        </div>
-    </script>
 
     <script>
         layui.config({
@@ -117,9 +111,9 @@
                 ,max : 'today'
                 ,lang: 'en'
             });
-            table.init('common_table', {
-                page:false,
-            });
+            // table.init('common_table', {
+            //     page:false,
+            // });
 
         })
     </script>
