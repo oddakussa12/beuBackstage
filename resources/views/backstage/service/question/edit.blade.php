@@ -17,7 +17,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Title CN：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="title_cn" name="title_cn" placeholder="仅可中文"  required="required" autocomplete="off" class="layui-input" value="{{$data->title['zh-CN']}}">
+                        <input type="text" id="title_cn" name="title_cn" placeholder="仅中文"  required="required" autocomplete="off" class="layui-input" value="{{$data->title['zh-CN']}}">
                     </div>
                 </div>
             </div>

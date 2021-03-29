@@ -78,6 +78,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::resource('props' , 'PropsController');
             Route::get('category/index' , 'CategoryController@index')->name('category.index');
             Route::resource('category' , 'CategoryController');
+            Route::resource('medal' , 'MedalController'); //勋章
         });
 
         Route::resource('menu' , 'MenuController');
