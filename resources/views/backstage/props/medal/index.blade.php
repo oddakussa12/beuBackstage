@@ -10,7 +10,8 @@
                 <th lay-data="{field:'id', width:100 ,fixed: 'left'}">ID</th>
                 <th lay-data="{field:'image', width:100}">Image</th>
                 <th lay-data="{field:'name', minWidth:150,sort:true}">Name</th>
-                <th lay-data="{field:'category', width:100,}">Category</th>
+                <th lay-data="{field:'category', width:100}">Category</th>
+                <th lay-data="{field:'score', width:100}">Score</th>
                 <th lay-data="{field:'desc', minWidth:300,sort:true}">Description</th>
                 <th lay-data="{field:'sort', width:100,edit:'text', sort:true}">Sort</th>
                 <th lay-data="{field:'created_at', width:160}">CreatedAt</th>
@@ -28,7 +29,7 @@
                         @endif
                     </td>
                     <td>{{$value->category}}</td>
-
+                    <td>{{$value->score}}</td>
                     <td>@if(is_array($value->desc))@foreach($value->desc as $key=>$item)
                             {{$key}}: {{$item}} <br />
                         @endforeach
