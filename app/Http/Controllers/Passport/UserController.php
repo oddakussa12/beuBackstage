@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Passport;
 
 use Carbon\Carbon;
-use Fenos\Tests\Models\Car;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Exports\UsersExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use GuzzleHttp\Exception\GuzzleException;
 use App\Repositories\Contracts\UserRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserController extends Controller
 {
@@ -805,5 +807,72 @@ class UserController extends Controller
         $dnu = collect($list)->pluck('num');
         $xAxis = array_keys($list);
         return compact('startTime'  , 'list' , 'dnu' , 'xAxis');
+    }
+
+    public function online(Request $request)
+    {
+        $keyword = $request->input('keyword' , '');
+        $userId = -1;
+        if($request->has('keyword'))
+        {
+            $user = $this->user->allWithBuilder()->where('user_name' , $keyword)->first();
+            $userId = blank($user)?0:$user->user_id;
+        }
+        $page = $request->input('page' , 1);
+        if($userId>=0)
+        {
+            $result = $this->httpRequest('api/backStage/last/online' , array('user_id'=>$userId) , "GET");
+        }else{
+            $max = $request->input('max' , Carbon::now('Asia/Shanghai')->timestamp);
+            $result = $this->httpRequest('api/backStage/last/online' , array('page'=>$page , 'max'=>$max), "GET");
+        }
+        if(is_array($result))
+        {
+            $activeUsers = $result['users'];
+            $userIds = array_keys($activeUsers);
+            $count = $result['count'];
+            $perPage = $result['perPage'];
+        }else{
+            $activeUsers = $userIds = array();
+            $count = 0;
+            $perPage = 10;
+        }
+        $users = $this->user->findByMany($userIds);
+        $users->each(function($user) use ($activeUsers){
+            $user->activeTime = Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString();
+        });
+        $users = new LengthAwarePaginator($users, $count,$perPage);
+        return view('backstage.passport.user.online' , ['users' => $users]);
+    }
+
+    /**
+     * @param $url
+     * @param $data
+     * @param string $method
+     * @param bool $json
+     * @return bool
+     * HTTP Request
+     */
+    private function httpRequest($url, $data=array(), $method='POST', $json=false)
+    {
+        try {
+            $client = new Client();
+            foreach ($data as &$datum) {
+                $datum = is_array($datum) ? json_encode($datum, JSON_UNESCAPED_UNICODE) : $datum;
+            }
+            $signature = common_signature($data);
+            $data['signature'] = $signature;
+            $data     = $json ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
+            $response = $client->request($method, front_url($url), ['form_params'=>$data]);
+            $code     = intval($response->getStatusCode());
+            if ($code>=300) {
+                Log::info('http_request_fail' , array('code'=>$code));
+                return false;
+            }
+            return \json_decode($response->getBody()->getContents() , true);
+        } catch (GuzzleException $e) {
+            Log::info('http_request_fail' , array('code'=>$e->getCode() , 'message'=>$e->getMessage()));
+            return false;
+        }
     }
 }

@@ -21,6 +21,15 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         return $this->model->find($id)->videoViews;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function findByMany(array $ids)
+    {
+        $query = $this->model->query();
+        return $query->whereIn("user_id", $ids)->get();
+    }
+
     public function findByWhere($params, $export=false)
     {
         $now  = Carbon::now();
