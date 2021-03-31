@@ -847,7 +847,6 @@ class UserController extends Controller
         $users->each(function($user) use ($activeUsers){
             $user->activeTime = Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString();
         });
-        $perPage=2;
         $users = $this->paginator($users, $count, $perPage, $page, [
             'path' => Paginator::resolveCurrentPath(),
             'pageName' => 'page',
