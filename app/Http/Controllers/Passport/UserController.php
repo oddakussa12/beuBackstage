@@ -817,6 +817,7 @@ class UserController extends Controller
         $userId = -1;
         if($request->has('keyword'))
         {
+            $appends['keyword'] = $keyword;
             $user = $this->user->allWithBuilder()->where('user_name' , $keyword)->first();
             $userId = blank($user)?0:$user->user_id;
         }
@@ -827,6 +828,7 @@ class UserController extends Controller
             $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>$userId) , "GET");
         }else{
             $max = $request->input('max' , Carbon::now('Asia/Shanghai')->timestamp);
+            $appends['max'] = $max;
             $result = $this->httpRequest('api/backstage/last/online' , array('page'=>$page , 'max'=>$max), "GET");
         }
         if(is_array($result))
@@ -848,7 +850,7 @@ class UserController extends Controller
         $users = $this->paginator($users, $total, $perPage, $page, [
             'path' => Paginator::resolveCurrentPath(),
             'pageName' => 'page',
-        ]);
+        ])->appends($appends);
         return view('backstage.passport.user.online' , ['users' => $users]);
     }
 
