@@ -33,7 +33,7 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
     public function findByWhere($params, $export=false)
     {
         $now  = Carbon::now();
-        $user = $this->model->withTrashed();
+        $user = $this->model;
         if($export){
             $user = $user->select('users.user_id', 'users.user_avatar', 'users.user_name', 'users.user_nick_name', 'users_phones.user_phone_country', 'users_phones.user_phone','users.user_gender', 'users_countries.country','users.user_created_at');
         }
@@ -222,7 +222,7 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         {
             $start = $end;
         }
-        $user = $this->model->withTrashed();
+        $user = $this->model;
         if(!empty($id))
         {
             $user = $user->where('user_id' , $id);
