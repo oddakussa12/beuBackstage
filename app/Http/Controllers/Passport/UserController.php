@@ -9,13 +9,15 @@ use App\Exports\UsersExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Pagination\Paginator;
 use Maatwebsite\Excel\Facades\Excel;
 use GuzzleHttp\Exception\GuzzleException;
 use App\Repositories\Contracts\UserRepository;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Concerns\BuildsQueries;
 
 class UserController extends Controller
 {
+    use BuildsQueries;
     /**
      * @var UserRepository
      */
@@ -842,7 +844,11 @@ class UserController extends Controller
         $users->each(function($user) use ($activeUsers){
             $user->activeTime = Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString();
         });
-        $users = new LengthAwarePaginator($users, $count,$perPage);
+        $total = ceil($count/$perPage);
+        $users = $this->paginator($users, $total, $perPage, $page, [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => 'page',
+        ]);
         return view('backstage.passport.user.online' , ['users' => $users]);
     }
 
