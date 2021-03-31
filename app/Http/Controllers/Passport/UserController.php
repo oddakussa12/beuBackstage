@@ -818,6 +818,7 @@ class UserController extends Controller
             $user = $this->user->allWithBuilder()->where('user_name' , $keyword)->first();
             $userId = blank($user)?0:$user->user_id;
         }
+        $userId = intval($userId);
         $page = $request->input('page' , 1);
         if($userId>=0)
         {
@@ -863,7 +864,12 @@ class UserController extends Controller
             $signature = common_signature($data);
             $data['signature'] = $signature;
             $data     = $json ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
-            $response = $client->request($method, front_url($url), ['form_params'=>$data]);
+            if(strtolower($method)=='get')
+            {
+                $response = $client->request($method, front_url($url), array('query'=>$data));
+            }else{
+                $response = $client->request($method, front_url($url), ['form_params'=>$data]);
+            }
             $code     = intval($response->getStatusCode());
             if ($code>=300) {
                 Log::info('http_request_fail' , array('code'=>$code));

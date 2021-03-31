@@ -25,9 +25,7 @@
             <th  lay-data="{field:'user_gender', width:70}">{{trans('user.table.header.user_gender')}}</th>
             <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
             <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_active_time')}}</th>
-            <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_active_ip')}}</th>
             <th  lay-data="{field:'activation', width:70}">{{trans('user.table.header.user_activation')}}</th>
-            <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -40,9 +38,7 @@
                 <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1){{trans('common.cast.sex.other')}}@elseif($user->user_gender==0){{trans('common.cast.sex.female')}}@else{{trans('common.cast.sex.male')}}@endif</span></td>
                 <td>{{ $user->country }}</td>
                 <td>{{$user->activeTime}}</td>
-                <td>{{$user->ip}}</td>
                 <td><span class="layui-btn layui-btn-xs">@if($user->activation==1) YES @else NO @endif</span></td>
-                <td>{{ $user->user_format_created_at }}</td>
             </tr>
         @endforeach
         </tbody>
