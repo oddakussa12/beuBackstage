@@ -5,13 +5,9 @@ namespace App\Models\Passport;
 use Carbon\Carbon;
 use App\Models\Base;
 use App\Models\Report\Report;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Base
 {
-    //
-    use SoftDeletes;
-
     protected $primaryKey = 'user_id';
 
     const CREATED_AT = 'user_created_at';
