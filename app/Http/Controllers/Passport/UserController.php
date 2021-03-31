@@ -813,6 +813,7 @@ class UserController extends Controller
 
     public function online(Request $request)
     {
+        $appends = [];
         $keyword = $request->input('keyword' , '');
         $userId = -1;
         if($request->has('keyword'))
@@ -846,8 +847,7 @@ class UserController extends Controller
         $users->each(function($user) use ($activeUsers){
             $user->activeTime = Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString();
         });
-        $total = ceil($count/$perPage);
-        $users = $this->paginator($users, $total, $perPage, $page, [
+        $users = $this->paginator($users, $count, $perPage, $page, [
             'path' => Paginator::resolveCurrentPath(),
             'pageName' => 'page',
         ])->appends($appends);
