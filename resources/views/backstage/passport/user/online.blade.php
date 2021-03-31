@@ -3,15 +3,14 @@
     <form class="layui-form">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Name/ID:</label>
+                <label class="layui-form-label">Name:</label>
                 <div class="layui-input-inline">
                     <input class="layui-input" placeholder="" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
-                <div class="layui-input-inline" style="width: 300px;">
-                    <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
+                <div class="layui-input-inline">
+                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
                 </div>
             </div>
         </div>
