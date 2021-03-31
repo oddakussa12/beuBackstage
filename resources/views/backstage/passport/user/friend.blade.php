@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.app')
 @section('layui-content')
 <div  class="layui-fluid">
     <table class="layui-table"  lay-filter="common_table">
