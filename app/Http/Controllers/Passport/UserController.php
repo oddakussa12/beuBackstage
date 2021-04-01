@@ -826,7 +826,7 @@ class UserController extends Controller
         $page = $request->input('page' , 1);
         if($userId>=0)
         {
-            $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>$userId) , "GET");
+            $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>(array)$userId) , "GET");
         }else{
             $max = $request->input('max' , Carbon::now('Asia/Shanghai')->timestamp);
             $appends['max'] = $max;
@@ -852,6 +852,33 @@ class UserController extends Controller
             'pageName' => 'page',
         ])->appends($appends);
         return view('backstage.passport.user.online' , ['users' => $users]);
+    }
+
+    public function friendStatus(Request $request , $id)
+    {
+        $friendIds = array();
+        DB::connection('lovbee')->table('users_friends')->where('user_id' , $id)->chunk(100  , function ($friends) use (&$friendIds){
+            $friendId = $friends->pluck('friend_id')->toArray();
+            $friendIds = array_merge($friendIds , $friendId);
+        });
+        $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>$friendIds) , "GET");
+        if(is_array($result))
+        {
+            $activeUsers = $result['users'];
+            $activeUsers = collect($activeUsers)->reject(function ($value, $key) {
+                return $value == 946656000;
+            })->toArray();
+            $userIds = array_keys($activeUsers);
+            $users = $this->user->findByMany($userIds);
+            $users->each(function($user) use ($activeUsers){
+                $user->activeTime = Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString();
+            });
+            dd($users);
+        }else{
+            $activeUsers = $userIds = array();
+            $count = 0;
+            $perPage = 10;
+        }
     }
 
     /**
@@ -889,4 +916,5 @@ class UserController extends Controller
             return false;
         }
     }
+
 }
