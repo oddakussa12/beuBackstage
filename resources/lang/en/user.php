@@ -32,6 +32,7 @@ return [
             'friend'=>'Friend',
             'history'=>'History',
             'friend_active'=>'Friend Active',
+            'friend_yesterday_active'=>'Friend Yesterday Active',
         ]
     ],
     'form'=>[
