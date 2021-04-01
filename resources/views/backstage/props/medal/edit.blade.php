@@ -10,19 +10,31 @@
             {{ csrf_field() }}
             <div class="layui-form-item">
                 <div class="layui-inline">
+                    <label class="layui-form-label">Name CN：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="name_cn" name="name_cn" required="required" placeholder="仅中文" autocomplete="off" class="layui-input" value="{{$data->name['cn']}}">
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">Name EN：</label>
                     <div class="layui-input-block">
                         <input type="text" id="name_en" name="name_en" required="required" placeholder="Only English" autocomplete="off" class="layui-input" value="{{$data->name['en']}}">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Name CN：</label>
+                    <label class="layui-form-label">Name ID：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="name_cn" name="name_cn" required="required" placeholder="仅中文" autocomplete="off" class="layui-input" value="{{$data->name['cn']}}">
+                        <input type="text" id="name_id" name="name_id" required="required" placeholder="id" autocomplete="off" class="layui-input" value="@if(!empty($data->name['id'])){{$data->name['id']}}@endif">
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">Description CN：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="desc_cn" name="desc_cn" required="required" placeholder="仅中文" autocomplete="off" class="layui-input" value="{{$data->desc['cn']}}">
+                    </div>
+                </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Description EN：</label>
                     <div class="layui-input-block">
@@ -30,9 +42,9 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Description CN：</label>
+                    <label class="layui-form-label">Description ID：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="desc_cn" name="desc_cn" required="required" placeholder="仅中文" autocomplete="off" class="layui-input" value="{{$data->desc['cn']}}">
+                        <input type="text" id="desc_id" name="desc_id" required="required" placeholder="id" autocomplete="off" class="layui-input" value="@if(!empty($data->desc['id'])){{$data->desc['id']}}@endif">
                     </div>
                 </div>
             </div>
@@ -66,7 +78,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"></label>
                     <div class="layui-input-block">
-                        <img style="width:100px;height: 100px;" src="{{$data->image}}" id="show" name="show" />
+                        <img style="width:113px;height: 100px;" src="{{$data->image}}" id="show" name="show" />
                     </div>
                 </div>
             </div>

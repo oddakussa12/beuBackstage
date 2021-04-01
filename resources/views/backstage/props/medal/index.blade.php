@@ -73,7 +73,7 @@
                         type: 2,
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['50%','80%'],
+                        area: ['65%','80%'],
                         offset: 'auto',
                         scrollbar:true,
                         content: '/backstage/props/medal/'+id+'/edit',
