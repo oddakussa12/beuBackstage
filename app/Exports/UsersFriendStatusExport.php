@@ -33,7 +33,7 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
      */
     public function headings(): array
     {
-        return ['user_id', 'user_name', 'user_nick_name', 'user_created_at' , 'activeTime'];
+        return ['user_id', 'user_phone_country' , 'user_phone' , 'user_name', 'user_nick_name', 'user_created_at' , 'activeTime'];
     }
 
     public function collection()
@@ -42,7 +42,7 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
         $data = array();
         DB::connection('lovbee')->table('users_friends')->where('user_id' , $id)->orderByDesc('friend_id')->chunk(100  , function ($friends) use (&$data){
             $friendIds = $friends->pluck('friend_id')->toArray();
-            $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>$friendIds) , "GET");
+            $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>join(',' , $friendIds)) , "GET");
             if(is_array($result))
             {
                 $activeUsers = $result['users'];
@@ -51,9 +51,14 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
                 })->toArray();
                 $userIds = array_keys($activeUsers);
                 $users = app(UserRepository::class)->findByMany($userIds);
-                $users = $users->map(function($user) use ($activeUsers){
+                $userPhones = DB::connection('lovbee')->table('users_friends')->whereIn('user_id' , $userIds)->get();
+                $users = $users->map(function($user) use ($activeUsers , $userPhones){
+                    $phone = $userPhones->where('user_id' , $user->user_id)->all();
+                    Log::info('test' , $phone->toArray());
                     return array(
                         'user_id'=>$user->user_id,
+//                        'user_phone'=>$phone->pluck('user_phone')->first(),
+//                        'user_phone_country'=>$phone->pluck('user_phone_country')->first(),
                         'user_name'=>$user->user_name,
                         'user_nick_name'=>$user->user_nick_name,
                         'user_created_at'=>$user->user_created_at,
