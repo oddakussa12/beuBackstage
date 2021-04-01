@@ -12,7 +12,8 @@
                 <th lay-data="{field:'name', minWidth:150,sort:true}">Name</th>
                 <th lay-data="{field:'category', width:100}">Category</th>
                 <th lay-data="{field:'score', width:100}">Score</th>
-                <th lay-data="{field:'desc', minWidth:300,sort:true}">Description</th>
+                <th lay-data="{field:'desc', minWidth:250}">Description</th>
+                <th lay-data="{field:'rule', minWidth:250}">Rule</th>
                 <th lay-data="{field:'sort', width:100,edit:'text', sort:true}">Sort</th>
                 <th lay-data="{field:'created_at', width:160}">CreatedAt</th>
                 <th lay-data="{fixed: 'right', width:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -31,6 +32,11 @@
                     <td>{{$value->category}}</td>
                     <td>{{$value->score}}</td>
                     <td>@if(is_array($value->desc))@foreach($value->desc as $key=>$item)
+                            {{$key}}: {{$item}} <br />
+                        @endforeach
+                        @endif
+                    </td>
+                    <td>@if(is_array($value->rule) && !empty($value->rule['en']))@foreach($value->rule as $key=>$item)
                             {{$key}}: {{$item}} <br />
                         @endforeach
                         @endif

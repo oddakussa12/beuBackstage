@@ -50,6 +50,26 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
+                    <label class="layui-form-label">Rule CN：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="rule_cn" name="rule_cn" required="required" placeholder="仅中文" autocomplete="off" class="layui-input" value="{{$data->rule['cn']}}">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">Rule EN：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="rule_en" name="rule_en" required="required" placeholder="Only English" autocomplete="off" class="layui-input" value="{{$data->rule['en']}}">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">Rule ID：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="rule_id" name="rule_id" required="required" placeholder="id" autocomplete="off" class="layui-input" value="@if(!empty($data->rule['id'])){{$data->rule['id']}}@endif">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
                     <label class="layui-form-label">Score：</label>
                     <div class="layui-input-block">
                         <input type="text" id="score" name="score" required="required" autocomplete="off" class="layui-input" value="{{$data->score}}">
