@@ -130,21 +130,18 @@ class MedalController extends Controller
             $desc_cn  = $request->input('desc_cn');
             $desc_en  = $request->input('desc_en');
             $desc_id  = $request->input('desc_id');
-            $rule_cn  = $request->input('rule_cn');
-            $rule_en  = $request->input('rule_en');
-            $rule_id  = $request->input('rule_id');
             $category = $request->input('category');
             $score    = $request->input('score');
             $image    = $request->input('image');
+            $image_light = $request->input('image_light');
             $name     = ['cn'=>$name_cn, 'en'=>$name_en, 'id'=>$name_id];
             $desc     = ['cn'=>$desc_cn, 'en'=>$desc_en, 'id'=>$desc_id];
-            $rule     = ['cn'=>$rule_cn, 'en'=>$rule_en, 'id'=>$rule_id];
             $data->name     = json_encode($name, JSON_UNESCAPED_UNICODE);
             $data->desc     = json_encode($desc, JSON_UNESCAPED_UNICODE);
-            $data->rule     = json_encode($rule, JSON_UNESCAPED_UNICODE);
             $data->category = !empty($category) ? $category : $data->category;
             $data->score    = !empty($score)    ? $score    : $data->score;
             $data->image    = !empty($image)    ? $image    : $data->image;
+            $data->image_light = !empty($image_light)    ? $image_light    : $data->image_light;
         }
 
         $data->save();

@@ -1,19 +1,18 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <style>
-        td img {width:35px; height: 35px;}
+        td img {width:35px; height: 30px;}
     </style>
     <div  class="layui-fluid">
         <table class="layui-table"   lay-filter="category_table" id="category_table" >
             <thead>
             <tr>
                 <th lay-data="{field:'id', width:100 ,fixed: 'left'}">ID</th>
-                <th lay-data="{field:'image', width:100}">Image</th>
+                <th lay-data="{field:'image', width:120}">Image</th>
                 <th lay-data="{field:'name', minWidth:150,sort:true}">Name</th>
                 <th lay-data="{field:'category', width:100}">Category</th>
                 <th lay-data="{field:'score', width:100}">Score</th>
                 <th lay-data="{field:'desc', minWidth:250}">Description</th>
-                <th lay-data="{field:'rule', minWidth:250}">Rule</th>
                 <th lay-data="{field:'sort', width:100,edit:'text', sort:true}">Sort</th>
                 <th lay-data="{field:'created_at', width:160}">CreatedAt</th>
                 <th lay-data="{fixed: 'right', width:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -23,7 +22,10 @@
             @foreach($data as $value)
                 <tr>
                     <td>{{$value->id}}</td>
-                    <td>@if(!empty($value->image))<img src="{{$value->image}}" />@endif</td>
+                    <td>
+                        @if(!empty($value->image))<img src="{{$value->image}}" />@endif
+                        @if(!empty($value->image_light))<img src="{{$value->image_light}}" />@endif
+                    </td>
                     <td>@if(is_array($value->name))@foreach($value->name as $key=>$item)
                             {{$key}}: {{$item}} <br />
                         @endforeach
@@ -32,11 +34,6 @@
                     <td>{{$value->category}}</td>
                     <td>{{$value->score}}</td>
                     <td>@if(is_array($value->desc))@foreach($value->desc as $key=>$item)
-                            {{$key}}: {{$item}} <br />
-                        @endforeach
-                        @endif
-                    </td>
-                    <td>@if(is_array($value->rule) && !empty($value->rule['en']))@foreach($value->rule as $key=>$item)
                             {{$key}}: {{$item}} <br />
                         @endforeach
                         @endif
@@ -79,7 +76,7 @@
                         type: 2,
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['65%','80%'],
+                        area: ['80%','90%'],
                         offset: 'auto',
                         scrollbar:true,
                         content: '/backstage/props/medal/'+id+'/edit',
