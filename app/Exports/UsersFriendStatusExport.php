@@ -20,11 +20,11 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
 {
     use Exportable;
 
-    private $params;
+    private $id;
 
-    public function __construct($params)
+    public function __construct($id)
     {
-        $this->params = $params;
+        $this->id = $id;
     }
 
     /**
