@@ -33,7 +33,7 @@ class UsersFriendYesterdayStatusExport extends StringValueBinder implements From
      */
     public function headings(): array
     {
-        return ['user_id', 'user_phone_country' , 'user_phone' , 'user_name', 'user_nick_name', 'user_created_at' , 'activeTime'];
+        return ['user_id', 'user_phone_country' , 'user_phone' , 'user_name', 'user_nick_name', 'user_created_at'];
     }
 
     public function collection()
@@ -46,13 +46,12 @@ class UsersFriendYesterdayStatusExport extends StringValueBinder implements From
         DB::connection('lovbee')->table('users_friends')->where('user_id' , $id)->orderByDesc('friend_id')->chunk(100  , function ($friends) use (&$data , $table , $date){
             $friendIds = $friends->pluck('friend_id')->toArray();
             $users = app(UserRepository::class)->findByMany($friendIds);
-            $activeUsers = DB::connection('lovbee')->table($table)->where('created_at' , $date)->whereIn('user_id' , $friendIds)->get()->map(function ($value) {return (array)$value;})->values()->toArray();
+            $activeUsers = DB::connection('lovbee')->table($table)->where('created_at' , $date)->whereIn('user_id' , $friendIds)->get()->map(function ($value) {return (array)$value;})->pluck('user_id')->unique()->values()->toArray();
             $userPhones = DB::connection('lovbee')->table('users_phones')->whereIn('user_id' , $friendIds)->get()->map(function ($value) {return (array)$value;})->values();
             $users = $users->reject(function ($user) use ($activeUsers) {
-                return !isset($activeUsers[$user->user_id]);
-            })->map(function($user) use ($activeUsers , $userPhones){
+                return !in_array($user->user_id , $activeUsers);
+            })->map(function($user) use ($userPhones){
                 $phone = collect($userPhones->where('user_id' , $user->user_id)->first())->toArray();
-                $activeUser = collect($activeUsers->where('user_id' , $user->user_id)->first())->toArray();
                 return array(
                     'user_id'=>$user->user_id,
                     'user_phone_country'=>$phone['user_phone_country'],
@@ -60,7 +59,6 @@ class UsersFriendYesterdayStatusExport extends StringValueBinder implements From
                     'user_name'=>$user->user_name,
                     'user_nick_name'=>$user->user_nick_name,
                     'user_created_at'=>$user->user_created_at,
-                    'activeTime'=>Carbon::createFromTimestamp($activeUser[$user->user_id] , "Asia/Shanghai")->toDateTimeString(),
                 );
             });
             $data = collect($data)->merge($users);
