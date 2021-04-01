@@ -827,7 +827,7 @@ class UserController extends Controller
         $page = $request->input('page' , 1);
         if($userId>=0)
         {
-            $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>(array)$userId) , "GET");
+            $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>join(',' , (array)$userId)) , "GET");
         }else{
             $max = $request->input('max' , Carbon::now('Asia/Shanghai')->timestamp);
             $appends['max'] = $max;

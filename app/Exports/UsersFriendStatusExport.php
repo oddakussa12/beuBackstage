@@ -42,7 +42,7 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
         $data = array();
         DB::connection('lovbee')->table('users_friends')->where('user_id' , $id)->orderByDesc('friend_id')->chunk(100  , function ($friends) use (&$data){
             $friendIds = $friends->pluck('friend_id')->toArray();
-            $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>$friendIds) , "GET");
+            $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>join(',' , $friendIds)) , "GET");
             if(is_array($result))
             {
                 $activeUsers = $result['users'];
