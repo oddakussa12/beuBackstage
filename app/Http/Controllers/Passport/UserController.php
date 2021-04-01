@@ -857,7 +857,7 @@ class UserController extends Controller
     public function friendStatus(Request $request , $id)
     {
         $friendIds = array();
-        DB::connection('lovbee')->table('users_friends')->where('user_id' , $id)->chunk(100  , function ($friends) use (&$friendIds){
+        DB::connection('lovbee')->table('users_friends')->where('user_id' , $id)->orderByDesc('friend_id')->chunk(100  , function ($friends) use (&$friendIds){
             $friendId = $friends->pluck('friend_id')->toArray();
             $friendIds = array_merge($friendIds , $friendId);
         });
