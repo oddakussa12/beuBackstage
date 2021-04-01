@@ -52,9 +52,10 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
                 $userIds = array_keys($activeUsers);
                 $users = app(UserRepository::class)->findByMany($userIds);
                 $userPhones = DB::connection('lovbee')->table('users_friends')->whereIn('user_id' , $userIds)->get()->map(function ($value) {return (array)$value;})->toArray();
+                Log::info('$userPhones' , $userPhones);
                 $users = $users->map(function($user) use ($activeUsers , $userPhones){
-                    $phone = collect($userPhones)->where('user_id' , $user->user_id)->all();
-                    Log::info('test' , collect($phone)->toArray());
+//                    $phone = collect($userPhones)->where('user_id' , $user->user_id)->all();
+//                    Log::info('test' , collect($phone)->toArray());
                     return array(
                         'user_id'=>$user->user_id,
 //                        'user_phone'=>$phone->pluck('user_phone')->first(),
