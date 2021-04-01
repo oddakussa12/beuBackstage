@@ -53,7 +53,7 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
             })->toArray();
             $userIds = array_keys($activeUsers);
             $users = app(UserRepository::class)->findByMany($userIds);
-            $users->each(function($user) use ($activeUsers){
+            $users = $users->map(function($user) use ($activeUsers){
                 return array(
                     'user_id'=>$user->user_id,
                     'user_name'=>$user->user_name,
