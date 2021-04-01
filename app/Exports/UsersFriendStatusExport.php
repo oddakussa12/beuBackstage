@@ -39,34 +39,31 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
     public function collection()
     {
         $id = $this->id;
-        $friendIds = array();
-        DB::connection('lovbee')->table('users_friends')->where('user_id' , $id)->orderByDesc('friend_id')->chunk(100  , function ($friends) use (&$friendIds){
-            $friendId = $friends->pluck('friend_id')->toArray();
-            Log::info('$friendId' , $friendId);
-            $friendIds = array_merge($friendIds , $friendId);
+        $data = array();
+        DB::connection('lovbee')->table('users_friends')->where('user_id' , $id)->orderByDesc('friend_id')->chunk(100  , function ($friends) use (&$data){
+            $friendIds = $friends->pluck('friend_id')->toArray();
+            $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>$friendIds) , "GET");
+            if(is_array($result))
+            {
+                $activeUsers = $result['users'];
+                $activeUsers = collect($activeUsers)->reject(function ($value, $key) {
+                    return $value == 946656000;
+                })->toArray();
+                $userIds = array_keys($activeUsers);
+                $users = app(UserRepository::class)->findByMany($userIds);
+                $users = $users->map(function($user) use ($activeUsers){
+                    return array(
+                        'user_id'=>$user->user_id,
+                        'user_name'=>$user->user_name,
+                        'user_nick_name'=>$user->user_nick_name,
+                        'user_created_at'=>$user->user_created_at,
+                        'activeTime'=>Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString(),
+                    );
+                });
+                $data = collect($data)->merge($users);
+            }
         });
-        Log::info('$friendIds' , $friendIds);
-        $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>$friendIds) , "GET");
-        if(is_array($result))
-        {
-            $activeUsers = $result['users'];
-            $activeUsers = collect($activeUsers)->reject(function ($value, $key) {
-                return $value == 946656000;
-            })->toArray();
-            $userIds = array_keys($activeUsers);
-            $users = app(UserRepository::class)->findByMany($userIds);
-            $users = $users->map(function($user) use ($activeUsers){
-                return array(
-                    'user_id'=>$user->user_id,
-                    'user_name'=>$user->user_name,
-                    'user_nick_name'=>$user->user_nick_name,
-                    'user_created_at'=>$user->user_created_at,
-                    'activeTime'=>Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString(),
-                );
-            });
-            return collect($users)->values();
-        }
-        return collect()->values();
+        return collect($data)->values();
     }
 
 
