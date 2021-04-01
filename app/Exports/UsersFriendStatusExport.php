@@ -56,7 +56,7 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
             $users->each(function($user) use ($activeUsers){
                 $user->activeTime = Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString();
             });
-            return collect($users)->pluck(array(
+            return collect($users)->only(array(
                 'user_id',
                 'user_name',
                 'user_nick_name',
