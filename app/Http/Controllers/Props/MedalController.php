@@ -28,6 +28,7 @@ class MedalController extends Controller
         foreach ($data as $item) {
             $item['name'] = json_decode($item['name'], true);
             $item['desc'] = json_decode($item['desc'], true);
+            $item['rule'] = json_decode($item['rule'], true);
         }
         $params['appends'] = $params;
         $params['data']    = $data;
@@ -97,6 +98,7 @@ class MedalController extends Controller
         if (!empty($data)) {
             $data['name'] = json_decode($data['name'], true);
             $data['desc'] = json_decode($data['desc'], true);
+            $data['rule'] = json_decode($data['rule'], true);
         }
 
         return view('backstage.props.medal.edit')->with(['data' => $data, 'category'=>['once'=>'一次性成就', 'aggregate'=>'累计成就', 'great'=>'Great']]);
@@ -128,13 +130,18 @@ class MedalController extends Controller
             $desc_cn  = $request->input('desc_cn');
             $desc_en  = $request->input('desc_en');
             $desc_id  = $request->input('desc_id');
+            $rule_cn  = $request->input('rule_cn');
+            $rule_en  = $request->input('rule_en');
+            $rule_id  = $request->input('rule_id');
             $category = $request->input('category');
             $score    = $request->input('score');
             $image    = $request->input('image');
             $name     = ['cn'=>$name_cn, 'en'=>$name_en, 'id'=>$name_id];
             $desc     = ['cn'=>$desc_cn, 'en'=>$desc_en, 'id'=>$desc_id];
+            $rule     = ['cn'=>$rule_cn, 'en'=>$rule_en, 'id'=>$rule_id];
             $data->name     = json_encode($name, JSON_UNESCAPED_UNICODE);
             $data->desc     = json_encode($desc, JSON_UNESCAPED_UNICODE);
+            $data->rule     = json_encode($rule, JSON_UNESCAPED_UNICODE);
             $data->category = !empty($category) ? $category : $data->category;
             $data->score    = !empty($score)    ? $score    : $data->score;
             $data->image    = !empty($image)    ? $image    : $data->image;
