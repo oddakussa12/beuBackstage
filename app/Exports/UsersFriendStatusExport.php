@@ -56,8 +56,8 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
                     $phone = collect($userPhones->where('user_id' , $user->user_id)->first())->toArray();
                     return array(
                         'user_id'=>$user->user_id,
-                        'user_phone'=>$phone['user_phone'],
                         'user_phone_country'=>$phone['user_phone_country'],
+                        'user_phone'=>$phone['user_phone'],
                         'user_name'=>$user->user_name,
                         'user_nick_name'=>$user->user_nick_name,
                         'user_created_at'=>$user->user_created_at,

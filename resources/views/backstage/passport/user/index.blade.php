@@ -104,6 +104,7 @@
         <div class="layui-btn-container">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend">{{trans('user.table.button.friend')}}</a>
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="history">{{trans('user.table.button.history')}}</a>
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend_active">{{trans('user.table.button.friend_active')}}</a>
         </div>
     </script>
 
@@ -158,7 +159,11 @@
                         offset: 'auto',
                         'scrollbar':true,
                         content: '/backstage/passport/user/history/'+data.user_id
-                    });                }
+                    });
+                }
+                if(layEvent === 'friend_active'){
+                    window.open('/backstage/passport/user/'+data.user_id+'/friend/status');
+                }
             });
             table.init('user_table', { //转化静态表格
                 page:false,

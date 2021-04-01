@@ -31,6 +31,7 @@ return [
         'button'=>[
             'friend'=>'Friend',
             'history'=>'History',
+            'friend_active'=>'Friend Active',
         ]
     ],
     'form'=>[
