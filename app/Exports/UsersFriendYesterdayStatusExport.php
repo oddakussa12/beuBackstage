@@ -46,10 +46,10 @@ class UsersFriendYesterdayStatusExport extends StringValueBinder implements From
         DB::connection('lovbee')->table('users_friends')->where('user_id' , $id)->orderByDesc('friend_id')->chunk(100  , function ($friends) use (&$data , $table , $date){
             $friendIds = $friends->pluck('friend_id')->toArray();
             $users = app(UserRepository::class)->findByMany($friendIds);
-            $activeUsers = DB::connection('lovbee')->table($table)->where('created_at' , $date)->whereIn('user_id' , $friendIds)->get()->map(function ($value) {return (array)$value;})->values();
+            $activeUsers = DB::connection('lovbee')->table($table)->where('created_at' , $date)->whereIn('user_id' , $friendIds)->get()->map(function ($value) {return (array)$value;})->values()->toArray();
             $userPhones = DB::connection('lovbee')->table('users_phones')->whereIn('user_id' , $friendIds)->get()->map(function ($value) {return (array)$value;})->values();
-            $users = $users->reject(function ($user) use ($activeUsers , $userPhones) {
-                return blank($activeUsers[$user->user_id]);
+            $users = $users->reject(function ($user) use ($activeUsers) {
+                return !isset($activeUsers[$user->user_id]);
             })->map(function($user) use ($activeUsers , $userPhones){
                 $phone = collect($userPhones->where('user_id' , $user->user_id)->first())->toArray();
                 return array(
