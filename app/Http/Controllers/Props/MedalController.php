@@ -122,15 +122,17 @@ class MedalController extends Controller
                 'desc_en'  => 'required|string',
                 'category' => 'required|string',
             ]);
-            $name_en  = $request->input('name_en');
             $name_cn  = $request->input('name_cn');
-            $desc_en  = $request->input('desc_en');
+            $name_en  = $request->input('name_en');
+            $name_id  = $request->input('name_id');
             $desc_cn  = $request->input('desc_cn');
+            $desc_en  = $request->input('desc_en');
+            $desc_id  = $request->input('desc_id');
             $category = $request->input('category');
             $score    = $request->input('score');
             $image    = $request->input('image');
-            $name     = ['cn'=>$name_cn, 'en'=>$name_en];
-            $desc     = ['cn'=>$desc_cn, 'en'=>$desc_en];
+            $name     = ['cn'=>$name_cn, 'en'=>$name_en, 'id'=>$name_id];
+            $desc     = ['cn'=>$desc_cn, 'en'=>$desc_en, 'id'=>$desc_id];
             $data->name     = json_encode($name, JSON_UNESCAPED_UNICODE);
             $data->desc     = json_encode($desc, JSON_UNESCAPED_UNICODE);
             $data->category = !empty($category) ? $category : $data->category;
