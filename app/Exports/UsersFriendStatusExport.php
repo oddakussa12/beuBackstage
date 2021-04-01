@@ -33,7 +33,7 @@ class UsersFriendStatusExport extends StringValueBinder implements FromCollectio
      */
     public function headings(): array
     {
-        return ['user_id', 'user_name', 'user_nick_name', 'user_created_at' , 'activeTime'];
+        return ['user_id', 'user_phone_country' , 'user_phone' , 'user_name', 'user_nick_name', 'user_created_at' , 'activeTime'];
     }
 
     public function collection()
