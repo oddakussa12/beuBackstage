@@ -873,7 +873,7 @@ class UserController extends Controller
             $users->each(function($user) use ($activeUsers){
                 $user->activeTime = Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString();
             });
-            dd($users);
+            dd($users->toArray());
         }else{
             $activeUsers = $userIds = array();
             $count = 0;
