@@ -15,6 +15,7 @@ use App\Exports\UsersFriendStatusExport;
 use GuzzleHttp\Exception\GuzzleException;
 use App\Repositories\Contracts\UserRepository;
 use Illuminate\Database\Concerns\BuildsQueries;
+use App\Exports\UsersFriendYesterdayStatusExport;
 
 class UserController extends Controller
 {
@@ -858,6 +859,11 @@ class UserController extends Controller
     public function friendStatus(Request $request , $id)
     {
         return  Excel::download(new UsersFriendStatusExport($id), 'user-'.time().'.xlsx');
+    }
+
+    public function friendYesterdayStatus(Request $request , $id)
+    {
+        return  Excel::download(new UsersFriendYesterdayStatusExport($id), 'user-'.time().'.xlsx');
     }
 
     /**

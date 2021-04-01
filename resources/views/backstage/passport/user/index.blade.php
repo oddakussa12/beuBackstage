@@ -105,6 +105,7 @@
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend">{{trans('user.table.button.friend')}}</a>
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="history">{{trans('user.table.button.history')}}</a>
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend_active">{{trans('user.table.button.friend_active')}}</a>
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend_yesterday_active">{{trans('user.table.button.friend_yesterday_active')}}</a>
         </div>
     </script>
 
@@ -163,6 +164,9 @@
                 }
                 if(layEvent === 'friend_active'){
                     window.open('/backstage/passport/user/'+data.user_id+'/friend/status');
+                }
+                if(layEvent === 'friend_yesterday_active'){
+                    window.open('/backstage/passport/user/'+data.user_id+'/friend/yesterday/status');
                 }
             });
             table.init('user_table', { //转化静态表格
