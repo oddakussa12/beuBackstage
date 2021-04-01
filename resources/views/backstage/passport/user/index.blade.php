@@ -62,7 +62,7 @@
                         <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_active_ip')}}</th>
                         <th  lay-data="{field:'activation', width:70}">{{trans('user.table.header.user_activation')}}</th>
                         <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
-                        <th  lay-data="{field:'user_op', minWidth:280 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                        <th  lay-data="{field:'user_op', minWidth:300 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
                     </tr>
                     </thead>
                     <tbody>
