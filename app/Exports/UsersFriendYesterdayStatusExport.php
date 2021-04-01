@@ -52,6 +52,7 @@ class UsersFriendYesterdayStatusExport extends StringValueBinder implements From
                 return !isset($activeUsers[$user->user_id]);
             })->map(function($user) use ($activeUsers , $userPhones){
                 $phone = collect($userPhones->where('user_id' , $user->user_id)->first())->toArray();
+                $activeUser = collect($activeUsers->where('user_id' , $user->user_id)->first())->toArray();
                 return array(
                     'user_id'=>$user->user_id,
                     'user_phone_country'=>$phone['user_phone_country'],
@@ -59,7 +60,7 @@ class UsersFriendYesterdayStatusExport extends StringValueBinder implements From
                     'user_name'=>$user->user_name,
                     'user_nick_name'=>$user->user_nick_name,
                     'user_created_at'=>$user->user_created_at,
-                    'activeTime'=>Carbon::createFromTimestamp($activeUsers[$user->user_id] , "Asia/Shanghai")->toDateTimeString(),
+                    'activeTime'=>Carbon::createFromTimestamp($activeUser[$user->user_id] , "Asia/Shanghai")->toDateTimeString(),
                 );
             });
             $data = collect($data)->merge($users);
