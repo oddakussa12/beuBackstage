@@ -101,11 +101,11 @@
 @section('footerScripts')
     @parent
     <script type="text/html" id="operateTpl">
-        <div class="layui-btn-container">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend">{{trans('user.table.button.friend')}}</a>
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="history">{{trans('user.table.button.history')}}</a>
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend_active">{{trans('user.table.button.friend_active')}}</a>
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="friend_yesterday_active">{{trans('user.table.button.friend_yesterday_active')}}</a>
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="friend">{{trans('user.table.button.friend')}}</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="history">{{trans('user.table.button.history')}}</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="friend_active">{{trans('user.table.button.friend_active')}}</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="friend_yesterday_active">{{trans('user.table.button.friend_yesterday_active')}}</a>
         </div>
     </script>
 
