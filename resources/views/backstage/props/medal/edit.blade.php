@@ -53,7 +53,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Score：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="score" name="score" required="required" autocomplete="off" class="layui-input layui-disabled" value="{{$data->score}}" />
+                        <input type="text" id="score" name="score" disabled required="required" autocomplete="off" class="layui-input layui-disabled" value="{{$data->score}}" />
                     </div>
                 </div>
                 <div class="layui-inline">
