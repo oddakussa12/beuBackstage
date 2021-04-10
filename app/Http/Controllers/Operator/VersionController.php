@@ -121,39 +121,6 @@ class VersionController extends Controller
     }
 
 
-    /**
-     * @param $url
-     * @param $data
-     * @param string $method
-     * @param bool $json
-     * @return bool
-     * HTTP Request
-     */
-    public function httpRequest($url, $data=array(), $method='POST', $json=false)
-    {
-        try {
-            $client = new Client();
-            foreach ($data as &$datum) {
-                $datum = is_array($datum) ? json_encode($datum, JSON_UNESCAPED_UNICODE) : $datum;
-            }
-            $signature = common_signature($data);
-            $data['signature'] = $signature;
-            $data     = $json ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
-            $response = $client->request($method, front_url($url), ['form_params'=>$data]);
-            $code     = intval($response->getStatusCode());
-            if ($code>=300) {
-                Log::info('http_request_fail' , array('code'=>$code));
-                return false;
-            }
-            Log::info('http_request_success' , array('code'=>$code));
-            return true;
-        } catch (GuzzleException $e) {
-            Log::info('http_request_fail' , array('code'=>$e->getCode() , 'message'=>$e->getMessage()));
-            return false;
-        }
-    }
-
-
     public function get_color_by_scale( ) {
         $str='0123456789ABCDEF';
         $est='';

@@ -131,4 +131,76 @@ class OperatorController extends Controller
         $params['list'] = $result;
         return view('backstage.operator.feedback', $params);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * 照片墙
+     */
+    public function media(Request $request)
+    {
+        $params = $request->all();
+        $params['media'] = $params['media'] ?? 'video';
+        $table  = $params['media'] == 'video' ? 'users_videos' : 'users_photos';
+
+        $list   = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name', 'user_avatar');
+        $list   = $list->leftJoin('users', 'users.user_id', '=', "$table.user_id");
+        if (!empty($params['dateTime'])) {
+            $time   = explode(' - ', $params['dateTime']);
+            $start  = current($time);
+            $end    = last($time);
+            $list = $list->whereBetween('created_at', [$start, $end]);
+        }
+
+        if (!empty($params['keyword'])) {
+            $keyword = trim($params['keyword']);
+            $list    = $list->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
+        }
+
+        $list = $list->orderByDesc('user_id')->orderByDesc('created_at')->paginate(10);
+        foreach ($list as $item) {
+            $item->image = !empty($item->video_url) ? $item->image : $item->photo;
+        }
+        $params['appends'] = $params;
+        $params['list']    = $list;
+        $params['type']    = ['video', 'photo'];
+        return view('backstage.operator.media', $params);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * 积分
+     */
+    public function score(Request $request)
+    {
+        $params = $request->all();
+        $params['sort'] = !empty($params['sort']) ? $params['sort'] : 'score';
+        $table  = 'users_scores';
+
+        $list   = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.init,t_$table.score,t_users_kpi_counts.*"), 'users.user_name','users.user_nick_name', 'user_avatar');
+        $list   = $list->leftJoin('users', 'users.user_id', '=', "$table.user_id");
+        $list   = $list->leftJoin('users_kpi_counts', 'users_kpi_counts.user_id', '=', "$table.user_id");
+        if (!empty($params['dateTime'])) {
+            $time   = explode(' - ', $params['dateTime']);
+            $start  = current($time);
+            $end    = last($time);
+            $list = $list->whereBetween("$table.created_at", [$start, $end]);
+        }
+
+        if (!empty($params['keyword'])) {
+            $keyword = trim($params['keyword']);
+            $list    = $list->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
+        }
+
+        $sTable = in_array($params['sort'], ['init', 'score']) ? $table : 'users_kpi_counts';
+        $list = $list->groupBy("$table.user_id")->orderByDesc("$sTable.{$params['sort']}")->paginate(10);
+
+        $params['appends'] = $params;
+        $params['list']    = $list;
+        $params['type']    = ['init','score','sent', 'friend', 'like','liked','video','txt','audio','image','props','like_video','liked_video','game_score','other_school_friend'];
+
+        return view('backstage.operator.score', $params);
+
+    }
 }

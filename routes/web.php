@@ -45,6 +45,9 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('chat' , 'ChatController@index')->name('chat.index');
             Route::get('operator/network' , 'OperatorController@network')->name('operator.network');
             Route::get('operator/feedback' , 'OperatorController@feedback')->name('operator.feedback');
+            Route::get('operator/media' , 'OperatorController@media')->name('operator.media');
+            Route::get('operator/score' , 'OperatorController@score')->name('operator.score');
+            Route::resource('virtual' , 'VirtualUserController');
         });
 
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){

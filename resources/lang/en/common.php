@@ -66,6 +66,7 @@ return [
         ],
         'label'=>[
             'date'=>'Date',
+            'type'=>'Type',
             'sort'=>'Sort',
         ]
     ],
