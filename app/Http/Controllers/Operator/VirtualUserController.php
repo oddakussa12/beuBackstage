@@ -16,16 +16,19 @@ class VirtualUserController extends Controller
         $userIds = DB::connection('lovbee')->table('users_virtual')->pluck('user_id')->toArray();
         $users   = User::whereIn('user_id', $userIds)->select('user_id', 'user_avatar', 'user_name', 'user_nick_name', 'user_created_at')->paginate(10);
         $result  = $this->httpRequest('api/backstage/score', [], "GET");
-        foreach ($users as $user) {
-            $i=1;
-            foreach ($result as $key=>$item) {
-                if ($user->user_id==$key) {
-                    $user->score = $item;
-                    $user->rank  = $i;
+        if ($result) {
+            foreach ($users as $user) {
+                $i=1;
+                foreach ($result as $key=>$item) {
+                    if ($user->user_id==$key) {
+                        $user->score = $item;
+                        $user->rank  = $i;
+                    }
+                    $i++;
                 }
-                $i++;
             }
         }
+
         return view('backstage.operator.virtual.index', compact('users'));
     }
 
