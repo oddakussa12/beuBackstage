@@ -208,7 +208,7 @@ class OperatorController extends Controller
     {
         $yesterday = Carbon::yesterday('Asia/Shanghai')->toDateString();
         $dauCurrent = 0;
-        $dauCurrent = DB::connection('lovbee')->table('visit_logs_'.Carbon::yesterday('Asia/Shanghai')->format('Ym'))->where('created_at' , $yesterday)->distinct('user_id')->count();
+        $dauCurrent = DB::connection('lovbee')->table('visit_logs_'.Carbon::yesterday('Asia/Shanghai')->format('Ym'))->where('created_at' , $yesterday)->count(DB::raw('DISTINCT(user_id)'));
         $dauGoal = 17000;
         $dauData = array('percentage'=>strval(round($dauCurrent/$dauGoal , 4)*100)."%" , 'current'=>$dauCurrent , 'goal'=>strval(ceil($dauGoal/1000))."K");
 
