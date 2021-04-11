@@ -37,7 +37,7 @@ return [
             'delete'=>'删除',
             'detail'=>'查看',
             'check'=>'审核',
-            'upload'=>'上传'
+            'upload'=>'上传',
         ],
         'header'=>[
             'status'=>'状态',
@@ -65,6 +65,7 @@ return [
         ],
         'label'=>[
             'date'=>'日期',
+            'type'=>'类型',
             'sort'=>'排序',
         ]
     ],

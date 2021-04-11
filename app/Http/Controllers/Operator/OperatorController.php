@@ -204,7 +204,6 @@ class OperatorController extends Controller
         return view('backstage.operator.score', $params);
 
     }
-
     public function goal()
     {
         $yesterday = Carbon::yesterday('Asia/Shanghai')->toDateString();
