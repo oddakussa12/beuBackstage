@@ -264,7 +264,7 @@
             line-height: 60px;
         }
         ul li label{
-            padding-left:50px;
+            padding-left:40px;
             font-size: large;
         }
         .content{
