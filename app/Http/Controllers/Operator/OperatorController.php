@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use function GuzzleHttp\Psr7\str;
 
 class OperatorController extends Controller
 {
@@ -130,5 +131,119 @@ class OperatorController extends Controller
 
         $params['list'] = $result;
         return view('backstage.operator.feedback', $params);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * 照片墙
+     */
+    public function media(Request $request)
+    {
+        $params = $request->all();
+        $params['media'] = $params['media'] ?? 'video';
+        $table  = $params['media'] == 'video' ? 'users_videos' : 'users_photos';
+
+        $list   = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name', 'user_avatar');
+        $list   = $list->leftJoin('users', 'users.user_id', '=', "$table.user_id");
+        if (!empty($params['dateTime'])) {
+            $time   = explode(' - ', $params['dateTime']);
+            $start  = current($time);
+            $end    = last($time);
+            $list = $list->whereBetween('created_at', [$start, $end]);
+        }
+
+        if (!empty($params['keyword'])) {
+            $keyword = trim($params['keyword']);
+            $list    = $list->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
+        }
+
+        $list = $list->orderByDesc('user_id')->orderByDesc('created_at')->paginate(10);
+        foreach ($list as $item) {
+            $item->image = !empty($item->video_url) ? $item->image : $item->photo;
+        }
+        $params['appends'] = $params;
+        $params['list']    = $list;
+        $params['type']    = ['video', 'photo'];
+        return view('backstage.operator.media', $params);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * 积分
+     */
+    public function score(Request $request)
+    {
+        $params = $request->all();
+        $params['sort'] = !empty($params['sort']) ? $params['sort'] : 'score';
+        $table  = 'users_scores';
+
+        $list   = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.init,t_$table.score,t_users_kpi_counts.*"), 'users.user_name','users.user_nick_name', 'user_avatar');
+        $list   = $list->leftJoin('users', 'users.user_id', '=', "$table.user_id");
+        $list   = $list->leftJoin('users_kpi_counts', 'users_kpi_counts.user_id', '=', "$table.user_id");
+        if (!empty($params['dateTime'])) {
+            $time   = explode(' - ', $params['dateTime']);
+            $start  = current($time);
+            $end    = last($time);
+            $list = $list->whereBetween("$table.created_at", [$start, $end]);
+        }
+
+        if (!empty($params['keyword'])) {
+            $keyword = trim($params['keyword']);
+            $list    = $list->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
+        }
+
+        $sTable = in_array($params['sort'], ['init', 'score']) ? $table : 'users_kpi_counts';
+        $list = $list->groupBy("$table.user_id")->orderByDesc("$sTable.{$params['sort']}")->paginate(10);
+
+        $params['appends'] = $params;
+        $params['list']    = $list;
+        $params['type']    = ['init','score','sent', 'friend', 'like','liked','video','txt','audio','image','props','like_video','liked_video','game_score','other_school_friend'];
+
+        return view('backstage.operator.score', $params);
+
+    }
+
+    public function goal()
+    {
+        $yesterday = Carbon::yesterday('Asia/Shanghai')->toDateString();
+        $dauCurrent = 0;
+        $dauCurrent = DB::connection('lovbee')->table('visit_logs_'.Carbon::yesterday('Asia/Shanghai')->format('Ym'))->where('created_at' , $yesterday)->distinct('user_id')->count();
+        $dauGoal = 17000;
+        $dauData = array('percentage'=>strval(round($dauCurrent/$dauGoal , 4)*100)."%" , 'current'=>$dauCurrent , 'goal'=>strval(ceil($dauGoal/1000))."K");
+
+        $dates = array();
+        $start = Carbon::now('Asia/Shanghai')->startOfMonth()->toDateString();
+        $end = Carbon::now('Asia/Shanghai')->toDateString();
+        while ($start<=$end)
+        {
+            array_push($dates , $start);
+            $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
+        }
+        $operCurrent = 0;
+        $operCurrent = DB::connection('lovbee')->table('data_retentions')->whereIn('date' , $dates)->sum('new');
+        $operGoal = 60000;
+        $operData = array('percentage'=>strval(round($operCurrent/$operGoal , 4)*100)."%" , 'current'=>strval($operCurrent/1000)."K" , 'goal'=>strval($operGoal/1000)."K");
+
+        $hrCurrent = 0;
+        $hrGoal = 50;
+        $hrData = array('percentage'=>strval(round($hrCurrent/$hrGoal , 4)*100)."%" , 'current'=>$hrCurrent , 'goal'=>$hrGoal);
+
+        $nineDayAgo = Carbon::now('Asia/Shanghai')->subDays(9)->addDays(100)->toDateString();
+        $prodRetentionCurrent = 8;
+        $prodRetentionData = DB::connection('lovbee')->table('data_retentions')->where('date' , $nineDayAgo)->select(array(
+            DB::raw('SUM(new) as reg'),
+            DB::raw('SUM(`7`) as seven')
+        ))->get()->toArray();
+        $prodRetentionCurrent = empty($prodRetentionData[0]->reg)?0:round($prodRetentionData[0]->seven/$prodRetentionData[0]->reg , 4)*100;
+        $prodRetentionGoal = 30;
+        $prodRetentionData = array('percentage'=>strval(round($prodRetentionCurrent/$prodRetentionGoal , 4)*100)."%" , 'current'=>strval($prodRetentionCurrent)."%" , 'goal'=>strval($prodRetentionGoal)."%");
+
+        $prodMaskCurrent = 0;
+        $prodMaskGoal = 80;
+        $prodMaskData = array('percentage'=>strval(round($prodMaskCurrent/$prodMaskGoal , 4)*100)."%" , 'current'=>$prodMaskCurrent , 'goal'=>$prodMaskGoal);
+
+        return view('backstage.operator.operator.goal' , compact('dauData' , 'operData' , 'hrData' , 'prodRetentionData' , 'prodMaskData'));
     }
 }
