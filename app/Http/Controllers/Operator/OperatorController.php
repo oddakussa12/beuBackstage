@@ -229,7 +229,7 @@ class OperatorController extends Controller
         $hrGoal = 50;
         $hrData = array('percentage'=>strval(round($hrCurrent/$hrGoal , 4)*100)."%" , 'current'=>$hrCurrent , 'goal'=>$hrGoal);
 
-        $nineDayAgo = Carbon::now('Asia/Shanghai')->subDays(9)->addDays(100)->toDateString();
+        $nineDayAgo = Carbon::now('Asia/Shanghai')->subDays(9)->toDateString();
         $prodRetentionCurrent = 8;
         $prodRetentionData = DB::connection('lovbee')->table('data_retentions')->where('date' , $nineDayAgo)->select(array(
             DB::raw('SUM(new) as reg'),
