@@ -208,9 +208,10 @@ class OperatorController extends Controller
     {
         $yesterday = Carbon::yesterday('Asia/Shanghai')->toDateString();
         $dauCurrent = 0;
+        $dauMiddle = 16000;
         $dauCurrent = DB::connection('lovbee')->table('visit_logs_'.Carbon::yesterday('Asia/Shanghai')->format('Ym'))->where('created_at' , $yesterday)->count(DB::raw('DISTINCT(user_id)'));
         $dauGoal = 17000;
-        $dauData = array('percentage'=>strval(round($dauCurrent/$dauGoal , 4)*100)."%" , 'current'=>$dauCurrent , 'goal'=>strval(ceil($dauGoal/1000))."K");
+        $dauData = array('percentage'=>strval(round($dauCurrent/$dauGoal , 4)*100)."%" , 'current'=>$dauCurrent , 'goal'=>strval(ceil($dauGoal/1000))."K" , 'middle'=>strval(ceil($dauMiddle/1000))."K" );
 
         $dates = array();
         $start = Carbon::now('Asia/Shanghai')->startOfMonth()->toDateString();
@@ -221,27 +222,31 @@ class OperatorController extends Controller
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
         }
         $operCurrent = 0;
+        $operMiddle = 40000;
         $operCurrent = DB::connection('lovbee')->table('data_retentions')->whereIn('date' , $dates)->sum('new');
         $operGoal = 60000;
-        $operData = array('percentage'=>strval(round($operCurrent/$operGoal , 4)*100)."%" , 'current'=>strval($operCurrent/1000)."K" , 'goal'=>strval($operGoal/1000)."K");
+        $operData = array('percentage'=>strval(round($operCurrent/$operGoal , 4)*100)."%" , 'current'=>strval($operCurrent/1000)."K" , 'goal'=>strval($operGoal/1000)."K" , 'marginTop'=>empty($operGoal)?0:strval((($operGoal-$operMiddle)/$operGoal)*500).'px' , 'middle'=>strval(ceil($operMiddle/1000))."K");
 
         $hrCurrent = 0;
+        $hrMiddle = 36;
         $hrGoal = 50;
-        $hrData = array('percentage'=>strval(round($hrCurrent/$hrGoal , 4)*100)."%" , 'current'=>$hrCurrent , 'goal'=>$hrGoal);
+        $hrData = array('percentage'=>strval(round($hrCurrent/$hrGoal , 4)*100)."%" , 'current'=>$hrCurrent , 'goal'=>$hrGoal , 'marginTop'=>empty($hrGoal)?0:strval((($hrGoal-$hrMiddle)/$hrGoal)*500).'px' , 'middle'=>$hrMiddle);
 
         $nineDayAgo = Carbon::now('Asia/Shanghai')->subDays(9)->toDateString();
         $prodRetentionCurrent = 8;
+        $prodRetentionMiddle = 19;
         $prodRetentionData = DB::connection('lovbee')->table('data_retentions')->where('date' , $nineDayAgo)->select(array(
             DB::raw('SUM(new) as reg'),
             DB::raw('SUM(`7`) as seven')
         ))->get()->toArray();
         $prodRetentionCurrent = empty($prodRetentionData[0]->reg)?0:round($prodRetentionData[0]->seven/$prodRetentionData[0]->reg , 4)*100;
         $prodRetentionGoal = 30;
-        $prodRetentionData = array('percentage'=>strval(round($prodRetentionCurrent/$prodRetentionGoal , 4)*100)."%" , 'current'=>strval($prodRetentionCurrent)."%" , 'goal'=>strval($prodRetentionGoal)."%");
+        $prodRetentionData = array('percentage'=>strval(round($prodRetentionCurrent/$prodRetentionGoal , 4)*100)."%" , 'current'=>strval($prodRetentionCurrent)."%" , 'goal'=>strval($prodRetentionGoal)."%" ,'marginTop'=>empty($prodRetentionGoal)?0:strval((($prodRetentionGoal-$prodRetentionMiddle)/$prodRetentionGoal)*500).'px' , 'middle'=>strval($prodRetentionMiddle)."%" );
 
         $prodMaskCurrent = 0;
+        $prodMaskMiddle = 50;
         $prodMaskGoal = 80;
-        $prodMaskData = array('percentage'=>strval(round($prodMaskCurrent/$prodMaskGoal , 4)*100)."%" , 'current'=>$prodMaskCurrent , 'goal'=>$prodMaskGoal);
+        $prodMaskData = array('percentage'=>strval(round($prodMaskCurrent/$prodMaskGoal , 4)*100)."%" , 'current'=>$prodMaskCurrent , 'goal'=>$prodMaskGoal ,'marginTop'=>empty($prodMaskGoal)?0:strval((($prodMaskGoal-$prodMaskMiddle)/$prodMaskGoal)*500).'px' , 'middle'=>$prodMaskMiddle);
 
         return view('backstage.operator.operator.goal' , compact('dauData' , 'operData' , 'hrData' , 'prodRetentionData' , 'prodMaskData'));
     }

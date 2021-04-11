@@ -2,6 +2,11 @@
 @section('content')
     <div  class="layui-fluid">
         <div class="layui-row">
+            <div class="layui-col-md3"><div style="padding: 30px;"></div></div>
+            <div class="layui-col-md6 title">先定一个小目标、4月底DAU:<span class="arrow">17K</span></div>
+            <div class="layui-col-md3"><div style="padding: 30px;"></div></div>
+        </div>
+        <div class="layui-row">
             <div class="layui-progress">
                 <div class="layui-progress-bar" lay-percent="{{$dauData['percentage']}}"><span style="padding-left: 40px;">{{$dauData['current']}}</span></div>
                 <img src="{{url('plugin/layui/images/goal')}}/1@10x.png" id="vertical">
@@ -45,7 +50,7 @@
                                 <span class="goal">60K</span>
                                 <div class="layui-slider layui-slider-vertical oper">
                                     <div class="layui-slider-wrap" style="bottom: 66.66667%;">
-                                        <span class="current">40k</span>
+                                        <span class="current">{{$operData['middle']}}</span>
                                     </div>
                                     <div class="layui-slider-wrap" style="bottom: {{$operData['percentage']}}">
                                         <span class="current">{{$operData['current']}}</span>
@@ -198,19 +203,18 @@
             width: 80px;
         }
         .horizontal-oper{
-            margin-top: 200px;
+            margin-top: {{$operData['marginTop']}};
         }
         .horizontal-hr{
-            margin-top: 168px;
+            margin-top: {{$hrData['marginTop']}};
         }
         .horizontal-prod-retention{
-            margin-top: 220px;
+            margin-top: {{$prodRetentionData['marginTop']}};
         }
         .horizontal-prod-mask{
-            margin-top: 225px;
+            margin-top: {{$prodMaskData['marginTop']}};
         }
         .layui-progress{
-            top: 50px;
             height:100px;
             position: relative;
             width: 60%;
@@ -229,7 +233,7 @@
             background-color:rgba(255,255,255,0.4);
         }
         .bottom{
-            margin-top: 100px;
+            margin-top: 50px;
             border-radius: 1px;
         }
         .layui-panel {
@@ -261,13 +265,13 @@
         }
         ul li label{
             padding-left:50px;
-            font-size: x-large;
+            font-size: large;
         }
         .content{
             padding: 5px;
         }
         .layui-slider-vertical{
-            height: 600px;
+            height: 500px;
             width: 80px;
             margin: 0px;
         }
@@ -308,8 +312,8 @@
             text-align: center;
         }
         input[type='checkbox']{
-            width: 20px;
-            height: 20px;
+            width: 15px;
+            height: 15px;
         }
         ul li{
             padding-bottom: 10px;
@@ -323,9 +327,26 @@
             font-weight: bold;
             font-size: large;
         }
+        .title{
+            padding-top: 20px;
+            text-align: center;
+            line-height: normal;
+            font-weight: bold;
+            font-size: xx-large;
+        }
         .goal{
             font-weight: bold;
             font-size: large;
+        }
+        .arrow{
+            display: inline-block;
+            background: url("{{url('plugin/layui/images/goal')}}/410x.png") no-repeat 0px center;
+            height: 64px;
+            width: 120px;
+            color: white;
+            font-weight: bold;
+            font-size: x-large;
+            padding-top: 15px;
         }
         .multi dl dd.layui-this{background-color:#fff}
     </style>
