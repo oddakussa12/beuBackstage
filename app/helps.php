@@ -428,3 +428,20 @@ if (!function_exists('curl_https_request')) {
 }
 
 
+if (! function_exists('hashDbIndex')) {
+
+    function hashDbIndex($string, $hashNumber = 8)
+    {
+        $checksum = crc32(md5(strtolower(strval($string))));
+        if (8 == PHP_INT_SIZE) {
+            if ($checksum > 2147483647) {
+                $checksum = $checksum & (2147483647);
+                $checksum = ~($checksum - 1);
+                $checksum = $checksum & 2147483647;
+            }
+        }
+        return (abs($checksum) % intval($hashNumber));
+    }
+}
+
+

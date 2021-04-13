@@ -49,7 +49,7 @@
             <th  lay-data="{field:'game_score', minWidth:120}">GameScore</th>
             <th  lay-data="{field:'other_school_friend', minWidth:160}">OtherSchoolFriend</th>
             <th  lay-data="{field:'created_at', minWidth:160}">{{trans('user.table.header.user_time')}}</th>
-{{--            <th lay-data="{fixed: 'right', minWidth:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>--}}
+            <th lay-data="{fixed: 'right', minWidth:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -75,7 +75,7 @@
                 <td>@if(isset($l->game_score)){{$l->game_score}}@else 0 @endif</td>
                 <td>@if(isset($l->other_school_friend)){{$l->other_school_friend}}@else 0 @endif</td>
                 <td>@if(isset($l->created_at)){{$l->created_at}}@endif</td>
-{{--                <td></td>--}}
+                <td></td>
             </tr>
         @endforeach
         </tbody>
@@ -113,6 +113,21 @@
             });
             table.init('table', {
                 page:false
+            });
+            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                let data = obj.data; //获得当前行数据
+                let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                if(layEvent === 'detail'){
+                    layer.open({
+                        type: 2,
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['80%','80%'],
+                        offset: 'auto',
+                        scrollbar:true,
+                        content: '/backstage/operator/operator/score/detail/'+data.user_id,
+                    });
+                }
             });
             $(function () {
                 hoverOpenImg();

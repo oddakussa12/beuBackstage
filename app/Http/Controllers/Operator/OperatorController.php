@@ -211,14 +211,23 @@ class OperatorController extends Controller
     {
         $params = $request->all();
         $params['sort'] = !empty($params['sort']) ? $params['sort'] : 'score';
-        $table  = 'users_scores';
+        $ids   = [];
+        if (!empty($params['keyword'])) {
+            $keyword = trim($params['keyword']);
+            $select  = $this->db->table('users')->where('user_name', 'like', "%{$keyword}%")->paginate(10);
+            $ids     = $select->pluck('user_id')->toArray();
+        }
 
         if (in_array($params['sort'], ['score', 'init'])) {
-            $result  = $this->db->table('users_scores')->orderByDesc($params['sort'])->groupBy('user_id')->paginate(10);
+            $result  = $this->db->table('users_scores')->orderByDesc($params['sort'])->groupBy('user_id');
+            $ids && $result = $result->whereIn('user_id', $ids);
+            $result  = $result->paginate(10);
             $userIds = $result->pluck('user_id')->toArray();
             $list    = $this->db->table('users_kpi_counts')->whereIn('user_id', $userIds)->get();
         } else {
-            $result  = $this->db->table('users_kpi_counts')->orderByDesc($params['sort'])->groupBy('user_id')->paginate(10);
+            $result  = $this->db->table('users_kpi_counts')->orderByDesc($params['sort'])->groupBy('user_id');
+            $ids && $result = $result->whereIn('user_id', $ids);
+            $result  = $result->paginate(10);
             $userIds = $result->pluck('user_id')->toArray();
             $list    = $this->db->table('users_scores')->whereIn('user_id', $userIds)->get();
         }
@@ -247,6 +256,23 @@ class OperatorController extends Controller
 
         return view('backstage.operator.score', $params);
     }
+
+    /**
+     * @param Request $request
+     * @param $userId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * 积分详情
+     */
+    public function scoreDetail(Request $request, $userId)
+    {
+        $params = $request->all();
+        $hash   = hashDbIndex($userId);
+        $result = $this->db->table('users_scores_logs_'.$hash)->where('user_id', $userId)->paginate(10);
+        $params['list'] = $result;
+
+        return view('backstage.operator.scoreDetail', $params);
+    }
+
     public function goal()
     {
         $yesterday = Carbon::yesterday('Asia/Shanghai')->toDateString();

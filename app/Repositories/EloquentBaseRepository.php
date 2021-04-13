@@ -195,22 +195,4 @@ abstract class EloquentBaseRepository implements BaseRepository
         return true;
     }
 
-    public function hashDbIndex($string)
-    {
-        //return abs(hash('crc32b', md5(strtolower($string))) % parent::MAX_HASH_NUMBER);
-        $checksum  = crc32(md5(strtolower($string)));
-        //64位机,进行移位从处理成和32机一样
-        if(8==PHP_INT_SIZE){
-            if($checksum >2147483647){
-                //对64位机的先进截取后32位
-                $checksum  = $checksum&(2147483647);
-                //取补码
-                $checksum = ~($checksum-1);
-                //由于补码操作的修改，但是这时的checksum是正值而不是负值
-                $checksum = $checksum&2147483647;
-            }
-        }
-        $hash = (abs($checksum) % self::MAX_HASH_NUMBER);
-        return $hash;
-    }
 }

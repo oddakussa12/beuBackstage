@@ -47,6 +47,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('operator/feedback' , 'OperatorController@feedback')->name('operator.feedback');
             Route::get('operator/media' , 'OperatorController@media')->name('operator.media');
             Route::get('operator/score' , 'OperatorController@score')->name('operator.score');
+            Route::get('operator/score/detail/{user}' , 'OperatorController@scoreDetail')->name('operator.score.detail');
             Route::resource('virtual' , 'VirtualUserController');
         });
 
