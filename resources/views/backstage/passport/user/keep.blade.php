@@ -31,21 +31,21 @@
 
             </div>
         </form>
-        <table class="layui-table">
+        <table class="layui-table"   lay-filter="common_table">
             <thead>
             <tr>
-                <th>Day</th>
-                <th>SignUp</th>
-                <th>1Day</th>
-                <th>1Day%</th>
-                <th>2Day</th>
-                <th>2Day%</th>
-                <th>3Day</th>
-                <th>3Day%</th>
-                <th>7Day</th>
-                <th>7Day%</th>
-                <th>30Day</th>
-                <th>30Day%</th>
+                <th lay-data="{field:'day', minWidth:130 ,fixed: 'left'}">Day</th>
+                <th lay-data="{field:'SignUp', width:130}">SignUp</th>
+                <th lay-data="{field:'1Day', width:120}">1Day</th>
+                <th lay-data="{field:'1Day%', width:120}">1Day%</th>
+                <th lay-data="{field:'2Day', width:120}">2Day</th>
+                <th lay-data="{field:'2Day%', width:120}">2Day%</th>
+                <th lay-data="{field:'3Day', width:120}">3Day</th>
+                <th lay-data="{field:'3Day%', width:120}">3Day%</th>
+                <th lay-data="{field:'7Day', width:120}">7Day</th>
+                <th lay-data="{field:'7Day%', width:120}">7Day%</th>
+                <th lay-data="{field:'30Day', width:120}">30Day</th>
+                <th lay-data="{field:'30Day%', width:120}">30Day%</th>
             </tr>
             </thead>
             <tbody>
@@ -111,9 +111,10 @@
                 ,max : 'today'
                 ,lang: 'en'
             });
-            // table.init('common_table', {
-            //     page:false,
-            // });
+            table.init('common_table', {
+                page:false,
+                limit:{{count($list)}}
+            });
 
         })
     </script>
