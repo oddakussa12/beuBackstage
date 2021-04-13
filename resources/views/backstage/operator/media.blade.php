@@ -16,7 +16,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">{{trans('common.form.label.type')}}:</label>
                 <div class="layui-input-inline">
-                    <select  name="media" lay-verify="">
+                    <select id="media" name="media" lay-verify="">
                         @foreach($type as $item)
                             <option value="{{$item}}" @if(!empty($media)&&$media==$item) selected @endif>{{$item}}</option>
                         @endforeach
@@ -38,6 +38,7 @@
     <table class="layui-table" lay-filter="table">
         <thead>
         <tr>
+            <th  lay-data="{field:'id', minWidth:140 ,fixed: 'left', hide: 'true'}">MediaID</th>
             <th  lay-data="{field:'user_id', minWidth:140 ,fixed: 'left'}">ID</th>
             <th  lay-data="{field:'user_avatar', minWidth:150}">{{trans('user.table.header.user_avatar')}}</th>
             <th  lay-data="{field:'user_name', minWidth:160}">{{trans('user.table.header.user_name')}}</th>
@@ -51,6 +52,7 @@
         <tbody>
         @foreach($list as $l)
             <tr>
+                <td>@if(!empty($l->photo_id)){{$l->photo_id}}@else{{$l->video_id}}@endif</td>
                 <td>{{$l->user_id}}</td>
                 <td><img src="{{$l->user_avatar}}" /></td>
                 <td>{{$l->user_name}}</td>
@@ -78,6 +80,7 @@
     @parent
     <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
+{{--        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">{{trans('common.table.button.delete')}}</a>--}}
     </script>
     <script>
         layui.config({
@@ -86,6 +89,7 @@
             common: 'lay/modules/admin/common',
         }).use(['element' , 'table', 'common', 'laydate'], function () {
             let $ = layui.jquery,
+                common = layui.common,
                 table = layui.table,
                 laydate = layui.laydate;
             laydate.render({
@@ -110,6 +114,18 @@
                         skin: 'layer-alert-video',
                         scrollbar:true,
                         content: content
+                    });
+                } else if(layEvent === 'del'){ //删除
+                    data.type = $('#media').val();
+                    layer.confirm("{{trans('common.confirm.delete')}}", function(index){
+                        common.ajax("{{url('/backstage/operator/operator/media/destroy')}}", data , function(res){
+                            common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
+                                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                // layer.close(index);
+                                location.reload();
+                            });
+                        } , 'post');
+                        //向服务端发送删除指令
                     });
                 }
             });

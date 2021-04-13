@@ -172,6 +172,17 @@ class OperatorController extends Controller
 
     /**
      * @param Request $request
+     * 删除
+     */
+    public function destroyMedia(Request $request)
+    {
+        $params = $request->all();
+//        dump($params);
+        return [];
+    }
+
+    /**
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      * 积分
      */
