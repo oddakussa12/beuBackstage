@@ -56,25 +56,25 @@
         @foreach($list as $l)
             <tr>
                 <td>{{$l->user_id}}</td>
-                <td><img src="{{$l->user_avatar}}" /></td>
-                <td>{{$l->user_name}}</td>
-                <td>{{$l->user_nick_name}}</td>
-                <td>{{$l->init}}</td>
-                <td>{{$l->score}}</td>
-                <td>{{$l->sent}}</td>
-                <td>{{$l->friend}}</td>
-                <td>{{$l->like}}</td>
-                <td>{{$l->liked}}</td>
-                <td>{{$l->video}}</td>
-                <td>{{$l->txt}}</td>
-                <td>{{$l->audio}}</td>
-                <td>{{$l->image}}</td>
-                <td>{{$l->props}}</td>
-                <td>{{$l->like_video}}</td>
-                <td>{{$l->liked_video}}</td>
-                <td>{{$l->game_score}}</td>
-                <td>{{$l->other_school_friend}}</td>
-                <td>{{$l->created_at}}</td>
+                <td>@if(isset($l->user_avatar))<img src="{{$l->user_avatar}}" />@endif</td>
+                <td>@if(isset($l->user_name)){{$l->user_name}}@else 0 @endif</td>
+                <td>@if(isset($l->user_nick_name)){{$l->user_nick_name}}@else 0 @endif</td>
+                <td>@if(isset($l->init)){{$l->init}}@else 0 @endif</td>
+                <td>@if(isset($l->score)){{$l->score}}@else 0 @endif</td>
+                <td>@if(isset($l->sent)){{$l->sent}}@else 0 @endif</td>
+                <td>@if(isset($l->friend)){{$l->friend}}@else 0 @endif</td>
+                <td>@if(isset($l->like)){{$l->like}}@else 0 @endif</td>
+                <td>@if(isset($l->liked)){{$l->liked}}@else 0 @endif</td>
+                <td>@if(isset($l->video)){{$l->video}}@else 0 @endif</td>
+                <td>@if(isset($l->txt)){{$l->txt}}@else 0 @endif</td>
+                <td>@if(isset($l->audio)){{$l->audio}}@else 0 @endif</td>
+                <td>@if(isset($l->image)){{$l->image}}@else 0 @endif</td>
+                <td>@if(isset($l->props)){{$l->props}}@else 0 @endif</td>
+                <td>@if(isset($l->like_video)){{$l->like_video}}@else 0 @endif</td>
+                <td>@if(isset($l->liked_video)){{$l->liked_video}}@else 0 @endif</td>
+                <td>@if(isset($l->game_score)){{$l->game_score}}@else 0 @endif</td>
+                <td>@if(isset($l->other_school_friend)){{$l->other_school_friend}}@else 0 @endif</td>
+                <td>@if(isset($l->created_at)){{$l->created_at}}@endif</td>
 {{--                <td></td>--}}
             </tr>
         @endforeach

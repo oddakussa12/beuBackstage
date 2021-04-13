@@ -13,9 +13,11 @@ use function GuzzleHttp\Psr7\str;
 class OperatorController extends Controller
 {
     private $table;
+    private $db;
 
     public function __construct() {
         $this->table = 'network_logs';
+        $this->db = DB::connection('lovbee');
     }
     public function network(Request $request)
     {
@@ -25,7 +27,7 @@ class OperatorController extends Controller
         $time   = explode(' - ', $params['dateTime']);
         $start  = current($time);
         $end    = last($time);
-        $list   = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name');
+        $list   = $this->db->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name');
         $list   = $list->leftJoin('users', 'users.user_id', '=', "$table.user_id")->whereBetween('time', [$start, $end]);
         $fields = ['app_version', 'system_version', 'networking', 'network_type'];
 
@@ -37,13 +39,13 @@ class OperatorController extends Controller
 
         if (!empty($params['keyword'])) {
             $keyword = trim($params['keyword']);
-            $list    = $list->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
+            $list    = $list->where(function($query)use($keyword){$query->where('user_name', 'like', "%$keyword%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
         }
         $list = $list->orderByDesc('time')->paginate(10);
         $params['appends']  = $params;
         $params['list']     = $list;
 
-        $base = DB::connection('lovbee')->table($this->table);
+        $base = $this->db->table($this->table);
         $params['appVersions']    = $base->pluck('app_version')->unique()->toArray();
         $params['systemVersions'] = $base->pluck('system_version')->unique()->toArray();
         $params['networks']       = $base->pluck('networking')->unique()->toArray();
@@ -58,7 +60,7 @@ class OperatorController extends Controller
         $time        = explode(' - ', $params['dateTime']);
         $start       = current($time);
         $end         = last($time);
-        $base        = DB::connection('lovbee')->table($this->table);
+        $base        = $this->db->table($this->table);
         $chart       = $base->whereBetween('time', [$start, $end])->get()->toArray();
         $appVersion  = collect($chart)->pluck('app_version')->toArray();
         $networkType = collect($chart)->pluck('network_type')->toArray();
@@ -108,7 +110,7 @@ class OperatorController extends Controller
         $params['dateTime'] = $params['dateTime'] ?? date('Y-m-d', strtotime('-7day')).' - '.date('Y-m-d');
 
         $table  = 'feedback';
-        $result = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name','users.user_avatar');
+        $result = $this->db->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name','users.user_avatar');
         $result = $result->leftJoin('users', 'users.user_id', '=', "$table.user_id");
 
         if (isset($params['status'])) {
@@ -144,7 +146,7 @@ class OperatorController extends Controller
         $params['media'] = $params['media'] ?? 'video';
         $table  = $params['media'] == 'video' ? 'users_videos' : 'users_photos';
 
-        $list   = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name', 'user_avatar');
+        $list   = $this->db->table($table)->select(DB::raw("t_$table.*"), 'users.user_name','users.user_nick_name', 'user_avatar');
         $list   = $list->leftJoin('users', 'users.user_id', '=', "$table.user_id");
         if (!empty($params['dateTime'])) {
             $time   = explode(' - ', $params['dateTime']);
@@ -173,13 +175,13 @@ class OperatorController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      * 积分
      */
-    public function score(Request $request)
+    public function score3(Request $request)
     {
         $params = $request->all();
         $params['sort'] = !empty($params['sort']) ? $params['sort'] : 'score';
         $table  = 'users_scores';
 
-        $list   = DB::connection('lovbee')->table($table)->select(DB::raw("t_$table.init,t_$table.score,t_users_kpi_counts.*"), 'users.user_name','users.user_nick_name', 'user_avatar');
+        $list   = $this->db->table($table)->select(DB::raw("t_$table.init,t_$table.score,t_users_kpi_counts.*"), 'users.user_name','users.user_nick_name', 'user_avatar');
         $list   = $list->leftJoin('users', 'users.user_id', '=', "$table.user_id");
         $list   = $list->leftJoin('users_kpi_counts', 'users_kpi_counts.user_id', '=', "$table.user_id");
         if (!empty($params['dateTime'])) {
@@ -204,12 +206,53 @@ class OperatorController extends Controller
         return view('backstage.operator.score', $params);
 
     }
+
+    public function score(Request $request)
+    {
+        $params = $request->all();
+        $params['sort'] = !empty($params['sort']) ? $params['sort'] : 'score';
+        $table  = 'users_scores';
+
+        if (in_array($params['sort'], ['score', 'init'])) {
+            $result  = $this->db->table('users_scores')->orderByDesc($params['sort'])->groupBy('user_id')->paginate(10);
+            $userIds = $result->pluck('user_id')->toArray();
+            $list    = $this->db->table('users_kpi_counts')->whereIn('user_id', $userIds)->get();
+        } else {
+            $result  = $this->db->table('users_kpi_counts')->orderByDesc($params['sort'])->groupBy('user_id')->paginate(10);
+            $userIds = $result->pluck('user_id')->toArray();
+            $list    = $this->db->table('users_scores')->whereIn('user_id', $userIds)->get();
+        }
+        $users  = $this->db->table('users')->select('user_id', 'user_name', 'user_nick_name', 'user_avatar')->whereIn('user_id', $userIds)->get();
+
+        foreach ($result as $key=>$item) {
+            $tmp = (array)$item;
+            foreach ($list as $li) {
+                $tmp1 = (array)$li;
+                if ($tmp['user_id']==$tmp1['user_id']) {
+                    $tmp = array_merge($tmp, $tmp1);
+                }
+            }
+            foreach ($users as $user) {
+                $tmp2 = (array)$user;
+                if ($item->user_id==$tmp2['user_id']) {
+                    $tmp = array_merge($tmp, $tmp2);
+                }
+            }
+            $result[$key] = (object)($tmp);
+        }
+
+        $params['appends'] = $params;
+        $params['list']    = $result;
+        $params['type']    = ['init','score','sent', 'friend', 'like','liked','video','txt','audio','image','props','like_video','liked_video','game_score','other_school_friend'];
+
+        return view('backstage.operator.score', $params);
+    }
     public function goal()
     {
         $yesterday = Carbon::yesterday('Asia/Shanghai')->toDateString();
         $dauCurrent = 0;
         $dauMiddle = 16000;
-        $dauCurrent = DB::connection('lovbee')->table('visit_logs_'.Carbon::yesterday('Asia/Shanghai')->format('Ym'))->where('created_at' , $yesterday)->count(DB::raw('DISTINCT(user_id)'));
+        $dauCurrent = $this->db->table('visit_logs_'.Carbon::yesterday('Asia/Shanghai')->format('Ym'))->where('created_at' , $yesterday)->count(DB::raw('DISTINCT(user_id)'));
         $dauGoal = 17000;
         $dauData = array('percentage'=>strval(round($dauCurrent/$dauGoal , 4)*100)."%" , 'current'=>$dauCurrent , 'goal'=>strval(ceil($dauGoal/1000))."K" , 'middle'=>strval(ceil($dauMiddle/1000))."K" );
 
@@ -223,7 +266,7 @@ class OperatorController extends Controller
         }
         $operCurrent = 0;
         $operMiddle = 40000;
-        $operCurrent = DB::connection('lovbee')->table('data_retentions')->whereIn('date' , $dates)->sum('new');
+        $operCurrent = $this->db->table('data_retentions')->whereIn('date' , $dates)->sum('new');
         $operGoal = 60000;
         $operData = array('percentage'=>strval(round($operCurrent/$operGoal , 4)*100)."%" , 'current'=>strval($operCurrent/1000)."K" , 'goal'=>strval($operGoal/1000)."K" , 'marginTop'=>empty($operGoal)?0:strval((($operGoal-$operMiddle)/$operGoal)*500).'px' , 'middle'=>strval(ceil($operMiddle/1000))."K");
 
@@ -235,7 +278,7 @@ class OperatorController extends Controller
         $nineDayAgo = Carbon::now('Asia/Shanghai')->subDays(9)->toDateString();
         $prodRetentionCurrent = 8;
         $prodRetentionMiddle = 19;
-        $prodRetentionData = DB::connection('lovbee')->table('data_retentions')->where('date' , $nineDayAgo)->select(array(
+        $prodRetentionData = $this->db->table('data_retentions')->where('date' , $nineDayAgo)->select(array(
             DB::raw('SUM(new) as reg'),
             DB::raw('SUM(`7`) as seven')
         ))->get()->toArray();
