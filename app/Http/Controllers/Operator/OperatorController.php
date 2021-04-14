@@ -323,7 +323,7 @@ class OperatorController extends Controller
         $prodRetentionGoal = 30;
         $prodRetentionData = array('percentage'=>strval(round($prodRetentionCurrent/$prodRetentionGoal , 4)*100)."%" , 'current'=>strval($prodRetentionCurrent)."%" , 'goal'=>strval($prodRetentionGoal)."%" ,'marginTop'=>empty($prodRetentionGoal)?0:strval((($prodRetentionGoal-$prodRetentionMiddle)/$prodRetentionGoal)*500).'px' , 'middle'=>strval($prodRetentionMiddle)."%" );
 
-        $prodMaskCurrent = 0;
+        $prodMaskCurrent = 26;
         $prodMaskMiddle = 50;
         $prodMaskGoal = 80;
         $prodMaskData = array('percentage'=>strval(round($prodMaskCurrent/$prodMaskGoal , 4)*100)."%" , 'current'=>$prodMaskCurrent , 'goal'=>$prodMaskGoal ,'marginTop'=>empty($prodMaskGoal)?0:strval((($prodMaskGoal-$prodMaskMiddle)/$prodMaskGoal)*500).'px' , 'middle'=>$prodMaskMiddle);
