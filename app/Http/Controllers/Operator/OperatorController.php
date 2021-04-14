@@ -278,7 +278,7 @@ class OperatorController extends Controller
     {
         $params = $request->all();
         $hash   = hashDbIndex($userId);
-        $result = $this->db->table('users_scores_logs_'.$hash)->where('user_id', $userId)->paginate(10);
+        $result = $this->db->table('users_scores_logs_'.$hash)->where('user_id', $userId)->orderByDesc('created_at')->paginate(10);
         $params['list'] = $result;
 
         return view('backstage.operator.scoreDetail', $params);
