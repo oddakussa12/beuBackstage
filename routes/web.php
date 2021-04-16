@@ -49,6 +49,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::post('operator/media/destroy' , 'OperatorController@destroyMedia')->name('operator.media.destroy');
             Route::get('operator/score' , 'OperatorController@score')->name('operator.score');
             Route::get('operator/score/detail/{user}' , 'OperatorController@scoreDetail')->name('operator.score.detail');
+            Route::get('operator/blacklist' , 'OperatorController@blackList')->name('operator.blacklist');
+            Route::put('operator/black' , 'OperatorController@block')->name('operator.block');
             Route::resource('virtual' , 'VirtualUserController');
         });
 
@@ -66,6 +68,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user/{user}/friend/status', 'UserController@friendStatus')->name('user.friend.status');
             Route::get('user/{user}/friend/yesterday/status', 'UserController@friendYesterdayStatus')->name('user.friend.yesterday.status');
             Route::get('user', 'UserController@index')->name('user.index');
+            Route::post('user/block', 'UserController@block')->name('user.block');
+
             Route::get('friend/index', 'FriendController@index')->name('friend.index');
             Route::get('friend/request', 'FriendController@request')->name('friend.request');
         });

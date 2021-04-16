@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Operator;
 use App\Exports\MessageExport;
 use App\Models\Passport\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -176,9 +177,15 @@ class OperatorController extends Controller
      */
     public function destroyMedia(Request $request)
     {
+        $user = auth()->user();
+
         $params = $request->all();
-//        dump($params);
-        return [];
+        $data   = collect($params)->only('id', 'user_id', 'type')->toArray();
+        $data['admin_id'] = $user->admin_id;
+        $data['admin_username'] = $user->admin_username;
+        $data['time'] = date('Y-m-d H:i:s');
+        $result = $this->httpRequest('api/backstage/destroyMedia' , $data);
+        return isset($result['code']) ? $result : ['code'=>1];
     }
 
     /**
@@ -270,6 +277,30 @@ class OperatorController extends Controller
 
     /**
      * @param Request $request
+     * 封号管理
+     */
+    public function blackList(Request $request)
+    {
+        $uri    = parse_url($request->server('REQUEST_URI'));
+        $params = $request->all();
+        $params['appends']  = $params;
+        $params['query']    = empty($uri['query']) ? "" : $uri['query'];
+
+        $user = DB::connection('lovbee')->table('black_users');
+        if (!empty($params['operator'])) {
+            $user = $user->where('operator', $params['operator']);
+        }
+        if (!empty($params['user_id'])) {
+            $user = $user->where('user_id', $params['user_id']);
+        }
+
+        $users = $user->orderByDesc('id')->groupBy('user_id')->paginate(10);
+        $params['users'] = $users;
+        return view('backstage.operator.suspend', $params);
+    }
+
+    /**
+     * @param Request $request
      * @param $userId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      * 积分详情
@@ -286,6 +317,9 @@ class OperatorController extends Controller
 
     public function goal()
     {
+
+//        $dau = DB::connection('lovbee')->table('dau_counts')->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
+
         $yesterday = Carbon::yesterday('Asia/Shanghai')->toDateString();
         $dauCurrent = 0;
         $dauMiddle = 16000;

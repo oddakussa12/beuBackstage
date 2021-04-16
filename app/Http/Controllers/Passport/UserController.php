@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Passport;
 
+use App\Models\Passport\User;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -46,6 +47,12 @@ class UserController extends Controller
         $users->each(function ($item){
             $item->user_format_created_at = Carbon::parse($item->user_created_at)->addHours(8)->toDateTimeString();
         });
+        $userIds = $users->pluck('user_id')->toArray();
+        $block_users = DB::connection('lovbee')->table('black_users')->where('is_delete', 0)->whereIn('user_id', $userIds)->pluck('user_id')->toArray();
+        $users->each(function ($item) use ($block_users){
+            $item->is_block = in_array($item->user_id, $block_users);
+            $item->user_format_created_at = Carbon::parse($item->user_created_at)->addHours(8)->toDateTimeString();
+        });
         $params['users']=$users;
         $params = $this->userChart($params);
         return view('backstage.passport.user.index' , $params);
@@ -84,6 +91,38 @@ class UserController extends Controller
         ];*/
         return $params;
     }
+
+    public function block(Request $request)
+    {
+        $params = $request->all();
+        $userId = $params['user_id'];
+        $block  = $params['block'];
+        $data   = ['user_id'=>$userId, 'operator' => auth()->user()->admin_username];
+
+        !empty($params['block']) && $data = array_merge(['desc' => '后台封禁'], $data);
+        $time = date("Y-m-d H:i:s");
+
+        if (!empty($block)) {
+            $data['operator']   = auth()->user()->admin_username;
+            $data['start_time'] = $time;
+            $data['end_time']   = date('Y-m-d H:i:s', time()+86400*30);
+            $data['created_at'] = $time;
+        } else {
+            $data['is_delete']  = 1;
+            $data['unoperator'] = auth()->user()->admin_username;
+        }
+        $data['updated_at'] = $time;
+        $result = DB::connection('lovbee')->table('black_users')->where('user_id', $userId)->orderByDesc('id')->first();
+        if (empty($result) || $result->is_delete==1) {
+            DB::connection('lovbee')->table('black_users')->insert($data);
+        } else {
+            DB::connection('lovbee')->table('black_users')->where('id', $result->id)->update($data);
+        }
+        // $url = !empty($params['block']) ? 'api/ry/set/block' : 'api/ry/set/unblock';
+        // $result = $this->httpRequest($url, $data);
+        return response()->json(['result' => 'success']);
+    }
+
     public function msgExport(Request $request)
     {
         ini_set('memory_limit','256M');

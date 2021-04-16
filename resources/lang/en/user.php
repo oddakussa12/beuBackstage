@@ -8,6 +8,7 @@ return [
             'user_school'=>'School',
             'user_gender'=>'Gender',
             'phone'=>'Phone',
+            'user_block'=>'Black',
             'friend_count'=>'Number of friends',
             'message_received'=>'Number of messages received',
             'message_send'=>'Number of messages sent',

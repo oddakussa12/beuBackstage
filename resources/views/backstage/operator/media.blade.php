@@ -80,7 +80,7 @@
     @parent
     <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
-{{--        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">{{trans('common.table.button.delete')}}</a>--}}
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">{{trans('common.table.button.delete')}}</a>
     </script>
     <script>
         layui.config({
@@ -119,9 +119,9 @@
                     data.type = $('#media').val();
                     layer.confirm("{{trans('common.confirm.delete')}}", function(index){
                         common.ajax("{{url('/backstage/operator/operator/media/destroy')}}", data , function(res){
-                            common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
-                                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                // layer.close(index);
+                            console.log(res);
+                            let prompt = res.code===0 ? "{{trans('common.ajax.result.prompt.delete')}}" : "Operation failed, please try again";
+                            common.prompt(prompt, 1 , 500 , 6 , 't' ,function () {
                                 location.reload();
                             });
                         } , 'post');

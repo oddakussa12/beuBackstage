@@ -55,7 +55,8 @@
                         <th  lay-data="{field:'user_nick_name', minWidth:150}">{{trans('user.table.header.user_nick_name')}}</th>
                         <th  lay-data="{field:'user_name', minWidth:190}">{{trans('user.table.header.user_name')}}</th>
                         <th  lay-data="{field:'user_phone', minWidth:180}">{{trans('user.table.header.phone')}}</th>
-                        <th  lay-data="{field:'friends', minWidth:100,sort:true}">{{trans('user.table.header.friend_count')}}</th>
+                        <th  lay-data="{field:'friends', minWidth:120,sort:true}">{{trans('user.table.header.friend_count')}}</th>
+                        <th  lay-data="{field:'user_is_block', width:100}">{{trans('user.table.header.user_block')}}</th>
                         <th  lay-data="{field:'user_gender', width:70}">{{trans('user.table.header.user_gender')}}</th>
                         <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
                         <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_active_time')}}</th>
@@ -74,6 +75,7 @@
                             <td>{{$user->user_name}}</td>
                             <td>{{$user->user_phone_country}} {{$user->user_phone}}</td>
                             <td>{{$user->friends}}</td>
+                            <td><input type="checkbox" @if($user->is_block==true) checked @endif name="is_block" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                             <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1){{trans('common.cast.sex.other')}}@elseif($user->user_gender==0){{trans('common.cast.sex.female')}}@else{{trans('common.cast.sex.male')}}@endif</span></td>
                             <td>{{ $user->country }}</td>
                             <td>{{$user->time}}</td>
@@ -122,7 +124,7 @@
                 table = layui.table,
                 common = layui.common,
                 echarts = layui.echarts,
-                laydate = layui.laydate,
+                form = layui.form,
                 flow = layui.flow,
                 timePicker = layui.timePicker;
 
@@ -133,7 +135,33 @@
                     format:'YYYY-MM-DD HH:ss:mm',//格式化时间具体可以参考moment.js官网 默认是YYYY-MM-DD HH:ss:mm
                 },
             });
+            form.on('switch(switchAll)', function(data){
+                let checked = data.elem.checked;
+                data.elem.checked = !checked;
+                let name = $(data.elem).attr('name');
+                @if(!Auth::user()->can('operator::operator.blacklist'))
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
+                    form.render();
+                    return false;
+                @endif
+                let params = {'block': checked ? 1 : 0, 'user_id': data.othis.parents('tr').find("td :first").text()};
+                form.render();
+                const url = "{{url('/backstage/passport/user/block')}}";
 
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax(url , params , function(res){
+                        data.elem.checked = checked;
+                        form.render();
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                    } , 'post' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            data.elem.checked = !checked;
+                            form.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
+            });
             table.on('tool(user_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）

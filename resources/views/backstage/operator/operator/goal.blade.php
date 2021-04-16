@@ -3,7 +3,7 @@
     <div  class="layui-fluid">
         <div class="layui-row">
             <div class="layui-col-md3"><div style="padding: 30px;"></div></div>
-            <div class="layui-col-md6 title">先定一个小目标、4月底DAU:<span class="arrow">17K</span></div>
+            <div class="layui-col-md6 title">XMT from 2021</div>
             <div class="layui-col-md3"><div style="padding: 30px;"></div></div>
         </div>
         <div class="layui-row">
@@ -14,17 +14,63 @@
             </div>
         </div>
         <div class="layui-row bottom layui-col-space1">
+            <div class="layui-col-xs10 dev-title"></div>
             <div class="layui-col-md1">
                 <div class="layui-panel left">
                     <div style="padding: 30px;"></div>
                 </div>
             </div>
             <div class="layui-col-md2">
-                <div class="dev-title">
-                    <img src="{{url('plugin/layui/images/goal')}}/dev1@10x.png" height="25px">
+                <div class="panel oper">
+                    <div class="layui-panel">
+                        <div class="layui-title"><h1>Operations</h1></div>
+                        <div class="operBg">
+                            <div class="layui-col-xs4 bg-left">45% <br />reach</div>
+                            <div class="layui-col-xs4 bg-middle"><img src="{{url('plugin/layui/images/goal')}}/Group843.png"></div>
+                            <div class="layui-col-xs4 bg-right">50K <br /> Target</div>
+                        </div>
+                            <div class="content">
+                            </div>
+                    </div>
                 </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="panel hr">
+                    <div class="layui-panel">
+                        <div class="layui-title"><h1>HR</h1></div>
+                        <div class="operBg">
+                            <div class="layui-col-xs4 bg-left">42% <br />reach</div>
+                            <div class="layui-col-xs4 bg-middle"><img src="{{url('plugin/layui/images/goal')}}/Group844.png"></div>
+                            <div class="layui-col-xs4 bg-right">78% <br /> Target</div>
+                        </div>
+                            <div class="content">
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="panel prod">
+                    <div class="layui-panel">
+                        <div class="layui-title"><h1>Product</h1></div>
+                        <div class="operBg">
+                            <div class="layui-col-xs4 bg-left">45% <br />Target</div>
+                            <div class="layui-col-xs4 bg-middle"><img src="{{url('plugin/layui/images/goal')}}/Group845.png"></div>
+                            <div class="layui-col-xs4 bg-right">45% <br /> Target</div>
+                        </div>
+                        <div class="content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md2">
                 <div class="panel">
                     <div class="layui-panel dev">
+                        <div class="layui-title"><h1>Development</h1></div>
+                        <div class="operBg">
+                            <div class="layui-col-xs4 bg-left">40% <br />Target</div>
+                            <div class="layui-col-xs4 bg-middle"><img src="{{url('plugin/layui/images/goal')}}/Group846.png"></div>
+                            <div class="layui-col-xs4 bg-right">100% <br /> Target</div>
+                        </div>
                         <div class="content">
                             <ul class="site-doc-bgcolor">
                                 <li>
@@ -32,7 +78,7 @@
                                 </li>
                                 <li>
                                     <label><input name="dev[]" type="checkbox" value="2" /> 对于一些"一定会成功、网络缺不太好、或后端响应时间较长"的接口，做一个入库操作，找一个准确的时机、做合适的轮训操作能很大幅度提升用户体验
-                                    <br />时间周期:4月底之前优化</label>
+                                        <br />时间周期:4月底之前优化</label>
                                 </li>
                                 <li>
                                     <label><input name="dev[]" type="checkbox" value="3" /> 整理规范GitHub</label>
@@ -46,61 +92,14 @@
                 </div>
             </div>
             <div class="layui-col-md2">
-                <div class="dev-title">
-                    <img src="{{url('plugin/layui/images/goal')}}/2@10x.png" height="25px">
-                </div>
-                <div class="no-panel">
-                    <div class="layui-panel oper">
-                        <div class="progress">
-                            <div class="slideoper">
-                                <span class="goal">60K</span>
-                                <div class="layui-slider layui-slider-vertical oper">
-                                    <div class="layui-slider-wrap" style="bottom: 66.66667%;">
-                                        <span class="current">{{$operData['middle']}}</span>
-                                    </div>
-                                    <div class="layui-slider-wrap" style="bottom: {{$operData['percentage']}}">
-                                        <span class="current">{{$operData['current']}}</span>
-                                    </div>
-                                    <img src="{{url('plugin/layui/images/goal')}}/1510x.png" class="horizontal horizontal-oper">
-                                    <div class="layui-slider-bar layui-slider-bar-oper"></div>
-                                </div>
-                                <span class="mark">拉新</span>
-                            </div>
+                <div class="panel data">
+                    <div class="layui-panel">
+                        <div class="layui-title"><h1>Data</h1></div>
+                        <div class="operBg">
+                            <div class="layui-col-xs4 bg-left">40% <br />Target</div>
+                            <div class="layui-col-xs4 bg-middle"><img src="{{url('plugin/layui/images/goal')}}/Group847.png"></div>
+                            <div class="layui-col-xs4 bg-right">100% <br /> Target</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-col-md2">
-                <div class="dev-title">
-                    <img src="{{url('plugin/layui/images/goal')}}/3@10x.png" height="25px">
-                </div>
-                <div class="no-panel">
-                    <div class="layui-panel hr">
-                        <div class="progress">
-                            <div class="slideoper">
-                                <span class="goal">50</span>
-                                <div class="layui-slider layui-slider-vertical hr">
-                                    <div class="layui-slider-wrap" style="bottom: 72%;">
-                                        <span class="current">36</span>
-                                    </div>
-                                    <div class="layui-slider-wrap" style="bottom: {{$hrData['percentage']}}">
-                                        <span class="current">{{$hrData['current']}}</span>
-                                    </div>
-                                    <img src="{{url('plugin/layui/images/goal')}}/1510x.png" class="horizontal horizontal-hr">
-                                    <div class="layui-slider-bar layui-slider-bar-hr"></div>
-                                </div>
-                                <span class="mark">面试</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-col-md2">
-                <div class="dev-title">
-                    <img src="{{url('plugin/layui/images/goal')}}/4@10x.png" height="25px">
-                </div>
-                <div class="panel">
-                    <div class="layui-panel data">
                         <div class="content">
                             <ul class="site-doc-bgcolor">
                                 <li>
@@ -120,45 +119,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-col-md2">
-                <div class="dev-title">
-                    <img src="{{url('plugin/layui/images/goal')}}/5@10x.png" height="25px">
-                </div>
-                <div class="no-panel">
-                    <div class="layui-panel prod">
-                        <div class="progress">
-                            <div class="slideoper">
-                                <span class="goal">30%</span>
-                                <div class="layui-slider layui-slider-vertical prod-retention">
-                                    <div class="layui-slider-wrap" style="bottom: 63.33%;">
-                                        <span class="current">19%</span>
-                                    </div>
-                                    <div class="layui-slider-wrap" style="bottom: {{$prodRetentionData['percentage']}};">
-                                        <span class="current">{{$prodRetentionData['current']}}</span>
-                                    </div>
-                                    <img src="{{url('plugin/layui/images/goal')}}/1510x.png" class="horizontal horizontal-prod-retention">
-                                    <div class="layui-slider-bar layui-slider-bar-prod-retention"></div>
-                                </div>
-                                <span class="mark">留存</span>
-                            </div>
-                            <div class="slideoper">
-                                <span class="goal">80</span>
-                                <div class="layui-slider layui-slider-vertical prod-mask">
-                                    <div class="layui-slider-wrap" style="bottom: 62.5%;">
-                                        <span class="current">50</span>
-                                    </div>
-                                    <div class="layui-slider-wrap" style="bottom: {{$prodMaskData['percentage']}};">
-                                        <span class="current">{{$prodMaskData['current']}}</span>
-                                    </div>
-                                    <img src="{{url('plugin/layui/images/goal')}}/1510x.png" class="horizontal horizontal-prod-mask">
-                                    <div class="layui-slider-bar layui-slider-bar-prod-mask"></div>
-                                </div>
-                                <span class="mark">面具</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             <div class="layui-col-md1">
                 <div class="layui-panel right">
                     <div style="padding: 30px;"></div>
@@ -174,15 +135,47 @@
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-        }).use(['common' , 'layer' , 'element' , 'slider'], function () {
+            echarts: 'lay/modules/echarts',
+        }).use(['common' , 'layer' , 'element' , 'echarts', 'slider'], function () {
             var $ = layui.jquery,
                 common = layui.common,
                 layer = layui.layer,
                 slider = layui.slider,
+                echarts = layui.echarts,
                 element = layui.element;
                 setTimeout(function() {
                     window.location.reload();
                 }, 60000);
+            {{--let dom = document.getElementById("container");--}}
+            {{--let myChart = echarts.init(dom);--}}
+
+            {{--let option = {--}}
+            {{--    tooltip: {--}}
+            {{--        trigger: 'axis',--}}
+            {{--    },--}}
+            {{--    xAxis: {--}}
+            {{--        type: 'category',--}}
+            {{--        boundaryGap: false,--}}
+            {{--        data: @json($dates)--}}
+            {{--    },--}}
+            {{--    yAxis: {--}}
+            {{--        type: 'value'--}}
+            {{--    },--}}
+            {{--    series: @json($line)--}}
+            {{--};--}}
+
+            if (option && typeof option === 'object') {
+                myChart.setOption(option);
+                window.onresize = function () {//用于使chart自适应高度和宽度
+                    autoContainer();//重置容器高宽
+                    myChart.resize();
+                };
+            }
+            let autoContainer = function () {
+                console.log($('.layui-body').height());
+                $('#layui-echarts').height($('.layui-body').height()-200);
+                myChart.resize();
+            };
         })
     </script>
     <style>
@@ -202,26 +195,9 @@
             font-weight: bold;
             font-size: large;
         }
-        .dau-goal{
-            color: white;
-            font-weight: bold;
-            font-size: large;
-        }
         .horizontal{
             margin-top: 60px;
             width: 80px;
-        }
-        .horizontal-oper{
-            margin-top: {{$operData['marginTop']}};
-        }
-        .horizontal-hr{
-            margin-top: {{$hrData['marginTop']}};
-        }
-        .horizontal-prod-retention{
-            margin-top: {{$prodRetentionData['marginTop']}};
-        }
-        .horizontal-prod-mask{
-            margin-top: {{$prodMaskData['marginTop']}};
         }
         .layui-progress{
             height:100px;
@@ -246,16 +222,32 @@
             border-radius: 1px;
         }
         .layui-panel {
-            /*background-color: green;*/
+            height: 65vh;
         }
         .panel{
-            margin-top:30px;
-            box-shadow: 0px 0px 4px 0px #909090;
+            margin:30px 10px 0 0;
             border-radius: 10px;
         }
-        .no-panel{
-            margin-top:30px;
-            border-radius: 10px;
+        .oper {
+            color: #FFDA8F;
+            box-shadow: 0 0 4px 2px #FFDA8F;
+            border: #FFDA8F 3px solid;
+        }
+        .hr {
+            box-shadow: 0 0 4px 2px #FF8FFF;
+            border: #FF8FFF 3px solid;
+        }
+        .data {
+            box-shadow: 0 0 4px 2px #8FDAFF;
+            border: #8FDAFF 3px solid;
+        }
+        .dev {
+            box-shadow: 0 0 4px 2px #B4FF8F;
+            border: #B4FF8F 3px solid;
+        }
+        .prod {
+            box-shadow: 0 0 4px 2px #FF8F8F;
+            border: #FF8F8F 3px solid;
         }
         .layui-panel{
             border-radius: 10px;
@@ -263,6 +255,7 @@
         .dev-title{
             text-align: center;
             background: url("{{url('plugin/layui/images/goal')}}/path.png") no-repeat 15px center;
+            margin: 0 8.33%;
         }
         .dev-title img{
             height: 36px;
@@ -274,7 +267,7 @@
         }
         ul li label{
             padding-left:40px;
-            font-size: large;
+            font-size: small;
         }
         .content{
             padding: 5px;
@@ -284,42 +277,7 @@
             width: 80px;
             margin: 0px;
         }
-        .slideoper .oper{
-            background-color: rgba(233, 128, 0, 1)
-        }
-        .slideoper .hr{
-            background-color: rgba(0, 175, 233, 1)
-        }
-        .slideoper .prod-retention{
-            background-color: rgba(0, 233, 221, 1)
-        }
-        .slideoper .prod-mask{
-            background-color: rgba(0, 233, 221, 1)
-        }
-        .layui-slider-vertical .layui-slider-bar{
-            width: 80px;
-            background-color:rgba(255,255,255,0.4);
-            bottom: 0%;
-        }
-        .layui-slider-vertical .layui-slider-bar-oper{
-            height: {{$operData['percentage']}};
-        }
-        .layui-slider-vertical .layui-slider-bar-hr{
-            height: {{$hrData['percentage']}};
-        }
-        .layui-slider-vertical .layui-slider-bar-prod-retention{
-            height: {{$prodRetentionData['percentage']}};
-        }
-        .layui-slider-vertical .layui-slider-bar-prod-mask{
-            height: {{$prodMaskData['percentage']}};
-        }
-        .layui-slider-vertical .layui-slider-wrap{
-            left: 24px;
-            margin-bottom: 5px;
-        }
-        .progress{
-            text-align: center;
-        }
+
         input[type='checkbox']{
             width: 15px;
             height: 15px;
@@ -327,11 +285,7 @@
         ul li{
             padding-bottom: 10px;
         }
-        .slideoper{
-            display: inline-block;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
+
         .mark{
             font-weight: bold;
             font-size: large;
@@ -357,6 +311,32 @@
             font-size: x-large;
             padding-top: 15px;
         }
+        .layui-col-space1 {height: 70vh}
+        .operBg {
+            vertical-align: middle;
+            width: 100%;
+            height: 33%;
+        }
+        .bg-left, .bg-middle, .bg-right {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .bg-left {
+        }
+        .bg-middle {
+        }
+        .bg-right {
+        }
+        .layui-title {
+            text-align: center;
+            padding-top: 10px;
+        }
+        .operBg img {
+            width: 100%;
+        }
+
         .multi dl dd.layui-this{background-color:#fff}
     </style>
 @endsection

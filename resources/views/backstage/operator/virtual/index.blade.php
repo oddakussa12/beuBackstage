@@ -13,7 +13,7 @@
             <th  lay-data="{field:'user_nickname', minWidth:190}">{{trans('user.table.header.user_nick_name')}}</th>
             <th  lay-data="{field:'rank', minWidth:120}">Rank</th>
             <th  lay-data="{field:'score', minWidth:120, edit:'text'}">Score</th>
-            <th  lay-data="{field:'user_time', minWidth:150}">{{trans('user.table.header.user_time')}}</th>
+            <th  lay-data="{field:'user_time', minWidth:160}">{{trans('user.table.header.user_time')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -102,7 +102,7 @@
                     type: 2,
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['40%','40%'],
+                    area: ['380px','90%'],
                     offset: 'auto',
                     content: '/backstage/operator/virtual/create',
                 });

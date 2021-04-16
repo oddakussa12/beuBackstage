@@ -9,6 +9,7 @@ return [
             'user_gender'=>'性别',
             'phone'=>'手机号',
             'friend_count'=>'好友数量',
+            'user_block'=>'封号',
             'message_received'=>'收到消息数',
             'message_send'=>'发送消息数',
             'user_nick_name'=>'昵称',
