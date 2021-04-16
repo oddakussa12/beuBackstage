@@ -180,6 +180,9 @@
                 layer = layui.layer,
                 slider = layui.slider,
                 element = layui.element;
+                setTimeout(function() {
+                    window.location.reload();
+                }, 60000);
         })
     </script>
     <style>
