@@ -3,7 +3,7 @@
     <div  class="layui-fluid">
         <div class="layui-row">
             <div class="layui-col-md3"><div style="padding: 30px;"></div></div>
-            <div class="layui-col-md6 title">XMT from 2021</div>
+            <div class="layui-col-md6 title">先定一个小目标、4月底DAU:<span class="arrow">17K</span></div>
             <div class="layui-col-md3"><div style="padding: 30px;"></div></div>
         </div>
         <div class="layui-row">
@@ -32,7 +32,7 @@
                                 </li>
                                 <li>
                                     <label><input name="dev[]" type="checkbox" value="2" /> 对于一些"一定会成功、网络缺不太好、或后端响应时间较长"的接口，做一个入库操作，找一个准确的时机、做合适的轮训操作能很大幅度提升用户体验
-                                    <br />时间周期:4月底之前优化</label>
+                                        <br />时间周期:4月底之前优化</label>
                                 </li>
                                 <li>
                                     <label><input name="dev[]" type="checkbox" value="3" /> 整理规范GitHub</label>
@@ -174,47 +174,15 @@
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-            echarts: 'lay/modules/echarts',
-        }).use(['common' , 'layer' , 'element' , 'echarts', 'slider'], function () {
+        }).use(['common' , 'layer' , 'element' , 'slider'], function () {
             var $ = layui.jquery,
                 common = layui.common,
                 layer = layui.layer,
                 slider = layui.slider,
-                echarts = layui.echarts,
                 element = layui.element;
-                setTimeout(function() {
-                    window.location.reload();
-                }, 60000);
-            {{--let dom = document.getElementById("container");--}}
-            {{--let myChart = echarts.init(dom);--}}
-
-            {{--let option = {--}}
-            {{--    tooltip: {--}}
-            {{--        trigger: 'axis',--}}
-            {{--    },--}}
-            {{--    xAxis: {--}}
-            {{--        type: 'category',--}}
-            {{--        boundaryGap: false,--}}
-            {{--        data: @json($dates)--}}
-            {{--    },--}}
-            {{--    yAxis: {--}}
-            {{--        type: 'value'--}}
-            {{--    },--}}
-            {{--    series: @json($line)--}}
-            {{--};--}}
-
-            if (option && typeof option === 'object') {
-                myChart.setOption(option);
-                window.onresize = function () {//用于使chart自适应高度和宽度
-                    autoContainer();//重置容器高宽
-                    myChart.resize();
-                };
-            }
-            let autoContainer = function () {
-                console.log($('.layui-body').height());
-                $('#layui-echarts').height($('.layui-body').height()-200);
-                myChart.resize();
-            };
+            setTimeout(function() {
+                window.location.reload();
+            }, 60000);
         })
     </script>
     <style>
