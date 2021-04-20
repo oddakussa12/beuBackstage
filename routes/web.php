@@ -72,6 +72,10 @@ Route::group(['prefix'=>'backstage'] , function(){
 
             Route::get('friend/index', 'FriendController@index')->name('friend.index');
             Route::get('friend/request', 'FriendController@request')->name('friend.request');
+            Route::get('group', 'GroupController@index')->name('group.index'); // 群组列表管理
+            Route::get('group/{groupId}', 'GroupController@member')->name('group.member'); // 群组列表管理
+            Route::get('group/members', 'GroupController@members')->name('group.members'); // 群组列表管理
+
         });
 
         Route::group(['namespace'=>'Service','prefix'=>'service' , 'as' => 'service::'] , function (){
