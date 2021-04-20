@@ -7,11 +7,7 @@
             <div class="layui-col-md3"><div style="padding: 30px;"></div></div>
         </div>
         <div class="layui-row">
-            <div class="layui-progress">
-                <div class="layui-progress-bar" lay-percent="{{$dauData['percentage']}}"><span style="padding-left: 40px;">{{$dauData['current']}}</span></div>
-                <img src="{{url('plugin/layui/images/goal')}}/1@10x.png" id="vertical">
-                <span class="dau">16k</span>
-            </div>
+
         </div>
         <div class="layui-row bottom layui-col-space1">
             <div class="layui-col-md1">
