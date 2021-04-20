@@ -39,14 +39,9 @@
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                    <div class="layui-btn layui-btn-primary">共{{$groups->total()}}条记录</div>
-                </div>
-
             </div>
         </form>
-        <table class="layui-table"  lay-filter="user_table">
+        <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
                 <th  lay-data="{field:'id', minWidth:180}">ID</th>
@@ -71,7 +66,7 @@
                         @endif
                     </td>
                     <td>{{ $group->name }}</td>
-                    <td><input type="checkbox" @if(!empty($group->is_delete)) checked @endif name="is_delete" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
+                    <td><input type="checkbox" @if(!empty($group->is_deleted)) checked @endif name="is_deleted" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO" disabled></td>
                     <td>{{ $group->member }}</td>
                     <td>{{ $group->administrator }}</td>
                     <td>{{ $group->created_at }}</td>
@@ -112,7 +107,7 @@
                 timePicker = layui.timePicker;
             flow.lazyimg();
 
-            table.on('tool(user_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 let tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -128,7 +123,7 @@
                     });
                 }
             });
-            table.init('user_table', { //转化静态表格
+            table.init('table', { //转化静态表格
                 page:false
             });
 
@@ -138,9 +133,6 @@
                     timeStamp:false,//true开启时间戳 开启后format就不需要配置，false关闭时间戳 //默认false
                     format:'YYYY-MM-DD HH:ss:mm',//格式化时间具体可以参考moment.js官网 默认是YYYY-MM-DD HH:ss:mm
                 },
-            });
-            form.on('submit(btnSubmit)', function (data) {
-
             });
         })
     </script>
