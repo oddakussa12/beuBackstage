@@ -63,7 +63,7 @@
                         <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_active_ip')}}</th>
                         <th  lay-data="{field:'activation', width:70}">{{trans('user.table.header.user_activation')}}</th>
                         <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
-                        <th  lay-data="{field:'user_op', minWidth:280 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                        <th  lay-data="{field:'user_op', minWidth:400 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -104,9 +104,10 @@
     @parent
     <script type="text/html" id="operateTpl">
         <div class="layui-btn-group">
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="friend">{{trans('user.table.button.friend')}}</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="device">Device</a>
+            <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="friend">{{trans('user.table.button.friend')}}</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="history">{{trans('user.table.button.history')}}</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="friend_active">{{trans('user.table.button.friend_active')}}</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="friend_active">{{trans('user.table.button.friend_active')}}</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="friend_yesterday_active">{{trans('user.table.button.friend_yesterday_active')}}</a>
         </div>
     </script>
@@ -188,6 +189,17 @@
                         offset: 'auto',
                         'scrollbar':true,
                         content: '/backstage/passport/user/history/'+data.user_id
+                    });
+                }
+                if(layEvent === 'device'){ //设备列表
+                    layer.open({
+                        type: 2,
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['70%','90%'],
+                        offset: 'auto',
+                        'scrollbar':true,
+                        content: '/backstage/passport/user/device/'+data.user_id
                     });
                 }
                 if(layEvent === 'friend_active'){

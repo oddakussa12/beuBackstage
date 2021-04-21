@@ -23,7 +23,7 @@
                 </div>
             </div>
         </form>
-        <table class="layui-table"  lay-filter="user_table">
+        <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
                 <th  lay-data="{field:'user_id', minWidth:120 ,fixed: 'left'}">ID</th>
@@ -85,7 +85,7 @@
                 table = layui.table,
                 timePicker = layui.timePicker;
 
-            table.init('user_table', { //转化静态表格
+            table.init('table', { //转化静态表格
                 page:false
             });
             timePicker.render({
@@ -98,8 +98,4 @@
 
         })
     </script>
-
-    <style>
-        .multi dl dd.layui-this{background-color:#fff}
-    </style>
 @endsection

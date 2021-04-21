@@ -76,19 +76,9 @@
             let table = layui.table,
                 flow = layui.flow,
                 laydate = layui.laydate;
-            table.init('user_table', { //转化静态表格
-                page:false
-            });
             laydate.render({
                 elem: '#dateTime'
-            });
-            table.init('user_table', { //转化静态表格
-                page:false,
-                toolbar: '#toolbar'
-            });
-
-            flow.lazyimg();
-
+            }); 
         })
     </script>
 

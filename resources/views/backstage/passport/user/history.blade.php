@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', trans('common.header.title'))
 <div  class="layui-fluid">
-    <table class="layui-table"  lay-filter="user_table">
+    <table class="layui-table"  lay-filter="table">
         <thead>
         <tr>
             <th  lay-data="{field:'ip', minWidth:130 ,fixed: 'left'}">{{trans('user.table.header.user_ip_address')}}</th>
@@ -38,13 +38,9 @@
         }).use(['common' , 'table', 'element'], function () {
             let table = layui.table,
                 element = layui.element;
-            table.init('user_table', { //转化静态表格
+            table.init('table', { //转化静态表格
                 page:false
             });
         })
     </script>
-
-    <style>
-        .multi dl dd.layui-this{background-color:#fff}
-    </style>
 @endsection

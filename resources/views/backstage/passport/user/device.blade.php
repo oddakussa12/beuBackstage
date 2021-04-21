@@ -4,27 +4,19 @@
     <table class="layui-table"  lay-filter="table">
         <thead>
         <tr>
-            <th  lay-data="{field:'ip', minWidth:130 ,fixed: 'left'}">Type</th>
-            <th  lay-data="{field:'time', minWidth:80}">Score</th>
-            <th  lay-data="{field:'status', minWidth:150}">{{trans('common.table.header.created_at')}}</th>
+            <th  lay-data="{field:'ip', minWidth:130 ,fixed: 'left'}">ID</th>
+            <th  lay-data="{field:'time', minWidth:80}">DeviceId</th>
         </tr>
         </thead>
         <tbody>
         @foreach($list as $l)
             <tr>
-                <td>{{$l->type}}</td>
-                <td>{{$l->score}}</td>
-                <td>{{$l->created_at}}</td>
+                <td>{{$l->user_id}}</td>
+                <td>{{$l->device_id}}</td>
             </tr>
         @endforeach
         </tbody>
     </table>
-    @if(empty($appends))
-        {{ $list->links('vendor.pagination.default') }}
-    @else
-        {{ $list->appends($appends)->links('vendor.pagination.default') }}
-    @endif
-
 
 </div>
 @section('footerScripts')

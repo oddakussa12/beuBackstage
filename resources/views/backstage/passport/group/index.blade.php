@@ -1,8 +1,5 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <style>
-        .line28 { height: 28px; line-height: 28px;}
-    </style>
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-form-item">
@@ -51,7 +48,7 @@
                 <th  lay-data="{field:'avatar', minWidth:200}">Avatar</th>
                 <th  lay-data="{field:'name', minWidth:200}">Name</th>
                 <th  lay-data="{field:'is_delete', minWidth:100}">Dissolution</th>
-                <th  lay-data="{field:'member_count', minWidth:80}">MemberCount</th>
+                <th  lay-data="{field:'member', minWidth:120}">MemberCount</th>
                 <th  lay-data="{field:'administrator', minWidth:150}">Owner</th>
                 <th  lay-data="{field:'created_at', minWidth:160}">CreateAt</th>
                 <th  lay-data="{field:'user_id', minWidth:100}">CreateUser</th>
@@ -139,8 +136,4 @@
             });
         })
     </script>
-
-    <style>
-        .multi dl dd.layui-this{background-color:#fff}
-    </style>
 @endsection

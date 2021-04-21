@@ -69,6 +69,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user/{user}/friend/yesterday/status', 'UserController@friendYesterdayStatus')->name('user.friend.yesterday.status');
             Route::get('user', 'UserController@index')->name('user.index');
             Route::post('user/block', 'UserController@block')->name('user.block');
+            Route::get('user/device/{id}', 'UserController@device')->name('user.device');
 
             Route::get('friend/index', 'FriendController@index')->name('friend.index');
             Route::get('friend/request', 'FriendController@request')->name('friend.request');
@@ -108,6 +109,7 @@ Route::group(['prefix'=>'backstage'] , function(){
     });
     Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
     Route::get('operator/operator/goal' , 'Operator\OperatorController@goal')->name('operator.operator.goal');
+    Route::get('operator/operator/goal/optimization' , 'Operator\OperatorController@goalOptimization')->name('operator.operator.goal.optimization');
 });
 Route::any('/' , function(){
     return redirect('/backstage');

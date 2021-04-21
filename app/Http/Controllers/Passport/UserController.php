@@ -207,6 +207,20 @@ class UserController extends Controller
         return view('backstage.passport.user.history' , $params);
     }
 
+    public function device($id)
+    {
+        $month = date("Ym");
+        $table = 'visit_logs_';
+        $list  = [];
+        for ($i=$month; $i>=202103; $i--) {
+            $cTable = $table.$i;
+            $result = DB::connection('lovbee')->table($cTable)->select(DB::raw('DISTINCT user_id, device_id'))->where('user_id', $id)->where('device_id', '!=', '')->get();
+            $list   = array_merge($list, collect($result)->toArray());
+        }
+        $params['list'] = $list ;
+        return view('backstage.passport.user.device' , $params);
+    }
+
     public function keep(Request $request)
     {
         $v = $request->input('v' , 0);
