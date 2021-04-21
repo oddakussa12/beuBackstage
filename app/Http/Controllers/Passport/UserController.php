@@ -99,28 +99,31 @@ class UserController extends Controller
         $block  = $params['block'];
         $data   = ['user_id'=>$userId, 'operator' => auth()->user()->admin_username];
 
-        !empty($params['block']) && $data = array_merge(['desc' => '后台封禁'], $data);
         $time = date("Y-m-d H:i:s");
 
         if (!empty($block)) {
+            $data['desc']       = '后台封禁';
             $data['operator']   = auth()->user()->admin_username;
             $data['start_time'] = $time;
             $data['end_time']   = date('Y-m-d H:i:s', time()+86400*30);
             $data['created_at'] = $time;
         } else {
+            return response()->json(['result' => '暂不支持']);
             $data['is_delete']  = 1;
             $data['unoperator'] = auth()->user()->admin_username;
         }
-        $data['updated_at'] = $time;
+        /*$data['updated_at'] = $time;
         $result = DB::connection('lovbee')->table('black_users')->where('user_id', $userId)->orderByDesc('id')->first();
         if (empty($result) || $result->is_delete==1) {
             DB::connection('lovbee')->table('black_users')->insert($data);
         } else {
             DB::connection('lovbee')->table('black_users')->where('id', $result->id)->update($data);
-        }
-        // $url = !empty($params['block']) ? 'api/ry/set/block' : 'api/ry/set/unblock';
-        // $result = $this->httpRequest($url, $data);
+        }*/
+         $url = !empty($block) ? 'api/backstage/block/user' : 'api/api/null';
+         $result = $this->httpRequest($url, $data);
+
         return response()->json(['result' => 'success']);
+
     }
 
     public function msgExport(Request $request)
@@ -228,12 +231,16 @@ class UserController extends Controller
             return  [];
         }
         $select = DB::connection('lovbee')->table('block_devices')->where($params)->first();
-        if (!empty($select)) {
+        $result = $this->httpRequest('api/backstage/block/device', $params);
+        if ($result) {
+
+        }
+        /*if (!empty($select)) {
             return [];
         } else {
             $params['created_at'] = $params['updated_at'] = date('Y-m-d H:i:s');
             DB::connection('lovbee')->table('block_devices')->insert($params);
-        }
+        }*/
         return [];
     }
 
