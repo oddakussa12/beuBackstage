@@ -221,6 +221,22 @@ class UserController extends Controller
         return view('backstage.passport.user.device' , $params);
     }
 
+    public function deviceBlock(Request $request)
+    {
+        $params = $request->only('user_id', 'device_id');
+        if (empty($params['user_id']) || empty($params['device_id'])) {
+            return  [];
+        }
+        $select = DB::connection('lovbee')->table('block_devices')->where($params)->first();
+        if (!empty($select)) {
+            return [];
+        } else {
+            $params['created_at'] = $params['updated_at'] = date('Y-m-d H:i:s');
+            DB::connection('lovbee')->table('block_devices')->insert($params);
+        }
+        return [];
+    }
+
     public function keep(Request $request)
     {
         $v = $request->input('v' , 0);
