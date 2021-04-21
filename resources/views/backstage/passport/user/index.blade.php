@@ -140,7 +140,7 @@
                 let checked = data.elem.checked;
                 data.elem.checked = !checked;
                 let name = $(data.elem).attr('name');
-                @if(!Auth::user()->can('operator::user.block'))
+                @if(!Auth::user()->can('passport::user.block'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
                     form.render();
                     return false;
