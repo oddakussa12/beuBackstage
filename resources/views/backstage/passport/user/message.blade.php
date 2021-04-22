@@ -63,9 +63,9 @@
                 <th  lay-data="{field:'user_gender', width:70}">{{trans('user.table.header.user_gender')}}</th>
                 <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
                 <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_active_time')}}</th>
-                <th  lay-data="{field:'ip', width:130}">{{trans('user.table.header.last_active_ip')}}</th>
+                <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_active_ip')}}</th>
                 <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
-                <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+{{--                <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>--}}
             </tr>
             </thead>
             <tbody>
@@ -84,7 +84,7 @@
                     <td>{{$user->time}}</td>
                     <td>{{$user->ip}}</td>
                     <td>{{ $user->user_format_created_at }}</td>
-                    <td></td>
+{{--                    <td></td>--}}
                 </tr>
             @endforeach
             </tbody>
@@ -100,11 +100,11 @@
 @endsection
 @section('footerScripts')
     @parent
-    <script type="text/html" id="operateTpl">
+<!--    <script type="text/html" id="operateTpl">
         <div class="layui-table-cell laytable-cell-1-6">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="history">{{trans('common.table.button.detail')}}</a>
         </div>
-    </script>
+    </script>-->
     <script>
         layui.config({
             base: "{{url('plugin/layui')}}/"
