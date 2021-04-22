@@ -293,7 +293,7 @@ class OperatorController extends Controller
             $blackUser = $blackUser->where('operator', $params['operator']);
         }
         if (!empty($params['keyword'])) {
-            $users     = $this->db->table('users')->where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_nick_name', 'like', "%{$params['keyword']}%")->get();
+            $users     = $this->db->table('users')->select('user_id')->where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_nick_name', 'like', "%{$params['keyword']}%")->get();
             $userIds   = $users->pluck('user_id')->toArray();
             $blackUser = $blackUser->whereIn('user_id', $userIds);
         }

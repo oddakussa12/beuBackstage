@@ -5,7 +5,7 @@
 
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">ID:</label>
+                    <label class="layui-form-label">UserID:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
                     </div>
