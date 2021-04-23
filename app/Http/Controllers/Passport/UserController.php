@@ -941,4 +941,35 @@ class UserController extends Controller
     {
         return  Excel::download(new UsersFriendYesterdayStatusExport($id), 'user-'.time().'.xlsx');
     }
+
+    public function kol()
+    {
+        $kol = DB::connection('lovbee')->table('kol_users')->paginate(10);
+        $userIds = $kol->pluck('user_id')->toArray();
+        $users = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
+        $kol->each(function($k , $i) use ($users){
+            $k->user = $users->where('user_id' , $k->user_id)->first();
+        });
+        return view('backstage.passport.user.kol.index' , compact('kol'));
+    }
+    public function storeKol(Request $request)
+    {
+        $userId = $request->input('user_id' , '');
+        if(!empty($userId))
+        {
+            $user = DB::connection('lovbee')->table('kol_users')->where('user_id' , $userId)->first();
+            if(empty($user))
+            {
+                DB::connection('lovbee')->table('kol_users')->insert(array(
+                    'user_id'=>$userId,
+                    'created_at'=>date('Y-m-d H:i:s'),
+                ));
+            }
+        }
+        return response()->json(['result'=>'success']);
+    }
+    public function createKol(Request $request)
+    {
+        return view('backstage.passport.user.kol.create');
+    }
 }

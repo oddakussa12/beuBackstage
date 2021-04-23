@@ -55,6 +55,9 @@ Route::group(['prefix'=>'backstage'] , function(){
         });
 
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){
+            Route::get('user/kol', 'UserController@kol')->name('user.kol');
+            Route::get('user/kol/create', 'UserController@createKol')->name('user.kol.create');
+            Route::post('user/kol', 'UserController@storeKol')->name('user.kol.store');
             Route::get('user/keep' , 'UserController@keep')->name('user.keep');
             Route::get('user/dau' , 'UserController@dau')->name('user.dau');
             Route::get('user/dnu' , 'UserController@dnu')->name('user.dnu');
