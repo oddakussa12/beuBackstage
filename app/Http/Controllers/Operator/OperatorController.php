@@ -287,16 +287,30 @@ class OperatorController extends Controller
         $params['appends']  = $params;
         $params['query']    = empty($uri['query']) ? "" : $uri['query'];
 
-        $user = DB::connection('lovbee')->table('black_users');
+        $blackUser = $this->db->table('black_users');
+
         if (!empty($params['operator'])) {
-            $user = $user->where('operator', $params['operator']);
+            $blackUser = $blackUser->where('operator', $params['operator']);
         }
-        if (!empty($params['user_id'])) {
-            $user = $user->where('user_id', $params['user_id']);
+        if (!empty($params['keyword'])) {
+            $users     = $this->db->table('users')->select('user_id')->where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_nick_name', 'like', "%{$params['keyword']}%")->get();
+            $userIds   = $users->pluck('user_id')->toArray();
+            $blackUser = $blackUser->whereIn('user_id', $userIds);
         }
 
-        $users = $user->orderByDesc('id')->groupBy('user_id')->paginate(10);
-        $params['users'] = $users;
+        $blackUsers = $blackUser->orderByDesc('id')->groupBy('user_id')->paginate(10);
+        if (empty($params['keyword'])) {
+            $blackIds = $blackUsers->pluck('user_id')->toArray();
+            $users    = $this->db->table('users')->select('user_id', 'user_name', 'user_nick_name', 'user_avatar')->whereIn('user_id', $blackIds)->get();
+        }
+        foreach ($blackUsers as $key=>$black) {
+            foreach ($users as $user) {
+                if ($black->user_id==$user->user_id) {
+                    $blackUsers[$key] = (object) array_merge((array) $black, (array) $user);
+                }
+            }
+        }
+        $params['users'] = $blackUsers;
         return view('backstage.operator.suspend', $params);
     }
 
@@ -364,5 +378,56 @@ class OperatorController extends Controller
         $prodMaskData = array('percentage'=>strval(round($prodMaskCurrent/$prodMaskGoal , 4)*100)."%" , 'current'=>$prodMaskCurrent , 'goal'=>$prodMaskGoal ,'marginTop'=>empty($prodMaskGoal)?0:strval((($prodMaskGoal-$prodMaskMiddle)/$prodMaskGoal)*500).'px' , 'middle'=>$prodMaskMiddle);
 
         return view('backstage.operator.operator.goal' , compact('dauData' , 'operData' , 'hrData' , 'prodRetentionData' , 'prodMaskData'));
+    }
+
+    public function goalOptimization()
+    {
+
+//        $dau = DB::connection('lovbee')->table('dau_counts')->whereIn('date' , $dates)->select('date' , 'dau' , '0 as zero' , '1 as one' , '2 as two' , 'gt3')->get();
+
+        $yesterday = Carbon::yesterday('Asia/Shanghai')->toDateString();
+        $dauCurrent = 0;
+        $dauMiddle = 16000;
+        $dauCurrent = $this->db->table('visit_logs_'.Carbon::yesterday('Asia/Shanghai')->format('Ym'))->where('created_at' , $yesterday)->count(DB::raw('DISTINCT(user_id)'));
+        $dauGoal = 17000;
+        $dauData = array('percentage'=>strval(round($dauCurrent/$dauGoal , 4)*100)."%" , 'current'=>$dauCurrent , 'goal'=>strval(ceil($dauGoal/1000))."K" , 'middle'=>strval(ceil($dauMiddle/1000))."K" );
+
+        $dates = array();
+        $start = Carbon::now('Asia/Shanghai')->startOfMonth()->toDateString();
+        $end = Carbon::now('Asia/Shanghai')->toDateString();
+        while ($start<=$end)
+        {
+            array_push($dates , $start);
+            $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
+        }
+        $operCurrent = 0;
+        $operMiddle = 40000;
+        $operCurrent = $this->db->table('data_retentions')->whereIn('date' , $dates)->sum('new');
+        $operGoal = 60000;
+        $operData = array('percentage'=>strval(round($operCurrent/$operGoal , 4)*100)."%" , 'current'=>strval($operCurrent/1000)."K" , 'goal'=>strval($operGoal/1000)."K" , 'marginTop'=>empty($operGoal)?0:strval((($operGoal-$operMiddle)/$operGoal)*500).'px' , 'middle'=>strval(ceil($operMiddle/1000))."K");
+
+        $hrCurrent = 18;
+        $hrMiddle = 36;
+        $hrGoal = 50;
+        $hrData = array('percentage'=>strval(round($hrCurrent/$hrGoal , 4)*100)."%" , 'current'=>$hrCurrent , 'goal'=>$hrGoal , 'marginTop'=>empty($hrGoal)?0:strval((($hrGoal-$hrMiddle)/$hrGoal)*500).'px' , 'middle'=>$hrMiddle);
+
+        $nineDayAgo = Carbon::now('Asia/Shanghai')->subDays(9)->toDateString();
+        $prodRetentionCurrent = 8;
+        $prodRetentionMiddle = 19;
+        $prodRetentionData = $this->db->table('data_retentions')->where('date' , $nineDayAgo)->select(array(
+            DB::raw('SUM(new) as reg'),
+            DB::raw('SUM(`7`) as seven')
+        ))->get()->toArray();
+        $prodRetentionCurrent = empty($prodRetentionData[0]->reg)?0:round($prodRetentionData[0]->seven/$prodRetentionData[0]->reg , 4)*100;
+        $prodRetentionGoal = 30;
+        $prodRetentionData = array('percentage'=>strval(round($prodRetentionCurrent/$prodRetentionGoal , 4)*100)."%" , 'current'=>strval($prodRetentionCurrent)."%" , 'goal'=>strval($prodRetentionGoal)."%" ,'marginTop'=>empty($prodRetentionGoal)?0:strval((($prodRetentionGoal-$prodRetentionMiddle)/$prodRetentionGoal)*500).'px' , 'middle'=>strval($prodRetentionMiddle)."%" );
+
+        $prodMaskCurrent = 37;
+        $prodMaskMiddle = 50;
+        $prodMaskGoal = 80;
+        $prodMaskData = array('percentage'=>strval(round($prodMaskCurrent/$prodMaskGoal , 4)*100)."%" , 'current'=>$prodMaskCurrent , 'goal'=>$prodMaskGoal ,'marginTop'=>empty($prodMaskGoal)?0:strval((($prodMaskGoal-$prodMaskMiddle)/$prodMaskGoal)*500).'px' , 'middle'=>$prodMaskMiddle);
+
+        return view('backstage.operator.operator.test' , compact('dauData' , 'operData' , 'hrData' , 'prodRetentionData' , 'prodMaskData'));
+        return view('backstage.operator.operator.goal-optimization' , compact('dauData' , 'operData' , 'hrData' , 'prodRetentionData' , 'prodMaskData'));
     }
 }

@@ -5,18 +5,11 @@
 
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">ID:</label>
+                    <label class="layui-form-label">UserID:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="user_id" id="user_id"  @if(!empty($user_id)) value="{{$user_id}}" @endif />
+                        <input class="layui-input" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
-                    <div class="layui-input-inline" style="width: 240px;">
-                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
-                    </div>
-                </div>
-
                 <div class="layui-inline">
                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
                     <div class="layui-btn layui-btn-primary">{{$users->total()}}</div>
@@ -27,6 +20,9 @@
             <thead>
             <tr>
                 <th  lay-data="{field:'user_id', minWidth:120 ,fixed: 'left'}">ID</th>
+                <th  lay-data="{field:'user_avatar', width:80}">Avatar</th>
+                <th  lay-data="{field:'user_nick_name', minWidth:150}">userNickName</th>
+                <th  lay-data="{field:'user_name', minWidth:190}">userName</th>
                 <th  lay-data="{field:'desc', minWidth:150, hide:true}">Reason</th>
                 <th  lay-data="{field:'start_time', minWidth:160}">StartTime</th>
                 <th  lay-data="{field:'end_time', width:160}">EndTime</th>
@@ -41,6 +37,9 @@
             @foreach($users as $user)
                 <tr>
                     <td>{{$user->user_id}}</td>
+                    <td><img width="32px;" src="@if(stripos($user->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$user->user_avatar}}@else{{$user->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                    <td>{{$user->user_name}}</td>
+                    <td>{{$user->user_nick_name}}</td>
                     <td>{{$user->desc}}</td>
                     <td>@if(!empty($user->start_time)){{$user->start_time}}@endif</td>
                     <td>@if(!empty($user->end_time))  {{$user->end_time}}  @endif</td>

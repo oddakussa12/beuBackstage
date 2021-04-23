@@ -70,6 +70,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user', 'UserController@index')->name('user.index');
             Route::post('user/block', 'UserController@block')->name('user.block');
             Route::get('user/device/{id}', 'UserController@device')->name('user.device');
+            Route::post('user/device/block', 'UserController@deviceBlock')->name('user.device.block');
 
             Route::get('friend/index', 'FriendController@index')->name('friend.index');
             Route::get('friend/request', 'FriendController@request')->name('friend.request');
