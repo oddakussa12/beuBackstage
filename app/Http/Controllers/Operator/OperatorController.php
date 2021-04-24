@@ -386,7 +386,7 @@ class OperatorController extends Controller
         if (Cache::has('helloo_dau_list')) {
             $cache = Cache::get('helloo_dau_list');
             $cacheData = \json_decode($cache , true);
-            $dateData = $cacheData['cacheData'];
+            $dateData = $cacheData['dateData'];
             $dauList = $cacheData['dauList'];
             $zoomStart = $cacheData['zoomStart'];
         }else{
