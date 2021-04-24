@@ -383,7 +383,7 @@ class OperatorController extends Controller
         $dateData = array();
         $dauList = array();
         $dauTable = array();
-        if (Cache::has('key')) {
+        if (Cache::has('helloo_dau_list')) {
             $cache = Cache::get('helloo_dau_list');
             $cacheData = \json_decode($cache , true);
             $dateData = $cacheData['cacheData'];
