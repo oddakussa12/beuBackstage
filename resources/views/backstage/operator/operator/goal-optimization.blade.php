@@ -101,7 +101,7 @@
             </div>
             <div class="layui-col-md2">
                 <div class="dev-title-middle">
-                    <div class="wave-num"><b id="num">{{$dauData['percentage']}}</b></div>
+                    <div class="wave-num"><b id="num">{{$dauData['percentage']}}</b><tt>17K</tt></div>
                     <div class="wave-n">
                         <div class="wave" style="height: {{$dauData['percentage']}};">&nbsp;</div>
                     </div>
@@ -835,6 +835,19 @@
             position:relative;
             z-index:2;
             line-height:45px;
+        }
+        .dev-title-middle .wave-num tt{
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
+            display: block;
+            position: relative;
+            z-index: 2;
+            font-weight: bold;
+            width: 50%;
+            border-top: 2px #fff solid;
+            margin: 3px auto;
+            line-height: 25px;
         }
 
         .wave-n{
