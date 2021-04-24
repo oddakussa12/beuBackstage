@@ -1,16 +1,12 @@
 <?php
 namespace App\Http\Controllers\Operator;
 
-use App\Exports\MessageExport;
-use App\Models\Passport\User;
 use Carbon\Carbon;
-use Fenos\Tests\Models\Car;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use function GuzzleHttp\Psr7\str;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+
 
 class OperatorController extends Controller
 {
@@ -385,28 +381,39 @@ class OperatorController extends Controller
     {
         $monthData = array();
         $dateData = array();
-        $yearStart = Carbon::now('Asia/Shanghai')->startOfYear()->format('Ym');
-        $yearEnd = Carbon::now('Asia/Shanghai')->format('Ym');
-        while($yearStart<=$yearEnd)
-        {
-            array_push($monthData  , $yearStart);
-            $yearStart = Carbon::createFromFormat('Ym' , $yearStart , 'Asia/Shanghai')->addMonths(1)->format('Ym');
-        }
-        $dauTable = array();
-        foreach ($monthData as $month)
-        {
-            $dauTable = array_merge($dauTable , $this->db->select('SELECT count(DISTINCT user_id) as `num`,created_at from t_visit_logs_'.$month.' GROUP BY created_at ORDER BY created_at'));
-        }
         $dauList = array();
-        foreach ($dauTable as $dau)
-        {
-            array_push($dateData , $dau->created_at);
-            array_push($dauList , array($dau->created_at , $dau->num));
+        $dauTable = array();
+        if (Cache::has('key')) {
+            $cache = Cache::get('helloo_dau_list');
+            $cacheData = \json_decode($cache , true);
+            $dateData = $cacheData['cacheData'];
+            $dauList = $cacheData['dauList'];
+            $zoomStart = $cacheData['zoomStart'];
+        }else{
+            $yearStart = Carbon::now('Asia/Shanghai')->startOfYear()->format('Ym');
+            $yearEnd = Carbon::now('Asia/Shanghai')->format('Ym');
+            while($yearStart<=$yearEnd)
+            {
+                array_push($monthData  , $yearStart);
+                $yearStart = Carbon::createFromFormat('Ym' , $yearStart , 'Asia/Shanghai')->addMonths(1)->format('Ym');
+            }
+            foreach ($monthData as $month)
+            {
+                $dauTable = array_merge($dauTable , $this->db->select('SELECT count(DISTINCT user_id) as `num`,created_at from t_visit_logs_'.$month.' GROUP BY created_at ORDER BY created_at'));
+            }
+            foreach ($dauTable as $dau)
+            {
+                array_push($dateData , $dau->created_at);
+                array_push($dauList , array($dau->created_at , $dau->num));
+            }
+            $zoomCount = count($dauList);
+            $zoomStart = ceil(($zoomCount-30)/$zoomCount*100);
+            Cache::put('helloo_dau_list', \json_encode(array(
+                'dateData'=>$dateData,
+                'dauList'=>$dauList,
+                'zoomStart'=>$zoomStart
+            )), 360);
         }
-        $zoomCount = count($dauList);
-        $zoomStart = ceil(($zoomCount-30)/$zoomCount*100);
-
-
         $dates = array();
         $start = Carbon::now('Asia/Shanghai')->startOfMonth()->toDateString();
         $end = Carbon::now('Asia/Shanghai')->toDateString();
@@ -416,8 +423,8 @@ class OperatorController extends Controller
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
         }
         $operMiddle = 40000;
-        $operCurrent = $this->db->table('data_retentions')->whereIn('date' , $dates)->sum('new');
         $operCurrent = 50000;
+        $operCurrent = $this->db->table('data_retentions')->whereIn('date' , $dates)->sum('new');
         $operGoal = 60000;
         $operData = array(
             'percentage'=>strval(round($operCurrent/$operGoal , 4)*100)."%" ,
