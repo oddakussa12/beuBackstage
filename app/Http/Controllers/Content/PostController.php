@@ -66,7 +66,7 @@ class PostController extends Controller
         $params   = $request->all();
         $comments = PostComment::with('owner')->where('post_id', $id);
         if (!empty($params['keyword'])) {
-            $user = User::where('user_name', 'like', "%{$params['keyword']}%")->where('user_name', 'like', "%{$params['keyword']}%")->get();
+            $user = User::where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_nick_name', 'like', "%{$params['keyword']}%")->get();
             $uIds = $user->pluck('user_id')->toArray();
             $comments = $comments->whereIn('user_id', $uIds);
         }
