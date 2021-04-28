@@ -42,6 +42,11 @@ trait PostTrait
         }
     }
 
+    public function destroy($data)
+    {
+       return $this->httpRequest('api/backstage/post', $data);
+    }
+
     /**
      * @param $post
      * @return JsonResponse

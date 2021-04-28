@@ -37,6 +37,9 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::delete('music/{music}' , 'MusicController@destroy')->name('music.destroy');
             Route::post('music' , 'MusicController@store')->name('music.store');
             Route::resource('post' , 'PostController');
+            Route::get('audit/claim' , 'PostAuditController@claim')->name('audit.claim');
+            Route::resource('audit' , 'PostAuditController');
+            Route::get('post/{postId}/comment' , 'PostController@comment')->name('post.comment');
             Route::get('post/{postId}/comment' , 'PostController@comment')->name('post.comment');
         });
 
