@@ -159,7 +159,7 @@ class OperatorController extends Controller
             $list    = $list->where(function($query)use($keyword){$query->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");});
         }
 
-        $list = $list->orderByDesc('user_id')->orderByDesc('created_at')->paginate(10);
+        $list = $list->orderByDesc('created_at')->paginate(10);
         foreach ($list as $item) {
             $item->image = !empty($item->video_url) ? $item->image : $item->photo;
         }
