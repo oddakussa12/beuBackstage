@@ -477,7 +477,7 @@ class OperatorController extends Controller
             'middle'=>strval($prodRetentionMiddle)."%"
         );
 
-        $prodMaskCurrent = 37;
+        $prodMaskCurrent = 58;
         $prodMaskMiddle = 50;
         $prodMaskGoal = 80;
         $prodMaskData = array(
