@@ -434,7 +434,7 @@ class OperatorController extends Controller
             'middle'=>strval(ceil($operMiddle/1000))."K"
         );
 
-        $hrCurrent = 18;
+        $hrCurrent = 26;
         $hrMiddle = 36;
         $hrGoal = 50;
         $hrData = array(
