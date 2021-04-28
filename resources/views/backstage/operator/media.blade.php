@@ -80,7 +80,7 @@
     @parent
     <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
-        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">{{trans('common.table.button.delete')}}</a>
+{{--        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">{{trans('common.table.button.delete')}}</a>--}}
     </script>
     <script>
         layui.config({

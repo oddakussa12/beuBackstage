@@ -36,6 +36,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::patch('music/{music}' , 'MusicController@update')->name('music.update');
             Route::delete('music/{music}' , 'MusicController@destroy')->name('music.destroy');
             Route::post('music' , 'MusicController@store')->name('music.store');
+            Route::resource('post' , 'PostController');
+            Route::get('post/{postId}/comment' , 'PostController@comment')->name('post.comment');
         });
 
         Route::group(['namespace'=>'Operator','prefix'=>'operator' , 'as' => 'operator::'] , function (){
