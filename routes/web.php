@@ -37,7 +37,10 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::delete('music/{music}' , 'MusicController@destroy')->name('music.destroy');
             Route::post('music' , 'MusicController@store')->name('music.store');
             Route::resource('post' , 'PostController');
+            Route::get('audit/claim' , 'PostAuditController@claim')->name('audit.claim');
+            Route::resource('audit' , 'PostAuditController');
             Route::get('post/{postId}/comment' , 'PostController@comment')->name('post.comment');
+            Route::delete('post/comment/{postId}' , 'PostController@destroyComment')->name('post.destroyComment');
         });
 
         Route::group(['namespace'=>'Operator','prefix'=>'operator' , 'as' => 'operator::'] , function (){

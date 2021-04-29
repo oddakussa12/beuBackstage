@@ -15,15 +15,11 @@ class PostController extends Controller
 {
     use PostTrait;
 
-    public function __construct()
-    {
-    }
-
     /**
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -75,6 +71,11 @@ class PostController extends Controller
         return view('backstage.content.post.comment', $params);
     }
 
+    public function destroyComment($id)
+    {
+        $this->httpRequest('api/backstage/postComment', ['comment_id'=>$id]);
+        return response()->json(['result'=>'success']);
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -87,11 +88,12 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         if (!empty($post)) {
-            $result = $this->httpRequest('api/backstage/post', ['post_id'=>$post->post_id, 'operator'=>auth()->user()->admin_username]);
+            $data   = ['post_id'=>$post->post_id, 'operator'=>auth()->user()->admin_username];
+            $result = $this->destroy($data);
             if (empty($result)) {
                 abort(500);
             }
-        } 
+        }
         return response()->json(['result'=>'success']);
     }
 

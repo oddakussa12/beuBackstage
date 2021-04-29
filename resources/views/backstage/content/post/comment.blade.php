@@ -82,11 +82,11 @@
                     alert('check');
                 } else if(layEvent === 'delete'){ //删除
                     layer.confirm("{{trans('common.confirm.delete')}}", function(index){
-                        common.ajax("{{url('/backstage/content/comment')}}/"+data.comment_id , {} , function(res){
+                        common.ajax("{{url('/backstage/content/post/comment')}}/"+data.comment_id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
                                 // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                                 // layer.close(index);
-                                location.reload();
+                               location.reload();
                             });
                         } , 'delete');
                     });
