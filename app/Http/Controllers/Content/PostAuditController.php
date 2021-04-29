@@ -73,17 +73,18 @@ class PostAuditController extends Controller
         $post_id = $param['post_id'] ?? '';
         $status  = $param['status']  ?? '';
         $time    = date('Y-m-d H:i:s');
-       
+        $adminId = auth()->user()->admin_id;
+
         if ($post_id && in_array($status, ['pass', 'refuse'])) {
-            $post    = Post::where(['post_id'=>$post_id, 'audited'=>0])->first();
-            $flag    = true;
+            $post = Post::where(['post_id'=>$post_id, 'audited'=>0])->first();
             if (!empty($post)) {
                 if ($status=='refuse') {
-                    $flag = $this->destroy($post['post_id']);
+                    $flag = $this->destroy(['post_id'=>$post['post_id'], 'operator'=>auth()->user()->admin_username]);
                 } else {
-                    Post::where('post_id', $post['post_id'])->update(['audited'=>1, 'audited_at'=>$time]);
+                    $flag = Post::where('post_id', $post['post_id'])->update(['audited'=>1, 'audited_at'=>$time]);
                 }
                 if ($flag) {
+                    DB::table('posts_claim')->where(['post_id'=>$post_id, 'admin_id'=>$adminId])->delete();
                     Audit::create([
                         'admin_id'       => auth()->user()->admin_id,
                         'admin_user_name'=> auth()->user()->admin_username,

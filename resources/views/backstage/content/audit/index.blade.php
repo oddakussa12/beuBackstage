@@ -40,7 +40,7 @@
                                 <button class="layui-btn  layui-btn-warm" type="submit" lay-submit="">通过</button>
                             </form>
                         </div>
-                        <div style="position: absolute;margin-left: 80%; line-height: 40px;">
+                        <div style="position: absolute;right: 15px; width: 220px; line-height: 40px;">
                             <span class="layui-btn layui-btn-normal" style="display: block; cursor:default">
                                <i style="color: black; font-weight: 600; font-size: 16px;margin-right: 20px;"> @if ($result['type']=='vote')  投票帖 @endif
                                 @if ($result['type']=='image') 图片帖 @endif
@@ -56,7 +56,8 @@
                         <span style="height: 22px; line-height: 22px;">发布时间： {{date('Y-m-d H:i:s',strtotime($result['created_at'])+3600*8)}}</span>
                     </td></tr>
                 <tr><td><p>图片/视频<i></i></p><span>：</span>
-                        <span class="layui-btn layui-btn-checked" style=" cursor:default; height: 20px;line-height: 20px;float: right; margin-right:20px;">
+                        <span class="layui-btn layui-btn-checked" style=" cursor:default; height: 20px;line-height: 20px;float: right;">
+                            已领取: <i style="font-weight: 600;font-size: 16px;margin-right: 10px;">{{$result['claim']}}</i>
                             今日已审核：<i style="font-weight: 600;font-size: 16px;margin-right: 10px;">{{$result['todayCount']}}</i>
                             累计已审核：<i style="font-weight: 600;font-size: 16px;">{{$result['totalCount']}}</i>
                             </span>

@@ -14,10 +14,8 @@ class Audit extends Authenticatable
 
     protected $primaryKey = "id";
 
-    protected $dateFormat = 'U';
-
     protected $fillable = [
-        'admin_id' , 'post_id', 'post_uuid' ,'post_audit', 'admin_user_name', 'source', 'user_id', 'is_delete', 'unoperator'
+        'admin_id' , 'post_id', 'post_uuid' ,'post_audit', 'admin_user_name', 'source', 'user_id', 'unoperator'
     ];
 
 
