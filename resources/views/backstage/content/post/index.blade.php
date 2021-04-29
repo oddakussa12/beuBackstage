@@ -60,7 +60,7 @@
                     <td><span class="layui-btn layui-btn-xs @if($value->type=='image')layui-btn-warm @else layui-btn-normal @endif">{{$value->type}}</span></td>
                     <td>{{$value->like}}</td>
                     <td>{{$value->comment}}</td>
-                    <td><span class="layui-btn layui-btn-xs @if($value->audited==0)layui-btn-danger @else layui-btn-normal @endif">@if($value->audited==0)unaudited @else audited @endif</span></td>
+                    <td><span class="layui-btn layui-btn-xs @if($value->audited==0)layui-btn-danger @elseif($value->audited==-1) layui-btn-warm @else  layui-btn-normal @endif">@if($value->audited==0)unaudited @elseif($value->audited==-1) refuse @else pass @endif</span></td>
                     <td>@if($value->audited_at!='0000-00-00 00:00:00') {{$value->audited_at}}@endif</td>
                     <td>{{$value->created_at}}</td>
                    <td></td>

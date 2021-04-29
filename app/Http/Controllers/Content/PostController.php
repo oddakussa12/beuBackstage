@@ -19,7 +19,7 @@ class PostController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -71,6 +71,11 @@ class PostController extends Controller
         return view('backstage.content.post.comment', $params);
     }
 
+    public function destroyComment($id)
+    {
+        $this->httpRequest('api/backstage/postComment', ['comment_id'=>$id]);
+        return response()->json(['result'=>'success']);
+    }
 
     /**
      * Remove the specified resource from storage.
