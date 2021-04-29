@@ -24,8 +24,9 @@ class PostAuditController extends Controller
         $today   = date('Y-m-d 00:00:00');
         $claim   = DB::table('posts_claim')->where('admin_id', $adminId)->first();
         $cCount  = DB::table('posts_claim')->where('admin_id', $adminId)->count();
-        $result  = Post::with('owner')->where(['audited'=>0, 'is_deleted'=>0, 'post_id'=>$claim->post_id])->first();
-
+        if ($claim) {
+            $result  = Post::with('owner')->where(['audited'=>0, 'is_deleted'=>0, 'post_id'=>$claim->post_id])->first();
+        }
         $count     = Post::where(['audited'=>0, 'is_deleted'=>0])->count();
         $totayCount= Audit::where('admin_id', $adminId)->where('created_at', '>=', $today)->count();
         $totalCount= Audit::where('admin_id', $adminId)->count();
