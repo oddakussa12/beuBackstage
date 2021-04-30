@@ -37,6 +37,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::delete('music/{music}' , 'MusicController@destroy')->name('music.destroy');
             Route::post('music' , 'MusicController@store')->name('music.store');
             Route::resource('post' , 'PostController');
+            Route::get('audit/jian' , 'PostAuditController@jianHuangShi')->name('audit.jian');
             Route::get('audit/claim' , 'PostAuditController@claim')->name('audit.claim');
             Route::resource('audit' , 'PostAuditController');
             Route::get('post/{postId}/comment' , 'PostController@comment')->name('post.comment');
@@ -56,6 +57,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('operator/score/detail/{user}' , 'OperatorController@scoreDetail')->name('operator.score.detail');
             Route::get('operator/blacklist' , 'OperatorController@blackList')->name('operator.blacklist');
             Route::put('operator/black' , 'OperatorController@block')->name('operator.block');
+            Route::get('operator/lastthree' , 'OperatorController@lastThree')->name('operator.lastthree');
             Route::resource('virtual' , 'VirtualUserController');
         });
 

@@ -107,11 +107,41 @@ class PostAuditController extends Controller
         return redirect(route('content::audit.index').$type);
     }
 
-    public function image($id)
+    public function jianHuangShi()
     {
-        $carousel_post_list = carousel_post_list($id);
-        $supportLanguage = config('translatable.frontSupportedLocales');
-        return view('backstage.content.post.image' , compact('id' , 'carousel_post_list' , 'supportLanguage'));
+        $role    = DB::table('roles')->where('name', 'jianhuang')->first();
+        $hasRole = DB::table('model_has_roles')->where('role_id', $role->id)->get();
+        $userIds = $hasRole->pluck('model_id')->toArray();
+        $admins  = DB::table('admins')->select('admin_id', 'admin_username', 'admin_realname', 'admin_status')->whereIn('admin_id', $userIds)->get();
+        $claims  = DB::table('posts_claim')->select(DB::raw('count(1) num, admin_id'))->groupBy('admin_id')->get();
+
+        foreach ($admins as $admin) {
+            $audits = DB::table('audits')->where('admin_id', $admin->admin_id);
+            $tTime  = [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')];
+            $mTime  = [date('Y-m-01'), date('Y-m-d H:i:s')];
+            $today  = $audits->whereBetween('created_at', $tTime)->count(); // 今日已审核个数
+            $month  = $audits->whereBetween('created_at', $mTime)->count(); // 本月已审核个数
+            $total  = $audits->count(); // 总审核数
+            $refuse = $audits->where('audited', 'refuse')->count(); // 拒绝总数
+            $refuseMonth = $audits->where('audited', 'refuse')->whereBetween('created_at', $mTime)->count(); // 本月拒绝数
+            $lastTime    = $audits->orderByDesc('created_at')->first();
+            foreach ($claims as $claim) {
+                if ($claim->admin_id==$admin->admin_id) {
+                    $admin->todayClaim = $today+$claim->num; // 今日领取数
+                    $admin->today      = $today; // 今日审核数
+                    $admin->monthClaim = $month+$claim->num; // 本月领取数
+                    $admin->month      = $month; // 本月审核数
+                    $admin->totalClaim = $total+$claim->num; // 总领取数
+                    $admin->total      = $total; // 总审核数
+                    $admin->refuse     = $refuse; // 不通过总数
+                    $admin->refuseMonth= $refuseMonth; // 本月不通过
+                    $admin->lastTime   = !empty($lastTime->created_at) ? $lastTime->created_at : ''; // 最后审核时间
+                }
+            }
+        }
+
+      //  return view('backstage.content.post.image' , compact('admins'));
+
     }
 
 }

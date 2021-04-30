@@ -273,6 +273,18 @@ class OperatorController extends Controller
         return view('backstage.operator.score', $params);
     }
 
+    public function lastThree(Request $request)
+    {
+        $params = $request->all();
+        $result = $this->db->table('data_last_three_day_users');
+        if (!empty($params['keyword'])) {
+            $result = $result->where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_nick_name', 'like', "%{$params['keyword']}%");
+        }
+        $result = $result->paginate(10);
+        $params['users'] = $result;
+        return view('backstage.operator.lastThree', $params);
+    }
+
     /**
      * @param Request $request
      * 封号管理
