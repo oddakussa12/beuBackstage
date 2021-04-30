@@ -10,11 +10,9 @@ use Illuminate\Support\Facades\Cache;
 
 class OperatorController extends Controller
 {
-    private $table;
     private $db;
 
     public function __construct() {
-        $this->table = 'network_logs';
         $this->db = DB::connection('lovbee');
     }
 
@@ -275,18 +273,24 @@ class OperatorController extends Controller
 
     public function lastThree(Request $request)
     {
-        $params = $request->all();
-        $result = $this->db->table('data_last_three_day_users');
-        if (!empty($params['keyword'])) {
-            $result = $result->where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_nick_name', 'like', "%{$params['keyword']}%");
+        $keyword = $request->input('keyword' , '');
+        $dateTime = $request->input('dateTime' , '');
+        $country = $request->input('country' , '');
+        $appends['keyword'] = $keyword;
+        $appends['dateTime'] = $dateTime;
+        $appends['country'] = $country;
+        $users = $this->db->table('data_last_three_day_users');
+        if (!empty($country)) {
+            $users = $users->where('phone_country', $country);
         }
-        if (!empty($params['dateTime'])) {
-            $result = $result->where('date', $params['dateTime']);
+        if (!empty($keyword)) {
+            $users = $users->where('user_name', 'like', "%{$keyword}%")->orWhere('user_nick_name', 'like', "%{$keyword}%");
         }
-        $result = $result->paginate(10);
-        $params['users'] = $result;
-
-        return view('backstage.operator.lastThree', $params);
+        if (!empty($dateTime)) {
+            $users = $users->where('date', $dateTime);
+        }
+        $users = $users->paginate(10)->appends($appends);
+        return view('backstage.operator.lastThree', compact('users' , 'keyword' , 'dateTime'));
     }
 
     /**
