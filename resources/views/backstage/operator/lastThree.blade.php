@@ -2,12 +2,17 @@
 @section('layui-content')
     <div  class="layui-fluid">
         <form class="layui-form">
-
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">UserID:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="dateTime" name="dateTime" placeholder="yyyy-MM-dd" value="@if(!empty($dateTime)){{$dateTime}}@endif">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -75,19 +80,13 @@
         }).use(['common' , 'table' , 'layer' , 'flow' , 'laydate' , 'timePicker'], function () {
             var $ = layui.jquery,
                 table = layui.table,
-                timePicker = layui.timePicker;
-
+                laydate = layui.laydate;
+            laydate.render({
+                elem: '#dateTime'
+            });
             table.init('table', { //转化静态表格
                 page:false
             });
-            timePicker.render({
-                elem: '#dateTime', //定义输入框input对象
-                options:{      //可选参数timeStamp，format
-                    timeStamp:false,//true开启时间戳 开启后format就不需要配置，false关闭时间戳 //默认false
-                    format:'YYYY-MM-DD HH:ss:mm',//格式化时间具体可以参考moment.js官网 默认是YYYY-MM-DD HH:ss:mm
-                },
-            });
-
         })
     </script>
 @endsection

@@ -280,8 +280,12 @@ class OperatorController extends Controller
         if (!empty($params['keyword'])) {
             $result = $result->where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_nick_name', 'like', "%{$params['keyword']}%");
         }
+        if (!empty($params['dateTime'])) {
+            $result = $result->where('date', $params['dateTime']);
+        }
         $result = $result->paginate(10);
         $params['users'] = $result;
+
         return view('backstage.operator.lastThree', $params);
     }
 
