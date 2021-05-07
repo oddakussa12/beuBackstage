@@ -279,7 +279,7 @@ class OperatorController extends Controller
         $appends['keyword'] = $keyword;
         $appends['dateTime'] = $dateTime;
         $appends['country'] = $country;
-        $users = $this->db->table('data_last_three_day_users');
+        $users = $this->db->table('data_active_users');
         if (!empty($country)) {
             $users = $users->where('phone_country', $country);
         }
