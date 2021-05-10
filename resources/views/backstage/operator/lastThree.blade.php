@@ -10,6 +10,17 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">Country</label>
+                    <div class="layui-input-inline">
+                        <select name="country" lay-verify="required" xm-select="country" lay-filter="country">
+                            <option value="670"  @if(!empty($country)&&$country==670) selected @endif>East Timor</option>
+                            <option value="62"  @if(!empty($country)&&$country==62) selected @endif>Indonesia</option>
+                            <option value="1473  @if(!empty($country)&&$country==1473) selected @endif">Grenada</option>
+                            <option value="251"  @if(!empty($country)&&$country==251) selected @endif>Ethiopia</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input" id="dateTime" name="dateTime" placeholder="yyyy-MM-dd" value="@if(!empty($dateTime)){{$dateTime}}@endif">
@@ -17,7 +28,6 @@
                 </div>
                 <div class="layui-inline">
                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                    <div class="layui-btn layui-btn-primary">{{$users->total()}}</div>
                 </div>
             </div>
         </form>
@@ -28,6 +38,7 @@
                 <th  lay-data="{field:'date', minWidth:120 ,fixed: 'left'}">Date</th>
                 <th  lay-data="{field:'user_name', minWidth:190}">userName</th>
                 <th  lay-data="{field:'user_nick_name', minWidth:150}">userNickName</th>
+                <th  lay-data="{field:'phone', minWidth:200}">Phone</th>
                 <th  lay-data="{field:'friend', minWidth:100}">Friend</th>
                 <th  lay-data="{field:'new', minWidth:100}">New</th>
                 <th  lay-data="{field:'detail', width:160}">Detail</th>
@@ -42,6 +53,7 @@
                     <td>{{$user->date}}</td>
                     <td>{{$user->user_name}}</td>
                     <td>{{$user->user_nick_name}}</td>
+                    <td>{{$user->phone_country.$user->phone}}</td>
                     <td>{{$user->friend}}</td>
                     <td>{{$user->new}}</td>
                     <td>{{$user->detail}}</td>
