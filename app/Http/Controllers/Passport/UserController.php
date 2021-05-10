@@ -82,21 +82,52 @@ class UserController extends Controller
             'data'   => $country ?? [],
             'label'  => ['normal'=>['formatter'=>"{b}: {c} {d}%"]]
         ];
-        /*$params['country'][]  = [
-            'name'=>'Country',
-            'type'   => 'pie',
-            'radius' => '50%',
-            'data'   => $country,
-            'label'  => ['normal'=>['formatter'=>'{a}{b}{c}{d}%']]
-        ];*/
         return $params;
     }
 
+    public function update(Request $request, $userId)
+    {
+        $params = $request->all();
+        $name   = $request->input('name', '');
+        $value  = $request->input('value', 0);
+        if ($name=='is_block') {
+            return $this->block($request, $userId);
+        }
+        if ($name=='user_shop') {
+            return $this->createShop($request, $userId);
+        }
+        return [];
+    }
+
+    /**
+     * @param Request $request
+     * @param $userId
+     * @return \Illuminate\Http\JsonResponse
+     * 创建店铺
+     */
+    public function createShop(Request $request, $userId)
+    {
+        $params   = $request->all();
+        $userShop = $params['value'];
+        $data     = ['user_id'=>$userId, 'state'=>$userShop, 'operator' => auth()->user()->admin_username];
+
+        if(!empty($userShop)) {
+            $this->httpRequest('api/backstage/createShop', $data);
+        }
+
+        return response()->json(['result' => 'success']);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 封号
+     */
     public function block(Request $request)
     {
         $params = $request->all();
         $userId = $params['user_id'];
-        $block  = $params['block'];
+        $block  = $params['value'];
         $data   = ['user_id'=>$userId, 'operator' => auth()->user()->admin_username];
 
         $time = date("Y-m-d H:i:s");
@@ -107,23 +138,14 @@ class UserController extends Controller
             $data['start_time'] = $time;
             $data['end_time']   = date('Y-m-d H:i:s', time()+86400*30);
             $data['created_at'] = $time;
+
+            $this->httpRequest('api/backstage/block/user', $data);
+            return response()->json(['result' => 'success']);
         } else {
-            return response()->json(['result' => '暂不支持']);
-            $data['is_delete']  = 1;
-            $data['unoperator'] = auth()->user()->admin_username;
+            return response()->json(['result' => 'Temporary does not support']);
+            // $data['is_delete']  = 1;
+            // $data['unoperator'] = auth()->user()->admin_username;
         }
-        /*$data['updated_at'] = $time;
-        $result = DB::connection('lovbee')->table('black_users')->where('user_id', $userId)->orderByDesc('id')->first();
-        if (empty($result) || $result->is_delete==1) {
-            DB::connection('lovbee')->table('black_users')->insert($data);
-        } else {
-            DB::connection('lovbee')->table('black_users')->where('id', $result->id)->update($data);
-        }*/
-         $url = !empty($block) ? 'api/backstage/block/user' : 'api/api/null';
-         $result = $this->httpRequest($url, $data);
-
-        return response()->json(['result' => 'success']);
-
     }
 
     public function msgExport(Request $request)

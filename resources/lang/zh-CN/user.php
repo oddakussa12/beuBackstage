@@ -7,6 +7,7 @@ return [
             'user_email'=>'邮箱',
             'user_school'=>'学校',
             'user_gender'=>'性别',
+            'business'=>'商家',
             'phone'=>'手机号',
             'friend_count'=>'好友数量',
             'user_block'=>'封号',

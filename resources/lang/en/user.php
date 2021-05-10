@@ -7,6 +7,7 @@ return [
             'user_email'=>'Email',
             'user_school'=>'School',
             'user_gender'=>'Gender',
+            'business'=>'Business',
             'phone'=>'Phone',
             'user_block'=>'Black',
             'friend_count'=>'Number of friends',

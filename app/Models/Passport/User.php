@@ -39,6 +39,7 @@ class User extends Base
         'user_instagram' ,
         'user_active' ,
         'user_verified' ,
+        'user_shop',
         'user_is_pro' ,
         'user_level' ,
         'user_age_changed'

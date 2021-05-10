@@ -65,6 +65,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user/kol', 'UserController@kol')->name('user.kol');
             Route::get('user/kol/create', 'UserController@createKol')->name('user.kol.create');
             Route::post('user/kol', 'UserController@storeKol')->name('user.kol.store');
+            Route::post('user', 'UserController@update')->name('user.update');
+            Route::resource('user', 'UserController')->only('update');
             Route::get('user/keep' , 'UserController@keep')->name('user.keep');
             Route::get('user/dau' , 'UserController@dau')->name('user.dau');
             Route::get('user/dnu' , 'UserController@dnu')->name('user.dnu');
@@ -107,6 +109,11 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('category/index' , 'CategoryController@index')->name('category.index');
             Route::resource('category' , 'CategoryController');
             Route::resource('medal' , 'MedalController'); //勋章
+        });
+
+        Route::group(['namespace'=>'Business','prefix'=>'business' , 'as' => 'business::'] , function (){
+            Route::resource('shop' , 'ShopController');
+            Route::resource('goods' , 'GoodsController');
         });
 
         Route::resource('menu' , 'MenuController');
