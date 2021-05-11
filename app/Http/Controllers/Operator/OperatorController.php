@@ -18,7 +18,7 @@ class OperatorController extends Controller
 
     public function network(Request $request)
     {
-        $table  = $this->table;
+        $table  = 'network_logs';
         $params = $request->all();
         $params['dateTime'] = $params['dateTime'] ?? date('Y-m-d', strtotime('-7day')).' - '.date('Y-m-d');
         $time   = explode(' - ', $params['dateTime']);
@@ -42,7 +42,7 @@ class OperatorController extends Controller
         $params['appends']  = $params;
         $params['list']     = $list;
 
-        $base = $this->db->table($this->table);
+        $base = $this->db->table($table);
         $params['appVersions']    = $base->pluck('app_version')->unique()->toArray();
         $params['systemVersions'] = $base->pluck('system_version')->unique()->toArray();
         $params['networks']       = $base->pluck('networking')->unique()->toArray();
@@ -57,7 +57,7 @@ class OperatorController extends Controller
         $time        = explode(' - ', $params['dateTime']);
         $start       = current($time);
         $end         = last($time);
-        $base        = $this->db->table($this->table);
+        $base        = $this->db->table('network_logs');
         $chart       = $base->whereBetween('time', [$start, $end])->get()->toArray();
         $appVersion  = collect($chart)->pluck('app_version')->toArray();
         $networkType = collect($chart)->pluck('network_type')->toArray();
@@ -88,8 +88,8 @@ class OperatorController extends Controller
             ];
         }
         $params['header'] = [];
-        $params['dates'] = [];
-        $params['line'] = [];
+        $params['dates']  = [];
+        $params['line']   = [];
 
 
         $params['appVersions']    = $base->pluck('app_version')->unique()->toArray();
