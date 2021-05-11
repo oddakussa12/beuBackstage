@@ -13,7 +13,6 @@
             </div>
             <div class="layui-inline">
                 <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                <div class="layui-btn layui-btn-primary">{{$comments->total()}}</div>
             </div>
         </div>
     </form>

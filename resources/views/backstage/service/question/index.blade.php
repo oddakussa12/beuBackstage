@@ -4,7 +4,6 @@
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-inline">
-                <div class="layui-btn layui-btn-primary">{{$data->total()}}</div>
                 <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
             </div>
         </form>
