@@ -3,20 +3,15 @@
 namespace App\Http\Controllers\Business;
 
 use App\Models\Goods;
-use App\Models\Passport\User;
-use App\Models\Shop;
-use App\Traits\PostTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class GoodsController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
-     *
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
@@ -26,16 +21,13 @@ class GoodsController extends Controller
         $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
         $now    = Carbon::now();
-        $goods  = new Goods();
-
-
+        $goods   = Goods::select(DB::raw('t_goods.*, t_shops.name shop_name, t_shops.nick_name shop_nick_name'))
+            ->join('shops', 'goods.shop_id', '=', 'shops.id');
         $keyword= $params['keyword'] ?? '';
         if (isset($params['recommend'])) {
-            $goods = $goods->where('recommend', $params['recommend']);
+            $goods = $goods->where('goods.recommend', $params['recommend']);
         }
-        if (isset($params['status'])) {
-            $goods = $goods->where('status', $params['status']);
-        }
+
         if (!empty($params['dateTime'])) {
             $endDate = $now->endOfDay()->toDateTimeString();
             $allDate = explode(' - ' , $params['dateTime']);
@@ -43,40 +35,23 @@ class GoodsController extends Controller
             $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
             $start   = $start>$end ? $end : $start;
             $end     = $end>$endDate ? $endDate : $end;
-            $goods   = $goods->where('created_at' , '>=' , $start)->where('created_at' , '<=' , $end);
+            $goods = $goods->where('goods.created_at' , '>=' , $start)->where('goods.created_at' , '<=' , $end);
         }
         if (!empty($keyword)) {
-            $goods = $goods->where(function ($query) use ($keyword){
-                $query->where('name', 'like', "%{$keyword}%");
+            $goods = $goods->where('goods.name', 'like', "%{$keyword}%");
+        }
+        if (!empty($params['shopName'])) {
+            $shopName = $params['shopName'];
+            $goods = $goods->where(function ($query) use ($shopName){
+                $query->where('shops.name', 'like', "%{$shopName}%")->orWhere('nick_name', 'like', "%{$shopName}%");
             });
         }
-
-        if (!empty($params['shopName'])) {
-
-            $shops   = Shop::select('id', 'name', 'nick_name')->where('name', $params['shopName'])->orWhere('nick_name', $params['shopName'])->get();
-            $shopIds = $shops->pluck('id')->toArray();
-            $goods   = $goods->whereIn('shop_id', $shopIds);
-        }
-        $goods = $goods->orderBy('created_at', 'DESC')->paginate(10);
-
-        if (!empty($shops)) {
-            if (empty($users)) {
-                $userIds = $shops->pluck('user_id')->toArray();
-                $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', $userIds)->paginate(10);
-            }
-            foreach ($shops as $shop) {
-                foreach ($users as $user) {
-                    if ($shop->user_id==$user->user_id) {
-                        $shop->user_name = $user->user_name;
-                        $shop->user_nick_name = $user->user_nick_name;
-                    }
-                }
-            }
-        }
-
+        $sort  = !empty($params['sort']) ? $params['sort'] : 'created_at';
+        $goods = $goods->groupBy('goods.id')->orderByDesc("goods.{$sort}")->paginate(10);
         foreach ($goods as $good) {
             $good->image = !empty($good->image) && !is_array($good->image) ? json_decode($good->image, true) : $good->image;
         }
+
         $params['query']   = $query;
         $params['appends'] = $params;
         $params['result']  = $goods;

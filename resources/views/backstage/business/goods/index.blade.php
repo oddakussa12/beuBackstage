@@ -12,13 +12,23 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">ShopName:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="shopName" placeholder="shop name (precise query)" id="shopName" @if(!empty($shopName)) value="{{$shopName}}" @endif/>
+                        <input class="layui-input" name="shopName" placeholder="shop name" id="shopName" @if(!empty($shopName)) value="{{$shopName}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">GoodsName:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="keyword" placeholder="goods name (fuzzy search)" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                        <input class="layui-input" name="keyword" placeholder="goods name" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">Sort:</label>
+                    <div class="layui-input-inline">
+                        <select  name="sort">
+                            <option value="created_at">CreatedAt</option>
+                            <option value="like" @if(isset($sort) && $sort=='like') selected @endif>Liked</option>
+                            <option value="price" @if(isset($sort) && $sort=='price') selected @endif>Price</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -78,7 +88,7 @@
                     <td>{{$value->price}}{{$value->currency}}</td>
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>{{$value->recommended_at}}</td>
-                    <td><span class="layui-btn layui-btn-xs @if($value->status==0) layui-btn-danger @else layui-btn-warm @endif">@if(empty($value->status)) NO @else YES @endif</span></td>
+                    <td><span class="layui-btn layui-btn-xs @if(empty($value->status)) layui-btn-danger @else layui-btn-warm @endif">@if(empty($value->status)) NO @else YES @endif</span></td>
                     <td>{{$value->description}}</td>
                     <td>{{$value->created_at}}</td>
                 </tr>
