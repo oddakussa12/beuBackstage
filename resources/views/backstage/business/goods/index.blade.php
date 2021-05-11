@@ -3,7 +3,7 @@
     <style>
         .layui-form-label {width: 90px;}
          table td { height: 40px; line-height: 40px;}
-        table td img { width: 60px; }
+        table td img { height: 30px; width: 60px; }
         .layer-alert-video .layui-layer-content img {width: 100%;}
     </style>
     <div  class="layui-fluid">
