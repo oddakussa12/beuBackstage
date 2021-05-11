@@ -10,7 +10,7 @@
                 </div>
             </div>
         </form>
-        <table class="layui-table"  lay-filter="user_table">
+        <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
                 <th  lay-data="{field:'user_id', width:110 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
@@ -49,7 +49,7 @@
             let $ = layui.jquery,
                 element = layui.element,
                 table = layui.table;
-            table.init('user_table', { //转化静态表格
+            table.init('table', { //转化静态表格
                 page:false,
                 toolbar: '#toolbar'
             });

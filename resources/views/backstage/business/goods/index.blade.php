@@ -160,26 +160,12 @@
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
             });
             $(function () {
-                hoverOpenImg();
-            });
-            function  hoverOpenImg(){
                 let img_show = null; // tips提示
                 $('td img').hover(function(){
                     let img = "<img class='img_msg' src='"+$(this).attr('src')+"' style='max-height:300px;min-height: 100px;' />";
-                    img_show = layer.tips(img, this,{
-                        tips:1,
-                    });
-                },function(){
-                    // layer.close(img_show);
-                });
-                //$('td img').attr('style','max-width:400px');
-            }
+                    img_show = layer.tips(img, this, {tips:1});
+                },function(){});
+            });
         });
-
-    </script>
-    <script type="text/html" id="postop">
-        <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
-        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="comment">Comment</a>
-        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">{{trans('common.table.button.delete')}}</a>
     </script>
 @endsection

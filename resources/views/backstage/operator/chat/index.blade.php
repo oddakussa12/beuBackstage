@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </form>
-                <table class="layui-table"   lay-filter="static_table">
+                <table class="layui-table"   lay-filter="table">
                     <thead>
                     <tr>
                         <th  lay-data="{field:'user_id', width:110 ,fixed: 'left'}">ID</th>
@@ -124,7 +124,7 @@
                 ,lang: 'en'
             });
 
-            table.init('static_table', {
+            table.init('table', {
                 page:false
             });
 

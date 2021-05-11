@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <div  class="layui-fluid">
-        <table class="layui-table"   lay-filter="feedback_table" id="feedback_table" >
+        <table class="layui-table"   lay-filter="table" id="table" >
 
             <thead>
             <tr>
@@ -100,7 +100,7 @@
             });
 
 
-            table.init('feedback_table', { //转化静态表格
+            table.init('table', { //转化静态表格
                 page:false,
                 toolbar: '#toolbar'
             });

@@ -12,7 +12,7 @@
                     <div class="layui-card-header">{{trans('config.tab.title.email.block.email.name')}}</div>
                     <div class="layui-card">
                         <div  class="layui-container">
-                            <table class="layui-table"  lay-filter="permission_table">
+                            <table class="layui-table"  lay-filter="table">
                                 <thead>
                                 <tr>
                                     <th  lay-data="{field:'topic_content', width:100, edit: 'text'}" >话题</th>

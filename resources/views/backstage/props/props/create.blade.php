@@ -105,7 +105,6 @@
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
         </div>
     </script>
-
     <script>
         layui.config({
             base: "{{url('plugin/layui')}}/"
@@ -139,8 +138,6 @@
                 let btn = $(this);
                 uploads(btn, 'bundle');
             });
-
-
             function uploads(btn, type=''){
                 upload.render({
                     elem: btn //绑定元素
@@ -184,11 +181,8 @@
                         loadBar.error();
                         return layer.msg('error');
                     }
-
                 });
             }
-
-
             function handle(e) {
                 var file = e.target.files[0];
                 browserMD5File(file, function (err, md5) {
@@ -198,7 +192,4 @@
         });
 
     </script>
-    <style>
-        .multi dl dd.layui-this{background-color:#fff}
-    </style>
 @endsection

@@ -65,7 +65,7 @@
             </div>
         </div>
     </form>
-    <table class="layui-table"   lay-filter="static_table">
+    <table class="layui-table"   lay-filter="table">
         <thead>
         <tr>
             <th  lay-data="{field:'user_id', width:110 ,fixed: 'left'}">ID</th>
@@ -128,7 +128,6 @@
 @endsection
 @section('footerScripts')
     @parent
-
     <script>
         layui.config({
             base: "{{url('plugin/layui')}}/"
@@ -143,12 +142,9 @@
                 ,max : 'today'
                 ,lang: 'en'
             });
-            table.init('static_table', {
+            table.init('table', {
                 page:false
             });
         })
     </script>
-    <style>
-        .multi dl dd.layui-this{background-color:#fff}
-    </style>
 @endsection

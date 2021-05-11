@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <div  class="layui-container">
-        <table class="layui-table"  lay-filter="translation_table">
+        <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
                 <th  lay-data="{field:'translation_key', width:360}">{{trans('translation.table.header.translation_key')}}</th>
@@ -75,11 +75,11 @@
 
 
 
-            table.init('translation_table', { //转化静态表格
+            table.init('table', { //转化静态表格
                 page:true
             });
 
-            table.on('tool(translation_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -168,7 +168,7 @@
                 }
             });
 
-            table.on('edit(translation_table)', function(obj){
+            table.on('edit(table)', function(obj){
                 var value = obj.value //得到修改后的值
                     ,data = obj.data //得到所在行所有键值
                     ,field = obj.field; //得到字段

@@ -29,7 +29,7 @@
                                 <label class="layui-form-label">Upload Music</label>
                                 <div class="layui-input-block">
                                     <div class="layui-upload-list">
-                                        <table class="layui-table"  lay-filter="static_table">
+                                        <table class="layui-table"  lay-filter="table">
                                             <thead>
                                             <tr>
                                                 <th lay-data="{field:'name', minWidth:100}">File Name</th>
@@ -159,7 +159,7 @@
                 play_list = document.querySelector("#play_list"),
                 player = document.querySelector("#player"),
                 play_index = 0;
-            var fileTable = table.init('static_table', {
+            var fileTable = table.init('table', {
                 page:false
             });
             var backward = function (){
@@ -528,7 +528,7 @@
                                 }
                                 tr.find('.file-delete').on('click', function(obj){
                                     $(obj.target).closest('tr').remove();
-                                    table.init('static_table', {
+                                    table.init('table', {
                                         page:false
                                     })
                                 });
@@ -537,7 +537,7 @@
                                     $("input[name=hash]").val(md5);
                                 });
                                 console.log(fileTable);
-                                table.init('static_table', {
+                                table.init('table', {
                                     page:false
                                 })
                             },

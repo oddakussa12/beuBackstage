@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <div  class="layui-container">
-        <table class="layui-table"  lay-filter="permission_table">
+        <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
                 <th  lay-data="{field:'id', width:100}">{{trans('permission.table.header.id')}}</th>
@@ -80,11 +80,11 @@
 
 
 
-            table.init('permission_table', { //转化静态表格
+            table.init('table', { //转化静态表格
                 page:false
             });
 
-            table.on('tool(permission_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -155,7 +155,4 @@
             });
         })
     </script>
-    <style>
-        .multi dl dd.layui-this{background-color:#fff}
-    </style>
 @endsection

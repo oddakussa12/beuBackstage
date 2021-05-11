@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 @section('layui-content')
-    <table class="layui-table"  class="layui-table"  lay-filter="static_table">
+    <table class="layui-table" lay-filter="table">
         <thead>
         <tr>
             <th lay-data="{field:'field', width:0 ,hide: true}">Field</th>
@@ -35,11 +35,11 @@
             let $ = layui.jquery,
                 table = layui.table,
                 common = layui.common;
-            table.init('static_table', {
+            table.init('table', {
                 page:false
             });
 
-            table.on('tool(static_table)', function(obj){
+            table.on('tool(table)', function(obj){
                 @if(!Auth::user()->can('operator::version.update'))
                 common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
                 table.render();

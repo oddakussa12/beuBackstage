@@ -207,12 +207,8 @@
                         //演示失败状态，并实现重传
                         return layer.msg('error');
                     }
-
                 });
             }
         });
     </script>
-    <style>
-        .multi dl dd.layui-this{background-color:#fff}
-    </style>
 @endsection

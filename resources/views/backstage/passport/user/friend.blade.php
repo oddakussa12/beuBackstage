@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('layui-content')
 <div  class="layui-fluid">
-    <table class="layui-table"  lay-filter="common_table">
+    <table class="layui-table"  lay-filter="table">
         <thead>
         <tr>
             <th  lay-data="{field:'user_id', minWidth:130 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
@@ -43,7 +43,7 @@
             loadBar: 'lay/modules/admin/loadBar',
         }).use(['common' , 'table'], function () {
             let table = layui.table;
-            table.init('common_table', {
+            table.init('table', {
                 page:false
             });
         })

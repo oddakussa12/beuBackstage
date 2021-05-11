@@ -193,7 +193,4 @@
             });
         })
     </script>
-    <style>
-        .multi dl dd.layui-this{background-color:#fff}
-    </style>
 @endsection
