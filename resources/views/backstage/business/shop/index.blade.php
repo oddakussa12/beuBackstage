@@ -22,6 +22,15 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">Sort:</label>
+                    <div class="layui-input-inline">
+                        <select  name="sort">
+                            <option value="">CreatedAt</option>
+                            <option value="goods" @if(isset($sort) && $sort=='goods') selected @endif>GoodsNum</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">Recommend:</label>
                     <div class="layui-input-inline">
                         <select  name="recommend">
@@ -55,6 +64,7 @@
                 <th lay-data="{field:'level', minWidth:100}">Vip</th>
                 <th lay-data="{field:'avatar', minWidth:100}">Avatar</th>
                 <th lay-data="{field:'cover', minWidth:100}">Cover</th>
+                <th lay-data="{field:'num', minWidth:120}">GoodsNum</th>
                 <th lay-data="{field:'recommend', minWidth:120}">Recommend</th>
                 <th lay-data="{field:'recommended_at', minWidth:160}">Time</th>
                 <th lay-data="{field:'country', minWidth:100}">Country</th>
@@ -75,6 +85,7 @@
                     <td><input type="checkbox" @if($value->level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td><img src="{{$value->avatar}}"></td>
                     <td><img src="{{$value->cover}}"></td>
+                    <td>{{$value->num}}</td>
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>{{$value->recommended_at}}</td>
                     <td>{{$value->country}}</td>

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Business;
 use App\Models\Passport\User;
 use App\Models\Shop;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ShopController extends Controller
 {
@@ -22,13 +24,14 @@ class ShopController extends Controller
         $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
         $now    = Carbon::now();
-        $shop   = new Shop();
+        $shop   = Shop::select(DB::raw('t_shops.*, count(t_goods.id) num'), 'users.user_name', 'users.user_nick_name')
+            ->leftjoin('goods', 'goods.shop_id', '=', 'shops.id')->join('users', 'users.user_id', '=', 'shops.user_id');
         $keyword= $params['keyword'] ?? '';
         if (isset($params['recommend'])) {
-            $shop = $shop->where('recommend', $params['recommend']);
+            $shop = $shop->where('shops.recommend', $params['recommend']);
         }
         if (isset($params['level'])) {
-            $shop = $shop->where('level', $params['level']);
+            $shop = $shop->where('shops.level', $params['level']);
         }
         if (!empty($params['dateTime'])) {
             $endDate = $now->endOfDay()->toDateTimeString();
@@ -37,34 +40,21 @@ class ShopController extends Controller
             $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
             $start   = $start>$end ? $end : $start;
             $end     = $end>$endDate ? $endDate : $end;
-            $shop = $shop->where('created_at' , '>=' , $start)->where('created_at' , '<=' , $end);
+            $shop = $shop->where('shops.created_at' , '>=' , $start)->where('shops.created_at' , '<=' , $end);
         }
         if (!empty($keyword)) {
             $shop = $shop->where(function ($query) use ($keyword){
-                $query->where('name', 'like', "%{$keyword}%")->orWhere('nick_name', 'like', "%{$keyword}%");
+                $query->where('shops.name', 'like', "%{$keyword}%")->orWhere('shops.nick_name', 'like', "%{$keyword}%");
             });
         }
         if (!empty($params['userName'])) {
-            $users   = User::select('user_id', 'user_name', 'user_nick_name')->where('user_name', 'like', "%{$params['userName']}%")->orWhere('user_nick_name', 'like', "%{$params['userName']}%")->paginate(10);
-            $userIds = $users->pluck('user_id')->toArray();
-            $shop    = $shop->whereIn('user_id', $userIds);
+            $userName = $params['userName'];
+            $shop = $shop->where(function ($query) use ($userName){
+                $query->where('users.user_name', 'like', "%{$userName}%")->orWhere('users.user_nick_name', 'like', "%{$userName}%");
+            });
         }
-        $shops = $shop->orderBy('created_at', 'DESC')->paginate(10);
-
-        if (!empty($shops)) {
-            if (empty($users)) {
-                $userIds = $shops->pluck('user_id')->toArray();
-                $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', $userIds)->paginate(10);
-            }
-            foreach ($shops as $shop) {
-                foreach ($users as $user) {
-                    if ($shop->user_id==$user->user_id) {
-                        $shop->user_name = $user->user_name;
-                        $shop->user_nick_name = $user->user_nick_name;
-                    }
-                }
-            }
-        }
+        $sort  = !empty($params['sort']) && $params['sort']=='goods' ? 'num' : 'shops.created_at';
+        $shops = $shop->groupBy('shops.id')->orderByDesc($sort)->paginate(10);
 
         $params['query']   = $query;
         $params['appends'] = $params;
