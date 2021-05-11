@@ -2,7 +2,7 @@
 @section('content')
     <style>
         table td { height: 40px; line-height: 40px;}
-        table td img { width: 30px; }
+        table td img { max-height: 30px; min-width: 40px; }
     </style>
     <br>
     <form class="layui-form">

@@ -2,7 +2,7 @@
 @section('layui-content')
     <style>
         table td { height: 40px; line-height: 40px;}
-        table td img { height: 40px; }
+        table td img { max-height: 30px; min-width: 40px; }
         .layer-alert-video .layui-layer-content img {width: 100%;}
     </style>
     <form class="layui-form" action="">

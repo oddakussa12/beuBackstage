@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <style>
-        table td img { height: 40px; }
+        table td img { max-height: 30px; min-width: 40px; }
     </style>
     <form class="layui-form" action="">
         <div class="layui-form-item">
