@@ -2,16 +2,24 @@
 @section('layui-content')
     <style>
         .layui-form-label {width: 90px;}
-         table td { height: 40px; line-height: 40px;}
+        table td { height: 40px; line-height: 40px;}
         table td img { width: 60px; }
         .layer-alert-video .layui-layer-content img {width: 100%;}
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-form-item">
-                <label class="layui-form-label">Name:</label>
-                <div class="layui-input-inline">
-                    <input class="layui-input" name="keyword" placeholder="shop name" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                <div class="layui-inline">
+                    <label class="layui-form-label">UserName:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="userName" placeholder="user name" id="userName" @if(!empty($userName)) value="{{$userName}}" @endif/>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">ShopName:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="keyword" placeholder="shop name" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                    </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Recommend:</label>
@@ -40,8 +48,10 @@
             <thead>
             <tr>
                 <th lay-data="{field:'id', minWidth:180}">ShopId</th>
-                <th lay-data="{field:'name', minWidth:160}">Name</th>
-                <th lay-data="{field:'nick_name', minWidth:160}">NickName</th>
+                <th lay-data="{field:'user_name', minWidth:160}">UserName</th>
+                <th lay-data="{field:'user_nick_name', minWidth:160}">UserNickName</th>
+                <th lay-data="{field:'name', minWidth:160}">ShopName</th>
+                <th lay-data="{field:'nick_name', minWidth:160}">ShopNickName</th>
                 <th lay-data="{field:'level', minWidth:100}">Vip</th>
                 <th lay-data="{field:'avatar', minWidth:100}">Avatar</th>
                 <th lay-data="{field:'cover', minWidth:100}">Cover</th>
@@ -58,6 +68,8 @@
             @foreach($result as $value)
                 <tr>
                     <td>{{$value->id}}</td>
+                    <td>{{$value->user_name}}</td>
+                    <td>{{$value->user_nick_name}}</td>
                     <td>{{$value->name}}</td>
                     <td>{{$value->nick_name}}</td>
                     <td><input type="checkbox" @if($value->level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Business;
 
 use App\Models\Goods;
+use App\Models\Passport\User;
+use App\Models\Shop;
 use App\Traits\PostTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +27,8 @@ class GoodsController extends Controller
         $params = $request->all();
         $now    = Carbon::now();
         $goods  = new Goods();
+
+
         $keyword= $params['keyword'] ?? '';
         if (isset($params['recommend'])) {
             $goods = $goods->where('recommend', $params['recommend']);
@@ -46,7 +50,29 @@ class GoodsController extends Controller
                 $query->where('name', 'like', "%{$keyword}%");
             });
         }
+
+        if (!empty($params['shopName'])) {
+
+            $shops   = Shop::select('id', 'name', 'nick_name')->where('name', $params['shopName'])->orWhere('nick_name', $params['shopName'])->get();
+            $shopIds = $shops->pluck('id')->toArray();
+            $goods   = $goods->whereIn('shop_id', $shopIds);
+        }
         $goods = $goods->orderBy('created_at', 'DESC')->paginate(10);
+
+        if (!empty($shops)) {
+            if (empty($users)) {
+                $userIds = $shops->pluck('user_id')->toArray();
+                $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', $userIds)->paginate(10);
+            }
+            foreach ($shops as $shop) {
+                foreach ($users as $user) {
+                    if ($shop->user_id==$user->user_id) {
+                        $shop->user_name = $user->user_name;
+                        $shop->user_nick_name = $user->user_nick_name;
+                    }
+                }
+            }
+        }
 
         foreach ($goods as $good) {
             $good->image = !empty($good->image) && !is_array($good->image) ? json_decode($good->image, true) : $good->image;

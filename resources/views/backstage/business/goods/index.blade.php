@@ -9,9 +9,17 @@
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-form-item">
-                <label class="layui-form-label">Name:</label>
-                <div class="layui-input-inline">
-                    <input class="layui-input" name="keyword" placeholder="goods name" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                <div class="layui-inline">
+                    <label class="layui-form-label">ShopName:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="shopName" placeholder="shop name (precise query)" id="shopName" @if(!empty($shopName)) value="{{$shopName}}" @endif/>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">GoodsName:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="keyword" placeholder="goods name (fuzzy search)" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                    </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Recommend:</label>
@@ -40,7 +48,9 @@
             <thead>
             <tr>
                 <th lay-data="{field:'id', minWidth:180}">GoodId</th>
-                <th lay-data="{field:'name', minWidth:160}">Name</th>
+                <th lay-data="{field:'shop_name', minWidth:160}">ShopName</th>
+                <th lay-data="{field:'shop_nick_name', minWidth:160}">ShopNickName</th>
+                <th lay-data="{field:'name', minWidth:160}">GoodsName</th>
                 <th lay-data="{field:'image', minWidth:200}">Image</th>
                 <th lay-data="{field:'like', minWidth:100}">Like</th>
                 <th lay-data="{field:'price', minWidth:100}">Price</th>
@@ -55,8 +65,9 @@
             @foreach($result as $value)
                 <tr>
                     <td>{{$value->id}}</td>
+                    <td>{{$value->shop_name}}</td>
+                    <td>{{$value->shop_nick_name}}</td>
                     <td>{{$value->name}}</td>
-
                     <td>@if(!empty($value->image))
                             @foreach($value->image as $image)
                                 <img src="{{$image['url']}}">
