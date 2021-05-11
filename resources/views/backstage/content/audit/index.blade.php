@@ -9,7 +9,7 @@
         .layui-table span {display: block;float: left;}
     </style>
     <div  class="layui-fluid">
-        <table class="layui-table" lay-filter="post_table">
+        <table class="layui-table" lay-filter="table">
             <tr><th>
                     <div>
                         <form id="form-refuse" method="post">

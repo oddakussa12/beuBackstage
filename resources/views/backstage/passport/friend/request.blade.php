@@ -20,7 +20,7 @@
                 </div>
             </div>
         </form>
-        <table class="layui-table"  lay-filter="common_table">
+        <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
                 <th  lay-data="{field:'from_nick_name', minWidth:120 ,fixed: 'left'}">{{trans('friend.table.header.from_nick_name')}}</th>
@@ -76,7 +76,7 @@
             let $ = layui.jquery,
                 table = layui.table;
 
-            table.init('common_table', { //转化静态表格
+            table.init('table', { //转化静态表格
                 page:false
             });
         })

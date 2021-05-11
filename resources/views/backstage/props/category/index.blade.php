@@ -6,7 +6,7 @@
                 <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
             </div>
         </form>
-        <table class="layui-table"   lay-filter="category_table" id="category_table" >
+        <table class="layui-table"   lay-filter="table" id="table" >
             <thead>
             <tr>
                 <th lay-data="{field:'id', width:100 ,fixed: 'left'}">ID</th>
@@ -53,7 +53,7 @@
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common;
-            table.on('tool(category_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -72,7 +72,7 @@
             });
 
             //监听单元格编辑
-            table.on('edit(category_table)', function(obj){
+            table.on('edit(table)', function(obj){
                 var that = this;
                 var value = obj.value //得到修改后的值
                     ,data = obj.data //得到所在行所有键值
@@ -149,7 +149,7 @@
                     content: '/backstage/props/category/create',
                 });
             });
-            table.init('category_table', { //转化静态表格
+            table.init('table', { //转化静态表格
                 page:false,
                 toolbar: '#toolbar'
             });

@@ -49,7 +49,7 @@
                 </div>
             </div>
         </form>
-        <table class="layui-table"  lay-filter="common_table">
+        <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
                 <th  lay-data="{field:'user_id', width:130 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
@@ -119,7 +119,7 @@
             laydate.render({
                 elem: '#dateTime'
             });
-            table.on('tool(common_table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 let tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -137,7 +137,7 @@
                     });
                 }
             });
-            table.init('common_table', {
+            table.init('table', {
                 page:false,
             });
 

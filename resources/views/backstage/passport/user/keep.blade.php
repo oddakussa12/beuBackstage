@@ -31,7 +31,7 @@
 
             </div>
         </form>
-        <table class="layui-table"   lay-filter="common_table">
+        <table class="layui-table"   lay-filter="table">
             <thead>
             <tr>
                 <th lay-data="{field:'day', minWidth:130 ,fixed: 'left'}">Day</th>
@@ -111,7 +111,7 @@
                 ,max : 'today'
                 ,lang: 'en'
             });
-            table.init('common_table', {
+            table.init('table', {
                 page:false,
                 limit:{{count($list)}}
             });
