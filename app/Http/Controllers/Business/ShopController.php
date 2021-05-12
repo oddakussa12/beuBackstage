@@ -24,8 +24,10 @@ class ShopController extends Controller
         $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
         $now    = Carbon::now();
-        $shop   = Shop::select(DB::raw('t_shops.*, count(t_goods.id) num'), 'users.user_name', 'users.user_nick_name')
-            ->leftjoin('goods', 'goods.shop_id', '=', 'shops.id')->join('users', 'users.user_id', '=', 'shops.user_id');
+        $shop   = Shop::select(DB::raw('t_shops.*, count(t_goods.id) num, t_shops_views.num view_num'), 'users.user_name', 'users.user_nick_name')
+            ->leftjoin('goods', 'goods.shop_id', '=', 'shops.id')
+            ->leftjoin('shops_views', 'shops_views.shop_id', '=', 'shops.id')
+            ->join('users', 'users.user_id', '=', 'shops.user_id');
         $keyword= $params['keyword'] ?? '';
         if (isset($params['recommend'])) {
             $shop = $shop->where('shops.recommend', $params['recommend']);
@@ -53,7 +55,8 @@ class ShopController extends Controller
                 $query->where('users.user_name', 'like', "%{$userName}%")->orWhere('users.user_nick_name', 'like', "%{$userName}%");
             });
         }
-        $sort  = !empty($params['sort']) && $params['sort']=='goods' ? 'num' : 'shops.created_at';
+
+        $sort  = !empty($params['sort']) ? $params['sort'] : 'shops.created_at';
         $shops = $shop->groupBy('shops.id')->orderByDesc($sort)->paginate(10);
 
         $params['query']   = $query;

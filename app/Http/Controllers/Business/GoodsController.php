@@ -21,8 +21,9 @@ class GoodsController extends Controller
         $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
         $now    = Carbon::now();
-        $goods   = Goods::select(DB::raw('t_goods.*, t_shops.name shop_name, t_shops.nick_name shop_nick_name'))
-            ->join('shops', 'goods.shop_id', '=', 'shops.id');
+        $goods   = Goods::select(DB::raw('t_goods.*, t_shops.name shop_name, t_shops.nick_name shop_nick_name, t_goods_views.num view_num'))
+            ->join('shops', 'goods.shop_id', '=', 'shops.id')
+            ->leftjoin('goods_views', 'goods_views.goods_id', '=', 'goods.id');
         $keyword= $params['keyword'] ?? '';
         if (isset($params['recommend'])) {
             $goods = $goods->where('goods.recommend', $params['recommend']);
@@ -47,7 +48,8 @@ class GoodsController extends Controller
             });
         }
         $sort  = !empty($params['sort']) ? $params['sort'] : 'created_at';
-        $goods = $goods->groupBy('goods.id')->orderByDesc("goods.{$sort}")->paginate(10);
+        $sort  = $sort == 'view_num' ? $sort : 'goods.'.$sort;
+        $goods = $goods->groupBy('goods.id')->orderByDesc($sort)->paginate(10);
         foreach ($goods as $good) {
             $good->image = !empty($good->image) && !is_array($good->image) ? json_decode($good->image, true) : $good->image;
         }

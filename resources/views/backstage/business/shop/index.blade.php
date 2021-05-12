@@ -26,7 +26,8 @@
                     <div class="layui-input-inline">
                         <select  name="sort">
                             <option value="">CreatedAt</option>
-                            <option value="goods" @if(isset($sort) && $sort=='goods') selected @endif>GoodsNum</option>
+                            <option value="num" @if(isset($sort) && $sort=='num') selected @endif>GoodsNum</option>
+                            <option value="view_num" @if(isset($sort) && $sort=='view_num') selected @endif>ViewNum</option>
                         </select>
                     </div>
                 </div>
@@ -64,6 +65,7 @@
                 <th lay-data="{field:'avatar', minWidth:100}">Avatar</th>
                 <th lay-data="{field:'cover', minWidth:100}">Cover</th>
                 <th lay-data="{field:'num', minWidth:120}">GoodsNum</th>
+                <th lay-data="{field:'view_num', minWidth:120}">ViewNum</th>
                 <th lay-data="{field:'recommend', minWidth:120}">Recommend</th>
                 <th lay-data="{field:'recommended_at', minWidth:160}">Time</th>
                 <th lay-data="{field:'country', minWidth:100}">Country</th>
@@ -84,9 +86,10 @@
                     <td><input type="checkbox" @if($value->level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td><img src="{{$value->avatar}}"></td>
                     <td><img src="{{$value->cover}}"></td>
-                    <td>{{$value->num}}</td>
+                    <td>@if(!empty($value->num)){{$value->num}}@else 0 @endif</td>
+                    <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td>{{$value->recommended_at}}</td>
+                    <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
                     <td>{{$value->country}}</td>
                     <td>{{$value->phone}}</td>
                     <td>{{$value->address}}</td>

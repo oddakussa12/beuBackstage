@@ -28,6 +28,7 @@
                             <option value="created_at">CreatedAt</option>
                             <option value="like" @if(isset($sort) && $sort=='like') selected @endif>Liked</option>
                             <option value="price" @if(isset($sort) && $sort=='price') selected @endif>Price</option>
+                            <option value="view_num" @if(isset($sort) && $sort=='view_num') selected @endif>ViewNum</option>
                         </select>
                     </div>
                 </div>
@@ -63,6 +64,7 @@
                 <th lay-data="{field:'image', minWidth:200}">Image</th>
                 <th lay-data="{field:'like', minWidth:100}">Like</th>
                 <th lay-data="{field:'price', minWidth:100}">Price</th>
+                <th lay-data="{field:'view_num', minWidth:100}">ViewNum</th>
                 <th lay-data="{field:'recommend', minWidth:120}">Recommend</th>
                 <th lay-data="{field:'recommended_at', minWidth:160}">RecommendTime</th>
                 <th lay-data="{field:'status', minWidth:100}">InStock</th>
@@ -84,9 +86,10 @@
                         @endif
                     </td>
                     <td>{{$value->like}}</td>
-                    <td>{{$value->price}}{{$value->currency}}</td>
+                    <td>{{$value->price}} {{$value->currency}}</td>
+                    <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td>{{$value->recommended_at}}</td>
+                    <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
                     <td><span class="layui-btn layui-btn-xs @if(empty($value->status)) layui-btn-danger @else layui-btn-warm @endif">@if(empty($value->status)) NO @else YES @endif</span></td>
                     <td>{{$value->description}}</td>
                     <td>{{$value->created_at}}</td>
