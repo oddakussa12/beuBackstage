@@ -73,6 +73,7 @@
                 <th lay-data="{field:'address', minWidth:200}">Address</th>
                 <th lay-data="{field:'description', minWidth:200}">Description</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
+                <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -95,6 +96,7 @@
                     <td>{{$value->address}}</td>
                     <td>{{$value->description}}</td>
                     <td>{{$value->created_at}}</td>
+                    <td></td>
                 </tr>
             @endforeach
             </tbody>
@@ -164,6 +166,21 @@
                     });
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
             });
+            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                let data = obj.data; //获得当前行数据
+                let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                if(layEvent === 'view'){
+                    layer.open({
+                        type: 2,
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['95%','95%'],
+                        offset: 'auto',
+                        scrollbar:true,
+                        content: '/backstage/business/shop/view/'+data.id,
+                    });
+                }
+            });
             $(function () {
                 let img_show = null; // tips提示
                 $('td img').hover(function(){
@@ -174,9 +191,7 @@
         });
 
     </script>
-    <script type="text/html" id="postop">
-        <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
-        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="comment">Comment</a>
-        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">{{trans('common.table.button.delete')}}</a>
+    <script type="text/html" id="op">
+        <a class="layui-btn layui-btn-xs" lay-event="view">View History</a>
     </script>
 @endsection

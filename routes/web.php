@@ -112,6 +112,8 @@ Route::group(['prefix'=>'backstage'] , function(){
         });
 
         Route::group(['namespace'=>'Business','prefix'=>'business' , 'as' => 'business::'] , function (){
+            Route::get('shop/view/{shopId}' , 'ShopController@view')->name('shop.view');
+            Route::get('shop/search' , 'ShopController@search')->name('shop.search');
             Route::resource('shop' , 'ShopController');
             Route::resource('goods' , 'GoodsController');
         });
