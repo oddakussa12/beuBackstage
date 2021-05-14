@@ -43,7 +43,7 @@ class UserController extends Controller
         $params['appends'] = $params;
         $countries = config('country');
         $params['countries']=$countries;
-        $users = $this->user->findByWhere($params);
+        $users = $this->user->findByPaginate($params);
         $users->each(function ($item){
             $item->user_format_created_at = Carbon::parse($item->user_created_at)->addHours(8)->toDateTimeString();
         });

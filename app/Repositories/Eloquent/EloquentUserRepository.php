@@ -10,7 +10,6 @@ namespace App\Repositories\Eloquent;
 use Carbon\Carbon;
 use App\Repositories\EloquentBaseRepository;
 use App\Repositories\Contracts\UserRepository;
-use DateTimeZone;
 use Illuminate\Support\Facades\DB;
 
 
@@ -30,7 +29,7 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         return $query->whereIn("user_id", $ids)->get();
     }
 
-    public function findByWhere($params, $export=false)
+    public function findByPaginate($params, $export=false)
     {
         $now  = Carbon::now();
         $user = $this->model;
@@ -192,65 +191,6 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             $user = $user->orderByDesc(DB::raw("count(`t_users_friends`.`id`)"));
         }
         return $user->paginate(10);
-    }
-
-    public function export($params)
-    {
-
-    }
-
-    public function paginate($perPage = 10, $columns = ['*'], $pageName = 'page', $page = null)
-    {
-        $now = Carbon::now();
-        $request = request();
-        $pageName = isset($this->model->paginateParamName)?$this->model->paginateParamName:$pageName;
-        $name = $request->input('name' , '');
-        $id = $request->input('id' , '');
-        $key = $request->input('key' , '');
-        $startDate = $now->startOfDay()->toDateTimeString();
-        $endDate = $now->endOfDay()->toDateTimeString();
-        $dateTime = $request->input('dateTime' , $startDate.' - '.$endDate);
-        $date = $request->input('dateTime' , '');
-        $allDate = explode(' - ' , $dateTime);
-        $start = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->subHours(8)->toDateTimeString();
-        $end = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
-        if($end>$endDate)
-        {
-            $end =  $endDate;
-        }
-        if($start>$end)
-        {
-            $start = $end;
-        }
-        $user = $this->model;
-        if(!empty($id))
-        {
-            $user = $user->where('user_id' , $id);
-        }
-        if(!empty($name))
-        {
-            $user = $user->where('user_name' , $name)->orWhere('user_email' , $name);
-        }
-        if(!empty($key))
-        {
-            $user = $user->where(function ($query) use ($key) {
-                $query->where('user_name', 'like', "%{$key}%")->orWhere('user_nick_name', 'like', "%{$key}%");
-            });
-        }
-        $countries = config('country');
-        $country_code = $request->input('country_code' , '');
-        $codes = collect($countries)->pluck('code')->all();
-        $k = array_search($country_code , $codes);
-        $country = $k===false?0:intval($k+1);
-        if(!empty($country_code))
-        {
-            $user = $user->where('user_country_id' , $country);
-        }
-        if(!empty($date))
-        {
-            $user = $user->where('user_created_at' , '>=' , $start)->where('user_created_at' , '<=' , $end);
-        }
-        return $user->orderBy($this->model->getCreatedAtColumn(), 'DESC')->paginate($perPage , $columns , $pageName , $page);
     }
 
     public function update($model, $data)

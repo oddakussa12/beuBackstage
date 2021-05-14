@@ -34,7 +34,7 @@ class ShopController extends Controller
         if (isset($params['level'])) {
             $shop = $shop->where('shops.level', $params['level']);
         }
-        $shop  = $this->dateTime($shop, $params, 'shops');
+        $shop  = $this->dateTime($shop, $params, 'addHours', 'shops');
         if (!empty($keyword)) {
             $shop = $shop->where(function ($query) use ($keyword){
                 $query->where('shops.name', 'like', "%{$keyword}%")->orWhere('shops.nick_name', 'like', "%{$keyword}%");
@@ -118,20 +118,5 @@ class ShopController extends Controller
         return view('backstage.business.shop.view' , $params);
     }
 
-    public function dateTime($result, $params, $tablePre='')
-    {
-        if (!empty($params['dateTime'])) {
-            $now    = Carbon::now();
-            $endDate = $now->endOfDay()->toDateTimeString();
-            $allDate = explode(' - ' , $params['dateTime']);
-            $start   = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->subHours(8)->toDateTimeString();
-            $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
-            $start   = $start>$end ? $end : $start;
-            $end     = $end>$endDate ? $endDate : $end;
-            $createAt= !empty($tablePre) ? "$tablePre.created_at" : 'created_at';
-            $result  = $result->where($createAt, '>=', $start)->where($createAt, '<=', $end);
-        }
 
-        return $result;
-    }
 }

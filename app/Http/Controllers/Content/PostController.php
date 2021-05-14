@@ -37,7 +37,6 @@ class PostController extends Controller
 
     public function findByWhere($params)
     {
-        $now  = Carbon::now();
         $post = Post::with('owner');
 
         if (!empty($params['user_name'])) {
@@ -45,15 +44,7 @@ class PostController extends Controller
             $uIds = $user->pluck('user_id')->toArray();
             $post = $post->whereIn('user_id' , $uIds);
         }
-        if (!empty($params['dateTime'])) {
-            $endDate = $now->endOfDay()->toDateTimeString();
-            $allDate = explode(' - ' , $params['dateTime']);
-            $start   = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->subHours(8)->toDateTimeString();
-            $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
-            $start   = $start>$end ? $end : $start;
-            $end     = $end>$endDate ? $endDate : $end;
-            $post = $post->where('created_at' , '>=' , $start)->where('created_at' , '<=' , $end);
-        }
+        $post = $this->dateTime($post, $params);
         return $post->orderBy('created_at', 'DESC')->paginate(10);
     }
 

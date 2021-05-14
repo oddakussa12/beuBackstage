@@ -19,25 +19,16 @@ class GoodsController extends Controller
     {
         $uri    = parse_url($request->server('REQUEST_URI'));
         $query  = empty($uri['query']) ? "" : $uri['query'];
+        $keyword= $params['keyword'] ?? '';
         $params = $request->all();
-        $now    = Carbon::now();
-        $goods   = Goods::select(DB::raw('t_goods.*, t_shops.name shop_name, t_shops.nick_name shop_nick_name, t_goods_views.num view_num'))
+        $goods  = Goods::select(DB::raw('t_goods.*, t_shops.name shop_name, t_shops.nick_name shop_nick_name, t_goods_views.num view_num'))
             ->join('shops', 'goods.shop_id', '=', 'shops.id')
             ->leftjoin('goods_views', 'goods_views.goods_id', '=', 'goods.id');
-        $keyword= $params['keyword'] ?? '';
         if (isset($params['recommend'])) {
             $goods = $goods->where('goods.recommend', $params['recommend']);
         }
+        $goods = $this->dateTime($goods, $params, 'addHours', 'goods');
 
-        if (!empty($params['dateTime'])) {
-            $endDate = $now->endOfDay()->toDateTimeString();
-            $allDate = explode(' - ' , $params['dateTime']);
-            $start   = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->subHours(8)->toDateTimeString();
-            $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->subHours(8)->toDateTimeString();
-            $start   = $start>$end ? $end : $start;
-            $end     = $end>$endDate ? $endDate : $end;
-            $goods = $goods->where('goods.created_at' , '>=' , $start)->where('goods.created_at' , '<=' , $end);
-        }
         if (!empty($keyword)) {
             $goods = $goods->where('goods.name', 'like', "%{$keyword}%");
         }

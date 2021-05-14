@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -48,6 +49,23 @@ class Controller extends BaseController
             Log::info('http_request_fail' , array('code'=>$e->getCode() , 'message'=>$e->getMessage()));
             return false;
         }
+    }
+
+    public function dateTime($result, $params, $hour='addHours', $tablePre='')
+    {
+        if (!empty($params['dateTime'])) {
+            $now    = Carbon::now();
+            $endDate = $now->endOfDay()->toDateTimeString();
+            $allDate = explode(' - ' , $params['dateTime']);
+            $start   = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->$hour(8)->toDateTimeString();
+            $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->$hour(8)->toDateTimeString();
+            $start   = $start>$end ? $end : $start;
+            $end     = $end>$endDate ? $endDate : $end;
+            $createAt= !empty($tablePre) ? "$tablePre.created_at" : 'created_at';
+            $result  = $result->where($createAt, '>=', $start)->where($createAt, '<=', $end);
+        }
+
+        return $result;
     }
 
 
