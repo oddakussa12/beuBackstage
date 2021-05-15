@@ -208,7 +208,7 @@ class MessageController extends Controller
             $j  = $i<10 ? '00'.$i : ($i>=10 && $i<100 ? '0'.$i : $i);
             $key= "[emo:e000{$j}]";
             $emoImg[] = $key;
-            $emoSrc[] = "<img width='50px' height='50px' src=\"/images/emo/ic_chat_e000{$j}.png\"/>";
+            $emoSrc[] = "<img width='30px' height='30px' src=\"/images/emo/ic_chat_e000{$j}.png\"/>";
         }
 
         foreach ($chat as $item) {

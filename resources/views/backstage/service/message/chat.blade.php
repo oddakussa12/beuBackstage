@@ -3,7 +3,7 @@
     <style>
         .layui-form-label {width: 90px;}
          table td { height: 40px; line-height: 40px;}
-        table td img { max-height: 30px; min-width: 40px; }
+        table td img { max-height: 30px; max-width: 30px; }
         .layer-alert-video .layui-layer-content img {width: 100%;}
         .audio {display: block;width: 40px;float: left; color: #FFFFFF;text-align: center; border-radius: 15px;}
         .layui-layer-content { display: flex; align-items: center; justify-content: center; text-align: justify; margin:0 auto; }
