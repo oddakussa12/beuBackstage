@@ -27,8 +27,8 @@
                     <label class="layui-form-label">CreatedAt:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
-                            <option value="desc" @if(isset($sort) && $sort=='DESC') selected @endif>DESC</option>
-                            <option value="asc"  @if(isset($sort) && $sort=='ASC')  selected @endif>ASC</option>
+                            <option value="DESC" @if(isset($sort) && $sort=='DESC') selected @endif>DESC</option>
+                            <option value="ASC"  @if(isset($sort) && $sort=='ASC')  selected @endif>ASC</option>
                         </select>
                     </div>
                 </div>
@@ -50,7 +50,8 @@
                 <th lay-data="{field:'chat_msg_uid', minWidth:180}">MessageId</th>
                 <th lay-data="{field:'type', minWidth:180, hide:true}">Type</th>
                 <th lay-data="{field:'audio', minWidth:180, hide:true}">Audio</th>
-
+                <th lay-data="{field:'from_name', minWidth:180}">FromUser</th>
+                <th lay-data="{field:'to_name', minWidth:180}">ToUser</th>
                 <th lay-data="{field:'message_content', minWidth:180}">Content</th>
                 <th lay-data="{field:'video_url', minWidth:180, hide:true}">VideoUrl</th>
                 <th lay-data="{field:'chat_msg_type', minWidth:180}">Type</th>
@@ -64,6 +65,9 @@
                     <td>{{$value->chat_msg_uid}}</td>
                     <td>{{$value->chat_msg_type}}</td>
                     <td>{{$value->message_content}}</td>
+                    <td>@if(!empty($value->from)){{$value->from['user_nick_name']}}@endif</td>
+                    <td>@if(!empty($value->to)){{$value->to['user_nick_name']}}@endif</td>
+
                     <td>
                         @if($value->chat_msg_type=='RC:ImgMsg') <img src="{{$value->message_content}}">
                         @elseif($value->chat_msg_type=='RC:TxtMsg') {!! $value->message_content !!}
