@@ -5,40 +5,30 @@
          table td { height: 40px; line-height: 40px;}
         table td img { max-height: 30px; min-width: 40px; }
         .layer-alert-video .layui-layer-content img {width: 100%;}
+        .audio {display: block;width: 40px;float: left; color: #FFFFFF;text-align: center; border-radius: 15px;}
+        .layui-layer-content { display: flex; align-items: center; justify-content: center; text-align: justify; margin:0 auto; }
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">ShopName:</label>
+                    <label class="layui-form-label">Sender:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="shopName" placeholder="shop name" id="shopName" @if(!empty($shopName)) value="{{$shopName}}" @endif/>
+                        <input class="layui-input" name="sender" placeholder="Sender" id="sender" @if(!empty($sender)) value="{{$sender}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">GoodsName:</label>
+                    <label class="layui-form-label">ReceivedBy:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="keyword" placeholder="goods name" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                        <input class="layui-input" name="received_by" placeholder="Received By" id="received_by" @if(!empty($received_by)) value="{{$received_by}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Sort:</label>
+                    <label class="layui-form-label">CreatedAt:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
-                            <option value="created_at">CreatedAt</option>
-                            <option value="like" @if(isset($sort) && $sort=='like') selected @endif>Liked</option>
-                            <option value="price" @if(isset($sort) && $sort=='price') selected @endif>Price</option>
-                            <option value="view_num" @if(isset($sort) && $sort=='view_num') selected @endif>ViewNum</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">Recommend:</label>
-                    <div class="layui-input-inline">
-                        <select  name="recommend">
-                            <option value="">All</option>
-                            <option value="1" @if(isset($recommend) && $recommend=='1') selected @endif>YES</option>
-                            <option value="0" @if(isset($recommend) && $recommend=='0') selected @endif>NO</option>
+                            <option value="desc" @if(isset($sort) && $sort=='DESC') selected @endif>DESC</option>
+                            <option value="asc"  @if(isset($sort) && $sort=='ASC')  selected @endif>ASC</option>
                         </select>
                     </div>
                 </div>
@@ -76,12 +66,13 @@
                     <td>{{$value->message_content}}</td>
                     <td>
                         @if($value->chat_msg_type=='RC:ImgMsg') <img src="{{$value->message_content}}">
-                        @elseif($value->chat_msg_type=='RC:TxtMsg') {{$value->message_content}}
+                        @elseif($value->chat_msg_type=='RC:TxtMsg') {!! $value->message_content !!}
                         @elseif($value->chat_msg_type=='Helloo:VoiceMsg')
                             @if($value->suffix=='wav')
                                 <audio style="width:240px; height: 30px;" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
                             @else
-                                <audio style="width:240px; height: 30px;" id="audio" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
+                                <a onclick=playAudio("{{$value->message_content}}") href="javascript:;" class="audio layui-btn-danger">Play</a>
+                                <audio style="width:200px; height: 30px;" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
                             @endif
                         @else
                         <video style="height: 100%; width:100%" controls><source src="{{$value->video_url}}" type="video/mp4"></video>
@@ -103,13 +94,12 @@
             {{ $result->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
-    <script src="/js/BenzAMRRecorder.js"></script>
-
+    <script src="/js/amrwb-js/amrwb.js" defer></script>
+    <script src="/js/amrwb-js/amrwb-util.js" defer></script>
 @endsection
 @section('footerScripts')
     @parent
     <script>
-
         //内容修改弹窗
         layui.config({
             base: "{{url('plugin/layui')}}/"
@@ -169,28 +159,17 @@
                 let content;
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                let area = ['40%','95%'];
+                let area = data.type==='RC:ImgMsg' ? ['95%','95%'] : ['40%','30%'];
                 content = data.message_content;
                 if (data.type==='Helloo:VoiceMsg') {
                     if (data.suffix==='wav') {
                         content = '<audio style="width:240px; height: 30px;" controls><source src="'+data.message_content+'" type="audio/mpeg"></audio>';
-                    } else {
-                        console.log(data.audio);
-                        console.log(content);
-                        $('#audio').attr('src', data.audio);
-                        const amr = new BenzAMRRecorder();
-                        amr.initWithUrl(data.audio).then(function () {
-                            amr.play();
-                        });
-                        amr.onEnded(function () {
-                            alert('播放完毕');
-                        });
                     }
-                } else if(data.type==='Helloo:VideoMsg'){
+                }
+                if(data.type==='Helloo:VideoMsg'){
                     area = ['50%','60%'];
                     content = '<video controls="controls" autoplay="autoplay" width="100%" height="380px"><source src="'+data.video_url+'" type="video/mp4" /></video>';
                 }
-
                 if(layEvent === 'detail'){
                     layer.open({
                         type: 1,
@@ -211,6 +190,77 @@
                 },function(){});
             });
         });
+
+
+        function playAudio(file) {
+            file = '/js/amrwb-js/audio/233752199224623104.amr';
+            fetchBlob(file, function(blob) {
+                playAmrBlob(blob);
+            });
+        }
+
+        let gAudioContext = new AudioContext();
+
+        function getAudioContext() {
+            if (!gAudioContext) {
+                gAudioContext = new AudioContext();
+            }
+            return gAudioContext;
+        }
+
+        function fetchBlob(url, callback) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.responseType = 'blob';
+            xhr.onload = function() {
+                callback(this.response);
+            };
+            xhr.onerror = function() {
+                alert('Failed to fetch ' + url);
+            };
+            xhr.send();
+        }
+
+        function readBlob(blob, callback) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                callback(data);
+            };
+            reader.readAsArrayBuffer(blob);
+        }
+
+        function playAmrBlob(blob, callback) {
+            readBlob(blob, function(data) {
+                playAmrArray(data);
+            });
+        }
+
+        function playAmrArray(array) {
+            AMRWB.decodeInit();
+            const samples = AMRWB.decode(array);
+            AMRWB.decodeExit();
+            if (!samples) {
+                alert('Failed to decode!');
+                return;
+            }
+            playPcm(samples);
+        }
+
+        function playPcm(samples) {
+            const ctx = getAudioContext();
+            const src = ctx.createBufferSource();
+            const buffer = ctx.createBuffer(1, samples.length, 16000);
+            if (buffer.copyToChannel) {
+                buffer.copyToChannel(samples, 0, 0)
+            } else {
+                const channelBuffer = buffer.getChannelData(0);
+                channelBuffer.set(samples);
+            }
+            src.buffer = buffer;
+            src.connect(ctx.destination);
+            src.start();
+        }
     </script>
     <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="detail">Detail</a>

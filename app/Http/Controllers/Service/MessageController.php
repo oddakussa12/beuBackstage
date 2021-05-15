@@ -180,9 +180,10 @@ class MessageController extends Controller
 
     public function chatMessage(Request $request)
     {
-        $params= $request->all();
-        $month = !empty($params['dateTime']) ? date('Ym', strtotime($params['dateTime'])) : date('Ym');
-        $sort  = !empty($params['sort']) && $params['sort']=='ASC' ? 'orderBy' : 'orderByDesc';
+        $params = $request->all();
+        $params['dateTime'] = $params['dateTime'] ?? date("Y-m");
+        $month  = date('Ym', strtotime($params['dateTime']));
+        $sort   = !empty($params['sort']) && $params['sort']=='ASC' ? 'orderBy' : 'orderByDesc';
 
         $mTable = 'ry_messages_'.$month;
         $cTable = 'ry_chats_'.$month;
@@ -203,7 +204,17 @@ class MessageController extends Controller
         $userIds= array_unique(array_merge($fromId, $toId));
         $users  = User::select('user_id', 'user_name', 'user_nick_name', 'user_avatar')->whereIn('user_id', $userIds)->get();
 
+        for ($i=1; $i<=200; $i++) {
+            $j  = $i<10 ? '00'.$i : ($i>=10 && $i<100 ? '0'.$i : $i);
+            $key= "[emo:e000{$j}]";
+            $emoImg[] = $key;
+            $emoSrc[] = "<img width='50px' height='50px' src=\"/images/emo/ic_chat_e000{$j}.png\"/>";
+        }
+
         foreach ($chat as $item) {
+            if ($item->chat_msg_type=='RC:TxtMsg') {
+                $item->message_content = str_replace($emoImg, $emoSrc, $item->message_content);
+            }
             if ($item->chat_msg_type=='Helloo:VoiceMsg') {
                 $item->suffix = substr($item->message_content, -3);
             }
@@ -216,7 +227,8 @@ class MessageController extends Controller
                 }
             }
         }
-//        $text   = DB::connection('lovbee')->table($mTable)->whereIn('message_id', $msgId)->$sort('created_at')->paginate(10);
+
+        //        $text   = DB::connection('lovbee')->table($mTable)->whereIn('message_id', $msgId)->$sort('created_at')->paginate(10);
 //        $video = DB::connection('lovbee')->table($vTable)->whereIn('message_id', $msgId)->$sort('created_at')->paginate(10);
 
         $params['result'] = $chat;

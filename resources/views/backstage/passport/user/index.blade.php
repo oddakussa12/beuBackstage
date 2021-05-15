@@ -159,7 +159,7 @@
                     common.ajax(url , params , function(res){
                         data.elem.checked = checked;
                         form.render();
-                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                        common.prompt(res.result , 1 , 300 , 6 , 't');
                     } , 'put' , function (event,xhr,options,exc) {
                         setTimeout(function(){
                             common.init_error(event,xhr,options,exc);

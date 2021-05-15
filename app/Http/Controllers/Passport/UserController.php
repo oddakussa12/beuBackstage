@@ -87,13 +87,12 @@ class UserController extends Controller
 
     public function update(Request $request, $userId)
     {
-        $params = $request->all();
-        $name   = $request->input('name', '');
-        $value  = $request->input('value', 0);
-        if ($name=='is_block') {
+        $name  = $request->input('name', '');
+        $value = $request->input('value', 0);
+        if ($name=='is_block' && $value) {
             return $this->block($request, $userId);
         }
-        if ($name=='user_shop') {
+        if ($name=='user_shop' && $value) {
             return $this->createShop($request, $userId);
         }
         return [];
@@ -112,10 +111,16 @@ class UserController extends Controller
         $data     = ['user_id'=>$userId, 'state'=>$userShop, 'operator' => auth()->user()->admin_username];
 
         if(!empty($userShop)) {
-            $this->httpRequest('api/backstage/createShop', $data);
+           $result = $this->httpRequest('api/backstage/createShop', $data);
+           if (!empty($result)) {
+               return response()->json(['result' => 'success']);
+           } else {
+               return response()->array(['result' => 'created failed']);
+           }
         }
 
-        return response()->json(['result' => 'success']);
+
+        return response()->json(['result' => 'shop already existed']);
     }
 
     /**
