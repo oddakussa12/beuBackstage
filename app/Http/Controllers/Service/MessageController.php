@@ -228,12 +228,7 @@ class MessageController extends Controller
             }
         }
 
-        //        $text   = DB::connection('lovbee')->table($mTable)->whereIn('message_id', $msgId)->$sort('created_at')->paginate(10);
-//        $video = DB::connection('lovbee')->table($vTable)->whereIn('message_id', $msgId)->$sort('created_at')->paginate(10);
-
         $params['result'] = $chat;
-//        dump($params);
-//        exit;
         return  view('backstage.service.message.chat', $params);
     }
 }

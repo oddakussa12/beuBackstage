@@ -5,7 +5,7 @@
          table td { height: 40px; line-height: 40px;}
         table td img { max-height: 30px; max-width: 30px; }
         .layer-alert-video .layui-layer-content img {width: 100%;}
-        .audio {display: block;width: 40px;float: left; color: #FFFFFF;text-align: center; border-radius: 15px;}
+        .audio {display: block;width: 40px;float: left; color: #FFFFFF;text-align: center; border-radius: 15px; position: absolute; z-index: 1; left: 5px;}
         .layui-layer-content { display: flex; align-items: center; justify-content: center; text-align: justify; margin:0 auto; }
     </style>
     <div  class="layui-fluid">
@@ -76,7 +76,7 @@
                                 <audio style="width:240px; height: 30px;" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
                             @else
                                 <a onclick=playAudio("{{$value->message_content}}") href="javascript:;" class="audio layui-btn-danger">Play</a>
-                                <audio style="width:200px; height: 30px;" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
+                                <audio style="width:180px; height: 30px; margin-left: -10px" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
                             @endif
                         @else
                         <video style="height: 100%; width:100%" controls><source src="{{$value->video_url}}" type="video/mp4"></video>
