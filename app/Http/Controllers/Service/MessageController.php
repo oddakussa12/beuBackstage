@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Service;
 
 use App\Exports\MessageExport;
 use App\Exports\UsersExport;
+use App\Models\Passport\User;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -141,7 +142,7 @@ class MessageController extends Controller
         $page  = $page<0 ? 0 : $page;
         $month = $month>12 || $month<0 ? 1 : $month;
         if ($month<10) {
-            $month = '0'.strval($month);
+            $month = '0'.$month;
         }
         $table = 'ry_messages_'.date('Y').$month;
         $cTable= 'ry_chats_'.date('Y').$month;
@@ -175,5 +176,52 @@ class MessageController extends Controller
         }
         return array('result'=>(array)$newResult , 'from'=>$from);
 
+    }
+
+    public function chatMessage(Request $request)
+    {
+        $params= $request->all();
+        $month = !empty($params['dateTime']) ? date('Ym', strtotime($params['dateTime'])) : date('Ym');
+        $sort  = !empty($params['sort']) && $params['sort']=='ASC' ? 'orderBy' : 'orderByDesc';
+
+        $mTable = 'ry_messages_'.$month;
+        $cTable = 'ry_chats_'.$month;
+        $vTable = 'ry_video_messages_'.$month;
+        $cTable = Schema::connection('lovbee')->hasTable($cTable) ? $cTable : 'ry_chats';
+        $mTable = Schema::connection('lovbee')->hasTable($mTable) ? $mTable  : 'ry_messages';
+        $vTable = Schema::connection('lovbee')->hasTable($vTable) ? $vTable : 'ry_video_messages';
+
+        $chat   = DB::connection('lovbee')->table($cTable)
+            ->select("$cTable.chat_msg_uid", "$cTable.chat_msg_type", "$cTable.chat_created_at", "$cTable.chat_from_id", "$cTable.chat_to_id", "$mTable.message_content", "$vTable.video_url")
+            ->leftjoin($mTable, "$mTable.message_id", '=', "$cTable.chat_msg_uid")
+            ->leftjoin($vTable, "$vTable.message_id", '=', "$cTable.chat_msg_uid");
+
+        $chat = $chat->$sort("$cTable.chat_created_at")->paginate(10);
+
+        $fromId = $chat->pluck('chat_from_id')->toArray();
+        $toId   = $chat->pluck('chat_to_id')->toArray();
+        $userIds= array_unique(array_merge($fromId, $toId));
+        $users  = User::select('user_id', 'user_name', 'user_nick_name', 'user_avatar')->whereIn('user_id', $userIds)->get();
+
+        foreach ($chat as $item) {
+            if ($item->chat_msg_type=='Helloo:VoiceMsg') {
+                $item->suffix = substr($item->message_content, -3);
+            }
+            foreach ($users as $user) {
+                if ($item->chat_from_id==$user->user_id) {
+                    $item->from = $user;
+                }
+                if ($item->chat_to_id==$user->user_id) {
+                    $item->to = $user;
+                }
+            }
+        }
+//        $text   = DB::connection('lovbee')->table($mTable)->whereIn('message_id', $msgId)->$sort('created_at')->paginate(10);
+//        $video = DB::connection('lovbee')->table($vTable)->whereIn('message_id', $msgId)->$sort('created_at')->paginate(10);
+
+        $params['result'] = $chat;
+//        dump($params);
+//        exit;
+        return  view('backstage.service.message.chat', $params);
     }
 }

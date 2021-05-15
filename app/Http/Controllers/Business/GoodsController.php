@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Business;
 
 use App\Models\Goods;
-use Carbon\Carbon;
+use App\Models\Passport\User;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -62,5 +63,42 @@ class GoodsController extends Controller
             $goods->save();
         }
         return [];
+    }
+
+    public function view(Request $request, $id)
+    {
+        $params = $request->all();
+        $result = DB::connection('lovbee')->table('goods_views_logs')->where('goods_id', $id);
+        $result = $this->dateTime($result, $params);
+        $result = $result->paginate(10);
+
+        if ($result->isNotEmpty()) {
+            $userIds = $result->pluck('user_id')->unique()->toArray();
+            $shopIds = $result->pluck('shop_id')->unique()->toArray();
+            $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', $userIds)->get();
+            $shops   = Shop::select('id', 'name', 'nick_name')->whereIn('id', $shopIds)->get();
+            $goods   = Goods::where('id', $id)->first();
+            foreach ($result as $item) {
+                foreach ($users as $user) {
+                    if ($item->user_id==$user->user_id) {
+                        $item->user_name = $user->user_name;
+                        $item->user_nick_name = $user->user_nick_name;
+                    }
+                }
+                foreach ($shops as $shop) {
+                    if ($item->shop_id==$shop->id) {
+                        $item->shop_name = $shop->name;
+                        $item->shop_nick_name = $shop->nick_name;
+                    }
+                }
+                if ($item->goods_id==$goods->id) {
+                    $item->goods_name = $goods->name;
+                }
+            }
+        }
+
+        $params['result'] = $result;
+
+        return view('backstage.business.goods.view' , $params);
     }
 }

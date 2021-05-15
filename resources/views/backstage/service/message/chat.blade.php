@@ -44,8 +44,8 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
-                    <div class="layui-input-inline" style="width: 300px;">
-                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="dateTime" id="dateTime" @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -57,43 +57,41 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180}">GoodId</th>
-                <th lay-data="{field:'shop_name', minWidth:160}">ShopName</th>
-                <th lay-data="{field:'shop_nick_name', minWidth:160}">ShopNickName</th>
-                <th lay-data="{field:'name', minWidth:160}">GoodsName</th>
-                <th lay-data="{field:'image', minWidth:200}">Image</th>
-                <th lay-data="{field:'like', minWidth:100}">Like</th>
-                <th lay-data="{field:'price', minWidth:100}">Price</th>
-                <th lay-data="{field:'view_num', minWidth:100}">ViewNum</th>
-                <th lay-data="{field:'recommend', minWidth:120}">Recommend</th>
-                <th lay-data="{field:'recommended_at', minWidth:160}">RecommendTime</th>
-                <th lay-data="{field:'status', minWidth:100}">InStock</th>
-                <th lay-data="{field:'description', minWidth:200}">Description</th>
-                <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
+                <th lay-data="{field:'chat_msg_uid', minWidth:180}">MessageId</th>
+                <th lay-data="{field:'type', minWidth:180, hide:true}">Type</th>
+                <th lay-data="{field:'audio', minWidth:180, hide:true}">Audio</th>
+
+                <th lay-data="{field:'message_content', minWidth:180}">Content</th>
+                <th lay-data="{field:'video_url', minWidth:180, hide:true}">VideoUrl</th>
+                <th lay-data="{field:'chat_msg_type', minWidth:180}">Type</th>
+                <th lay-data="{field:'created_at', minWidth:160}">ChatTime</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($result as $value)
+            @foreach($result as $key=>$value)
                 <tr>
-                    <td>{{$value->id}}</td>
-                    <td>{{$value->shop_name}}</td>
-                    <td>{{$value->shop_nick_name}}</td>
-                    <td>{{$value->name}}</td>
-                    <td>@if(!empty($value->image))
-                            @foreach($value->image as $image)
-                                <img src="{{$image['url']}}">
-                            @endforeach
+                    <td>{{$value->chat_msg_uid}}</td>
+                    <td>{{$value->chat_msg_type}}</td>
+                    <td>{{$value->message_content}}</td>
+                    <td>
+                        @if($value->chat_msg_type=='RC:ImgMsg') <img src="{{$value->message_content}}">
+                        @elseif($value->chat_msg_type=='RC:TxtMsg') {{$value->message_content}}
+                        @elseif($value->chat_msg_type=='Helloo:VoiceMsg')
+                            @if($value->suffix=='wav')
+                                <audio style="width:240px; height: 30px;" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
+                            @else
+                                <audio style="width:240px; height: 30px;" id="audio" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
+                            @endif
+                        @else
+                        <video style="height: 100%; width:100%" controls><source src="{{$value->video_url}}" type="video/mp4"></video>
                         @endif
                     </td>
-                    <td>{{$value->like}}</td>
-                    <td>{{$value->price}} {{$value->currency}}</td>
-                    <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
-                    <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
-                    <td><span class="layui-btn layui-btn-xs @if(empty($value->status)) layui-btn-danger @else layui-btn-warm @endif">@if(empty($value->status)) NO @else YES @endif</span></td>
-                    <td>{{$value->description}}</td>
-                    <td>{{$value->created_at}}</td>
+                    <td>{{$value->video_url}}</td>
+                    <td><span class="layui-btn layui-btn-xs @if($value->chat_msg_type=='RC:ImgMsg') layui-btn-danger
+                    @elseif($value->chat_msg_type=='RC:TxtMsg') layui-btn-warm
+                    @elseif($value->chat_msg_type=='Helloo:VoiceMsg') layui-btn-normal@else @endif">{{$value->chat_msg_type}} @if(!empty($value->suffix)){{$value->suffix}}@endif</span></td>
+                    <td>{{$value->chat_created_at}}</td>
                     <td></td>
                 </tr>
             @endforeach
@@ -105,34 +103,37 @@
             {{ $result->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
+    <script src="/js/BenzAMRRecorder.js"></script>
+
 @endsection
 @section('footerScripts')
     @parent
     <script>
+
         //内容修改弹窗
         layui.config({
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
             timePicker: 'lay/modules/admin/timePicker',
-        }).use(['common' , 'table' , 'layer' , 'timePicker'], function () {
+        }).use(['common' , 'table' , 'layer' , 'laydate', 'timePicker'], function () {
             const form = layui.form,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
-                timePicker = layui.timePicker,
-                $ = layui.jquery;
+                $ = layui.jquery,
+                laydate = layui.laydate;
+
             table.init('table', { //转化静态表格
                 page:false,
                 toolbar: '#toolbar'
             });
-            timePicker.render({
-                elem: '#dateTime',
-                options:{
-                    timeStamp:false,
-                    format:'YYYY-MM-DD HH:ss:mm',
-                },
+            laydate.render({
+               elem: "#dateTime",
+               type: 'month',
+                lang:'en'
             });
+
             form.on('switch(switchAll)', function(data){
                 let params;
                 const checked = data.elem.checked;
@@ -165,17 +166,40 @@
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
             });
             table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                let content;
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                if(layEvent === 'view'){
+                let area = ['40%','95%'];
+                content = data.message_content;
+                if (data.type==='Helloo:VoiceMsg') {
+                    if (data.suffix==='wav') {
+                        content = '<audio style="width:240px; height: 30px;" controls><source src="'+data.message_content+'" type="audio/mpeg"></audio>';
+                    } else {
+                        console.log(data.audio);
+                        console.log(content);
+                        $('#audio').attr('src', data.audio);
+                        const amr = new BenzAMRRecorder();
+                        amr.initWithUrl(data.audio).then(function () {
+                            amr.play();
+                        });
+                        amr.onEnded(function () {
+                            alert('播放完毕');
+                        });
+                    }
+                } else if(data.type==='Helloo:VideoMsg'){
+                    area = ['50%','60%'];
+                    content = '<video controls="controls" autoplay="autoplay" width="100%" height="380px"><source src="'+data.video_url+'" type="video/mp4" /></video>';
+                }
+
+                if(layEvent === 'detail'){
                     layer.open({
-                        type: 2,
+                        type: 1,
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['95%','95%'],
+                        area: area,
                         offset: 'auto',
                         scrollbar:true,
-                        content: '/backstage/business/goods/view/'+data.id,
+                        content: content,
                     });
                 }
             });
@@ -189,6 +213,6 @@
         });
     </script>
     <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="view">View History</a>
+        <a class="layui-btn layui-btn-xs" lay-event="detail">Detail</a>
     </script>
 @endsection

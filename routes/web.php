@@ -93,6 +93,7 @@ Route::group(['prefix'=>'backstage'] , function(){
         });
 
         Route::group(['namespace'=>'Service','prefix'=>'service' , 'as' => 'service::'] , function (){
+            Route::get('message/chat' , 'MessageController@chatMessage')->name('message.chat');
             Route::get('message/operation' , 'MessageController@operation')->name('message.operation');
             Route::post('message/operation' , 'MessageController@submit')->name('message.submit');
             Route::get('message/play' , 'MessageController@play')->name('message.play');
@@ -115,6 +116,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('shop/view/{shopId}' , 'ShopController@view')->name('shop.view');
             Route::get('shop/search' , 'ShopController@search')->name('shop.search');
             Route::resource('shop' , 'ShopController');
+            Route::get('goods/view/{goodsId}' , 'GoodsController@view')->name('goods.view');
             Route::resource('goods' , 'GoodsController');
         });
 
