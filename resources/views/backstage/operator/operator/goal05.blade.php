@@ -6,16 +6,18 @@
             <div class="layui-col-md10 title" id="dau"></div>
             <div class="layui-col-md1"><div style="padding: 30px;"></div></div>
         </div>
-        <div class="layui-row bottom layui-col-space10">
-            <div class="layui-col-md1">
-                <div class="layui-panel left">
-                    <div style="padding: 30px;"></div>
-                </div>
-            </div>
+        <div class="layui-row">
             <div class="dev-title-middle">
                 <div class="wave-num"><b id="num">{{$newUserData['percentage']}}</b><tt>{{$newUserData['goal']}}</tt></div>
                 <div class="wave-n">
                     <div class="wave" style="height: {{$newUserData['percentage']}};">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row bottom layui-col-space10">
+            <div class="layui-col-md1">
+                <div class="layui-panel left">
+                    <div style="padding: 30px;"></div>
                 </div>
             </div>
             <div class="layui-col-md2">
@@ -718,14 +720,12 @@
             margin-top: -50px;
         }
         .dev-title-middle{
-            height: 200px;
-            width: 98%;
             display:flex;
             justify-content:center;
             align-items:center;
-            margin-top: -100px;
             position: absolute;
             z-index: 11;
+            margin-left: 45%;
         }
         @media screen and (max-width: 750px){
             .dev-title-middle{
