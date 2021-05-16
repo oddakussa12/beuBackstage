@@ -406,7 +406,7 @@ class OperatorController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      * 四月目标
      */
-    public function goal04()
+    public function goal202104()
     {
         $monthData = array();
         $dateData = array();
@@ -547,7 +547,7 @@ class OperatorController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      * 五月目标
      */
-    public function goal05()
+    public function goal202105()
     {
         $monthData = array();
         $dateData = array();

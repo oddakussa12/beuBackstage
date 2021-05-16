@@ -1,8 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    <style>
-        /*.layui-col-md2 { width: 21.3%;}*/
-    </style>
     <div  class="layui-fluid">
         <div class="layui-row">
             <div class="layui-col-md1"><div style="padding: 30px;"></div></div>
@@ -541,13 +538,16 @@
         });
     </script>
     <style>
+        .layui-col-md2 { width: 21.3%;}
+        @media screen and (max-width: 992px){
+            .layui-col-md2 {width: auto;}
+        }
         .title{
             height: 250px;
         }
         .div-title{
             text-align: center;
             padding-top: 80px;
-            /*background: url("https://helloo.backstage.mantouhealth.com/plugin/layui/images/goal/path.png") no-repeat 15px center;*/
         }
         .layui-pond{
             width: 100%;
