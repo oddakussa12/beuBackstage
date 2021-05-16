@@ -115,11 +115,9 @@ class UserController extends Controller
            if (!empty($result)) {
                return response()->json(['result' => 'success']);
            } else {
-               return response()->array(['result' => 'created failed']);
+               return response()->json(['result' => 'created failed']);
            }
         }
-
-
         return response()->json(['result' => 'shop already existed']);
     }
 
