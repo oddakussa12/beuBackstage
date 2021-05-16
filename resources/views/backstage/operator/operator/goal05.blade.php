@@ -828,7 +828,7 @@
         .target-content{
             position:absolute;
             padding: 5px;
-            top:150px;
+            top:160px;
             font-style: inherit;
             display: none;
         }
