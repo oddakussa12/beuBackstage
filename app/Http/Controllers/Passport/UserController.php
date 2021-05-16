@@ -93,7 +93,7 @@ class UserController extends Controller
             return $this->block($request, $userId);
         }
         if ($name=='user_shop' && $value) {
-            return $this->createShop($request, $userId);
+            return $this->storeShop($request, $userId);
         }
         return [];
     }
@@ -104,14 +104,14 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * 创建店铺
      */
-    public function createShop(Request $request, $userId)
+    public function storeShop(Request $request, $userId)
     {
         $params   = $request->all();
         $userShop = $params['value'];
         $data     = ['user_id'=>$userId, 'state'=>$userShop, 'operator' => auth()->user()->admin_username];
 
         if(!empty($userShop)) {
-           $result = $this->httpRequest('api/backstage/createShop', $data);
+           $result = $this->httpRequest('api/backstage/storeShop', $data);
            if (!empty($result)) {
                return response()->json(['result' => 'success']);
            } else {
