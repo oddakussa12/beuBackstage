@@ -680,7 +680,6 @@
         .layui-icon-div{
             display: flex;
             text-align: center;
-            z-index: 999;
             height: 175px;
             background-size: 20% 52%;
             margin: 0 auto;
@@ -690,7 +689,6 @@
         .layui-icon-div-middle{
             display: flex;
             text-align: center;
-            z-index: 999;
             height: 80px;
             background-size: 25% 50%;
             margin: 0 auto;
