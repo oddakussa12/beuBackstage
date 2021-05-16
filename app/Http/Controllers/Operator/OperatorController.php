@@ -649,6 +649,9 @@ class OperatorController extends Controller
             '<li><label><input type="checkbox"/> Analytics</label></li>',
             '<li><label><input type="checkbox"/> Firebase Remote Config</label></li>',
             '<li><label><input type="checkbox"/> In-App Messaging</label></li>',
+            '<li><label><input type="checkbox"/> 对于不同前、后端接口的功能上增加“时效性缓存系统”(针对不同的接口,缓存时长各有不同、可以统一封装一套缓存系统)能有效提升用户体验，减少服务器并发访问压力等</label></li>',
+            '<li><label><input type="checkbox"/> 对于一些"一定会成功、网络缺不太好、或后端响应时间较长"的接口，做一个入库操作，找一个准确的时机、做合适的轮训操作能很大幅度提升用户体验</label></li>',
+            '<li><label><input type="checkbox"/> 整理规范GitHub</label></li>',
         ];
         $devCurrent = 0;
         $devMiddle = 0;
