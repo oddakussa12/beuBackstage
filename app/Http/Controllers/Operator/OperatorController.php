@@ -604,16 +604,16 @@ class OperatorController extends Controller
         ];
 
         $pText = [
-            '<li><label><input type="checkbox"/>Business account profile 商家账户详情</label></li>',
-            '<li><label><input type="checkbox"/>Reviews 评论</label></li>',
-            '<li><label><input type="checkbox"/>Control of purchasing 购买管控</label></li>',
-            '<li><label><input type="checkbox"/>Website 网站</label></li>',
-            '<li><label><input type="checkbox"/>New logo 新logo</label></li>',
-            '<li><label><input type="checkbox"/>Shop QR code 商家二维码</label></li>',
-            '<li><label><input type="checkbox"/>Coupons 优惠券</label></li>',
-            '<li><label><input type="checkbox"/>Discover 商店广场</label></li>',
-            '<li><label><input type="checkbox"/>Shop verification 商家认证</label></li>',
-            '<li><label><input type="checkbox"/>Categories and filtering 分类和筛选</label></li>',
+            '<li><label><input type="checkbox"/> Business account profile 商家账户详情</label></li>',
+            '<li><label><input type="checkbox"/> Reviews 评论</label></li>',
+            '<li><label><input type="checkbox"/> Control of purchasing 购买管控</label></li>',
+            '<li><label><input type="checkbox"/> Website 网站</label></li>',
+            '<li><label><input type="checkbox"/> New logo 新logo</label></li>',
+            '<li><label><input type="checkbox"/> Shop QR code 商家二维码</label></li>',
+            '<li><label><input type="checkbox"/> Coupons 优惠券</label></li>',
+            '<li><label><input type="checkbox"/> Discover 商店广场</label></li>',
+            '<li><label><input type="checkbox"/> Shop verification 商家认证</label></li>',
+            '<li><label><input type="checkbox"/> Categories and filtering 分类和筛选</label></li>',
         ];
 
         $productCurrent = 5;
