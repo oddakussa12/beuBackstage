@@ -655,7 +655,7 @@ class OperatorController extends Controller
         ];
         $devCurrent = 0;
         $devMiddle = 0;
-        $devGoal = 3;
+        $devGoal = 6;
         $devData = [
             'percentage'=> strval(round($devCurrent/$devGoal, 4)*100)."%",
             'current'   => $devCurrent,
