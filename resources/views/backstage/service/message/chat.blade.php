@@ -14,13 +14,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Sender:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="sender" placeholder="Sender" id="sender" @if(!empty($sender)) value="{{$sender}}" @endif/>
+                        <input class="layui-input" name="sender" placeholder="user name" id="sender" @if(!empty($sender)) value="{{$sender}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">ReceivedBy:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="received_by" placeholder="Received By" id="received_by" @if(!empty($received_by)) value="{{$received_by}}" @endif/>
+                        <input class="layui-input" name="received_by" placeholder="user name" id="received_by" @if(!empty($received_by)) value="{{$received_by}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">

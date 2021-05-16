@@ -347,6 +347,11 @@ class OperatorController extends Controller
         return view('backstage.operator.scoreDetail', $params);
     }
 
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * 四月目标旧版
+     */
     public function goal()
     {
 
@@ -397,7 +402,11 @@ class OperatorController extends Controller
         return view('backstage.operator.operator.goal' , compact('dauData' , 'operData' , 'hrData' , 'prodRetentionData' , 'prodMaskData'));
     }
 
-    public function goalOptimization()
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * 四月目标
+     */
+    public function goal04()
     {
         $monthData = array();
         $dateData = array();
@@ -437,13 +446,11 @@ class OperatorController extends Controller
         $dates = array();
         $start = Carbon::now('Asia/Shanghai')->startOfMonth()->toDateString();
         $end = Carbon::now('Asia/Shanghai')->toDateString();
-        while ($start<=$end)
-        {
+        while ($start<=$end) {
             array_push($dates , $start);
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
         }
         $operMiddle = 40000;
-        $operCurrent = 50000;
         $operCurrent = $this->db->table('data_retentions')->whereIn('date' , $dates)->sum('new');
         $operGoal = 60000;
         $operData = array(
@@ -465,20 +472,11 @@ class OperatorController extends Controller
             'middle'=>$hrMiddle
         );
 
-
-
-
         $yesterday = Carbon::yesterday('Asia/Shanghai')->toDateString();
-        $dauCurrent = 0;
         $dauMiddle = 16000;
         $dauCurrent = $this->db->table('visit_logs_'.Carbon::yesterday('Asia/Shanghai')->format('Ym'))->where('created_at' , $yesterday)->count(DB::raw('DISTINCT(user_id)'));
         $dauGoal = 17000;
         $dauData = array('percentage'=>strval(round($dauCurrent/$dauGoal , 4)*100)."%" , 'current'=>$dauCurrent , 'goal'=>strval(ceil($dauGoal/1000))."K" , 'middle'=>strval(ceil($dauMiddle/1000))."K" );
-
-
-
-
-
 
         $nineDayAgo = Carbon::now('Asia/Shanghai')->subDays(9)->toDateString();
         $prodRetentionCurrent = 8;
@@ -538,6 +536,134 @@ class OperatorController extends Controller
             'prodMaskData' ,
             'devData' ,
             'dataData',
+            'dateData',
+            'dauList',
+            'zoomStart'
+        ));
+    }
+
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * 五月目标
+     */
+    public function goal05()
+    {
+        $monthData = array();
+        $dateData = array();
+        $dauList = array();
+        $dauTable = array();
+        if (Cache::has('helloo_dau_list')) {
+            $cache = Cache::get('helloo_dau_list');
+            $cacheData = \json_decode($cache , true);
+            $dateData = $cacheData['dateData'];
+            $dauList = $cacheData['dauList'];
+            $zoomStart = $cacheData['zoomStart'];
+        }else{
+            $yearStart = Carbon::now('Asia/Shanghai')->startOfYear()->format('Ym');
+            $yearEnd = Carbon::now('Asia/Shanghai')->format('Ym');
+            while($yearStart<=$yearEnd)
+            {
+                array_push($monthData  , $yearStart);
+                $yearStart = Carbon::createFromFormat('Ym' , $yearStart , 'Asia/Shanghai')->addMonths(1)->format('Ym');
+            }
+            foreach ($monthData as $month)
+            {
+                $dauTable = array_merge($dauTable , $this->db->select('SELECT count(DISTINCT user_id) as `num`,created_at from t_visit_logs_'.$month.' GROUP BY created_at ORDER BY created_at'));
+            }
+            foreach ($dauTable as $dau)
+            {
+                array_push($dateData , $dau->created_at);
+                array_push($dauList , array($dau->created_at , $dau->num));
+            }
+            $zoomCount = count($dauList);
+            $zoomStart = ceil(($zoomCount-30)/$zoomCount*100);
+            Cache::put('helloo_dau_list', \json_encode(array(
+                'dateData'=>$dateData,
+                'dauList'=>$dauList,
+                'zoomStart'=>$zoomStart
+            )), 360);
+        }
+        $dates = array();
+        $start = Carbon::now('Asia/Shanghai')->startOfMonth()->toDateString();
+        $end = Carbon::now('Asia/Shanghai')->toDateString();
+        while ($start<=$end) {
+            array_push($dates , $start);
+            $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
+        }
+
+        $hrCurrent = 24;
+        $hrMiddle = 36;
+        $hrGoal = 50;
+        $hrData = [
+            'percentage'=>strval(round($hrCurrent/$hrGoal , 4)*100)."%" ,
+            'current'=>$hrCurrent ,
+            'goal'=>$hrGoal ,
+            'marginTop'=>strval(round((round(($hrGoal-$hrCurrent)/$hrGoal , 4)*480))).'px',
+            'middle'=>$hrMiddle
+        ];
+
+        $pText = [
+            '<li><label><input type="checkbox"/>Business account profile 商家账户详情</label></li>',
+            '<li><label><input type="checkbox"/>Reviews 评论</label></li>',
+            '<li><label><input type="checkbox"/>Control of purchasing 购买管控</label></li>',
+            '<li><label><input type="checkbox"/>Website 网站</label></li>',
+            '<li><label><input type="checkbox"/>New logo 新logo</label></li>',
+            '<li><label><input type="checkbox"/>Shop QR code 商家二维码</label></li>',
+            '<li><label><input type="checkbox"/>Coupons 优惠券</label></li>',
+            '<li><label><input type="checkbox"/>Discover 商店广场</label></li>',
+            '<li><label><input type="checkbox"/>Shop verification 商家认证</label></li>',
+            '<li><label><input type="checkbox"/>Categories and filtering 分类和筛选</label></li>',
+        ];
+
+        $productCurrent = 5;
+        $productMiddle = 8;
+        $productGoal = 10;
+        $productData = [
+            'percentage' => strval(round($productCurrent/$productGoal , 4)*100)."%" ,
+            'current'    => $productCurrent ,
+            'goal'       => $productGoal ,
+            'marginTop'  => strval(round((round(($productGoal-$productCurrent)/$productGoal , 4)*480))).'px',
+            'middle'     => $productMiddle,
+            'text'       => $pText,
+        ];
+
+        $shopMiddle  = 100;
+        $shopCurrent = $this->db->table('shops')->where('name', '!=', '')->count();
+        $shopGoal    = 170;
+        $shopData    = array('percentage'=>strval(round($shopCurrent/$shopGoal , 4)*100)."%" , 'current'=>$shopCurrent , 'goal'=>$shopGoal, 'marginTop'=>strval(round((round(($shopGoal-$shopCurrent)/$shopGoal , 4)*235))).'px',
+            'middle'=>$shopMiddle);
+
+        $newUserMiddle  = 20000;
+        $newUserCurrent = $this->db->table('users')->whereBetween('user_created_at', [date('2021-05-01 00:00:00'), date('2021-05-31 23:59:59')])->count();
+        $newUserGoal    = 25000;
+        $newUserData = array(
+            'percentage'=>strval(round($newUserCurrent/$newUserGoal , 4)*100)."%" ,
+            'current'=>strval($newUserCurrent/1000)."K" ,
+            'goal'=>strval($newUserGoal/1000)."K" ,
+            'marginTop'=>strval(round((round(($newUserGoal-$newUserCurrent)/$newUserGoal , 4)*235))).'px',
+            'middle'=>strval(ceil($newUserMiddle/1000))."K"
+        );
+
+        $dText = [];
+        $devCurrent = 4;
+        $devMiddle = 8;
+        $devGoal = 10;
+        $devData = [
+            'percentage'=> strval(round($devCurrent/$devGoal, 4)*100)."%",
+            'current'   => $devCurrent,
+            'goal'      => $devGoal,
+            'marginTop' => strval(round((round(($devGoal-$devCurrent)/$devGoal, 4)*480))).'px',
+            'middle'    => $devMiddle,
+            'text'      => $dText,
+        ];
+
+        return view('backstage.operator.operator.goal05', compact(
+            'shopData',
+            'productData',
+            'newUserData',
+            'hrData',
+            'devData',
             'dateData',
             'dauList',
             'zoomStart'

@@ -197,6 +197,24 @@ class MessageController extends Controller
             ->leftjoin($mTable, "$mTable.message_id", '=', "$cTable.chat_msg_uid")
             ->leftjoin($vTable, "$vTable.message_id", '=', "$cTable.chat_msg_uid");
 
+
+        $senderId  = '';
+        $receiveId = '';
+
+        if ($senderId && $receiveId) {
+            $chat = $chat->where(function ($query) use ($senderId, $receiveId){
+                $query->where(['chat_from_id'=>$senderId, 'chat_to_id'=>$receiveId])->orWhere(['chat_from_id'=>$receiveId, 'chat_to_id'=>$senderId]);
+            });
+        } elseif ($senderId) {
+            $chat = $chat->where(function ($query) use ($senderId, $receiveId){
+                $query->where('chat_from_id', $senderId)->orWhere('chat_to_id', $senderId);
+            });
+        } elseif ($receiveId) {
+            $chat = $chat->where(function ($query) use ($senderId, $receiveId){
+                $query->where('chat_from_id', $receiveId)->orWhere('chat_to_id', $receiveId);
+            });
+        }
+
         $chat = $chat->$sort("$cTable.chat_created_at")->paginate(10);
 
         $fromId = $chat->pluck('chat_from_id')->toArray();

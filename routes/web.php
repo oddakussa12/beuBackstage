@@ -131,7 +131,8 @@ Route::group(['prefix'=>'backstage'] , function(){
     });
     Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
     Route::get('operator/operator/goal' , 'Operator\OperatorController@goal')->name('operator.operator.goal');
-    Route::get('operator/operator/goal/optimization' , 'Operator\OperatorController@goalOptimization')->name('operator.operator.goal.optimization');
+    Route::get('operator/operator/goal04' , 'Operator\OperatorController@goal04')->name('operator.operator.goal04');
+    Route::get('operator/operator/goal05' , 'Operator\OperatorController@goal05')->name('operator.operator.goal05');
 });
 Route::any('/' , function(){
     return redirect('/backstage');
