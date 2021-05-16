@@ -61,7 +61,7 @@
                             <span></span>
                         </div>
                     </div>
-                    <div class="layui-panel layui-slider layui-middle layui-panel-operate">
+                    <div class="layui-panel layui-slider layui-middle layui-panel-operate margin-top-10">
                         <div class="layui-row layui-item-title">
                             <h2>NewUser</h2>
                         </div>
@@ -545,6 +545,9 @@
         .title{
             height: 250px;
         }
+        .margin-top-10 {
+            margin-top: 10px;
+        }
         .div-title{
             text-align: center;
             padding-top: 80px;
@@ -600,7 +603,6 @@
             }
         }
 
-
         .number{
             padding-top: 70px;
         }
@@ -613,17 +615,6 @@
             position: absolute;
             width: 100%;
         }
-
-
-
-
-
-
-
-
-
-
-
         .layui-panel-operate{
             box-shadow: 0px 0px 4px 3px #FFD88A;
         }
