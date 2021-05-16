@@ -616,7 +616,7 @@ class OperatorController extends Controller
             '<li><label><input type="checkbox"/> Categories and filtering 分类和筛选</label></li>',
         ];
 
-        $productCurrent = 5;
+        $productCurrent = 0;
         $productMiddle = 8;
         $productGoal = 10;
         $productData = [
@@ -645,10 +645,14 @@ class OperatorController extends Controller
             'middle'=>strval(ceil($newUserMiddle/1000))."K"
         );
 
-        $dText = [];
-        $devCurrent = 4;
-        $devMiddle = 8;
-        $devGoal = 10;
+        $dText = [
+            '<li><label><input type="checkbox"/> Analytics</label></li>',
+            '<li><label><input type="checkbox"/> Firebase Remote Config</label></li>',
+            '<li><label><input type="checkbox"/> In-App Messaging</label></li>',
+        ];
+        $devCurrent = 0;
+        $devMiddle = 0;
+        $devGoal = 3;
         $devData = [
             'percentage'=> strval(round($devCurrent/$devGoal, 4)*100)."%",
             'current'   => $devCurrent,
