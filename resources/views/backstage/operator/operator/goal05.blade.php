@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <style>
-        .layui-col-md2 { width: 21.3%;}
+        /*.layui-col-md2 { width: 21.3%;}*/
     </style>
     <div  class="layui-fluid">
         <div class="layui-row">
