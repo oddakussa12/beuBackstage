@@ -24,7 +24,7 @@
                 <div class="layui-panel">
                     <div class="layui-panel layui-slider layui-middle layui-panel-operate">
                         <div class="layui-row layui-item-title">
-                            <h2>Operations</h2>
+                            <h2>Business Account</h2>
                         </div>
                         <span class="operate-icon layui-row layui-icon-div">
                         <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
@@ -538,7 +538,7 @@
         });
     </script>
     <style>
-        .layui-col-md2 { width: 21.3%;}
+        .layui-col-md2 { width: 20.83%;}
         @media screen and (max-width: 992px){
             .layui-col-md2 {width: auto;}
         }
@@ -731,7 +731,7 @@
         }
         .dev-title-middle{
             height: 200px;
-            width: 100%;
+            width: 98%;
             display:flex;
             justify-content:center;
             align-items:center;
