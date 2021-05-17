@@ -603,28 +603,37 @@ class OperatorController extends Controller
             'middle'=>$hrMiddle
         ];
 
-        $pText = [
-            '<li><label><input type="checkbox"/> Business account profile 商家账户详情</label></li>',
-            '<li><label><input type="checkbox"/> Reviews 评论</label></li>',
-            '<li><label><input type="checkbox"/> Control of purchasing 购买管控</label></li>',
-            '<li><label><input type="checkbox"/> Website 网站</label></li>',
-            '<li><label><input type="checkbox"/> New logo 新logo</label></li>',
-            '<li><label><input type="checkbox"/> Shop QR code 商家二维码</label></li>',
-            '<li><label><input type="checkbox"/> Coupons 优惠券</label></li>',
-            '<li><label><input type="checkbox"/> Discover 商店广场</label></li>',
-            '<li><label><input type="checkbox"/> Shop verification 商家认证</label></li>',
-            '<li><label><input type="checkbox"/> Categories and filtering 分类和筛选</label></li>',
+        $productSelected = json_decode(Cache::get('goal_product'), true);
+        $pText= [
+            ' Business account profile 商家账户详情',
+            'Reviews 评论',
+            'Control of purchasing 购买管控',
+            'Website 网站',
+            'New logo 新logo',
+            'Shop QR code 商家二维码',
+            'Coupons 优惠券',
+            'Discover 商店广场',
+            'Shop verification 商家认证',
+            'Categories and filtering 分类和筛选',
         ];
+        foreach ($pText as $key=>$text) {
+            if (!empty($productSelected)) {
+                foreach ($productSelected as $item) {
+                    $selected = ($item==$key+1) ? 'checked' : '';
+                    $pText[$key] = '<li><label><input name="product[]" value="'.($key+1).'" type="checkbox"'. $selected. ' />'.$text.'</label></li>';
+                }
+            } else {
+                $pText[$key] = '<li><label><input name="product[]" value="'.($key+1).'" type="checkbox" />'.$text.'</label></li>';
+            }
+        }
 
-        $productCurrent = 0;
-        $productMiddle = 8;
-        $productGoal = 10;
-        $productData = [
+        $productCurrent = !empty($productSelected) ? count($productSelected) : 0;
+        $productGoal    = count($pText);
+        $productData    = [
             'percentage' => strval(round($productCurrent/$productGoal , 4)*100)."%" ,
             'current'    => $productCurrent ,
             'goal'       => $productGoal ,
             'marginTop'  => strval(round((round(($productGoal-$productCurrent)/$productGoal , 4)*480))).'px',
-            'middle'     => $productMiddle,
             'text'       => $pText,
         ];
 
@@ -645,17 +654,30 @@ class OperatorController extends Controller
             'middle'=>strval(ceil($newUserMiddle/1000))."K"
         );
 
-        $dText = [
-            '<li><label><input type="checkbox"/> Analytics</label></li>',
-            '<li><label><input type="checkbox"/> Firebase Remote Config</label></li>',
-            '<li><label><input type="checkbox"/> In-App Messaging</label></li>',
-            '<li><label><input type="checkbox"/> 对于不同前、后端接口的功能上增加“时效性缓存系统”(针对不同的接口,缓存时长各有不同、可以统一封装一套缓存系统)能有效提升用户体验，减少服务器并发访问压力等</label></li>',
-            '<li><label><input type="checkbox"/> 对于一些"一定会成功、网络缺不太好、或后端响应时间较长"的接口，做一个入库操作，找一个准确的时机、做合适的轮训操作能很大幅度提升用户体验</label></li>',
-            '<li><label><input type="checkbox"/> 整理规范GitHub</label></li>',
+
+        $devSelected = json_decode(Cache::get('goal_dev'), true);
+        $dText= [
+            ' Analytics',
+            'Firebase Remote Config',
+            'In-App Messaging',
+            '对于不同前、后端接口的功能上增加“时效性缓存系统”(针对不同的接口,缓存时长各有不同、可以统一封装一套缓存系统)能有效提升用户体验，减少服务器并发访问压力等',
+            '对于一些"一定会成功、网络缺不太好、或后端响应时间较长"的接口，做一个入库操作，找一个准确的时机、做合适的轮训操作能很大幅度提升用户体验',
+            '整理规范GitHub',
         ];
-        $devCurrent = 0;
+        foreach ($dText as $key=>&$text) {
+            if (!empty($devSelected)) {
+                foreach ($devSelected as $item) {
+                    $selected = ($item==$key+1) ? 'checked' : '';
+                    $text = '<li><label><input name="developer[]" value="'.($key+1).'" type="checkbox"'. $selected. ' />'.$text.'</label></li>';
+                }
+            } else {
+                $text = '<li><label><input name="developer[]" value="'.($key+1).'" type="checkbox" />'.$text.'</label></li>';
+            }
+        }
+
+        $devCurrent = !empty($devSelected) ? count($devSelected) : 0;
         $devMiddle = 0;
-        $devGoal = 6;
+        $devGoal = count($dText);
         $devData = [
             'percentage'=> strval(round($devCurrent/$devGoal, 4)*100)."%",
             'current'   => $devCurrent,
@@ -675,5 +697,15 @@ class OperatorController extends Controller
             'dauList',
             'zoomStart'
         ));
+    }
+
+    public function goalData(Request $request)
+    {
+        $params = $request->all();
+        $name   = $params['name']=='product[]' ? 'product' : 'developer';
+        $count  = count($params['value']);
+        $params += ['divName'=>$name, 'count'=>$count];
+        return $params;
+
     }
 }

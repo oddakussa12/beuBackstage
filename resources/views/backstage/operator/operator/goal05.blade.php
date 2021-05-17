@@ -193,6 +193,8 @@
                     <div class="content content-product">
                         <span></span>
                     </div>
+                    <button id="button1" class="button-1">Show</button>
+
                 </div>
             </div>
             <div class="layui-col-md2">
@@ -243,6 +245,7 @@
                     <div class="content content-dev">
                         <span></span>
                     </div>
+                    <button id="button2" class="button-2">Show</button>
                 </div>
             </div>
             <div class="layui-col-md1">
@@ -258,15 +261,45 @@
     <script type="text/javascript" src="{{url('plugin/layui/lay/modules')}}/echarts.min.js"></script>
     <script>
         function developer(id, state=0) {
-            let s = state===1 ? 'block' : 'none';
-            document.getElementById(id).style.display=s;
+            document.getElementById(id).style.display=state === 1 ? 'block' : 'none';
         }
         layui.config({
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-        }).use(['element'], function () {
-            var $ = layui.jquery;
+        }).use(['element', 'common'], function () {
+            var $ = layui.jquery,
+                common=layui.common;
+            $('button').click(function () {
+               let id = this.id === 'button1' ? 'product' : 'developer';
+                $("#product").toggle();
+            });
+            $('input').click(function () {
+                let cName    = this.name;
+                let checked = [];
+                $('input[name="'+cName+'"]:checked').each(function(){//遍历，将所有选中的值放到数组中
+                    checked.push($(this).val());
+                });
+                /*$.post("{{url('/backstage/operator/operator/goal/data')}}", {'name': cName, 'value': checked}, function(res){
+                        console.log(res.divName);
+                        let total = res.divName==='product' ? {{$productData['goal']}} : {{$devData['goal']}};
+                        let top = Math.round((total-res.count)/total)*480+'px';
+                        console.log(top);
+                        $(".editorial-"+res.divName).css({"padding-top": top});
+                });*/
+
+                common.ajax("{{url('/backstage/operator/operator/goal/data')}}", {'name': cName, 'value': checked}, function(res){
+                    console.log(res.divName);
+                    let total = res.divName==='product' ? {{$productData['goal']}} : {{$devData['goal']}};
+                    let top = Math.round((total-res.count)/total)*480+'px';
+                    console.log(top);
+                    // $(".editorial-"+res.divName).css({"padding-top": top});
+                    $(".editorial-product").style.paddingTop='100px'
+
+                    layer.close();
+                }, 'post');
+            });
+
             var chart_dau = echarts.init(
                 document.getElementById('dau'), 'light', {renderer: 'canvas'});
             var option = {
@@ -538,6 +571,24 @@
         }
         .title{
             height: 250px;
+        }
+        button {
+            width: 150px;
+            height: 50px;
+            border: 0;
+            border-radius: 10px;
+        }
+        .button-1 {
+            position: fixed;
+            top: 81vh;
+            right: 37vw;
+            background: #ff8f8f;
+        }
+        .button-2 {
+            position: fixed;
+            top: 81vh;
+            right: 16vw;
+            background: #b4ff8f;
         }
         .margin-top-10 {
             margin-top: 10px;
