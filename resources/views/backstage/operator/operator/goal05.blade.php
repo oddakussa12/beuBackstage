@@ -28,15 +28,17 @@
                         <div class="layui-row layui-item-title">
                             <h2>Business Account</h2>
                         </div>
-                        <span class="operate-icon layui-row layui-icon-div">
+                        <span class="shop-icon layui-row layui-icon-div" style="background-size: 30% 50%;">
                         <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <h2 class="number">{{$shopData['current']}}<br />Reach</h2>
+{{--                            <h2 class="number">{{$shopData['current']}}<br />Reach</h2>--}}
                         </div>
                         <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <div style="padding: 5px;"></div>
+                            <div style="padding: 5px;">
+                                <h2 style="margin-top: 70px;" class="number">{{$shopData['current']}}<br />Reach</h2>
+                            </div>
                         </div>
                         <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <h2 class="number">{{$shopData['goal']}}<br />Target</h2>
+{{--                            <h2 class="number">{{$shopData['goal']}}<br />Target</h2>--}}
                         </div>
                     </span>
                         <svg class="editorial-shop"
@@ -67,7 +69,7 @@
                         <div class="layui-row layui-item-title">
                             <h2>NewUser</h2>
                         </div>
-                        <span class="data-icon layui-row layui-icon-div">
+                        <span class="layui-row layui-icon-div">
                         <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
                             <h2 class="number">{{$newUserData['current']}}<br />Reach</h2>
                         </div>
@@ -677,6 +679,9 @@
         }
         .data-icon{
             background: url("https://test.helloo.backstage.mantouhealth.com/plugin/layui/images/goal/Group847.png") no-repeat center center;
+        }
+        .shop-icon{
+            background: url("/images/Group848.png") no-repeat center center;
         }
 
         .layui-icon-div{
