@@ -835,7 +835,6 @@
             padding: 5px;
             top:160px;
             font-style: inherit;
-            display: none;
         }
 
     </style>
