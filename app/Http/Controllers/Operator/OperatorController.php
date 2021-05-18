@@ -711,7 +711,7 @@ class OperatorController extends Controller
         $name   = $params['name']=='product[]' ? 'product' : 'developer';
         $select = !empty($params['value']) ? $params['value'] : [];
         $params += ['divName'=>$name, 'current'=>count($select)];
-        $select && Cache::put('goal_'.$name, json_encode($select), 86400*30);
+        Cache::put('goal_'.$name, json_encode($select), 86400*30);
         return $params;
     }
 }

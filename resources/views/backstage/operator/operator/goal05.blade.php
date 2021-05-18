@@ -206,7 +206,7 @@
                     </div>
                     <span class="dev-icon layui-row layui-icon-div">
                         <div onclick="developer('developer')" class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <h2 class="number"><span id="developer_num">{{$devData['current']}}</span><br />Reach</h2>
+                            <h2 class="number"><span id="developer-num">{{$devData['current']}}</span><br />Reach</h2>
                         </div>
                         <div onclick="developer('developer', 1)" class="layui-col-xs4 layui-col-sm4 layui-col-md4">
                             <div style="padding: 5px;"></div>
