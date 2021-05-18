@@ -1,17 +1,12 @@
-@extends('layouts.dashboard')
-@section('layui-content')
+@extends('layouts.app')
     <div  class="layui-fluid">
+        <br/>
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Keyword:</label>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" name="keyword" placeholder="keyword" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
-                    </div>
-                </div>
-                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline" style="width: 300px;">
+                        <input type="hidden" name="keyword" value="{{$keyword}}">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
                 </div>
@@ -24,21 +19,21 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'content', minWidth:180}">Keyword</th>
-                <th lay-data="{field:'contentCount', minWidth:180}">Num</th>
-                <th lay-data="{field:'userCount', minWidth:180}">UserCount</th>
+                <th lay-data="{field:'user_id', minWidth:180}">UserId</th>
+                <th lay-data="{field:'user_avatar', minWidth:180}">Avatar</th>
+                <th lay-data="{field:'user_name', minWidth:180}">UserName</th>
+                <th lay-data="{field:'user_nick_name', minWidth:180}">UserNickName</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
-                <th  lay-data="{field:'user_op', width:100 ,fixed: 'right', templet: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
             @foreach($result as $value)
                 <tr>
-                    <td>{{$value->content}}</td>
-                    <td>{{$value->contentCount}}</td>
-                    <td>{{$value->userCount}}</td>
+                    <td>{{$value->user_id}}</td>
+                    <td><img src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                    <td>{{$value->user_name}}</td>
+                    <td>{{$value->user_nick_name}}</td>
                     <td>{{$value->created_at}}</td>
-                    <td></td>
                 </tr>
             @endforeach
             </tbody>
@@ -49,9 +44,11 @@
             {{ $result->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
-@endsection
 @section('footerScripts')
     @parent
+    <script type="text/html" id="op">
+        <a class="layui-btn layui-btn-xs" lay-event="view">History</a>
+    </script>
     <script>
         //内容修改弹窗
         layui.config({
@@ -61,7 +58,8 @@
             timePicker: 'lay/modules/admin/timePicker',
         }).use(['common' , 'table' , 'layer' , 'timePicker'], function () {
             const table = layui.table,
-                timePicker = layui.timePicker;
+                timePicker = layui.timePicker,
+                $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
                 toolbar: '#toolbar'
@@ -73,24 +71,13 @@
                     format:'YYYY-MM-DD HH:ss:mm',
                 },
             });
-            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                let data = obj.data; //获得当前行数据
-                let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                if(layEvent === 'view'){
-                    layer.open({
-                        type: 2,
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['95%','95%'],
-                        offset: 'auto',
-                        scrollbar:true,
-                        content: '/backstage/business/shop/search/detail?keyword='+data.content,
-                    });
-                }
+            $(function () {
+                let img_show = null; // tips提示
+                $('td img').hover(function(){
+                    let img = "<img class='img_msg' src='"+$(this).attr('src')+"' style='max-height:300px;min-height: 100px;' />";
+                    img_show = layer.tips(img, this, {tips:1});
+                },function(){});
             });
         });
-    </script>
-    <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="view">History</a>
     </script>
 @endsection
