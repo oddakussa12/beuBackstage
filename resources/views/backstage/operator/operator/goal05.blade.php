@@ -572,13 +572,13 @@
         }
         .button-1 {
             position: fixed;
-            top: 81vh;
+            top: 85vh;
             right: 37vw;
             background: #ff8f8f;
         }
         .button-2 {
             position: fixed;
-            top: 81vh;
+            top: 85vh;
             right: 16vw;
             background: #b4ff8f;
         }
