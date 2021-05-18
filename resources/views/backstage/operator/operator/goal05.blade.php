@@ -282,12 +282,10 @@
                 });
 
                 common.ajax("{{url('/backstage/operator/operator/goal/data')}}", {'name': cName, 'value': checked}, function(res){
-
-                    console.log(res.divName);
                     let total = res.divName==='product' ? {{$productData['goal']}} : {{$devData['goal']}};
                     let top = ((total-res.current)/total)*480+'px';
                     $("#"+res.divName+"-num").text(res.current);
-                    console.log($(".editorial-product").css('padding-top', top));
+                    console.log($(".editorial-"+res.divName).css('padding-top', top));
                     layer.closeAll();
                 }, 'post');
             });
