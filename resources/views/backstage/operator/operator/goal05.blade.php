@@ -222,7 +222,7 @@
                             @endforeach
                         </ul>
                     </span>
-                    <svg class="editorial-dev"
+                    <svg class="editorial-developer"
                          xmlns="http://www.w3.org/2000/svg"
                          xmlns:xlink="http://www.w3.org/1999/xlink"
                          viewBox="0 24 150 28"
@@ -285,7 +285,7 @@
                     let total = res.divName==='product' ? {{$productData['goal']}} : {{$devData['goal']}};
                     let top = ((total-res.current)/total)*480+'px';
                     $("#"+res.divName+"-num").text(res.current);
-                    console.log($(".editorial-"+res.divName).css('padding-top', top));
+                    $(".editorial-"+res.divName).css('padding-top', top);
                     layer.closeAll();
                 }, 'post');
             });
@@ -684,7 +684,7 @@
         .editorial-product{
             padding-top: {{$productData['marginTop']}};
         }
-        .editorial-dev{
+        .editorial-developer{
             padding-top: {{$devData['marginTop']}};
         }
 
