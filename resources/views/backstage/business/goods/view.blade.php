@@ -34,8 +34,8 @@
                     <td>{{$value->goods_name}}</td>
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
-                    <td>{{$value->shop_name}}</td>
-                    <td>{{$value->shop_nick_name}}</td>
+                    <td>@if(isset($value->shop_name)){{$value->shop_name}}@endif</td>
+                    <td>@if(isset($value->shop_nick_name)){{$value->shop_nick_name}}@endif</td>
                     <td>{{$value->created_at}}</td>
                 </tr>
             @endforeach

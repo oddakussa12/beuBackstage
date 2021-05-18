@@ -22,8 +22,8 @@ class GoodsController extends Controller
         $query  = empty($uri['query']) ? "" : $uri['query'];
         $keyword= $params['keyword'] ?? '';
         $params = $request->all();
-        $goods  = Goods::select(DB::raw('t_goods.*, t_shops.name shop_name, t_shops.nick_name shop_nick_name, t_goods_views.num view_num'))
-            ->join('shops', 'goods.shop_id', '=', 'shops.id')
+        $goods  = Goods::select(DB::raw('t_goods.*, t_users.user_name shop_name, t_users.user_nick_name shop_nick_name, t_goods_views.num view_num'))
+            ->join('users', 'goods.user_id', '=', 'users.user_id')
             ->leftjoin('goods_views', 'goods_views.goods_id', '=', 'goods.id');
         if (isset($params['recommend'])) {
             $goods = $goods->where('goods.recommend', $params['recommend']);
@@ -75,8 +75,8 @@ class GoodsController extends Controller
         if ($result->isNotEmpty()) {
             $userIds = $result->pluck('user_id')->unique()->toArray();
             $shopIds = $result->pluck('shop_id')->unique()->toArray();
+            $userIds = array_unique(array_merge($userIds, $shopIds));
             $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', $userIds)->get();
-            $shops   = Shop::select('id', 'name', 'nick_name')->whereIn('id', $shopIds)->get();
             $goods   = Goods::where('id', $id)->first();
             foreach ($result as $item) {
                 foreach ($users as $user) {
@@ -84,11 +84,9 @@ class GoodsController extends Controller
                         $item->user_name = $user->user_name;
                         $item->user_nick_name = $user->user_nick_name;
                     }
-                }
-                foreach ($shops as $shop) {
-                    if ($item->shop_id==$shop->id) {
-                        $item->shop_name = $shop->name;
-                        $item->shop_nick_name = $shop->nick_name;
+                    if ($item->shop_id==$user->user_id) {
+                        $item->shop_name = $user->user_name;
+                        $item->shop_nick_name = $user->user_nick_name;
                     }
                 }
                 if ($item->goods_id==$goods->id) {
@@ -98,7 +96,6 @@ class GoodsController extends Controller
         }
 
         $params['result'] = $result;
-
         return view('backstage.business.goods.view' , $params);
     }
 }
