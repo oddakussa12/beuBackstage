@@ -154,7 +154,7 @@
                     </div>
                     <span class="prod-icon layui-row layui-icon-div">
                         <div onclick="developer('product')" class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <h2 class="number">{{$productData['current']}}<br />Reach</h2>
+                            <h2 class="number"><span id="product-num">{{$productData['current']}}</span><br />Reach</h2>
                         </div>
                         <div onclick="developer('product',1)" class="layui-col-xs4 layui-col-sm4 layui-col-md4">
                             <div style="padding: 5px;"></div>
@@ -206,7 +206,7 @@
                     </div>
                     <span class="dev-icon layui-row layui-icon-div">
                         <div onclick="developer('developer')" class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <h2 class="number">{{$devData['current']}}<br />Reach</h2>
+                            <h2 class="number"><span id="developer_num">{{$devData['current']}}</span><br />Reach</h2>
                         </div>
                         <div onclick="developer('developer', 1)" class="layui-col-xs4 layui-col-sm4 layui-col-md4">
                             <div style="padding: 5px;"></div>
@@ -280,23 +280,15 @@
                 $('input[name="'+cName+'"]:checked').each(function(){//遍历，将所有选中的值放到数组中
                     checked.push($(this).val());
                 });
-                /*$.post("{{url('/backstage/operator/operator/goal/data')}}", {'name': cName, 'value': checked}, function(res){
-                        console.log(res.divName);
-                        let total = res.divName==='product' ? {{$productData['goal']}} : {{$devData['goal']}};
-                        let top = Math.round((total-res.count)/total)*480+'px';
-                        console.log(top);
-                        $(".editorial-"+res.divName).css({"padding-top": top});
-                });*/
 
                 common.ajax("{{url('/backstage/operator/operator/goal/data')}}", {'name': cName, 'value': checked}, function(res){
+
                     console.log(res.divName);
                     let total = res.divName==='product' ? {{$productData['goal']}} : {{$devData['goal']}};
-                    let top = Math.round((total-res.count)/total)*480+'px';
-                    console.log(top);
-                    // $(".editorial-"+res.divName).css({"padding-top": top});
-                    $(".editorial-product").style.paddingTop='100px'
-
-                    layer.close();
+                    let top = ((total-res.current)/total)*480+'px';
+                    $("#"+res.divName+"-num").text(res.current);
+                    console.log($(".editorial-product").css('padding-top', top));
+                    layer.closeAll();
                 }, 'post');
             });
 

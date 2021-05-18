@@ -619,8 +619,11 @@ class OperatorController extends Controller
         foreach ($pText as $key=>$text) {
             if (!empty($productSelected)) {
                 foreach ($productSelected as $item) {
-                    $selected = ($item==$key+1) ? 'checked' : '';
-                    $pText[$key] = '<li><label><input name="product[]" value="'.($key+1).'" type="checkbox"'. $selected. ' />'.$text.'</label></li>';
+                    $pText[$key] = '<li><label><input name="product[]" value="'.($key+1).'" type="checkbox" />'.$text.'</label></li>';
+                    if (($item-1)==$key) {
+                        $pText[$key] = '<li><label><input name="product[]" value="'.($key+1).'" type="checkbox" checked />'.$text.'</label></li>';
+                        break;
+                    }
                 }
             } else {
                 $pText[$key] = '<li><label><input name="product[]" value="'.($key+1).'" type="checkbox" />'.$text.'</label></li>';
@@ -655,7 +658,7 @@ class OperatorController extends Controller
         );
 
 
-        $devSelected = json_decode(Cache::get('goal_dev'), true);
+        $devSelected = json_decode(Cache::get('goal_developer'), true);
         $dText= [
             ' Analytics',
             'Firebase Remote Config',
@@ -664,14 +667,17 @@ class OperatorController extends Controller
             '对于一些"一定会成功、网络缺不太好、或后端响应时间较长"的接口，做一个入库操作，找一个准确的时机、做合适的轮训操作能很大幅度提升用户体验',
             '整理规范GitHub',
         ];
-        foreach ($dText as $key=>&$text) {
+        foreach ($dText as $key=>$text) {
             if (!empty($devSelected)) {
                 foreach ($devSelected as $item) {
-                    $selected = ($item==$key+1) ? 'checked' : '';
-                    $text = '<li><label><input name="developer[]" value="'.($key+1).'" type="checkbox"'. $selected. ' />'.$text.'</label></li>';
+                    $dText[$key] = '<li><label><input name="developer[]" value="'.($key+1).'" type="checkbox" />'.$text.'</label></li>';
+                    if (($item-1)==$key) {
+                        $dText[$key] = '<li><label><input name="developer[]" value="'.($key+1).'" type="checkbox" checked />'.$text.'</label></li>';
+                        break;
+                    }
                 }
             } else {
-                $text = '<li><label><input name="developer[]" value="'.($key+1).'" type="checkbox" />'.$text.'</label></li>';
+                $dText[$key] = '<li><label><input name="developer[]" value="'.($key+1).'" type="checkbox" />'.$text.'</label></li>';
             }
         }
 
@@ -703,9 +709,9 @@ class OperatorController extends Controller
     {
         $params = $request->all();
         $name   = $params['name']=='product[]' ? 'product' : 'developer';
-        $count  = count($params['value']);
-        $params += ['divName'=>$name, 'count'=>$count];
+        $select = !empty($params['value']) ? $params['value'] : [];
+        $params += ['divName'=>$name, 'current'=>count($select)];
+        $select && Cache::put('goal_'.$name, json_encode($select), 86400*30);
         return $params;
-
     }
 }
