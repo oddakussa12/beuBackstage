@@ -10,12 +10,6 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">UserName:</label>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" name="userName" placeholder="user name" id="userName" @if(!empty($userName)) value="{{$userName}}" @endif/>
-                    </div>
-                </div>
-                <div class="layui-inline">
                     <label class="layui-form-label">ShopName:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="keyword" placeholder="shop name" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
@@ -56,14 +50,12 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180}">ShopId</th>
-                <th lay-data="{field:'user_name', minWidth:160}">UserName</th>
-                <th lay-data="{field:'user_nick_name', minWidth:160}">UserNickName</th>
-                <th lay-data="{field:'name', minWidth:160}">ShopName</th>
-                <th lay-data="{field:'nick_name', minWidth:160}">ShopNickName</th>
-                <th lay-data="{field:'level', minWidth:100}">Vip</th>
-                <th lay-data="{field:'avatar', minWidth:100}">Avatar</th>
-                <th lay-data="{field:'cover', minWidth:100}">Cover</th>
+                <th lay-data="{field:'user_id', minWidth:180}">ShopId</th>
+                <th lay-data="{field:'user_name', minWidth:160}">ShopName</th>
+                <th lay-data="{field:'user_nick_name', minWidth:160}">ShopNickName</th>
+                <th lay-data="{field:'user_level', minWidth:100}">Vip</th>
+                <th lay-data="{field:'user_avatar', minWidth:100}">Avatar</th>
+                <th lay-data="{field:'user_cover', minWidth:100}">Cover</th>
                 <th lay-data="{field:'num', minWidth:120}">GoodsNum</th>
                 <th lay-data="{field:'view_num', minWidth:120}">ViewNum</th>
                 <th lay-data="{field:'recommend', minWidth:120}">Recommend</th>
@@ -79,14 +71,12 @@
             <tbody>
             @foreach($result as $value)
                 <tr>
-                    <td>{{$value->id}}</td>
+                    <td>{{$value->user_id}}</td>
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
-                    <td>{{$value->name}}</td>
-                    <td>{{$value->nick_name}}</td>
-                    <td><input type="checkbox" @if($value->level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td><img src="{{$value->avatar}}"></td>
-                    <td><img src="{{$value->cover}}"></td>
+                    <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
+                    <td><img src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                    <td>@if(!empty($value->user_cover))<img src="@if(stripos($value->user_cover, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_cover}}@else{{$value->user_cover}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" />@endif</td>
                     <td>@if(!empty($value->num)){{$value->num}}@else 0 @endif</td>
                     <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
@@ -95,7 +85,7 @@
                     <td>{{$value->phone}}</td>
                     <td>{{$value->address}}</td>
                     <td>{{$value->description}}</td>
-                    <td>{{$value->created_at}}</td>
+                    <td>{{$value->user_created_at}}</td>
                     <td></td>
                 </tr>
             @endforeach

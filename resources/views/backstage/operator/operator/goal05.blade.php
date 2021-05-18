@@ -877,6 +877,9 @@
             top:160px;
             font-style: inherit;
         }
+        .target-content input {
+            margin-right: 7px;
+        }
 
     </style>
 @endsection

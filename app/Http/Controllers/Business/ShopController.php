@@ -22,33 +22,26 @@ class ShopController extends Controller
         $uri    = parse_url($request->server('REQUEST_URI'));
         $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
-        $now    = Carbon::now();
-        $shop   = Shop::select(DB::raw('t_shops.*, count(t_goods.id) num, t_shops_views.num view_num'), 'users.user_name', 'users.user_nick_name')
-            ->leftjoin('goods', 'goods.shop_id', '=', 'shops.id')
-            ->leftjoin('shops_views', 'shops_views.shop_id', '=', 'shops.id')
-            ->join('users', 'users.user_id', '=', 'shops.user_id');
         $keyword= $params['keyword'] ?? '';
+        $shop   = User::select(DB::raw('t_users.*, count(t_goods.id) num, t_shops_views.num view_num'))
+            ->leftjoin('goods', 'goods.user_id', '=', 'users.user_id')
+            ->leftjoin('shops_views', 'shops_views.shop_id', '=', 'users.user_id')
+            ->leftjoin('shops', 'shops.user_id', '=', 'users.user_id');
         if (isset($params['recommend'])) {
             $shop = $shop->where('shops.recommend', $params['recommend']);
         }
         if (isset($params['level'])) {
             $shop = $shop->where('shops.level', $params['level']);
         }
-        $shop  = $this->dateTime($shop, $params, 'addHours', 'shops');
+        $shop = $this->dateTime($shop, $params, 'addHours', 'shops');
         if (!empty($keyword)) {
             $shop = $shop->where(function ($query) use ($keyword){
-                $query->where('shops.name', 'like', "%{$keyword}%")->orWhere('shops.nick_name', 'like', "%{$keyword}%");
-            });
-        }
-        if (!empty($params['userName'])) {
-            $userName = $params['userName'];
-            $shop = $shop->where(function ($query) use ($userName){
-                $query->where('users.user_name', 'like', "%{$userName}%")->orWhere('users.user_nick_name', 'like', "%{$userName}%");
+                $query->where('users.user_name', 'like', "%{$keyword}%")->orWhere('users.user_nick_name', 'like', "%{$keyword}%");
             });
         }
 
         $sort  = !empty($params['sort']) ? $params['sort'] : 'shops.created_at';
-        $shops = $shop->groupBy('shops.id')->orderByDesc($sort)->paginate(10);
+        $shops = $shop->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
 
         $params['query']   = $query;
         $params['appends'] = $params;
@@ -86,6 +79,29 @@ class ShopController extends Controller
         return view('backstage.business.shop.search' , $params);
     }
 
+    public function searchDetail(Request $request)
+    {
+        $params  = $request->all();
+        $keyword = $params['keyword'];
+        $result  = DB::connection('lovbee')->table('business_search_logs')->where('content', $keyword)->orderByDesc('created_at');
+        $result  = $this->dateTime($result, $params);
+        $result  = $result->paginate(10);
+        $userIds = $result->pluck('user_id')->unique()->toArray();
+        $users   = DB::connection('lovbee')->table('users')->whereIn('user_id', $userIds)->get();
+        foreach ($result as $item) {
+            foreach ($users as $user) {
+                if ($item->user_id==$user->user_id) {
+                    $item->user_name = $user->user_name;
+                    $item->user_nick_name = $user->user_nick_name;
+                    $item->user_avatar = $user->user_avatar;
+                }
+            }
+        }
+        $params['result'] = $result;
+        return view('backstage.business.shop.searchDetail', $params);
+
+    }
+
     public function view(Request $request, $id)
     {
         $params = $request->all();
@@ -95,19 +111,19 @@ class ShopController extends Controller
 
         if ($result->isNotEmpty()) {
             $userIds = $result->pluck('user_id')->unique()->toArray();
-            $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', $userIds)->get();
-            $shop    = Shop::select('id', 'name', 'nick_name')->where('id', $id)->first();
+            $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', array_merge($userIds, [$id]))->get();
             foreach ($result as $item) {
                 foreach ($users as $user) {
                     if ($item->user_id==$user->user_id) {
                         $item->user_name = $user->user_name;
                         $item->user_nick_name = $user->user_nick_name;
                     }
+                    if ($item->shop_id==$user->user_id) {
+                        $item->shop_name = $user->user_name;
+                        $item->shop_nick_name = $user->user_nick_name;
+                    }
                 }
-                if ($item->shop_id==$shop->id) {
-                    $item->shop_name = $shop->name;
-                    $item->shop_nick_name = $shop->nick_name;
-                }
+
             }
         }
 
