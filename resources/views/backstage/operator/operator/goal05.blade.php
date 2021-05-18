@@ -272,7 +272,7 @@
                 common=layui.common;
             $('button').click(function () {
                let id = this.id === 'button1' ? 'product' : 'developer';
-                $("#product").toggle();
+                $("#"+id).toggle();
             });
             $('input').click(function () {
                 let cName    = this.name;
@@ -572,14 +572,14 @@
         }
         .button-1 {
             position: fixed;
-            top: 85vh;
-            right: 37vw;
+            top: 91vh;
+            right: 35vw;
             background: #ff8f8f;
         }
         .button-2 {
             position: fixed;
-            top: 85vh;
-            right: 16vw;
+            top: 91vh;
+            right: 14vw;
             background: #b4ff8f;
         }
         .margin-top-10 {
