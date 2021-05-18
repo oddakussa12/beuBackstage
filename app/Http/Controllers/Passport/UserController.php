@@ -58,6 +58,13 @@ class UserController extends Controller
         return view('backstage.passport.user.index' , $params);
     }
 
+    public function deviceInfo(Request $request)
+    {
+        $params = $request->all();
+        $list   = DB::connection('lovbee')->table('devices')->orderByDesc('created_at')->paginate(10);
+        return view('backstage.passport.user.deviceInfo' , compact('list'));
+    }
+
     public function userChart(&$params)
     {
         $gender = DB::connection('lovbee')->table('users')->select(DB::raw('count(user_gender) num, user_gender'))->groupBy('user_gender')->get()->toArray();
@@ -257,9 +264,7 @@ class UserController extends Controller
         }
         $select = DB::connection('lovbee')->table('block_devices')->where($params)->first();
         $result = $this->httpRequest('api/backstage/block/device', $params);
-        if ($result) {
 
-        }
         /*if (!empty($select)) {
             return [];
         } else {
