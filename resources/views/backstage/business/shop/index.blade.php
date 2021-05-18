@@ -10,13 +10,13 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">ShopName:</label>
+                    <label class="layui-form-label">{{trans('business.table.header.shop_name')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="keyword" placeholder="shop name" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                        <input class="layui-input" name="keyword" placeholder="{{trans('business.table.header.shop_name')}}" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Sort:</label>
+                    <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
                             <option value="">CreatedAt</option>
@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Recommend:</label>
+                    <label class="layui-form-label">{{trans('business.table.header.recommend')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="recommend">
                             <option value="">All</option>
@@ -50,20 +50,20 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'user_id', minWidth:180}">ShopId</th>
-                <th lay-data="{field:'user_name', minWidth:160}">ShopName</th>
-                <th lay-data="{field:'user_nick_name', minWidth:160}">ShopNickName</th>
-                <th lay-data="{field:'user_level', minWidth:100}">Vip</th>
-                <th lay-data="{field:'user_avatar', minWidth:100}">Avatar</th>
-                <th lay-data="{field:'user_cover', minWidth:100}">Cover</th>
-                <th lay-data="{field:'num', minWidth:120}">GoodsNum</th>
-                <th lay-data="{field:'view_num', minWidth:120}">ViewNum</th>
-                <th lay-data="{field:'recommend', minWidth:120}">Recommend</th>
-                <th lay-data="{field:'recommended_at', minWidth:160}">Time</th>
-                <th lay-data="{field:'country', minWidth:100}">Country</th>
-                <th lay-data="{field:'phone', minWidth:150}">Phone</th>
-                <th lay-data="{field:'address', minWidth:200}">Address</th>
-                <th lay-data="{field:'description', minWidth:200}">Description</th>
+                <th lay-data="{field:'user_id', minWidth:180}">{{trans('business.table.header.shop_id')}}</th>
+                <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
+                <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
+                <th lay-data="{field:'user_level', minWidth:100}">{{trans('business.table.header.vip')}}</th>
+                <th lay-data="{field:'user_avatar', minWidth:100}">{{trans('user.table.header.user_avatar')}}</th>
+                <th lay-data="{field:'user_cover', minWidth:100}">{{trans('user.table.header.user_cover')}}</th>
+                <th lay-data="{field:'num', minWidth:120}">{{trans('common.form.label.num')}}</th>
+                <th lay-data="{field:'view_num', minWidth:120}">{{trans('business.table.header.view_num')}}</th>
+                <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
+                <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
+                <th lay-data="{field:'country', minWidth:100}">{{trans('user.form.label.user_country')}}</th>
+                <th lay-data="{field:'phone', minWidth:150}">{{trans('user.form.label.phone')}}</th>
+                <th lay-data="{field:'address', minWidth:200}">{{trans('business.table.header.recommend')}}</th>
+                <th lay-data="{field:'description', minWidth:200}">{{trans('common.table.header.description')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
@@ -182,6 +182,6 @@
 
     </script>
     <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="view">View History</a>
+        <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('business.table.header.view_history')}}</a>
     </script>
 @endsection

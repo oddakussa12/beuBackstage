@@ -18,11 +18,10 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180}">ID</th>
-                <th lay-data="{field:'user_name', minWidth:180}">UserName</th>
-                <th lay-data="{field:'user_nick_name', minWidth:180}">UserNickName</th>
-                <th lay-data="{field:'shop_name', minWidth:180}">ShopName</th>
-                <th lay-data="{field:'shop_nick_name', minWidth:180}">ShopNickName</th>
+                <th lay-data="{field:'user_name', minWidth:180}">{{trans('user.table.header.user_name')}}</th>
+                <th lay-data="{field:'user_nick_name', minWidth:180}">{{trans('user.table.header.user_nick_name')}}</th>
+                <th lay-data="{field:'shop_name', minWidth:180}">{{trans('business.table.header.shop_name')}}</th>
+                <th lay-data="{field:'shop_nick_name', minWidth:180}">{{trans('business.table.header.shop_nick_name')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
             </tr>
             </thead>

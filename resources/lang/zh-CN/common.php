@@ -68,7 +68,7 @@ return [
         ],
         'label'=>[
             'keyword'=>'关键字',
-            'num' =>'次数',
+            'num' =>'数量',
             'date'=>'日期',
             'type'=>'类型',
             'sort'=>'排序',

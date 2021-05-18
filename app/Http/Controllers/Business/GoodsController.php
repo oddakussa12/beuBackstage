@@ -74,7 +74,7 @@ class GoodsController extends Controller
 
         if ($result->isNotEmpty()) {
             $userIds = $result->pluck('user_id')->unique()->toArray();
-            $shopIds = $result->pluck('shop_id')->unique()->toArray();
+            $shopIds = $result->pluck('owner')->unique()->toArray();
             $userIds = array_unique(array_merge($userIds, $shopIds));
             $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', $userIds)->get();
             $goods   = Goods::where('id', $id)->first();
@@ -84,7 +84,7 @@ class GoodsController extends Controller
                         $item->user_name = $user->user_name;
                         $item->user_nick_name = $user->user_nick_name;
                     }
-                    if ($item->shop_id==$user->user_id) {
+                    if ($item->owner==$user->user_id) {
                         $item->shop_name = $user->user_name;
                         $item->shop_nick_name = $user->user_nick_name;
                     }
