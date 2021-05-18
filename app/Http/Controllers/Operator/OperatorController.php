@@ -606,15 +606,15 @@ class OperatorController extends Controller
         $productSelected = json_decode(Cache::get('goal_product'), true);
         $pText= [
             ' Business account profile 商家账户详情',
-            'Reviews 评论',
-            'Control of purchasing 购买管控',
-            'Website 网站',
-            'New logo 新logo',
-            'Shop QR code 商家二维码',
-            'Coupons 优惠券',
-            'Discover 商店广场',
-            'Shop verification 商家认证',
-            'Categories and filtering 分类和筛选',
+            ' Reviews 评论',
+            ' Control of purchasing 购买管控',
+            ' Website 网站',
+            ' New logo 新logo',
+            ' Shop QR code 商家二维码',
+            ' Coupons 优惠券',
+            ' Discover 商店广场',
+            ' Shop verification 商家认证',
+            ' Categories and filtering 分类和筛选',
         ];
         foreach ($pText as $key=>$text) {
             if (!empty($productSelected)) {
@@ -661,11 +661,11 @@ class OperatorController extends Controller
         $devSelected = json_decode(Cache::get('goal_developer'), true);
         $dText= [
             ' Analytics',
-            'Firebase Remote Config',
-            'In-App Messaging',
-            '对于不同前、后端接口的功能上增加“时效性缓存系统”(针对不同的接口,缓存时长各有不同、可以统一封装一套缓存系统)能有效提升用户体验，减少服务器并发访问压力等',
-            '对于一些"一定会成功、网络缺不太好、或后端响应时间较长"的接口，做一个入库操作，找一个准确的时机、做合适的轮训操作能很大幅度提升用户体验',
-            '整理规范GitHub',
+            ' Firebase Remote Config',
+            ' In-App Messaging',
+            ' 对于不同前、后端接口的功能上增加“时效性缓存系统”(针对不同的接口,缓存时长各有不同、可以统一封装一套缓存系统)能有效提升用户体验，减少服务器并发访问压力等',
+            ' 对于一些"一定会成功、网络缺不太好、或后端响应时间较长"的接口，做一个入库操作，找一个准确的时机、做合适的轮训操作能很大幅度提升用户体验',
+            ' 整理规范GitHub',
         ];
         foreach ($dText as $key=>$text) {
             if (!empty($devSelected)) {
