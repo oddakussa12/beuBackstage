@@ -573,13 +573,13 @@
         .button-1 {
             position: fixed;
             top: 91vh;
-            right: 35vw;
+            right: 35.5vw;
             background: #ff8f8f;
         }
         .button-2 {
             position: fixed;
             top: 91vh;
-            right: 14vw;
+            right: 15vw;
             background: #b4ff8f;
         }
         .margin-top-10 {
