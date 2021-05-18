@@ -42,6 +42,8 @@ return [
         'header'=>[
             'status'=>'状态',
             'op'=>'操作',
+            'image'=>'图片',
+            'description'=>'描述',
             'created_at'=>'创建时间',
             'updated_at'=>'更新时间',
         ],
@@ -55,6 +57,7 @@ return [
         'button'=>[
             'submit'=>'查询',
             'export'=>'导出',
+            'detail'=>'查看',
             'add'=>'添加',
             'update'=>'修改',
             'reset'=>'重置',
@@ -64,6 +67,8 @@ return [
             'blank'=>'请输入内容',
         ],
         'label'=>[
+            'keyword'=>'关键字',
+            'num' =>'次数',
             'date'=>'日期',
             'type'=>'类型',
             'sort'=>'排序',

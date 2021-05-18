@@ -10,19 +10,19 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">ShopName:</label>
+                    <label class="layui-form-label">{{trans('business.table.header.shop_name')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="shopName" placeholder="shop name" id="shopName" @if(!empty($shopName)) value="{{$shopName}}" @endif/>
+                        <input class="layui-input" name="shopName" placeholder="{{trans('business.table.header.shop_name')}}" id="shopName" @if(!empty($shopName)) value="{{$shopName}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">GoodsName:</label>
+                    <label class="layui-form-label">{{trans('business.table.header.goods_name')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="keyword" placeholder="goods name" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                        <input class="layui-input" name="keyword" placeholder="{{trans('business.table.header.goods_name')}}" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Sort:</label>
+                    <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
                             <option value="created_at">CreatedAt</option>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Recommend:</label>
+                    <label class="layui-form-label">{{trans('business.table.header.recommend')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="recommend">
                             <option value="">All</option>
@@ -57,18 +57,18 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180}">GoodId</th>
-                <th lay-data="{field:'shop_name', minWidth:160}">ShopName</th>
-                <th lay-data="{field:'shop_nick_name', minWidth:160}">ShopNickName</th>
-                <th lay-data="{field:'name', minWidth:160}">GoodsName</th>
-                <th lay-data="{field:'image', minWidth:200}">Image</th>
-                <th lay-data="{field:'like', minWidth:100}">Like</th>
-                <th lay-data="{field:'price', minWidth:100}">Price</th>
-                <th lay-data="{field:'view_num', minWidth:100}">ViewNum</th>
-                <th lay-data="{field:'recommend', minWidth:120}">Recommend</th>
-                <th lay-data="{field:'recommended_at', minWidth:160}">RecommendTime</th>
-                <th lay-data="{field:'status', minWidth:100}">InStock</th>
-                <th lay-data="{field:'description', minWidth:200}">Description</th>
+                <th lay-data="{field:'id', minWidth:180}">{{trans('business.table.header.goods_id')}}</th>
+                <th lay-data="{field:'shop_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
+                <th lay-data="{field:'shop_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
+                <th lay-data="{field:'name', minWidth:160}">{{trans('business.table.header.goods_name')}}</th>
+                <th lay-data="{field:'image', minWidth:200}">{{trans('common.table.header.image')}}</th>
+                <th lay-data="{field:'like', minWidth:120}">{{trans('business.table.header.like')}}</th>
+                <th lay-data="{field:'price', minWidth:120}">{{trans('business.table.header.price')}}</th>
+                <th lay-data="{field:'view_num', minWidth:120}">{{trans('business.table.header.view_num')}}</th>
+                <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
+                <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
+                <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.in-stock')}}</th>
+                <th lay-data="{field:'description', minWidth:200}">{{trans('common.table.header.description')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
@@ -189,6 +189,6 @@
         });
     </script>
     <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="view">View History</a>
+        <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('common.table.button.detail')}}</a>
     </script>
 @endsection

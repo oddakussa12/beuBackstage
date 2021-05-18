@@ -20,6 +20,7 @@ return [
             'user_country'=>'Country',
             'user_age'=>'Age',
             'user_about'=>'About',
+            'user_count'=>'UserCount',
             'user_last_active'=>'Last Active',
             'user_registered'=>'Registration time',
             'user_ip_address'=>'IP',

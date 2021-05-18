@@ -20,6 +20,7 @@ return [
             'user_country'=>'国家',
             'user_age'=>'年龄',
             'user_about'=>'简介',
+            'user_count'=>'用户数量',
             'user_last_active'=>'最后活动',
             'user_registered'=>'注册时间',
             'user_ip_address'=>'IP',

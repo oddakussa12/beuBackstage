@@ -43,6 +43,8 @@ return [
         'header'=>[
             'status'=>'Status',
             'op'=>'operate',
+            'image'=>'Image',
+            'description'=>'Description',
             'created_at'=>'CreatedAt',
             'updated_at'=>'UpdatedAt',
         ],
@@ -65,6 +67,8 @@ return [
             'blank'=>'Please enter content',
         ],
         'label'=>[
+            'keyword'=>'Keyword',
+            'num'=>'Num',
             'date'=>'Date',
             'type'=>'Type',
             'sort'=>'Sort',

@@ -4,9 +4,9 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Keyword:</label>
+                    <label class="layui-form-label">{{trans('common.form.label.keyword')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="keyword" placeholder="keyword" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                        <input class="layui-input" name="keyword" placeholder="{{trans('common.form.label.keyword')}}" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -24,9 +24,9 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'content', minWidth:180}">Keyword</th>
-                <th lay-data="{field:'contentCount', minWidth:180}">Num</th>
-                <th lay-data="{field:'userCount', minWidth:180}">UserCount</th>
+                <th lay-data="{field:'content', minWidth:180}">{{trans('common.form.label.keyword')}}</th>
+                <th lay-data="{field:'contentCount', minWidth:180}">{{trans('common.form.label.num')}}</th>
+                <th lay-data="{field:'userCount', minWidth:180}">{{trans('user.table.header.user_count')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th  lay-data="{field:'user_op', width:100 ,fixed: 'right', templet: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
@@ -91,6 +91,6 @@
         });
     </script>
     <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="view">History</a>
+        <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('common.table.button.detail')}}</a>
     </script>
 @endsection
