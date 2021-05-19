@@ -23,46 +23,70 @@ class ShopController extends Controller
         $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
         $keyword= $params['keyword'] ?? '';
-        $shop   = User::select(DB::raw('t_users.*, count(t_goods.id) num, t_shops_views.num view_num'))
+        $phone  = $params['phone'] ?? '';
+        $shop   = User::select(DB::raw('t_users.*,t_users_phones.*,t_users_countries.country, count(t_goods.id) num, t_shops_views.num view_num, t_recommendation_users.user_id recommend, t_recommendation_users.created_at recommended_at'))
+            ->join('users_phones', 'users_phones.user_id', '=', 'users.user_id')
+            ->join('users_countries', 'users_countries.user_id', '=', 'users.user_id')
             ->leftjoin('goods', 'goods.user_id', '=', 'users.user_id')
-            ->leftjoin('shops_views', 'shops_views.shop_id', '=', 'users.user_id')
-            ->leftjoin('shops', 'shops.user_id', '=', 'users.user_id');
+            ->leftjoin('shops_views', 'shops_views.owner', '=', 'users.user_id')
+            ->leftjoin('recommendation_users', 'recommendation_users.user_id', '=', 'users.user_id');
         if (isset($params['recommend'])) {
-            $shop = $shop->where('shops.recommend', $params['recommend']);
+            $shop = $shop->where('recommend', $params['recommend']);
         }
         if (isset($params['level'])) {
-            $shop = $shop->where('shops.level', $params['level']);
+            $shop = $shop->where('users.user_level', $params['level']);
         }
-        $shop = $this->dateTime($shop, $params, 'addHours', 'shops');
+        if (!empty($params['dateTime'])) {
+            $allDate = explode(' - ' , $params['dateTime']);
+            $start   = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->addHours(8)->toDateTimeString();
+            $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->addHours(8)->toDateTimeString();
+            $shop  = $shop->whereBetween('users.user_created_at', [$start, $end]);
+        }
         if (!empty($keyword)) {
             $shop = $shop->where(function ($query) use ($keyword){
                 $query->where('users.user_name', 'like', "%{$keyword}%")->orWhere('users.user_nick_name', 'like', "%{$keyword}%");
             });
         }
+        if (isset($params['state'])) {
+            $shop = $shop->where('users.user_verified', $params['state']);
+        }
+        if (!empty($phone)) {
+            $shop = $shop->where('users_phones.user_phone', $phone);
 
-        $sort  = !empty($params['sort']) ? $params['sort'] : 'shops.created_at';
-        $shops = $shop->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
+        }
+
+        $sort  = !empty($params['sort']) ? $params['sort'] : 'users.user_created_at';
+        $shops = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
 
         $params['query']   = $query;
         $params['appends'] = $params;
         $params['result']  = $shops;
 
+        /*dump(collect($shops)->toArray());
+        exit;*/
         return view('backstage.business.shop.index' , $params);
     }
 
     public function update(Request $request, $id)
     {
         $params = $request->all();
-        $shop   = Shop::find($id);
+        $shop   = User::find($id);
         if (!empty($params['recommend'])) {
-            $shop->recommend = $params['recommend'] == 'on';
-            $shop->recommended_at = date('Y-m-d H:i:s');
+            $result = DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->first();
+            if ($params['recommend']=='on') {
+                if (empty($result)) {
+                    $insert = DB::connection('lovbee')->table('recommendation_users')->insert([
+                        'user_id'=>$id, 'created_at'=>date("Y-m-d H:i:s")
+                    ]);
+                    empty($insert) && abort('403', '');
+                }
+            }
         }
         if (isset($params['level'])) {
-            $shop->level = $params['level'] == 'on';
+            $shop->user_level = $params['level'] == 'on';
         }
         $shop->save();
-        return [];
+        return response()->json([]);
     }
 
     public function search(Request $request)
@@ -105,7 +129,7 @@ class ShopController extends Controller
     public function view(Request $request, $id)
     {
         $params = $request->all();
-        $result = DB::connection('lovbee')->table('shops_views_logs')->where('shop_id', $id);
+        $result = DB::connection('lovbee')->table('shops_views_logs')->where('user_id', $id);
         $result = $this->dateTime($result, $params);
         $result = $result->paginate(10);
 

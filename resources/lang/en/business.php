@@ -12,8 +12,10 @@ return [
             'price'=>'Price',
             'in-stock'=>'InStock',
             'view_num'=>'ViewNum',
+            'goods_num'=>'GoodsNum',
             'view_history'=>'ViewHistory',
             'recommend'=>'Recommend',
+            'address'=>'Address',
             'recommended_at'=>'RecommendTime',
         ],
         'button'=>[

@@ -12,8 +12,10 @@ return [
             'price'=>'价格',
             'in-stock'=>'上架',
             'view_num'=>'浏览量',
+            'goods_num'=>'产品数量',
             'view_history'=>'浏览历史',
             'recommend'=>'推荐',
+            'address'=>'地址',
             'recommended_at'=>'推荐时间',
         ],
         'button'=>[

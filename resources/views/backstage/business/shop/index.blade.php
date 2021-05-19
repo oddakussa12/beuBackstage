@@ -16,6 +16,23 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('user.form.label.phone')}}:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="phone" placeholder="{{trans('user.form.label.phone')}}" id="phone" @if(!empty($phone)) value="{{$phone}}" @endif/>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('common.table.header.status')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="state">
+                            <option value="">ALL</option>
+                            <option value="1" @if(isset($state) && $state=='1') selected @endif>Normal</option>
+                            <option value="-1" @if(isset($state) && $state=='-1') selected @endif>UnReviewed</option>
+                            <option value="0" @if(isset($state) && $state=='0') selected @endif>Refuse</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
@@ -53,17 +70,18 @@
                 <th lay-data="{field:'user_id', minWidth:180}">{{trans('business.table.header.shop_id')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
+                <th lay-data="{field:'user_verified', minWidth:130}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_level', minWidth:100}">{{trans('business.table.header.vip')}}</th>
                 <th lay-data="{field:'user_avatar', minWidth:100}">{{trans('user.table.header.user_avatar')}}</th>
                 <th lay-data="{field:'user_cover', minWidth:100}">{{trans('user.table.header.user_cover')}}</th>
-                <th lay-data="{field:'num', minWidth:120}">{{trans('common.form.label.num')}}</th>
+                <th lay-data="{field:'num', minWidth:120}">{{trans('business.table.header.goods_num')}}</th>
                 <th lay-data="{field:'view_num', minWidth:120}">{{trans('business.table.header.view_num')}}</th>
                 <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
                 <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
                 <th lay-data="{field:'country', minWidth:100}">{{trans('user.form.label.user_country')}}</th>
-                <th lay-data="{field:'phone', minWidth:150}">{{trans('user.form.label.phone')}}</th>
-                <th lay-data="{field:'address', minWidth:200}">{{trans('business.table.header.recommend')}}</th>
-                <th lay-data="{field:'description', minWidth:200}">{{trans('common.table.header.description')}}</th>
+                <th lay-data="{field:'user_phone', minWidth:150}">{{trans('user.form.label.phone')}}</th>
+                <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.address')}}</th>
+                <th lay-data="{field:'user_about', minWidth:200}">{{trans('user.table.header.user_about')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
@@ -74,6 +92,7 @@
                     <td>{{$value->user_id}}</td>
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
+                    <td><span class="layui-btn layui-btn-xs @if($value->user_verified==-1) layui-btn-danger @elseif($value->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">@if($value->user_verified==-1) UnAudited @elseif($value->user_verified==0) Refuse @else Normal @endif</span></td>
                     <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td><img src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
                     <td>@if(!empty($value->user_cover))<img src="@if(stripos($value->user_cover, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_cover}}@else{{$value->user_cover}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" />@endif</td>
@@ -82,9 +101,9 @@
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
                     <td>{{$value->country}}</td>
-                    <td>{{$value->phone}}</td>
-                    <td>{{$value->address}}</td>
-                    <td>{{$value->description}}</td>
+                    <td>{{$value->user_phone}}</td>
+                    <td>{{$value->user_address}}</td>
+                    <td>{{$value->user_about}}</td>
                     <td>{{$value->user_created_at}}</td>
                     <td></td>
                 </tr>
@@ -167,7 +186,7 @@
                         area: ['95%','95%'],
                         offset: 'auto',
                         scrollbar:true,
-                        content: '/backstage/business/shop/view/'+data.id,
+                        content: '/backstage/business/shop/view/'+data.user_id,
                     });
                 }
             });
