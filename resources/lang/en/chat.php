@@ -8,6 +8,12 @@ return [
             'content'=>'Content',
             'type'=>'Type',
             'chat_time'=>'ChatTime',
+            'group_id'=>'GroupID',
+            'group_name'=>'GroupName',
+            'dissolution'=>'Dissolution',
+            'member_count'=>'MemberCount',
+            'owner'=>'Owner',
+            'create_user'=>'Originator',
         ],
     ],
     'form'=>[

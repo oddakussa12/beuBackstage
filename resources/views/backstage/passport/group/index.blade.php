@@ -4,7 +4,7 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Sort：</label>
+                    <label class="layui-form-label">{{trans('common.form.label.sort')}}：</label>
                     <div class="layui-input-inline">
                         <select name="order">
                             <option value=""  @if(empty($order))  selected @endif>CreateAt</option>
@@ -13,25 +13,25 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">CreateUser:</label>
+                    <label class="layui-form-label">{{trans('chat.table.header.owner')}}:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="owner_id" id="owner_id"  @if(!empty($owner_id)) value="{{$owner_id}}" @endif />
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Name:</label>
+                    <label class="layui-form-label">{{trans('chat.table.header.group_name')}}:</label>
                     <div class="layui-input-inline" >
                         <input class="layui-input" name="name" id="name"  @if(!empty($name)) value="{{$name}}" @endif />
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">ID:</label>
+                    <label class="layui-form-label">{{trans('chat.table.header.group_id')}}:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="id" id="id"  @if(!empty($id)) value="{{$id}}" @endif />
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label" >CreateAt:</label>
+                    <label class="layui-form-label" >{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline" style="width: 300px;">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
@@ -44,14 +44,14 @@
         <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
-                <th  lay-data="{field:'id', minWidth:180}">ID</th>
-                <th  lay-data="{field:'avatar', minWidth:200}">Avatar</th>
-                <th  lay-data="{field:'name', minWidth:200}">Name</th>
-                <th  lay-data="{field:'is_delete', minWidth:100}">Dissolution</th>
-                <th  lay-data="{field:'member', minWidth:120}">MemberCount</th>
-                <th  lay-data="{field:'administrator', minWidth:150}">Owner</th>
-                <th  lay-data="{field:'created_at', minWidth:160}">CreateAt</th>
-                <th  lay-data="{field:'user_id', minWidth:100}">CreateUser</th>
+                <th  lay-data="{field:'id', minWidth:180}">{{trans('chat.table.header.group_id')}}</th>
+                <th  lay-data="{field:'avatar', minWidth:200}">{{trans('user.table.header.user_avatar')}}</th>
+                <th  lay-data="{field:'name', minWidth:200}">{{trans('chat.table.header.group_name')}}</th>
+                <th  lay-data="{field:'is_delete', minWidth:100}">{{trans('chat.table.header.dissolution')}}</th>
+                <th  lay-data="{field:'member', minWidth:120}">{{trans('chat.table.header.member_count')}}</th>
+                <th  lay-data="{field:'administrator', minWidth:150}">{{trans('chat.table.header.owner')}}</th>
+                <th  lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
+                <th  lay-data="{field:'user_id', minWidth:100}">{{trans('chat.table.header.create_user')}}</th>
                 <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
