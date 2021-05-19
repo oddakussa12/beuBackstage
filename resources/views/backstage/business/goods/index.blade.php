@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <style>
-        .layui-form-label {width: 90px;}
          table td { height: 40px; line-height: 40px;}
         table td img { max-height: 30px; min-width: 40px; }
         .layer-alert-video .layui-layer-content img {width: 100%;}

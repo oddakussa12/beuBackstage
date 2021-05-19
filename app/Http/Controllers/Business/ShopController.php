@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ShopController extends Controller
 {
@@ -70,7 +71,6 @@ class ShopController extends Controller
     public function update(Request $request, $id)
     {
         $params = $request->all();
-        $shop   = User::find($id);
         if (!empty($params['recommend'])) {
             $result = DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->first();
             if ($params['recommend']=='on') {
@@ -78,14 +78,16 @@ class ShopController extends Controller
                     $insert = DB::connection('lovbee')->table('recommendation_users')->insert([
                         'user_id'=>$id, 'created_at'=>date("Y-m-d H:i:s")
                     ]);
-                    empty($insert) && abort('403', '');
+                    empty($insert) && abort('403', trans('common.ajax.result.prompt.fail'));
                 }
             }
         }
         if (isset($params['level'])) {
-            $shop->user_level = $params['level'] == 'on';
+            $result = User::where('user_id', $id)->update(['user_level'=>$params['level']=='on']);
         }
-        $shop->save();
+        if (isset($params['audit'])) {
+            $result = User::where('user_id', $id)->update(['user_verified'=>$params['audit']=='pass', 'user_verified_at'=>date('Y-m-d H:i:s')]);
+        }
         return response()->json([]);
     }
 

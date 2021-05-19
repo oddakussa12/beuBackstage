@@ -24,6 +24,7 @@ return [
         'result'=>[
             'prompt'=>[
                 'delete'=>'successfully deleted',
+                'fail'=>'Operation failed',
                 'update'=>'update completed',
                 'add'=>'Added successfully',
                 'no_permission'=>'No permission to operate!',

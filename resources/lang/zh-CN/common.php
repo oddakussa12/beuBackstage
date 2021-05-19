@@ -23,6 +23,7 @@ return [
     'ajax'=>[
         'result'=>[
             'prompt'=>[
+                'fail'=>'操作失败',
                 'delete'=>'删除成功',
                 'update'=>'更新成功',
                 'add'=>'添加成功',

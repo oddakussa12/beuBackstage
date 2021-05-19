@@ -1,7 +1,6 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <style>
-        .layui-form-label {width: 90px;}
         table td { height: 40px; line-height: 40px;}
         table td img { max-height: 30px; min-width: 40px; }
         .layer-alert-video .layui-layer-content img {width: 100%;}
@@ -67,13 +66,13 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'user_id', minWidth:180}">{{trans('business.table.header.shop_id')}}</th>
+                <th lay-data="{field:'user_id', minWidth:130}">{{trans('business.table.header.shop_id')}}</th>
+                <th lay-data="{field:'user_avatar', minWidth:80}">{{trans('user.table.header.user_avatar')}}</th>
+                <th lay-data="{field:'user_cover', minWidth:80}">{{trans('user.table.header.user_cover')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
-                <th lay-data="{field:'user_verified', minWidth:130}">{{trans('common.table.header.status')}}</th>
+                <th lay-data="{field:'user_verified', minWidth:230}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_level', minWidth:100}">{{trans('business.table.header.vip')}}</th>
-                <th lay-data="{field:'user_avatar', minWidth:100}">{{trans('user.table.header.user_avatar')}}</th>
-                <th lay-data="{field:'user_cover', minWidth:100}">{{trans('user.table.header.user_cover')}}</th>
                 <th lay-data="{field:'num', minWidth:120}">{{trans('business.table.header.goods_num')}}</th>
                 <th lay-data="{field:'view_num', minWidth:120}">{{trans('business.table.header.view_num')}}</th>
                 <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
@@ -90,15 +89,22 @@
             @foreach($result as $value)
                 <tr>
                     <td>{{$value->user_id}}</td>
-                    <td>{{$value->user_name}}</td>
-                    <td>{{$value->user_nick_name}}</td>
-                    <td><span class="layui-btn layui-btn-xs @if($value->user_verified==-1) layui-btn-danger @elseif($value->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">@if($value->user_verified==-1) UnAudited @elseif($value->user_verified==0) Refuse @else Normal @endif</span></td>
-                    <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td><img src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
                     <td>@if(!empty($value->user_cover))<img src="@if(stripos($value->user_cover, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_cover}}@else{{$value->user_cover}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" />@endif</td>
+                    <td>{{$value->user_name}}</td>
+                    <td>{{$value->user_nick_name}}</td>
+                    <td><span class="layui-btn layui-btn-xs @if($value->user_verified==-1) layui-btn-danger @elseif($value->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">
+                            @if($value->user_verified==1) Normal @elseif($value->user_verified==0) Refuse @else UnAudited @endif
+                        </span>
+                        @if($value->user_verified!=1)
+                            <input type="radio" name="audit" lay-filter="radio" value="pass" title="Pass">
+                            @if($value->user_verified!=0)<input type="radio" name="audit" lay-filter="radio" value="refuse" title="Refuse">@endif
+                        @endif
+                    </td>
+                    <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>@if(!empty($value->num)){{$value->num}}@else 0 @endif</td>
                     <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
-                    <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
+                    <td><input type="checkbox" @if($value->recommend>0) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
                     <td>{{$value->country}}</td>
                     <td>{{$value->user_phone}}</td>
@@ -144,25 +150,35 @@
                     format:'YYYY-MM-DD HH:ss:mm',
                 },
             });
+            form.on('radio(radio)', function(data){
+                let level  = data.value;
+                const name = $(data.elem).attr('name');
+                let params = '{"' + name + '":"'+level+'"}';
+                data.id    = data.othis.parents('tr').find("td :first").text();
+                request(data, params);
+            });
             form.on('switch(switchAll)', function(data){
                 let params;
                 const checked = data.elem.checked;
-                const id = data.othis.parents('tr').find("td :first").text();
                 data.elem.checked = !checked;
-                @if(!Auth::user()->can('business::shop.update'))
-                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
-                form.render();
-                return false;
-                @endif;
+                data.id = data.othis.parents('tr').find("td :first").text();
                 const name = $(data.elem).attr('name');
                 if(checked) {
                     params = '{"' + name + '":"on"}';
                 }else {
                     params = '{"' + name + '":"off"}';
                 }
+                request(data, params, checked)
+            });
+            function request(data, params, checked=false) {
+                @if(!Auth::user()->can('business::shop.update'))
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
+                    form.render();
+                    return false;
+                @endif;
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/business/shop')}}/"+id , JSON.parse(params) , function(res){
+                    common.ajax("{{url('/backstage/business/shop')}}/"+data.id, JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
@@ -174,7 +190,8 @@
                         },100);
                     });
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
-            });
+            }
+
             table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
