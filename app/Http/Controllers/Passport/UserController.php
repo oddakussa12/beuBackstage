@@ -115,7 +115,12 @@ class UserController extends Controller
     {
         $params   = $request->all();
         $userShop = $params['value'];
-        $data     = ['user_id'=>$userId, 'state'=>$userShop, 'operator' => auth()->user()->admin_username];
+        if (!empty($userShop)) {
+            $result = User::where('user_id', $userId)->update(['user_shop'=>1]);
+            return response()->json(['result'=>$result ? 'success' : 'created failed']);
+        }
+
+        /*$data     = ['user_id'=>$userId, 'state'=>$userShop, 'operator' => auth()->user()->admin_username];
         if(!empty($userShop)) {
             $result = $this->httpRequest('api/backstage/storeShop', $data);
             if (!empty($result)) {
@@ -123,7 +128,7 @@ class UserController extends Controller
             } else {
                 return response()->json(['result' => 'created failed']);
             }
-        }
+        }*/
         return response()->json(['result' => 'shop already existed']);
     }
 
