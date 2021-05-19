@@ -46,15 +46,15 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'chat_msg_uid', minWidth:180}">MessageId</th>
-                <th lay-data="{field:'type', minWidth:180, hide:true}">Type</th>
+                <th lay-data="{field:'chat_msg_uid', minWidth:180}">{{trans('chat.table.header.message_id')}}</th>
+                <th lay-data="{field:'type', minWidth:180, hide:true}">{{trans('chat.table.header.type')}}</th>
                 <th lay-data="{field:'audio', minWidth:180, hide:true}">Audio</th>
-                <th lay-data="{field:'from_name', minWidth:180}">FromUser</th>
-                <th lay-data="{field:'to_name', minWidth:180}">ToUser</th>
-                <th lay-data="{field:'message_content', minWidth:180}">Content</th>
+                <th lay-data="{field:'from_name', minWidth:180}">{{trans('chat.table.header.from_user')}}</th>
+                <th lay-data="{field:'to_name', minWidth:180}">{{trans('chat.table.header.to_user')}}</th>
+                <th lay-data="{field:'message_content', minWidth:180}">{{trans('chat.table.header.content')}}</th>
                 <th lay-data="{field:'video_url', minWidth:180, hide:true}">VideoUrl</th>
-                <th lay-data="{field:'chat_msg_type', minWidth:180}">Type</th>
-                <th lay-data="{field:'created_at', minWidth:160}">ChatTime</th>
+                <th lay-data="{field:'chat_msg_type', minWidth:180}">{{trans('chat.table.header.type')}}</th>
+                <th lay-data="{field:'created_at', minWidth:160}">{{trans('chat.table.header.chat_time')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
@@ -266,6 +266,6 @@
         }
     </script>
     <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="detail">Detail</a>
+        <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
     </script>
 @endsection
