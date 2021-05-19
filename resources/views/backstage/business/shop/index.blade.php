@@ -156,6 +156,7 @@
                 let params = '{"' + name + '":"'+level+'"}';
                 data.id    = data.othis.parents('tr').find("td :first").text();
                 request(data, params);
+                location.reload();
             });
             form.on('switch(switchAll)', function(data){
                 let params;
@@ -168,7 +169,7 @@
                 }else {
                     params = '{"' + name + '":"off"}';
                 }
-                request(data, params, checked)
+                request(data, params, checked);
             });
             function request(data, params, checked=false) {
                 @if(!Auth::user()->can('business::shop.update'))
