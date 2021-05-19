@@ -157,8 +157,7 @@
                 const name = $(data.elem).attr('name');
                 let params = '{"' + name + '":"'+level+'"}';
                 data.id    = data.othis.parents('tr').find("td :first").text();
-                request(data, params);
-                location.reload();
+                request(data, params, name);
             });
             form.on('switch(switchAll)', function(data){
                 let params;
@@ -171,9 +170,9 @@
                 }else {
                     params = '{"' + name + '":"off"}';
                 }
-                request(data, params, checked);
+                request(data, params, name, checked);
             });
-            function request(data, params, checked=false) {
+            function request(data, params, name, checked=false) {
                 @if(!Auth::user()->can('business::shop.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
                     form.render();
@@ -184,6 +183,7 @@
                     common.ajax("{{url('/backstage/business/shop')}}/"+data.id, JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
+                        name==='audit' && location.reload();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                     } , 'put' , function (event,xhr,options,exc) {
                         setTimeout(function(){
