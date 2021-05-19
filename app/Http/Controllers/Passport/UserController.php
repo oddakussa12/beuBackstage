@@ -116,14 +116,13 @@ class UserController extends Controller
         $params   = $request->all();
         $userShop = $params['value'];
         $data     = ['user_id'=>$userId, 'state'=>$userShop, 'operator' => auth()->user()->admin_username];
-
         if(!empty($userShop)) {
-           $result = $this->httpRequest('api/backstage/storeShop', $data);
-           if (!empty($result)) {
-               return response()->json(['result' => 'success']);
-           } else {
-               return response()->json(['result' => 'created failed']);
-           }
+            $result = $this->httpRequest('api/backstage/storeShop', $data);
+            if (!empty($result)) {
+                return response()->json(['result' => 'success']);
+            } else {
+                return response()->json(['result' => 'created failed']);
+            }
         }
         return response()->json(['result' => 'shop already existed']);
     }
