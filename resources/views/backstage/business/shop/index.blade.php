@@ -66,21 +66,22 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'user_id', minWidth:130}">{{trans('business.table.header.shop_id')}}</th>
-                <th lay-data="{field:'user_avatar', minWidth:80}">{{trans('user.table.header.user_avatar')}}</th>
+                <th lay-data="{field:'user_id', minWidth:130, fixed:'left'}">{{trans('business.table.header.shop_id')}}</th>
+                <th lay-data="{field:'user_avatar', minWidth:80, fixed:'left'}">{{trans('user.table.header.user_avatar')}}</th>
                 <th lay-data="{field:'user_cover', minWidth:80}">{{trans('user.table.header.user_cover')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
                 <th lay-data="{field:'user_verified', minWidth:230}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_level', minWidth:100}">{{trans('business.table.header.vip')}}</th>
                 <th lay-data="{field:'num', minWidth:120}">{{trans('business.table.header.goods_num')}}</th>
-                <th lay-data="{field:'view_num', minWidth:120}">{{trans('business.table.header.view_num')}}</th>
-                <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
+                <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
+                <th lay-data="{field:'recommend', minWidth:100}">{{trans('business.table.header.recommend')}}</th>
                 <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
-                <th lay-data="{field:'country', minWidth:100}">{{trans('user.form.label.user_country')}}</th>
+                <th lay-data="{field:'country', minWidth:80}">{{trans('user.form.label.user_country')}}</th>
                 <th lay-data="{field:'user_phone', minWidth:150}">{{trans('user.form.label.phone')}}</th>
                 <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.address')}}</th>
                 <th lay-data="{field:'user_about', minWidth:200}">{{trans('user.table.header.user_about')}}</th>
+                <th lay-data="{field:'user_verified_at', minWidth:160}">{{trans('user.table.header.user_audit_time')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
@@ -110,6 +111,7 @@
                     <td>{{$value->user_phone}}</td>
                     <td>{{$value->user_address}}</td>
                     <td>{{$value->user_about}}</td>
+                    <td>@if($value->user_verified_at!='0000-00-00 00:00:00'){{$value->user_verified_at}}@endif</td>
                     <td>{{$value->user_created_at}}</td>
                     <td></td>
                 </tr>

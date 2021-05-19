@@ -29,6 +29,7 @@ return [
             'user_activation'=>'Activation',
             'user_time' =>'Time',
             'user_friend_time'=>'Add friend time',
+            'user_audit_time'=>'AuditedAt',
             'user_op'=>'Operation',
         ],
         'button'=>[

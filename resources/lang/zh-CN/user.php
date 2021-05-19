@@ -28,6 +28,7 @@ return [
             'last_active_ip'=>'最近活跃IP',
             'user_activation'=>'激活',
             'user_time' =>'时间',
+            'user_audit_time'=>'审核时间',
             'user_friend_time'=>'加好友时间',
             'user_op'=>'操作',
         ],
