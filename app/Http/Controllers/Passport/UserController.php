@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Passport;
 
 use App\Models\Passport\User;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Exports\UsersExport;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +12,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UsersFriendStatusExport;
-use GuzzleHttp\Exception\GuzzleException;
 use App\Repositories\Contracts\UserRepository;
 use Illuminate\Database\Concerns\BuildsQueries;
 use App\Exports\UsersFriendYesterdayStatusExport;

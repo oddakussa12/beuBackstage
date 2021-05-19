@@ -4,13 +4,13 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Name:</label>
+                    <label class="layui-form-label">{{trans('common.form.label.name')}}:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="name" id="name" value="@if(!empty($name)){{$name}}@endif" />
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Category:</label>
+                    <label class="layui-form-label">{{trans('common.table.header.category')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="category">
                             <option value="">All</option>
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Sort:</label>
+                    <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
                             <option value="">All</option>
@@ -33,7 +33,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Recommend:</label>
+                    <label class="layui-form-label">{{trans('business.table.header.recommend')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="recommend">
                             <option value="">All</option>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Hot:</label>
+                    <label class="layui-form-label">{{trans('common.table.header.hot')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="hot">
                             <option value="">All</option>
@@ -61,19 +61,19 @@
         <table class="layui-table"   lay-filter="table" id="table" >
             <thead>
             <tr>
-                <th lay-data="{field:'id', width:80 , fixed: 'left'}">ID</th>
-                <th lay-data="{field:'name', minWidth:100,sort:true, fixed: 'left'}">Name</th>
-                <th lay-data="{field:'remark', width:200,edit: 'text'}">Remark</th>
-                <th lay-data="{field:'cover', width:80}">Image</th>
-                <th lay-data="{field:'recommendation', width:120}">Recommend</th>
-                <th lay-data="{field:'category', minWidth:120}">Category</th>
+                <th lay-data="{field:'id', width:80 , fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
+                <th lay-data="{field:'name', minWidth:100,sort:true, fixed: 'left'}">{{trans('common.table.header.name')}}</th>
+                <th lay-data="{field:'remark', width:200,edit: 'text'}">{{trans('common.table.header.remark')}}</th>
+                <th lay-data="{field:'cover', width:80}">{{trans('user.table.header.user_avatar')}}</th>
+                <th lay-data="{field:'recommendation', width:120}">{{trans('business.table.header.recommend')}}</th>
+                <th lay-data="{field:'category', minWidth:120}">{{trans('common.table.header.category')}}</th>
                 <th lay-data="{field:'camera', width:80}">Camera</th>
-                <th lay-data="{field:'hot', width:100}">Hot</th>
-                <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">Sort</th>
-                <th lay-data="{field:'is_delete', width:100}">Status</th>
+                <th lay-data="{field:'hot', width:100}">{{trans('common.table.header.hot')}}</th>
+                <th lay-data="{field:'sort', width:100,edit: 'text',sort:true}">{{trans('common.form.label.sort')}}</th>
+                <th lay-data="{field:'is_delete', width:100}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'url', minWidth:360}">URL</th>
                 <th lay-data="{field:'hash', width:280}">Hash(MD5)</th>
-                <th lay-data="{field:'created_at', width:160}">Created_at</th>
+                <th lay-data="{field:'created_at', width:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
 
             </tr>

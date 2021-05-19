@@ -43,8 +43,12 @@ return [
         ],
         'header'=>[
             'status'=>'Status',
+            'name'=>'Name',
+            'remark'=>'Remark',
+            'hot'=>'Hot',
             'op'=>'operate',
             'image'=>'Image',
+            'recommend'=>'Recommend',
             'description'=>'Description',
             'created_at'=>'CreatedAt',
             'updated_at'=>'UpdatedAt',
@@ -68,6 +72,8 @@ return [
             'blank'=>'Please enter content',
         ],
         'label'=>[
+            'name'=>'Name',
+            'remark'=>'Remark',
             'keyword'=>'Keyword',
             'num'=>'Num',
             'date'=>'Date',

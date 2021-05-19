@@ -9,7 +9,7 @@
         <form class="layui-form layui-tab-content">
             {{ csrf_field() }}
             <div class="layui-form-item">
-                <label class="layui-form-label">Category：</label>
+                <label class="layui-form-label">{{trans('common.table.header.category')}}：</label>
                 <div class="layui-input-block">
                     <input id="id" name="id" type="hidden" value="{{$data['id']}}" />
                     <select  name="category" style="width: 100px;">
@@ -30,7 +30,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Recommendation：</label>
+                    <label class="layui-form-label">{{trans('common.table.header.recommend')}}：</label>
                     <div class="layui-input-block">
                         <select  name="recommendation" >
                             <option value="0" @if($data->recommendation==0) selected @endif>NO</option>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Status：</label>
+                    <label class="layui-form-label">{{trans('common.table.header.status')}}：</label>
                     <div class="layui-input-block">
                         <select  name="is_delete" >
                             <option value="1" @if($data->is_delete==1) selected @endif>ONLINE</option>
@@ -50,14 +50,14 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Name：</label>
+                    <label class="layui-form-label">{{trans('common.form.label.name')}}：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="hash" name="hash" value="{{$data->hash}}">
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="{{$data->name}}">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Hotting：</label>
+                    <label class="layui-form-label">{{trans('common.table.header.hot')}}：</label>
                     <div class="layui-input-block">
                         <select  name="hot" >
                             <option value="0" @if($data->hot==0) selected @endif>否</option>
@@ -68,7 +68,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Image：</label>
+                    <label class="layui-form-label">{{trans('common.table.header.image')}}：</label>
                     <div class="layui-input-block">
                         <input type="hidden" id="cover" name="cover" value="{{$data->cover}}" />
                         <button type="button" id="upload" name="upload" class="layui-btn"><i class="layui-icon"></i>Upload Image</button>
@@ -102,12 +102,6 @@
 <script src="/js/bundle.js"></script>
 @section('footerScripts')
     @parent
-    <script type="text/html" id="operateTpl">
-        <div class="layui-table-cell laytable-cell-1-6">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
-        </div>
-    </script>
-
     <script>
         //内容修改弹窗
         layui.config({
@@ -120,7 +114,6 @@
             var form = layui.form,
                 layer = layui.layer,
                 loadBar = layui.loadBar,
-                laydate = layui.laydate,
                 common = layui.common,
                 carousel = layui.carousel,
                 $=layui.jquery,
@@ -131,28 +124,15 @@
                 ,height: '600px'
                 ,interval: 1000
             });
-            //formSelects.render('admin_roles');
-            //执行一个laydate实例
-            lay('.time').each(function(){
-                laydate.render({
-                    elem: this, //指定元素
-                    type: 'datetime',
-                    calendar: true
-                });
-            });
-
             form.on('submit(admin_form)', function(data){
                 let params = {};
                 $.each(data.field , function (k ,v) {
-                    if(v==''||v==undefined) {return true;}
+                    if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
-                console.log(params);
-                console.log('ajax start');
                 common.ajax("{{url('/backstage/props/props')}}/"+params.id, params , function(res){
                     parent.location.reload();
                 } , 'patch');
-                console.log('end');
                 return false;
             });
             $('#upload').each(function(){
@@ -164,7 +144,6 @@
                 uploads(btn, 'bundle');
             });
             function uploads(btn, type=''){
-                let fileName = '';
                 upload.render({
                     elem: btn //绑定元素
                     //, url: 'https://upload-as0.qiniup.com/' //上传接口
@@ -175,12 +154,8 @@
                     ,choose: function (obj) {
                         let files = obj.pushFile();
                         obj.preview(function (index, file, result) {
-                            console.log(file);
                             browserMD5File(file, function (err, md5) {
-                                if (type!=='') {
-                                    $("#hash").val(md5);
-                                }
-                                console.log('md5:'+md5); // 97027eb624f85892c69c4bcec8ab0f11
+                                type!=='' && $("#hash").val(md5);
                             });
                         })
                     }, data: {
@@ -191,7 +166,6 @@
                         loadBar.start();
                     }
                     , done: function (res, index, upload) {
-                        console.log(res);
                         let param = {};
                         param.image = res.name;
                         let file = "https://qneventsource.mmantou.cn/"+res.name;

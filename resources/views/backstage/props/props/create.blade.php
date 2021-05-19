@@ -9,7 +9,7 @@
             {{ csrf_field() }}
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Category：</label>
+                    <label class="layui-form-label">{{trans('common.table.header.category')}}：</label>
                     <div class="layui-input-inline">
                         <select  name="category">
                             @foreach($categories as $category)
@@ -30,7 +30,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Recommendation：</label>
+                    <label class="layui-form-label">{{trans('common.table.header.recommend')}}：</label>
                     <div class="layui-input-inline">
                         <select  name="recommendation" >
                             <option value="0">NO</option>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Status：</label>
+                    <label class="layui-form-label">{{trans('common.table.header.status')}}：</label>
                     <div class="layui-input-inline">
                         <select  name="is_delete" >
                             <option value="1">ONLINE</option>
@@ -50,14 +50,14 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Name：</label>
+                    <label class="layui-form-label">{{trans('common.form.label.name')}}：</label>
                     <div class="layui-input-inline">
                         <input type="hidden" id="hash" name="hash" value="">
                         <input type="text" id="name" name="name" required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Hotting：</label>
+                    <label class="layui-form-label">{{trans('common.table.header.hot')}}：</label>
                     <div class="layui-input-inline">
                         <select  name="hot" >
                             <option value="0">NO</option>
@@ -68,7 +68,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Image：</label>
+                    <label class="layui-form-label">{{trans('common.table.header.image')}}：</label>
                     <div class="layui-input-inline">
                         <input type="hidden" id="cover" name="cover" />
                         <button type="button" id="upload" name="upload" class="layui-btn"><i class="layui-icon"></i>Upload Image</button>

@@ -14,7 +14,7 @@ return [
             'view_num'=>'浏览量',
             'goods_num'=>'产品数量',
             'view_history'=>'浏览历史',
-            'recommend'=>'推荐',
+            'recommend'=>'是否推荐',
             'address'=>'地址',
             'recommended_at'=>'推荐时间',
         ],
