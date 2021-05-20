@@ -21,6 +21,12 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('business.table.header.goods_id')}}:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" style="width: 300px" name="goods_id" placeholder="{{trans('business.table.header.goods_id')}}" id="goods_id" @if(!empty($goods_id)) value="{{$goods_id}}" @endif/>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">

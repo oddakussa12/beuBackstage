@@ -30,6 +30,9 @@ class GoodsController extends Controller
         }
         $goods = $this->dateTime($goods, $params, 'addHours', 'goods');
 
+        if (!empty($params['goods_id'])) {
+            $goods = $goods->where('goods.id', $params['goods_id']);
+        }
         if (!empty($keyword)) {
             $goods = $goods->where('goods.name', 'like', "%{$keyword}%");
         }

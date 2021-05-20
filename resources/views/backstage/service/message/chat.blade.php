@@ -11,21 +11,31 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Sender:</label>
+                    <label class="layui-form-label">{{trans('chat.table.header.from_user')}}:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="sender" placeholder="user name" id="sender" @if(!empty($sender)) value="{{$sender}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">ReceivedBy:</label>
+                    <label class="layui-form-label">{{trans('chat.table.header.to_user')}}:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="received_by" placeholder="user name" id="received_by" @if(!empty($received_by)) value="{{$received_by}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">CreatedAt:</label>
+                    <label class="layui-form-label">{{trans('common.form.label.type')}}:</label>
                     <div class="layui-input-inline">
-                        <select  name="sort">
+                        <select name="type">
+                            <option value="">ALL</option>
+                            <option value="shop" @if(isset($type) && $type=='shop') selected @endif>Shop</option>
+                            <option value="user"  @if(isset($type) && $type=='user')  selected @endif>User</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
+                    <div class="layui-input-inline">
+                        <select name="sort">
                             <option value="DESC" @if(isset($sort) && $sort=='DESC') selected @endif>DESC</option>
                             <option value="ASC"  @if(isset($sort) && $sort=='ASC')  selected @endif>ASC</option>
                         </select>
@@ -46,7 +56,7 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'chat_msg_uid', minWidth:180}">{{trans('chat.table.header.message_id')}}</th>
+                <th lay-data="{field:'chat_msg_uid', minWidth:200}">{{trans('chat.table.header.message_id')}}</th>
                 <th lay-data="{field:'type', minWidth:180, hide:true}">{{trans('chat.table.header.type')}}</th>
                 <th lay-data="{field:'audio', minWidth:180, hide:true}">Audio</th>
                 <th lay-data="{field:'from_name', minWidth:180}">{{trans('chat.table.header.from_user')}}</th>
@@ -64,12 +74,18 @@
                     <td>{{$value->chat_msg_uid}}</td>
                     <td>{{$value->chat_msg_type}}</td>
                     <td>{{$value->message_content}}</td>
-                    <td>@if(!empty($value->from)){{$value->from['user_nick_name']}}@endif</td>
-                    <td>@if(!empty($value->to)){{$value->to['user_nick_name']}}@endif</td>
-
+                    <td>@if(!empty($value->from))
+                            @if(!empty($value->chat_from_type)) <a target="_blank" style="color: #FFB800" href="{{url('/backstage/business/shop')}}?keyword={{$value->from['user_nick_name']}}">{{$value->from['user_nick_name']}}</a>@else {{$value->from['user_nick_name']}} @endif
+                        @endif
+                    </td>
+                    <td>@if(!empty($value->to))
+                            @if(!empty($value->chat_to_type)) <a target="_blank" style="color: #FFB800" href="{{url('/backstage/business/shop')}}?keyword={{$value->to['user_nick_name']}}">{{$value->to['user_nick_name']}}</a>@else {{$value->to['user_nick_name']}} @endif
+                        @endif</td>
                     <td>
                         @if($value->chat_msg_type=='RC:ImgMsg') <img src="{{$value->message_content}}">
                         @elseif($value->chat_msg_type=='RC:TxtMsg') {!! $value->message_content !!}
+                        @elseif($value->chat_msg_type=='Helloo:GoodsMsg')
+                            <a target="_blank" style="color: #5FB878" href="{{url('/backstage/business/goods')}}?goods_id={{$value->message_content}}">{{$value->message_content}}</a>
                         @elseif($value->chat_msg_type=='Helloo:VoiceMsg')
                             @if($value->suffix=='wav')
                                 <audio style="width:240px; height: 30px;" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
@@ -84,7 +100,9 @@
                     <td>@if(!empty($value->video_url)){{$value->video_url}}@endif</td>
                     <td><span class="layui-btn layui-btn-xs @if($value->chat_msg_type=='RC:ImgMsg') layui-btn-danger
                     @elseif($value->chat_msg_type=='RC:TxtMsg') layui-btn-warm
-                    @elseif($value->chat_msg_type=='Helloo:VoiceMsg') layui-btn-normal@else @endif">{{$value->chat_msg_type}} @if(!empty($value->suffix)){{$value->suffix}}@endif</span></td>
+                    @elseif($value->chat_msg_type=='Helloo:VoiceMsg') layui-btn-normal
+                    @elseif($value->chat_msg_type=='Helloo:GoodsMsg') layui-btn-checked
+                    @else @endif">{{$value->chat_msg_type}} @if(!empty($value->suffix)){{$value->suffix}}@endif</span></td>
                     <td>{{$value->chat_created_at}}</td>
                     <td></td>
                 </tr>

@@ -182,6 +182,9 @@ class MessageController extends Controller
     public function chatMessage(Request $request)
     {
         $params = $request->all();
+        $params['appends']  = $params;
+        $params['query']    = empty($uri['query']) ? "" : $uri['query'];
+
         $params['dateTime'] = $params['dateTime'] ?? date("Y-m");
         $month  = date('Ym', strtotime($params['dateTime']));
         $sort   = !empty($params['sort']) && $params['sort']=='ASC' ? 'orderBy' : 'orderByDesc';
@@ -194,20 +197,33 @@ class MessageController extends Controller
         $vTable = Schema::connection('lovbee')->hasTable($vTable) ? $vTable : 'ry_video_messages';
 
         $chat   = DB::connection('lovbee')->table($cTable);
-
-
-        $senderId  = '';
-        $receiveId = '';
+        $senderId = $receiveId = '';
+        if (!empty($params['sender'])) {
+            $sender  = User::where('user_name', $params['sender'])->orWhere('user_nick_name', $params['sender'])->first();
+            $senderId = !empty($sender->user_id) ? $sender->user_id : '';
+        }
+        if (!empty($params['received_by'])) {
+            $receive   = User::where('user_name', $params['received_by'])->orWhere('user_nick_name', $params['received_by'])->first();
+            $receiveId = !empty($receive->user_id) ? $receive->user_id : '';
+        }
 
         if ($senderId && $receiveId) {
-            $chat = $chat->where(['chat_from_id'=>$senderId, 'chat_to_id'=>$receiveId])->orWhere(['chat_from_id'=>$receiveId, 'chat_to_id'=>$senderId]);
+            $chat = $chat->where(['chat_from_id'=>$senderId, 'chat_to_id'=>$receiveId])->orWhere(function($query) use($receiveId, $senderId) {
+                $query->where(['chat_from_id'=>$receiveId, 'chat_to_id'=>$senderId]);
+            });
         } elseif ($senderId) {
             $chat = $chat->where('chat_from_id', $senderId)->orWhere('chat_to_id', $senderId);
         } elseif ($receiveId) {
             $chat = $chat->where('chat_from_id', $receiveId)->orWhere('chat_to_id', $receiveId);
         }
+        if (isset($params['type'])) {
+            $type = $params['type']=='shop';
+            $chat = $chat->where(function($query) use($type) {
+                $query->where('chat_from_type', $type)->orWhere('chat_to_type', $type);
+            });
+        }
 
-        $chat   = $chat->$sort("$cTable.chat_created_at")->paginate(10);
+        $chat   = $chat->$sort("chat_created_at")->paginate(10);
         $msgIds = $chat->pluck('chat_msg_uid')->toArray();
 
 
