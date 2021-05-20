@@ -2,6 +2,7 @@
 return [
     'table' => [
         'header'=>[
+            'chat_mode'=>'聊天方式',
             'message_id'=>'消息编号',
             'from_user'=>'发送人',
             'to_user'=>'接收人',

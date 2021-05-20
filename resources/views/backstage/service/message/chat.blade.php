@@ -11,6 +11,15 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('chat.table.header.chat_mode')}}:</label>
+                    <div class="layui-input-inline">
+                        <select name="mode">
+                            <option value="">BothWay</option>
+                            <option value="1" @if(!empty($mode)) selected @endif>OneWay</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('chat.table.header.from_user')}}:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="sender" placeholder="user name" id="sender" @if(!empty($sender)) value="{{$sender}}" @endif/>

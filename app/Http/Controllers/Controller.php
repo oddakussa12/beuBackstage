@@ -17,13 +17,13 @@ class Controller extends BaseController
 
     /**
      * @param $url
-     * @param $data
+     * @param array $data
      * @param string $method
      * @param bool $json
      * @return bool
      * HTTP Request
      */
-    protected function httpRequest($url, $data=array(), $method='POST', $json=false)
+    protected function httpRequest($url, array $data=array(), string $method='POST', bool $json=false)
     {
         try {
             $client = new Client();

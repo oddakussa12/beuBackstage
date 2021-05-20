@@ -182,13 +182,14 @@ class MessageController extends Controller
     public function chatMessage(Request $request)
     {
         $params = $request->all();
+        $uri    = parse_url($request->server('REQUEST_URI'));
         $params['appends']  = $params;
         $params['query']    = empty($uri['query']) ? "" : $uri['query'];
 
         $params['dateTime'] = $params['dateTime'] ?? date("Y-m");
         $month  = date('Ym', strtotime($params['dateTime']));
         $sort   = !empty($params['sort']) && $params['sort']=='ASC' ? 'orderBy' : 'orderByDesc';
-
+        $mode   = $params['mode'] ?? '';
         $mTable = 'ry_messages_'.$month;
         $cTable = 'ry_chats_'.$month;
         $vTable = 'ry_video_messages_'.$month;
@@ -208,13 +209,18 @@ class MessageController extends Controller
         }
 
         if ($senderId && $receiveId) {
-            $chat = $chat->where(['chat_from_id'=>$senderId, 'chat_to_id'=>$receiveId])->orWhere(function($query) use($receiveId, $senderId) {
-                $query->where(['chat_from_id'=>$receiveId, 'chat_to_id'=>$senderId]);
-            });
+            $chat = $chat->where(['chat_from_id'=>$senderId, 'chat_to_id'=>$receiveId]);
+            if (empty($mode)) {
+                $chat = $chat->orWhere(function($query) use($receiveId, $senderId) {
+                    $query->where(['chat_from_id'=>$receiveId, 'chat_to_id'=>$senderId]);
+                });
+            }
         } elseif ($senderId) {
-            $chat = $chat->where('chat_from_id', $senderId)->orWhere('chat_to_id', $senderId);
+            $chat = $chat->where('chat_from_id', $senderId);
+            empty($mode) && $chat = $chat->orWhere('chat_to_id', $senderId);
         } elseif ($receiveId) {
-            $chat = $chat->where('chat_from_id', $receiveId)->orWhere('chat_to_id', $receiveId);
+            $chat = $chat->where('chat_from_id', $receiveId);
+            empty($mode) && $chat = $chat->orWhere('chat_to_id', $receiveId);
         }
         if (isset($params['type'])) {
             $type = $params['type']=='shop';
@@ -271,6 +277,61 @@ class MessageController extends Controller
 
         $params['result'] = $chat;
         return  view('backstage.service.message.chat', $params);
+    }
+
+    public function agora(Request $request)
+    {
+        $params = $request->all();
+        $uri    = parse_url($request->server('REQUEST_URI'));
+        $query  = empty($uri['query']) ? "" : $uri['query'];
+        $appid  = '3becf38051e6484eaf6e1cbfc5427f72';
+        $key    = '399825024b1742fc8f7224af2b1accfc';
+        $secret = 'b4b05bea96f6468f92f3abb91136443a';
+        $auth   = 'Basic '.base64_encode($key.':'.$secret);
+
+        if (!empty($params['dateTime'])) {
+            $allDate = explode(' - ' , $params['dateTime']);
+            $start   = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->addHours(8);
+            $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->addHours(8);
+        }
+
+        $uids   = '1,2';
+        $data   = [
+            'headers'  => 'Authorization:'.$auth,
+            'appid'    => $appid,
+            'uids'     => $uids  ?? null,
+            'start_ts' => $start ?? null,
+            'end_ts'   => $end   ?? null,
+            'page_no'  => $params['page'] ?? 1,
+            'page_size'=>10,
+        ];
+
+        $result = $this->httpRequest('api.agora.io/beta/analytics/call/sessions', $data, 'GET', '');
+        $json   = '{"code": 200,
+                    "message": "",
+                    "total_size": 101,
+                    "page_no": 1,
+                    "page_size": 20,
+                    "call_info": [
+                        {
+                            "sid": "EDB224CCF4FB4F99815C24302BDF3301",
+                            "cname": "15056678066620",
+                            "uid": 630985881,
+                            "network": "Wi-Fi",
+                            "platform": "Android",
+                            "speaker": true,
+                            "sdk_version": "2.2.0.07_14",
+                            "device_type": "Android (6.0)",
+                            "join_ts": 1548670251,
+                            "leave_ts": 1548670815,
+                            "finished": true
+                        }
+                    ]
+        }';
+
+        $params['query']  = $query;
+        $params['result'] = json_decode($json, true);
+        return view('backstage.business.goods.index' , $params);
     }
 
 }

@@ -2,6 +2,7 @@
 return [
     'table' => [
         'header'=>[
+            'chat_mode'=>'ChatMode',
             'message_id'=>'MessageId',
             'from_user'=>'Sender',
             'to_user'=>'ToUser',
