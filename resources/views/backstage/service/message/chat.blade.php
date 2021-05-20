@@ -28,7 +28,6 @@
                         <select name="type">
                             <option value="">ALL</option>
                             <option value="shop" @if(isset($type) && $type=='shop') selected @endif>Shop</option>
-                            <option value="user"  @if(isset($type) && $type=='user')  selected @endif>User</option>
                         </select>
                     </div>
                 </div>
@@ -57,21 +56,26 @@
             <thead>
             <tr>
                 <th lay-data="{field:'chat_msg_uid', minWidth:200}">{{trans('chat.table.header.message_id')}}</th>
+                <th lay-data="{field:'chat_msg_type', minWidth:160}">{{trans('chat.table.header.type')}}</th>
                 <th lay-data="{field:'type', minWidth:180, hide:true}">{{trans('chat.table.header.type')}}</th>
                 <th lay-data="{field:'audio', minWidth:180, hide:true}">Audio</th>
                 <th lay-data="{field:'from_name', minWidth:180}">{{trans('chat.table.header.from_user')}}</th>
                 <th lay-data="{field:'to_name', minWidth:180}">{{trans('chat.table.header.to_user')}}</th>
-                <th lay-data="{field:'message_content', minWidth:180}">{{trans('chat.table.header.content')}}</th>
+                <th lay-data="{field:'message_content', minWidth:300}">{{trans('chat.table.header.content')}}</th>
                 <th lay-data="{field:'video_url', minWidth:180, hide:true}">VideoUrl</th>
-                <th lay-data="{field:'chat_msg_type', minWidth:180}">{{trans('chat.table.header.type')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('chat.table.header.chat_time')}}</th>
-                <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', width:80, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
             @foreach($result as $key=>$value)
                 <tr>
                     <td>{{$value->chat_msg_uid}}</td>
+                    <td><span class="layui-btn layui-btn-xs @if($value->chat_msg_type=='RC:ImgMsg') layui-btn-danger
+                    @elseif($value->chat_msg_type=='RC:TxtMsg') layui-btn-warm
+                    @elseif($value->chat_msg_type=='Helloo:VoiceMsg') layui-btn-normal
+                    @elseif($value->chat_msg_type=='Helloo:GoodsMsg') layui-btn-checked
+                    @else @endif">{{$value->chat_msg_type}} @if(!empty($value->suffix)){{$value->suffix}}@endif</span></td>
                     <td>{{$value->chat_msg_type}}</td>
                     <td>{{$value->message_content}}</td>
                     <td>@if(!empty($value->from))
@@ -98,11 +102,6 @@
                         @endif
                     </td>
                     <td>@if(!empty($value->video_url)){{$value->video_url}}@endif</td>
-                    <td><span class="layui-btn layui-btn-xs @if($value->chat_msg_type=='RC:ImgMsg') layui-btn-danger
-                    @elseif($value->chat_msg_type=='RC:TxtMsg') layui-btn-warm
-                    @elseif($value->chat_msg_type=='Helloo:VoiceMsg') layui-btn-normal
-                    @elseif($value->chat_msg_type=='Helloo:GoodsMsg') layui-btn-checked
-                    @else @endif">{{$value->chat_msg_type}} @if(!empty($value->suffix)){{$value->suffix}}@endif</span></td>
                     <td>{{$value->chat_created_at}}</td>
                     <td></td>
                 </tr>
