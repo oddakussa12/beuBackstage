@@ -46,6 +46,7 @@ return [
             'name'=>'Name',
             'remark'=>'Remark',
             'hot'=>'Hot',
+            'category'=>'Category',
             'op'=>'operate',
             'image'=>'Image',
             'recommend'=>'Recommend',

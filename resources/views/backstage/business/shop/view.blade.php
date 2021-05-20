@@ -18,6 +18,7 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
+                <th lay-data="{field:'referrer', minWidth:180}">{{trans('user.table.header.user_src')}}</th>
                 <th lay-data="{field:'user_name', minWidth:180}">{{trans('user.table.header.user_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:180}">{{trans('user.table.header.user_nick_name')}}</th>
                 <th lay-data="{field:'shop_name', minWidth:180}">{{trans('business.table.header.shop_name')}}</th>
@@ -28,7 +29,7 @@
             <tbody>
             @foreach($result as $value)
                 <tr>
-                    <td>{{$value->id}}</td>
+                    <td>{{$value->referrer}}</td>
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
                     <td>{{$value->shop_name}}</td>

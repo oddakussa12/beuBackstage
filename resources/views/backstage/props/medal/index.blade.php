@@ -7,14 +7,14 @@
         <table class="layui-table"   lay-filter="table" id="table" >
             <thead>
             <tr>
-                <th lay-data="{field:'id', width:100 ,fixed: 'left'}">ID</th>
-                <th lay-data="{field:'image', width:120}">Image</th>
-                <th lay-data="{field:'name', minWidth:150,sort:true}">Name</th>
-                <th lay-data="{field:'category', width:100}">Category</th>
+                <th lay-data="{field:'id', width:100 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
+                <th lay-data="{field:'image', width:120}">{{trans('common.table.header.image')}}</th>
+                <th lay-data="{field:'name', minWidth:150,sort:true}">{{trans('common.table.header.name')}}</th>
+                <th lay-data="{field:'category', width:100}">{{trans('common.table.header.category')}}</th>
                 <th lay-data="{field:'score', width:100}">Score</th>
-                <th lay-data="{field:'desc', minWidth:250}">Description</th>
-                <th lay-data="{field:'sort', width:100,edit:'text', sort:true}">Sort</th>
-                <th lay-data="{field:'created_at', width:160}">CreatedAt</th>
+                <th lay-data="{field:'desc', minWidth:250}">{{trans('common.table.header.description')}}</th>
+                <th lay-data="{field:'sort', width:100,edit:'text', sort:true}">{{trans('common.form.label.sort')}}</th>
+                <th lay-data="{field:'created_at', width:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', width:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>

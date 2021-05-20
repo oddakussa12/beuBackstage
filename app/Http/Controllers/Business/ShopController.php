@@ -131,20 +131,21 @@ class ShopController extends Controller
     public function view(Request $request, $id)
     {
         $params = $request->all();
-        $result = DB::connection('lovbee')->table('shops_views_logs')->where('user_id', $id);
+        $result = DB::connection('lovbee')->table('shops_views_logs')->where('owner', $id);
         $result = $this->dateTime($result, $params);
         $result = $result->paginate(10);
 
         if ($result->isNotEmpty()) {
             $userIds = $result->pluck('user_id')->unique()->toArray();
             $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', array_merge($userIds, [$id]))->get();
+
             foreach ($result as $item) {
                 foreach ($users as $user) {
                     if ($item->user_id==$user->user_id) {
                         $item->user_name = $user->user_name;
                         $item->user_nick_name = $user->user_nick_name;
                     }
-                    if ($item->shop_id==$user->user_id) {
+                    if ($item->owner==$user->user_id) {
                         $item->shop_name = $user->user_name;
                         $item->shop_nick_name = $user->user_nick_name;
                     }
