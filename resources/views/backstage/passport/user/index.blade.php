@@ -55,7 +55,7 @@
                         <th  lay-data="{field:'user_nick_name', minWidth:150}">{{trans('user.table.header.user_nick_name')}}</th>
                         <th  lay-data="{field:'user_name', minWidth:190}">{{trans('user.table.header.user_name')}}</th>
                         <th  lay-data="{field:'user_phone', minWidth:180}">{{trans('user.table.header.phone')}}</th>
-                        <th  lay-data="{field:'user_shop', minWidth:120}">{{trans('user.table.header.business')}}</th>
+{{--                        <th  lay-data="{field:'user_shop', minWidth:120}">{{trans('user.table.header.business')}}</th>--}}
                         <th  lay-data="{field:'friends', minWidth:120,sort:true}">{{trans('user.table.header.friend_count')}}</th>
                         <th  lay-data="{field:'user_is_block', width:100}">{{trans('user.table.header.user_block')}}</th>
                         <th  lay-data="{field:'user_gender', width:70}">{{trans('user.table.header.user_gender')}}</th>
@@ -75,7 +75,7 @@
                             <td>{{$user->user_nick_name}}</td>
                             <td>{{$user->user_name}}</td>
                             <td>{{$user->user_phone_country}} {{$user->user_phone}}</td>
-                            <td><input type="checkbox" @if($user->user_shop>0) checked @endif name="user_shop" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
+{{--                            <td><input type="checkbox" @if($user->user_shop>0) checked @endif name="user_shop" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>--}}
                             <td>{{$user->friends}}</td>
                             <td><input type="checkbox" @if($user->is_block==true) checked @endif name="is_block" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                             <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1){{trans('common.cast.sex.other')}}@elseif($user->user_gender==0){{trans('common.cast.sex.female')}}@else{{trans('common.cast.sex.male')}}@endif</span></td>
