@@ -23,6 +23,7 @@ class MessageController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      * 导出
+     *
      */
     public function export(Request $request)
     {
@@ -192,30 +193,23 @@ class MessageController extends Controller
         $mTable = Schema::connection('lovbee')->hasTable($mTable) ? $mTable  : 'ry_messages';
         $vTable = Schema::connection('lovbee')->hasTable($vTable) ? $vTable : 'ry_video_messages';
 
-        $chat   = DB::connection('lovbee')->table($cTable)
-            ->select("$cTable.chat_msg_uid", "$cTable.chat_msg_type", "$cTable.chat_created_at", "$cTable.chat_from_id", "$cTable.chat_to_id", "$mTable.message_content", "$vTable.video_url")
-            ->leftjoin($mTable, "$mTable.message_id", '=', "$cTable.chat_msg_uid")
-            ->leftjoin($vTable, "$vTable.message_id", '=', "$cTable.chat_msg_uid");
+        $chat   = DB::connection('lovbee')->table($cTable);
 
 
         $senderId  = '';
         $receiveId = '';
 
         if ($senderId && $receiveId) {
-            $chat = $chat->where(function ($query) use ($senderId, $receiveId){
-                $query->where(['chat_from_id'=>$senderId, 'chat_to_id'=>$receiveId])->orWhere(['chat_from_id'=>$receiveId, 'chat_to_id'=>$senderId]);
-            });
+            $chat = $chat->where(['chat_from_id'=>$senderId, 'chat_to_id'=>$receiveId])->orWhere(['chat_from_id'=>$receiveId, 'chat_to_id'=>$senderId]);
         } elseif ($senderId) {
-            $chat = $chat->where(function ($query) use ($senderId, $receiveId){
-                $query->where('chat_from_id', $senderId)->orWhere('chat_to_id', $senderId);
-            });
+            $chat = $chat->where('chat_from_id', $senderId)->orWhere('chat_to_id', $senderId);
         } elseif ($receiveId) {
-            $chat = $chat->where(function ($query) use ($senderId, $receiveId){
-                $query->where('chat_from_id', $receiveId)->orWhere('chat_to_id', $receiveId);
-            });
+            $chat = $chat->where('chat_from_id', $receiveId)->orWhere('chat_to_id', $receiveId);
         }
 
-        $chat = $chat->$sort("$cTable.chat_created_at")->paginate(10);
+        $chat   = $chat->$sort("$cTable.chat_created_at")->paginate(10);
+        $msgIds = $chat->pluck('chat_msg_uid')->toArray();
+
 
         $fromId = $chat->pluck('chat_from_id')->toArray();
         $toId   = $chat->pluck('chat_to_id')->toArray();
@@ -228,7 +222,20 @@ class MessageController extends Controller
             $emoImg[] = $key;
             $emoSrc[] = "<img width='30px' height='30px' src=\"/images/emo/ic_chat_e000{$j}.png\"/>";
         }
-
+        $messages = DB::connection('lovbee')->table($mTable)->whereIn('message_id', $msgIds)->get();
+        $videos   = DB::connection('lovbee')->table($vTable)->whereIn('message_id', $msgIds)->get();
+        foreach ($chat as $value) {
+            foreach ($messages as $message) {
+                if ($value->chat_msg_uid==$message->message_id) {
+                    $value->message_content = $message->message_content;
+                }
+            }
+            foreach ($videos as $video) {
+                if ($value->chat_msg_uid==$video->message_id) {
+                    $value->video_url = $video->video_url;
+                }
+            }
+        }
         foreach ($chat as $item) {
             if ($item->chat_msg_type=='RC:TxtMsg') {
                 $item->message_content = str_replace($emoImg, $emoSrc, $item->message_content);
@@ -249,4 +256,5 @@ class MessageController extends Controller
         $params['result'] = $chat;
         return  view('backstage.service.message.chat', $params);
     }
+
 }

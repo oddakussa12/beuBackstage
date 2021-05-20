@@ -78,10 +78,10 @@
                                 <audio style="width:180px; height: 30px; margin-left: -10px" controls><source src="{{$value->message_content}}" type="audio/mpeg"></audio>
                             @endif
                         @else
-                        <video style="height: 100%; width:100%" controls><source src="{{$value->video_url}}" type="video/mp4"></video>
+                            @if(!empty($value->video_url))<video style="height: 100%; width:100%" controls><source src="{{$value->video_url}}" type="video/mp4"></video>@endif
                         @endif
                     </td>
-                    <td>{{$value->video_url}}</td>
+                    <td>@if(!empty($value->video_url)){{$value->video_url}}@endif</td>
                     <td><span class="layui-btn layui-btn-xs @if($value->chat_msg_type=='RC:ImgMsg') layui-btn-danger
                     @elseif($value->chat_msg_type=='RC:TxtMsg') layui-btn-warm
                     @elseif($value->chat_msg_type=='Helloo:VoiceMsg') layui-btn-normal@else @endif">{{$value->chat_msg_type}} @if(!empty($value->suffix)){{$value->suffix}}@endif</span></td>
