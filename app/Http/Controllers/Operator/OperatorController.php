@@ -592,7 +592,7 @@ class OperatorController extends Controller
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
         }
 
-        $hrCurrent = 24;
+        $hrCurrent = 29;
         $hrMiddle = 36;
         $hrGoal = 50;
         $hrData = [
