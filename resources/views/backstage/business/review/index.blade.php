@@ -30,10 +30,8 @@
                     <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
-                            <option value="created_at">CreatedAt</option>
-                            <option value="like" @if(isset($sort) && $sort=='like') selected @endif>Liked</option>
-                            <option value="price" @if(isset($sort) && $sort=='price') selected @endif>Price</option>
-                            <option value="view_num" @if(isset($sort) && $sort=='view_num') selected @endif>ViewNum</option>
+                            <option value="desc" @if(isset($sort) && $sort=='desc') selected @endif>Desc</option>
+                            <option value="asc" @if(isset($sort) && $sort=='asc') selected @endif>Asc</option>
                         </select>
                     </div>
                 </div>
@@ -44,6 +42,17 @@
                             <option value="">All</option>
                             <option value="1" @if(isset($recommend) && $recommend=='1') selected @endif>YES</option>
                             <option value="0" @if(isset($recommend) && $recommend=='0') selected @endif>NO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('business.table.header.verified')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="verify">
+                            <option value="">All</option>
+                            <option value="1" @if(isset($verify) && $verify=='1') selected @endif>Pass</option>
+                            <option value="0" @if(isset($verify) && $verify=='0') selected @endif>Refuse</option>
+                            <option value="-1" @if(isset($verify) && $verify=='-1') selected @endif>UnAudited</option>
                         </select>
                     </div>
                 </div>
@@ -65,20 +74,21 @@
                 <th lay-data="{field:'comment_id', minWidth:180}">{{trans('user.table.header.user_id')}}</th>
                 <th lay-data="{field:'shop_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
                 <th lay-data="{field:'goods_name', minWidth:160}">{{trans('business.table.header.goods_name')}}</th>
-                <th lay-data="{field:'image', minWidth:200}">{{trans('common.table.header.image')}}</th>
-
-
-                <th lay-data="{field:'like', minWidth:100}">{{trans('business.table.header.shop_score')}}</th>
-                <th lay-data="{field:'service', minWidth:100}">{{trans('business.table.header.service')}}</th>
-                <th lay-data="{field:'quality', minWidth:100}">{{trans('business.table.header.quality')}}</th>
+                <th lay-data="{field:'image', minWidth:160}">{{trans('common.table.header.image')}}</th>
+                <th lay-data="{field:'level', minWidth:100}">{{trans('business.table.header.recommend')}}</th>
                 <th lay-data="{field:'verifiedd', minWidth:120}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'verified', minWidth:180}">{{trans('business.table.header.verified')}}</th>
+
+                <th lay-data="{field:'point', minWidth:100}">{{trans('business.table.header.shop_score')}}</th>
+                <th lay-data="{field:'service', minWidth:100}">{{trans('business.table.header.service')}}</th>
+                <th lay-data="{field:'quality', minWidth:100}">{{trans('business.table.header.quality')}}</th>
+
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.comment_user')}}</th>
-                <th lay-data="{field:'content', minWidth:120}">{{trans('business.table.header.content')}}</th>
+                <th lay-data="{field:'media', minWidth:160}">{{trans('business.table.header.content')}}</th>
+                <th lay-data="{field:'content', minWidth:200}">{{trans('business.table.header.content')}}</th>
                 <th lay-data="{field:'to_id', minWidth:120}">{{trans('business.table.header.to_user')}}</th>
                 <th lay-data="{field:'top_id', minWidth:120}">{{trans('business.table.header.top_user')}}</th>
 
-                <th lay-data="{field:'level', minWidth:100}">{{trans('business.table.header.level')}}</th>
                 <th lay-data="{field:'child_comment', minWidth:100}">{{trans('business.table.header.child_comment')}}</th>
                 <th lay-data="{field:'verified_at', minWidth:160}">{{trans('business.table.header.verified_at')}}</th>
 
@@ -99,30 +109,38 @@
                             @endforeach
                         @endif
                     </td>
-                    <td>{{$value->service}}</td>
-                    <td>{{$value->like}}</td>
-                    <td>{{$value->quality}}</td>
+                    <td><input type="checkbox" @if($value->level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td><span class="layui-btn layui-btn-xs @if($value->verified==-1) layui-btn-danger @elseif($value->verified==0) layui-btn-warm @else layui-btn-normal @endif">
-                            @if($value->verified==1) Normal @elseif($value->verified==0) Refuse @else UnAudited @endif
+                            @if($value->verified==1) Pass @elseif($value->verified==0) Refuse @else UnAudited @endif
                         </span>
                     </td>
-                    <td>@if($value->verified!=1)
-                            <input type="radio" name="audit" lay-filter="radio" value="pass" title="Pass">
-                            <input type="radio" name="audit" @if($value->verified==0) checked @endif lay-filter="radio" value="refuse" title="Refuse">
-                        @endif
+                    <td>
+                        <input type="radio" name="audit" @if($value->verified==1) checked @endif lay-filter="radio" value="pass" title="Pass">
+                        <input type="radio" name="audit" @if($value->verified==0) checked @endif lay-filter="radio" value="refuse" title="Refuse">
                     </td>
+                    <td>{{$value->service}}</td>
+                    <td>{{$value->point}}</td>
+                    <td>{{$value->quality}}</td>
+
                     <td>@if(!empty($value->user_nick_name))<a target="_blank" style="color: #FFB800" href="{{url('/backstage/passport/user')}}?keyword={{$value->user_nick_name}}">{{$value->user_nick_name}}</a>@endif</td>
-                    <td>@if(empty($value->type=='txt')){{$value->content}}@elseif($value->type=='video')
+<!--                    <td>@if(empty($value->type=='txt')){{$value->content}}@elseif($value->type=='video')
                             <video controls="controls" autoplay="autoplay" width="100%" height="380px"><source src="{{$value->media}}" type="video/mp4" /></video>
                         @else
                             @foreach($value->media as $image)
-                                <img src="{{$image}}">
+                                <img src="{{$image['url']}}">
+                                <img src="{{$image['url']}}">
+                            @endforeach
+                        @endif
+                    </td>-->
+                    <td>
+                        @if(!empty($value->media))
+                            @foreach($value->media as $image)
+                                <img src="{{$image['url']}}">
                             @endforeach
                         @endif
                     </td>
                     <td>@if(!empty($value->to_nick_name))<a target="_blank" style="color: #FFB800" href="{{url('/backstage/passport/user')}}?keyword={{$value->to_nick_name}}">{{$value->to_nick_name}}</a>@endif</td>
                     <td>@if(!empty($value->top_nick_name))<a target="_blank" style="color: #FFB800" href="{{url('/backstage/passport/user')}}?keyword={{$value->top_nick_name}}">{{$value->top_nick_name}}</a>@endif</td>
-                    <td>@if(!empty($value->level)){{$value->level}}@else 0 @endif</td>
                     <td>@if(!empty($value->child_comment)){{$value->child_comment}}@else 0 @endif</td>
                     <td>@if($value->verified_at!='0000-00-00 00:00:00'){{$value->verified_at}}@endif</td>
                     <td>{{$value->created_at}}</td>
@@ -165,36 +183,25 @@
                     format:'YYYY-MM-DD HH:ss:mm',
                 },
             });
+            form.on('radio(radio)', function(data){
+                let level  = data.value;
+                const name = $(data.elem).attr('name');
+                let params = '{"' + name + '":"'+level+'"}';
+                data.id    = data.othis.parents('tr').find("td :first").text();
+                request(data, params, name);
+            });
             form.on('switch(switchAll)', function(data){
                 let params;
                 const checked = data.elem.checked;
-                const id = data.othis.parents('tr').find("td :first").text();
                 data.elem.checked = !checked;
-                @if(!Auth::user()->can('business::review.update'))
-                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
-                form.render();
-                return false;
-                @endif;
+                data.id = data.othis.parents('tr').find("td :first").text();
                 const name = $(data.elem).attr('name');
                 if(checked) {
                     params = '{"' + name + '":"on"}';
                 }else {
                     params = '{"' + name + '":"off"}';
                 }
-                form.render();
-                common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/business/review')}}/"+id , JSON.parse(params) , function(res){
-                        data.elem.checked = checked;
-                        form.render();
-                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
-                    } , 'put' , function (event,xhr,options,exc) {
-                        setTimeout(function(){
-                            common.init_error(event,xhr,options,exc);
-                            data.elem.checked = !checked;
-                            form.render();
-                        },100);
-                    });
-                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
+                request(data, params, name, checked);
             });
             table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 let data = obj.data; //获得当前行数据
@@ -211,6 +218,28 @@
                     });
                 }
             });
+            function request(data, params, name, checked=false) {
+                @if(!Auth::user()->can('business::review.update'))
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
+                form.render();
+                return false;
+                @endif;
+                form.render();
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax("{{url('/backstage/business/review')}}/"+data.id, JSON.parse(params) , function(res){
+                        data.elem.checked = checked;
+                        form.render();
+                        name==='audit' && location.reload();
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                    } , 'put' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            data.elem.checked = !checked;
+                            form.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
+            }
             $(function () {
                 let img_show = null; // tips提示
                 $('td img').hover(function(){

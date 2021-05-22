@@ -25,7 +25,7 @@
                     <div class="layui-input-inline">
                         <select  name="state">
                             <option value="">ALL</option>
-                            <option value="1" @if(isset($state) && $state=='1') selected @endif>Normal</option>
+                            <option value="1" @if(isset($state) && $state=='1') selected @endif>Pass</option>
                             <option value="-1" @if(isset($state) && $state=='-1') selected @endif>UnReviewed</option>
                             <option value="0" @if(isset($state) && $state=='0') selected @endif>Refuse</option>
                         </select>
@@ -71,7 +71,8 @@
                 <th lay-data="{field:'user_cover', minWidth:80}">{{trans('user.table.header.user_cover')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
-                <th lay-data="{field:'user_verified', minWidth:230}">{{trans('common.table.header.status')}}</th>
+                <th lay-data="{field:'user_verifiedd', minWidth:310}">{{trans('common.table.header.status')}}</th>
+                <th lay-data="{field:'user_verified', minWidth:150}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_level', minWidth:100}">{{trans('business.table.header.vip')}}</th>
                 <th lay-data="{field:'num', minWidth:120}">{{trans('business.table.header.goods_num')}}</th>
                 <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
@@ -95,12 +96,16 @@
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
                     <td><span class="layui-btn layui-btn-xs @if($value->user_verified==-1) layui-btn-danger @elseif($value->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">
-                            @if($value->user_verified==1) Normal @elseif($value->user_verified==0) Refuse @else UnAudited @endif
+                            @if($value->user_verified==1) Pass @elseif($value->user_verified==0) Refuse @else UnAudited @endif
                         </span>
-                        @if($value->user_verified!=1)
-                            <input type="radio" name="audit" lay-filter="radio" value="pass" title="Pass">
-                            @if($value->user_verified!=0)<input type="radio" name="audit" lay-filter="radio" value="refuse" title="Refuse">@endif
+                        @if($value->user_verified!=1) {{$value->user_verified}}
+                            <input type="radio" @if(!empty($value->user_verified)) checked @endif name="audit" lay-filter="radio" value="pass" title="Pass">
+                            @if($value->user_verified!=0)<input type="radio" @if($value->user_user_verified==0) checked @endif name="audit" lay-filter="radio" value="refuse" title="Refuse">@endif
                         @endif
+                    </td>
+                    <td>
+                        <input type="radio" name="audit" @if($value->user_verified==1) checked @endif lay-filter="radio" value="pass" title="Pass">
+                        <input type="radio" name="audit" @if($value->user_verified==0) checked @endif lay-filter="radio" value="refuse" title="Refuse">
                     </td>
                     <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>@if(!empty($value->num)){{$value->num}}@else 0 @endif</td>

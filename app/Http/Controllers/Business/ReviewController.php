@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Business;
 
 use App\Models\Goods;
 use App\Models\Passport\User;
-use App\Models\Shop;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -20,31 +19,33 @@ class ReviewController extends Controller
     {
         $uri    = parse_url($request->server('REQUEST_URI'));
         $query  = empty($uri['query']) ? "" : $uri['query'];
-        $keyword= $params['keyword'] ?? '';
         $params = $request->all();
-        $result  = DB::connection('lovbee')->table('comments')->select(DB::raw('t_comments.*'));
-        if (isset($params['level'])) {
-            $result = $result->where('comments.level', $params['level']);
+        $result  = DB::connection('lovbee')->table('comments')->where('step', 1);
+        if (isset($params['recommend'])) {
+            $result = $result->where('level', $params['recommend']);
         }
+        if (isset($params['verify'])) {
+            $result = $result->where('verified', $params['verify']);
+        }
+
         $result = $this->dateTime($result, $params, 'addHours', 'comments');
 
         if (!empty($params['goods_id'])) {
-            $result = $result->where('goods.id', $params['goods_id']);
+            $result = $result->where('goods_id', $params['goods_id']);
         }
         if (!empty($params['shopName'])) {
             $shopName = $params['shopName'];
             $user   = User::where('user_name', $shopName)->orWhere('user_nick_name', $shopName)->get();
             $userIds= $user->pluck('user_id')->toArray();
-            $result = $result->whereIn('shop_id', $userIds);
+            $result = $result->whereIn('owner', $userIds);
         }
         if (!empty($params['keyword'])) {
-            $user    = Goods::where('name', $keyword)->get();
-            $goodsIds= $user->pluck('id')->toArray();
+            $goods    = Goods::where('name', $params['keyword'])->get();
+            $goodsIds= $goods->pluck('id')->toArray();
             $result  = $result->whereIn('goods_id', $goodsIds);
         }
-        $sort   = !empty($params['sort']) ? $params['sort'] : 'created_at';
-        $sort   = $sort == 'view_num' ? $sort : 'comments.'.$sort;
-        $result = $result->orderByDesc($sort)->paginate(10);
+        $sort   = !empty($params['sort']) && $params['sort'] == 'asc' ? 'orderBy' : 'orderByDesc';
+        $result = $result->$sort('created_at')->paginate(10);
 
         $userIds  = $result->pluck('user_id')->unique()->toArray();
         $toIds    = $result->pluck('to_id')->unique()->toArray();
@@ -81,6 +82,9 @@ class ReviewController extends Controller
                     $item->media_url = $m->url;
                 }
             }
+            if (!empty($item->media)) {
+                $item->media = json_decode($item->media, true);
+            }
         }
 
         $params['query']   = $query;
@@ -94,11 +98,14 @@ class ReviewController extends Controller
     public function update(Request $request, $id)
     {
         $params = $request->all();
-        $result  = DB::connection('lovbee')->table('comments')->find($id);
-        if (!empty($params['verify'])) {
-            $result->recommend = $params['recommend'] == 'on';
-            $result->recommended_at = date('Y-m-d H:i:s');
-            $result->save();
+        $base   = DB::connection('lovbee')->table('comments')->where('comment_id', $id);
+        if (!empty($params['audit'])) {
+            $verify = $params['audit'] == 'pass' ? 1 : 0;
+            $base->update(['verified'=>$verify, 'verified_at'=>date('Y-m-d H:i:s')]);
+        }
+        if (!empty($params['level'])) {
+            $level = $params['level'] == 'on' ? 1 : 0;
+            $base->update(['level'=>$level]);
         }
         return [];
     }
