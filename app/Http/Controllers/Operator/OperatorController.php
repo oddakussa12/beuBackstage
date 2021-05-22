@@ -582,7 +582,7 @@ class OperatorController extends Controller
                 'dateData'=>$dateData,
                 'dauList'=>$dauList,
                 'zoomStart'=>$zoomStart
-            )), 360);
+            )), 86400*2);
         }
         $dates = array();
         $start = Carbon::now('Asia/Shanghai')->startOfMonth()->toDateString();
@@ -641,7 +641,7 @@ class OperatorController extends Controller
         ];
 
         $shopMiddle  = 100;
-        $shopCurrent = $this->db->table('shops')->where('name', '!=', '')->count();
+        $shopCurrent = $this->db->table('users')->where('user_shop', 1)->where('user_verified', 1)->count();
         $shopGoal    = 170;
         $shopData    = array('percentage'=>strval(round($shopCurrent/$shopGoal , 4)*100)."%" , 'current'=>$shopCurrent , 'goal'=>$shopGoal, 'marginTop'=>strval(round((round(($shopGoal-$shopCurrent)/$shopGoal , 4)*235))).'px',
             'middle'=>$shopMiddle);
