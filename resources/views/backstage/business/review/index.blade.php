@@ -76,8 +76,8 @@
                 <th lay-data="{field:'goods_name', minWidth:160}">{{trans('business.table.header.goods_name')}}</th>
                 <th lay-data="{field:'image', minWidth:160}">{{trans('common.table.header.image')}}</th>
                 <th lay-data="{field:'level', minWidth:100}">{{trans('business.table.header.recommend')}}</th>
-                <th lay-data="{field:'verifiedd', minWidth:120}">{{trans('common.table.header.status')}}</th>
-                <th lay-data="{field:'verified', minWidth:180}">{{trans('business.table.header.verified')}}</th>
+                <th lay-data="{field:'verifiedd', minWidth:110}">{{trans('common.table.header.status')}}</th>
+                <th lay-data="{field:'verified', minWidth:160}">{{trans('business.table.header.verified')}}</th>
 
                 <th lay-data="{field:'point', minWidth:100}">{{trans('business.table.header.shop_score')}}</th>
                 <th lay-data="{field:'service', minWidth:100}">{{trans('business.table.header.service')}}</th>
@@ -115,8 +115,8 @@
                         </span>
                     </td>
                     <td>
-                        <input type="radio" name="audit" @if($value->verified==1) checked @endif lay-filter="radio" value="pass" title="Pass">
-                        <input type="radio" name="audit" @if($value->verified==0) checked @endif lay-filter="radio" value="refuse" title="Refuse">
+                        <input type="radio" name="audit_{{$value->comment_id}}" @if($value->verified==1) checked @endif lay-filter="radio" value="pass" title="Pass">
+                        <input type="radio" name="audit_{{$value->comment_id}}" @if($value->verified==0) checked @endif lay-filter="radio" value="refuse" title="Refuse">
                     </td>
                     <td>{{$value->service}}</td>
                     <td>{{$value->point}}</td>
@@ -185,7 +185,7 @@
             });
             form.on('radio(radio)', function(data){
                 let level  = data.value;
-                const name = $(data.elem).attr('name');
+                const name = 'audit';
                 let params = '{"' + name + '":"'+level+'"}';
                 data.id    = data.othis.parents('tr').find("td :first").text();
                 request(data, params, name);
