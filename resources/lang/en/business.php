@@ -16,6 +16,20 @@ return [
             'view_history'=>'ViewHistory',
             'recommend'=>'Recommend',
             'address'=>'Address',
+
+            'service'=>'Service',
+            'quality'=>'Quality',
+            'media'=>'Media',
+            'verified'=>'Isverify',
+            'verified_at'=>'VerifyAt',
+            'content'=>'Content',
+            'shop_score'=>'Score',
+            'level'=>'Level',
+            'child_comment'=>'SecondComments',
+            'comment_user'=>'CommentUser',
+            'to_user'=>'ByReply',
+            'top_user'=>'TopUser',
+
             'recommended_at'=>'RecommendTime',
         ],
         'button'=>[
