@@ -108,7 +108,6 @@ class ReviewController extends Controller
         $params = $request->all();
         $sort   = !empty($params['sort']) && $params['sort'] == 'asc' ? 'orderBy' : 'orderByDesc';
         $result = DB::connection('lovbee')->table('comments')->where('top_id', $id);
-        $result = DB::connection('lovbee')->table('comments')->where('comment_id', $id);
         $result = $this->dateTime($result, $params);
         $result = $result->$sort('created_at')->paginate(10);
 
