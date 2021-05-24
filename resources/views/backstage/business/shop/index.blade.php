@@ -66,8 +66,8 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'user_id', minWidth:130, fixed:'left'}">{{trans('business.table.header.shop_id')}}</th>
-                <th lay-data="{field:'user_avatar', minWidth:80, fixed:'left'}">{{trans('user.table.header.user_avatar')}}</th>
+                <th lay-data="{field:'user_id', minWidth:130}">{{trans('business.table.header.shop_id')}}</th>
+                <th lay-data="{field:'user_avatar', minWidth:80}">{{trans('user.table.header.user_avatar')}}</th>
                 <th lay-data="{field:'user_cover', minWidth:80}">{{trans('user.table.header.user_cover')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>

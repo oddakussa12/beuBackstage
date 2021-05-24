@@ -55,7 +55,6 @@ class ReviewController extends Controller
 
         $users = User::whereIn('user_id', array_unique(array_merge($userIds, $shopIds, $toIds)))->get();
         $goods = Goods::whereIn('id', $goodsIds)->get();
-        $media = DB::connection('lovbee')->table('comments_media')->whereIn('comment_id', $mediaIds)->get();
         foreach ($result as $item) {
             foreach ($users as $user) {
                 if ($item->user_id==$user->user_id) {
@@ -75,11 +74,6 @@ class ReviewController extends Controller
                 if ($item->goods_id==$good->id) {
                     $item->goods_name = $good->name;
                     $item->image = $good->image;
-                }
-            }
-            foreach ($media as $m) {
-                if ($item->comment_id==$m->comment_id) {
-                    $item->media_url = $m->url;
                 }
             }
             if (!empty($item->media)) {
@@ -113,34 +107,48 @@ class ReviewController extends Controller
     public function view(Request $request, $id)
     {
         $params = $request->all();
-        $result = DB::connection('lovbee')->table('goods_views_logs')->where('goods_id', $id);
+        $sort   = !empty($params['sort']) && $params['sort'] == 'asc' ? 'orderBy' : 'orderByDesc';
+        $result = DB::connection('lovbee')->table('comments')->where('top_id', $id);
+        $result = DB::connection('lovbee')->table('comments')->where('comment_id', $id);
         $result = $this->dateTime($result, $params);
-        $result = $result->paginate(10);
+        $result = $result->$sort('created_at')->paginate(10);
 
-        if ($result->isNotEmpty()) {
-            $userIds = $result->pluck('user_id')->unique()->toArray();
-            $shopIds = $result->pluck('owner')->unique()->toArray();
-            $userIds = array_unique(array_merge($userIds, $shopIds));
-            $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', $userIds)->get();
-            $result   = Goods::where('id', $id)->first();
-            foreach ($result as $item) {
-                foreach ($users as $user) {
-                    if ($item->user_id==$user->user_id) {
-                        $item->user_name = $user->user_name;
-                        $item->user_nick_name = $user->user_nick_name;
-                    }
-                    if ($item->owner==$user->user_id) {
-                        $item->shop_name = $user->user_name;
-                        $item->shop_nick_name = $user->user_nick_name;
-                    }
+        $userIds  = $result->pluck('user_id')->unique()->toArray();
+        $toIds    = $result->pluck('to_id')->unique()->toArray();
+        $shopIds  = $result->pluck('owner')->unique()->toArray();
+        $goodsIds = $result->pluck('goods_id')->unique()->toArray();
+        $mediaIds = $result->where('media', '!=', '')->pluck('comment_id')->toArray();
+
+        $users = User::whereIn('user_id', array_unique(array_merge($userIds, $shopIds, $toIds)))->get();
+        $goods = Goods::whereIn('id', $goodsIds)->get();
+        foreach ($result as $item) {
+            foreach ($users as $user) {
+                if ($item->user_id==$user->user_id) {
+                    $item->user_nick_name = $user->user_nick_name;
                 }
-                if ($item->goods_id==$result->id) {
-                    $item->goods_name = $result->name;
+                if ($item->to_id==$user->user_id) {
+                    $item->to_nick_name = $user->user_nick_name;
                 }
+                if ($item->top_id==$user->user_id) {
+                    $item->top_nick_name = $user->user_nick_name;
+                }
+                if ($item->owner==$user->user_id) {
+                    $item->shop_nick_name = $user->user_nick_name;
+                }
+            }
+            foreach ($goods as $good) {
+                if ($item->goods_id==$good->id) {
+                    $item->goods_name = $good->name;
+                    $item->image = $good->image;
+                }
+            }
+            if (!empty($item->media)) {
+                $item->media = json_decode($item->media, true);
             }
         }
 
-        $params['result'] = $result;
-        return view('backstage.business.goods.view' , $params);
+        $params['appends'] = $params;
+        $params['result']  = $result;
+        return view('backstage.business.review.view' , $params);
     }
 }

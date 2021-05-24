@@ -120,6 +120,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::resource('shop' , 'ShopController');
             Route::get('goods/view/{goodsId}' , 'GoodsController@view')->name('goods.view');
             Route::resource('goods' , 'GoodsController');
+            Route::get('review/view/{commentId}' , 'ReviewController@view')->name('review.view');
             Route::resource('review' , 'ReviewController');
 
         });
