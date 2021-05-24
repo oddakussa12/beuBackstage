@@ -53,11 +53,23 @@ class ShopController extends Controller
         }
         if (!empty($phone)) {
             $shop = $shop->where('users_phones.user_phone', $phone);
-
         }
 
-        $sort  = !empty($params['sort']) ? $params['sort'] : 'users.user_created_at';
-        $shops = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
+
+        $sort    = !empty($params['sort']) ? $params['sort'] : 'users.user_created_at';
+        $shops   = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
+        $shopIds = $shops->pluck('user_id')->toArray();
+        $points  = DB::connection('lovbee')->table('shop_evaluation_points')->whereIn('user_id', $shopIds)->get();
+
+        foreach ($shops as $shop) {
+            foreach ($points as $point) {
+                if ($shop->user_id==$point->user_id) {
+                    $shop->score   = number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/5), 2);
+                    $shop->quality = number_format((($point->quality_1+$point->quality_2*2+$point->quality_3*3+$point->quality_4*4+$point->quality_5*5)/5), 2);
+                    $shop->service = number_format((($point->service_1+$point->service_2*2+$point->service_3*3+$point->service_4*4+$point->service_5*5)/5), 2);
+                }
+            }
+        }
 
         $params['query']   = $query;
         $params['appends'] = $params;

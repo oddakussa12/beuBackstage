@@ -74,6 +74,9 @@
                 <th lay-data="{field:'user_verifiedd', minWidth:100}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_verified', minWidth:150}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_level', minWidth:100}">{{trans('business.table.header.vip')}}</th>
+                <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
+                <th lay-data="{field:'quality', minWidth:120}">{{trans('business.table.header.quality')}}</th>
+                <th lay-data="{field:'service', minWidth:120}">{{trans('business.table.header.service')}}</th>
                 <th lay-data="{field:'num', minWidth:120}">{{trans('business.table.header.goods_num')}}</th>
                 <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
                 <th lay-data="{field:'recommend', minWidth:100}">{{trans('business.table.header.recommend')}}</th>
@@ -104,6 +107,9 @@
                         <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==0) checked @endif lay-filter="radio" value="refuse" title="Refuse">
                     </td>
                     <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
+                    <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
+                    <td>@if(!empty($value->quality)){{$value->quality}}@else 0 @endif</td>
+                    <td>@if(!empty($value->service)){{$value->service}}@else 0 @endif</td>
                     <td>@if(!empty($value->num)){{$value->num}}@else 0 @endif</td>
                     <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
                     <td><input type="checkbox" @if($value->recommend>0) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>

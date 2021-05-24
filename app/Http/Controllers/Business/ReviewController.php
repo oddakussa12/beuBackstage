@@ -51,10 +51,9 @@ class ReviewController extends Controller
         $toIds    = $result->pluck('to_id')->unique()->toArray();
         $shopIds  = $result->pluck('owner')->unique()->toArray();
         $goodsIds = $result->pluck('goods_id')->unique()->toArray();
-        $mediaIds = $result->where('media', '!=', '')->pluck('comment_id')->toArray();
 
-        $users = User::whereIn('user_id', array_unique(array_merge($userIds, $shopIds, $toIds)))->get();
-        $goods = Goods::whereIn('id', $goodsIds)->get();
+        $users    = User::whereIn('user_id', array_unique(array_merge($userIds, $shopIds, $toIds)))->get();
+        $goods    = Goods::whereIn('id', $goodsIds)->get();
         foreach ($result as $item) {
             foreach ($users as $user) {
                 if ($item->user_id==$user->user_id) {
