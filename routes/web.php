@@ -122,7 +122,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('goods/view/{goodsId}' , 'GoodsController@view')->name('goods.view');
             Route::resource('goods' , 'GoodsController');
             Route::get('review/view/{commentId}' , 'ReviewController@view')->name('review.view');
-            Route::get('review/comment' , 'ReviewController@comment')->name('review.comment');
+            Route::get('review/audit' , 'ReviewController@audit')->name('review.audit');
             Route::resource('review' , 'ReviewController');
 
         });

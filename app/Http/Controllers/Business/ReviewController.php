@@ -92,10 +92,10 @@ class ReviewController extends Controller
         return view('backstage.business.review.index' , $params);
     }
 
-    public function comment(Request $request)
+    public function audit(Request $request)
     {
         $params = $this->base($request);
-        return view('backstage.business.review.audit' , $params);
+        return view('backstage.business.review.audit', $params);
     }
 
 
