@@ -45,8 +45,19 @@ class GoodsController extends Controller
         $sort  = !empty($params['sort']) ? $params['sort'] : 'created_at';
         $sort  = $sort == 'view_num' ? $sort : 'goods.'.$sort;
         $goods = $goods->groupBy('goods.id')->orderByDesc($sort)->paginate(10);
+
+        $goodsIds = $goods->pluck('id')->toArray();
+        $points   = DB::connection('lovbee')->table('goods_evaluation_points')->whereIn('goods_id', $goodsIds)->get();
+
         foreach ($goods as $good) {
             $good->image = !empty($good->image) && !is_array($good->image) ? json_decode($good->image, true) : $good->image;
+            foreach ($points as $point) {
+                if ($good->user_id==$point->user_id) {
+                    $good->score   = number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/5), 2);
+                    $good->quality = number_format((($point->quality_1+$point->quality_2*2+$point->quality_3*3+$point->quality_4*4+$point->quality_5*5)/5), 2);
+                    $good->service = number_format((($point->service_1+$point->service_2*2+$point->service_3*3+$point->service_4*4+$point->service_5*5)/5), 2);
+                }
+            }
         }
 
         $params['query']   = $query;
