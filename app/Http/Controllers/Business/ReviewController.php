@@ -11,11 +11,7 @@ use Illuminate\Support\Facades\DB;
 class ReviewController extends Controller
 {
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
-     */
-    public function index(Request $request)
+    public function base(Request $request)
     {
         $uri    = parse_url($request->server('REQUEST_URI'));
         $query  = empty($uri['query']) ? "" : $uri['query'];
@@ -84,8 +80,24 @@ class ReviewController extends Controller
         $params['appends'] = $params;
         $params['result']  = $result;
 
+        return $params;
+    }
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function index(Request $request)
+    {
+        $params = $this->base($request);
         return view('backstage.business.review.index' , $params);
     }
+
+    public function comment(Request $request)
+    {
+        $params = $this->base($request);
+        return view('backstage.business.review.audit' , $params);
+    }
+
 
     public function update(Request $request, $id)
     {
