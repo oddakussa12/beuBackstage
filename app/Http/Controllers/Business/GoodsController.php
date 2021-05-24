@@ -54,8 +54,6 @@ class GoodsController extends Controller
             foreach ($points as $point) {
                 if ($good->user_id==$point->user_id) {
                     $good->score   = number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/5), 2);
-                    $good->quality = number_format((($point->quality_1+$point->quality_2*2+$point->quality_3*3+$point->quality_4*4+$point->quality_5*5)/5), 2);
-                    $good->service = number_format((($point->service_1+$point->service_2*2+$point->service_3*3+$point->service_4*4+$point->service_5*5)/5), 2);
                 }
             }
         }

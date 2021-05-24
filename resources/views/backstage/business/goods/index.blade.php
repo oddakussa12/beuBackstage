@@ -75,8 +75,6 @@
                 <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.in-stock')}}</th>
                 <th lay-data="{field:'description', minWidth:200}">{{trans('common.table.header.description')}}</th>
                 <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
-                <th lay-data="{field:'quality', minWidth:120}">{{trans('business.table.header.quality')}}</th>
-                <th lay-data="{field:'service', minWidth:120}">{{trans('business.table.header.service')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
@@ -102,8 +100,6 @@
                     <td><span class="layui-btn layui-btn-xs @if(empty($value->status)) layui-btn-danger @else layui-btn-warm @endif">@if(empty($value->status)) NO @else YES @endif</span></td>
                     <td>{{$value->description}}</td>
                     <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
-                    <td>@if(!empty($value->quality)){{$value->quality}}@else 0 @endif</td>
-                    <td>@if(!empty($value->service)){{$value->service}}@else 0 @endif</td>
                     <td>{{$value->created_at}}</td>
                     <td></td>
                 </tr>

@@ -84,7 +84,6 @@ class ReviewController extends Controller
         $params['appends'] = $params;
         $params['result']  = $result;
 
-
         return view('backstage.business.review.index' , $params);
     }
 
@@ -113,12 +112,13 @@ class ReviewController extends Controller
 
         $userIds  = $result->pluck('user_id')->unique()->toArray();
         $toIds    = $result->pluck('to_id')->unique()->toArray();
+        $topIds   = $result->pluck('top_id')->unique()->toArray();
         $shopIds  = $result->pluck('owner')->unique()->toArray();
         $goodsIds = $result->pluck('goods_id')->unique()->toArray();
-        $mediaIds = $result->where('media', '!=', '')->pluck('comment_id')->toArray();
+        $ids      = array_unique(array_merge($userIds, $shopIds, $toIds, $topIds));
+        $users    = User::whereIn('user_id', $ids)->get();
+        $goods    = Goods::whereIn('id', $goodsIds)->get();
 
-        $users = User::whereIn('user_id', array_unique(array_merge($userIds, $shopIds, $toIds)))->get();
-        $goods = Goods::whereIn('id', $goodsIds)->get();
         foreach ($result as $item) {
             foreach ($users as $user) {
                 if ($item->user_id==$user->user_id) {
