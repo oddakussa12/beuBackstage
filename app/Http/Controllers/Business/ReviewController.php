@@ -94,6 +94,7 @@ class ReviewController extends Controller
 
     public function audit(Request $request)
     {
+        request()->offsetSet('verify', -1);
         $params = $this->base($request);
         return view('backstage.business.review.audit', $params);
     }

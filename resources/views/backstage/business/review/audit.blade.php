@@ -62,7 +62,6 @@
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.comment_user')}}</th>
                 <th lay-data="{field:'media', minWidth:160}">{{trans('business.table.header.media')}}</th>
                 <th lay-data="{field:'content', minWidth:200}">{{trans('business.table.header.content')}}</th>
-                <th lay-data="{field:'to_id', minWidth:120}">{{trans('business.table.header.to_user')}}</th>
 
                 <th lay-data="{field:'verified_at', minWidth:160}">{{trans('business.table.header.verified_at')}}</th>
 
@@ -74,8 +73,8 @@
             @foreach($result as $value)
                 <tr>
                     <td>{{$value->comment_id}}</td>
-                    <td>@if(!empty($value->shop_nick_name)) <a target="_blank" style="color: #FFB800" href="{{url('/backstage/business/shop')}}?keyword={{$value->shop_nick_name}}">{{$value->shop_nick_name}}</a>@endif</td>
-                    <td>@if(!empty($value->goods_name)) <a target="_blank" style="color: #FFB800" href="{{url('/backstage/business/goods')}}?goods_id={{$value->goods_id}}&keyword={{$value->goods_name}}">{{$value->goods_name}}</a>@endif
+                    <td>@if(!empty($value->shop_nick_name)){{$value->shop_nick_name}}@endif</td>
+                    <td>@if(!empty($value->goods_name)){{$value->goods_name}}@endif
                     </td>
                     <td>@if(!empty($value->image))
                             @foreach($value->image as $image)
@@ -96,7 +95,7 @@
                     <td>{{$value->point}}</td>
                     <td>{{$value->quality}}</td>
 
-                    <td>@if(!empty($value->user_nick_name))<a target="_blank" style="color: #FFB800" href="{{url('/backstage/passport/user')}}?keyword={{$value->user_nick_name}}">{{$value->user_nick_name}}</a>@endif</td>
+                    <td>@if(!empty($value->user_nick_name)){{$value->user_nick_name}}@endif</td>
 
                     <td>
                         @if(!empty($value->media))
@@ -110,7 +109,6 @@
                         @endif
                     </td>
                     <td>{{$value->content}}</td>
-                    <td>@if(!empty($value->to_nick_name))<a target="_blank" style="color: #FFB800" href="{{url('/backstage/passport/user')}}?keyword={{$value->to_nick_name}}">{{$value->to_nick_name}}</a>@endif</td>
                     <td>@if($value->verified_at!='0000-00-00 00:00:00'){{$value->verified_at}}@endif</td>
                     <td>{{$value->created_at}}</td>
                     <td></td>
@@ -188,12 +186,8 @@
                 }
                 if(layEvent === 'media'){
                     data.media = $.trim(data.media);
-                    let area = data.media!=='' && data.media!==undefined ? ['95%','95%'] : ['40%','30%'];
+                    let area = ['95%','95%'];
                     let content = data.media!=='' && data.media!==undefined ? data.media : data.content;
-
-                    if(data.media.indexOf('video')!==-1){
-                        area = ['50%','60%'];
-                    }
                     layer.open({
                         type: 1,
                         shadeClose: true,
