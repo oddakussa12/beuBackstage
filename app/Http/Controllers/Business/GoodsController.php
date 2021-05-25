@@ -52,7 +52,7 @@ class GoodsController extends Controller
         foreach ($goods as $good) {
             $good->image = !empty($good->image) && !is_array($good->image) ? json_decode($good->image, true) : $good->image;
             foreach ($points as $point) {
-                if ($good->user_id==$point->user_id) {
+                if ($good->id==$point->goods_id) {
                     $good->score   = number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/5), 2);
                 }
             }

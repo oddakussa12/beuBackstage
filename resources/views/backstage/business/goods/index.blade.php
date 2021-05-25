@@ -68,8 +68,8 @@
                 <th lay-data="{field:'name', minWidth:160}">{{trans('business.table.header.goods_name')}}</th>
                 <th lay-data="{field:'image', minWidth:200}">{{trans('common.table.header.image')}}</th>
                 <th lay-data="{field:'like', minWidth:120}">{{trans('business.table.header.like')}}</th>
-                <th lay-data="{field:'price', minWidth:120}">{{trans('business.table.header.price')}}</th>
-                <th lay-data="{field:'view_num', minWidth:120}">{{trans('business.table.header.view_num')}}</th>
+                <th lay-data="{field:'price', minWidth:140}">{{trans('business.table.header.price')}}</th>
+                <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
                 <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
                 <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
                 <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.in-stock')}}</th>
