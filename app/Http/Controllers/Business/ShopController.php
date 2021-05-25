@@ -55,7 +55,6 @@ class ShopController extends Controller
             $shop = $shop->where('users_phones.user_phone', $phone);
         }
 
-
         $sort    = !empty($params['sort']) ? $params['sort'] : 'users.user_created_at';
         $shops   = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
         $shopIds = $shops->pluck('user_id')->toArray();
@@ -65,8 +64,8 @@ class ShopController extends Controller
             foreach ($points as $point) {
                 if ($shop->user_id==$point->user_id) {
                     $shop->score   = number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/5), 2);
-                    $shop->quality = number_format((($point->quality_1+$point->quality_2*2+$point->quality_3*3+$point->quality_4*4+$point->quality_5*5)/5), 2);
-                    $shop->service = number_format((($point->service_1+$point->service_2*2+$point->service_3*3+$point->service_4*4+$point->service_5*5)/5), 2);
+                    $shop->quality = $point->quality;
+                    $shop->service = $point->service;
                 }
             }
         }
@@ -75,9 +74,25 @@ class ShopController extends Controller
         $params['appends'] = $params;
         $params['result']  = $shops;
 
-        /*dump(collect($shops)->toArray());
-        exit;*/
         return view('backstage.business.shop.index' , $params);
+    }
+
+    public function audit(Request $request)
+    {
+        $params  = $request->all();
+        $keyword = $params['keyword'] ?? '';
+        $result  = new User();
+        if (!empty($keyword)) {
+            $user = User::select(DB::raw('t_users.*'), 'users_phones.user_phone_country', 'users_phones.user_phone')->where('user_shop', 1)
+                ->join('users_phones', 'users_phones.user_id', '=', 'users.user_id');
+                $user->where(function ($query) use ($keyword) {
+                    $query->where('users.user_name', 'like', "%{$keyword}%")->orWhere('users.user_nick_name', 'like', "%{$keyword}%")->orWhere('users_phones.user_phone', $keyword);
+                });
+           $result = $user->first();
+        }
+        $params['result'] = $result;
+
+        return view('backstage.business.shop.audit', $params);
     }
 
     public function update(Request $request, $id)
@@ -99,8 +114,14 @@ class ShopController extends Controller
         }
         if (isset($params['audit'])) {
             $result = User::where('user_id', $id)->update(['user_verified'=>$params['audit']=='pass', 'user_verified_at'=>date('Y-m-d H:i:s')]);
+            $this->auditLog($id, $params['audit']);
         }
         return response()->json([]);
+    }
+
+    public function auditLog($shopId, $status)
+    {
+
     }
 
     public function search(Request $request)
