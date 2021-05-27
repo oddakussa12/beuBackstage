@@ -656,6 +656,14 @@ class OperatorController extends Controller
             'marginTop'=>strval(round((round(($newUserGoal-$newUserCurrent)/$newUserGoal , 4)*235))).'px',
             'middle'=>strval(ceil($newUserMiddle/1000))."K"
         );
+        
+        $onlineCurrent = DB::connection('lovbee')->table('dau_counts')->select(DB::raw('sum(dau) num'))->whereBetween('date', [date('Y-m-01'), $end])->first();
+        $onlineCurrent = empty($onlineCurrent->num) ? 1 : $onlineCurrent->num;
+        $monthDau = [
+            'percentage'=> (round($onlineCurrent/($onlineCurrent*2), 4)*100)."%",
+            'current'   => $onlineCurrent,
+            'goal'      => $onlineCurrent*2,
+        ];
 
 
         $devSelected = json_decode(Cache::get('goal_developer'), true);
@@ -693,11 +701,12 @@ class OperatorController extends Controller
             'text'      => $dText,
         ];
 
-        return view('backstage.operator.operator.goal05', compact(
+        return view('backstage.operator.operator.goal05v2', compact(
             'shopData',
             'productData',
             'newUserData',
             'hrData',
+            'monthDau',
             'devData',
             'dateData',
             'dauList',
