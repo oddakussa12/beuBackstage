@@ -20,13 +20,13 @@
         <table class="layui-table" lay-filter="post_table">
             @if (empty($result['comment_id']))
                 @if(empty($result['unaudited']))
-                <tr><td style="text-align: center; height: 500px; font-size: 18px;">真厉害，都审核完成了呢！休息一下吧☺☺</td></tr>
+                <tr><td style="text-align: center; height: 500px; font-size: 18px;">Amazing! The audit is all done! Take a break ☺☺</td></tr>
                 @else
                     <tr>
                         <td style="text-align: center; height: 500px; font-size: 18px;">
                             <h5>待审核 <i style="font-weight: 600;font-size: 16px;">{{$result['unaudited']}}</i></h5><br>
                             <form method="get" action="{{route('business::review.claim')}}">
-                                <button class="layui-btn layui-btn-normal" type="submit">继续审核</button>
+                                <button class="layui-btn layui-btn-normal" type="submit">Continue to review</button>
                             </form>
                         </td></tr>
                 @endif
