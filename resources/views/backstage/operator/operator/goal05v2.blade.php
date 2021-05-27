@@ -289,6 +289,9 @@
                     layer.closeAll();
                 }, 'post');
             });
+            setTimeout(function() {
+                window.location.reload();
+            }, 600000);
         });
     </script>
     <style>

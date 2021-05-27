@@ -657,14 +657,13 @@ class OperatorController extends Controller
             'middle'=>strval(ceil($newUserMiddle/1000))."K"
         );
 
-        $onlineCurrent = DB::connection('lovbee')->table('dau_counts')->select(DB::raw('sum(dau) num'))->whereBetween('date', [date('Y-m-01'), $end])->first();
-        $onlineCurrent = empty($onlineCurrent->num) ? 1 : $onlineCurrent->num;
+        $online = DB::connection('lovbee')->select('select count(1) num from (select user_id from t_visit_logs_202105 where 1 group by user_id) b');
+        $onlineCurrent = !empty($online[0]->num) ? $online[0]->num : 1;
         $monthDau = [
             'percentage'=> (round($onlineCurrent/($onlineCurrent*2), 4)*100)."%",
             'current'   => $onlineCurrent,
             'goal'      => $onlineCurrent*2,
         ];
-
 
         $devSelected = json_decode(Cache::get('goal_developer'), true);
         $dText= [

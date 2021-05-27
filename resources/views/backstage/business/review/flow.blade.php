@@ -17,10 +17,9 @@
         .layui-table span {display: block;float: left;}
     </style>
     <div class="layui-fluid">
-
         <table class="layui-table" lay-filter="post_table">
             @if (empty($result['comment_id']))
-                @if(empty($result['unaudited'])) {
+                @if(empty($result['unaudited']))
                 <tr><td style="text-align: center; height: 500px; font-size: 18px;">真厉害，都审核完成了呢！休息一下吧☺☺</td></tr>
                 @else
                     <tr>
