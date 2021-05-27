@@ -113,7 +113,7 @@ class ReviewController extends Controller
 
     public function flow(Request $request)
     {
-        request()->offsetSet('verify', -1);
+        $user = auth()->user();
         $params = $request->all();
         $uri    = parse_url($request->server('REQUEST_URI'));
         $query  = empty($uri['query']) ? "" : $uri['query'];
@@ -124,19 +124,23 @@ class ReviewController extends Controller
         $cCount  = DB::table('comments_claim')->where('admin_id', $adminId)->count();
         if ($claim) {
             $list  = DB::connection('lovbee')->table('comments')->where(['verified'=>-1, 'step'=>1])->where('comment_id', $claim->comment_id)->get();
+            if ($list->isEmpty()) {
+                DB::table('comments_claim')->where(['admin_id'=>$user->admin_id, 'comment_id'=>$claim->comment_id])->delete();
+                return $this->flow($request);
+            }
             $list  = $this->select($list, $params);
             $list  = collect($list['result'])->first();
             $result= collect($list)->toArray();
         }
-        $count     = DB::connection('lovbee')->table('comments')->where(['verified'=>-1])->count();
+
+        $count     = DB::connection('lovbee')->table('comments')->join('users_countries', 'users_countries.user_id', '=', 'comments.owner')
+            ->where('verified', -1)->where('country', $user->admin_country)->count();
+
         $totayCount= DB::table('business_audits')->where('admin_id', $adminId)->where('created_at', '>=', $today)->count();
         $totalCount= DB::table('business_audits')->where('admin_id', $adminId)->count();
 
-        if (!empty($result)) {
-            $result = collect($result)->toArray();
-            $result['todayCount'] = $totayCount ?? 0;
-            $result['totalCount'] = $totalCount ?? 0;
-        }
+        $result['todayCount'] = $totayCount ?? 0;
+        $result['totalCount'] = $totalCount ?? 0;
         $result['claim']     = $cCount;
         $result['unaudited'] = $count;
         $result['query']     = $query;
@@ -149,12 +153,14 @@ class ReviewController extends Controller
      */
     public function claim()
     {
-        $adminId = auth()->user()->admin_id;
+        $user    = auth()->user();
+        $adminId = $user->admin_id;
         $result  = DB::table('comments_claim')->where('admin_id', $adminId)->first();
         if (empty($result)) {
             $claim = DB::table('comments_claim')->get();
             $ids   = $claim->pluck('comment_id')->toArray();
-            $list  = DB::connection('lovbee')->table('comments')->where('verified', -1)->whereNotIn('comment_id', $ids)->orderByDesc('created_at')->limit(10)->get();
+            $list  = DB::connection('lovbee')->table('comments')->join('users_countries', 'users_countries.user_id', '=', 'comments.owner')
+                ->where('verified', -1)->where('users_countries.country', $user->admin_country)->whereNotIn('comment_id', $ids)->orderByDesc('comments.created_at')->limit(10)->get();
             $data  = [];
             foreach ($list as $item) {
                 $data[] = ['admin_id' => $adminId, 'comment_id' => $item->comment_id, 'created_at'=>date('Y-m-d H:i:s')];
@@ -166,6 +172,7 @@ class ReviewController extends Controller
 
     public function auditLog($id, $params)
     {
+        $user = auth()->user();
         $data = [
             'audit_id'  => $id,
             'type'      => 'comment',
@@ -175,6 +182,7 @@ class ReviewController extends Controller
             'created_at'=> date('Y-m-d H:i:s'),
             'admin_username' => auth()->user()->admin_username,
         ];
+        DB::table('comments_claim')->where(['admin_id'=>$user->admin_id, 'comment_id'=>$id])->delete();
         DB::table('business_audits')->insert($data);
 
     }
@@ -192,10 +200,10 @@ class ReviewController extends Controller
             if ($params['level']=='on') {
                 $result = $this->httpRequest('/api/backstage/review/comment', ['id'=>$id, 'level'=>1, 'reviewer'=>auth()->user()->admin_id]);
             } else {
-                DB::connection('lovbee')->table('comments')->where('comment_id', $id)->update(['level'=>$level]);
+                $result = DB::connection('lovbee')->table('comments')->where('comment_id', $id)->update(['level'=>$level]);
             }
         }
-
+        $this->auditLog($id, $params);
         return redirect(route('business::review.audit'));
     }
 

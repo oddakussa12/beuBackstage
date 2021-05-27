@@ -11,6 +11,7 @@
             .layui-btn { padding: 0 18px}
             .margin-left { margin-left: 30%;}
         }
+        table td span {word-break: break-all;}
         .layer-photos-demo {width: 100%}
         p {width: 60px;height: 20px; text-align: justify;float: left; font-weight: 600;}
         p > i {display: inline-block;padding-left: 100%;}
@@ -24,25 +25,19 @@
                 @else
                     <tr>
                         <td style="text-align: center; height: 500px; font-size: 18px;">
-                            <h5>待审核 <i style="font-weight: 600;font-size: 16px;">{{$result['unaudited']}}</i></h5><br>
+                            <h5>To Be Reviewed:<i style="font-weight: 600;font-size: 16px;">{{$result['unaudited']}}</i></h5><br>
+                            <h5>Reviewed Today:<i style="font-weight: 600;font-size: 16px;">{{$result['todayCount']}}</i></h5><br>
+                            <h5>Total:<i style="font-weight: 600;font-size: 16px;">{{$result['totalCount']}}</i></h5><br>
                             <form method="get" action="{{route('business::review.claim')}}">
                                 <button class="layui-btn layui-btn-normal" type="submit">Continue to review</button>
                             </form>
                         </td></tr>
                 @endif
             @else
-            <!--                <tr><td>
-                        <div class="margin-left">
-                            <span class="layui-btn layui-btn-normal" style="display: block; cursor:default">
-                                Unaudited&lt;!&ndash;待审核数量&ndash;&gt;:<i style="font-weight: 600;font-size: 16px;">{{$result['unaudited']}}0000</i></span>
-                        </div>
-                    </td>
-                </tr>-->
-                <tr><td><span>ShopNickName: {{$result['shop_nick_name']}}</span></td></tr>
-                <tr><td><span>GoodsName: {{$result['goods_name']}}</span></td></tr>
-                <tr><td><span>
+                <tr><td>ShopName:</td><td><span>{{$result['shop_nick_name']}}</span></td></tr>
+                <tr><td>GoodsName:</td><td><span>{{$result['goods_name']}}</span></td></tr>
+                <tr><td>GoodsImage:</td><td><span>
                             <div class="layer-photos-demo">
-                                GoodsImage:
                                 @if(!empty($result['image']))
                                 @foreach($result['image'] as $image)
                                     <img style="min-width: 30px; max-width: 40px;" src="{{$image['url']}}">
@@ -51,12 +46,11 @@
                             </div>
                         </span>
                     </td></tr>
-                <tr><td><span>Point: {{$result['point']}}</span></td></tr>
-                <tr><td><span>Service: {{$result['service']}}</span></td></tr>
-                <tr><td><span>Quality: {{$result['quality']}}</span></td></tr>
-                <tr><td><span>Content: {{$result['content']}}</span></td></tr>
-                <tr>
-                    <td>
+                <tr><td>Point:</td><td><span>{{$result['point']}}</span></td></tr>
+                <tr><td>Service:</td><td><span>{{$result['service']}}</span></td></tr>
+                <tr><td>Quality:</td><td><span>{{$result['quality']}}</span></td></tr>
+                <tr><td>Content:</td><td><span>{{$result['content']}}content4content4content4content4cont ent4content4content4content4content4content 4content4content4content4content4content4content4content4cont ent4content4content4content4content4content4</span></td></tr>
+                <tr><td colspan="2">
                         @if (!empty($result['media']))
                             <div class="layer-photos-demo">
                                 @foreach($result['media'] as $media)
@@ -67,23 +61,21 @@
                                         </video>
                                     @else
                                         <img layer-pid="{{$media['url']}}" layer-src="{{$media['url']}}" src="{{$media['url']}}">
-                                        <img layer-pid="{{$media['url']}}" layer-src="{{$media['url']}}" src="{{$media['url']}}">
-                                        <img layer-pid="{{$media['url']}}" layer-src="{{$media['url']}}" src="{{$media['url']}}">
-                                        <img layer-pid="{{$media['url']}}" layer-src="{{$media['url']}}" src="{{$media['url']}}">
                                     @endif
                                 @endforeach
                             </div>
                         @endif
                     </td>
                 </tr>
-                <tr><td><span>发布时间: {{date('Y-m-d H:i:s',strtotime($result['created_at'])+3600*8)}}</span></td></tr>
-                <tr><td><span>
-                            已领取: <i style="font-weight: 600;font-size: 16px;margin-right: 10px;">{{$result['claim']}}</i>
-                            今日已审核:<i style="font-weight: 600;font-size: 16px;margin-right: 10px;">{{$result['todayCount']}}</i>
-                            累计已审核:<i style="font-weight: 600;font-size: 16px;">{{$result['totalCount']}}</i>
+                <tr><td>Submitted Time:</td>
+                    <td><span>{{date('Y-m-d H:i:s',strtotime($result['created_at'])+3600*8)}}</span></td></tr>
+                <tr><td colspan="2"><span>
+                            Task:<i style="font-weight: 600;font-size: 16px;margin-right: 10px;">{{$result['claim']}}</i>
+                            Reviewed Today:<i style="font-weight: 600;font-size: 16px;margin-right: 10px;">{{$result['todayCount']}}</i>
+                            Total:<i style="font-weight: 600;font-size: 16px;">{{$result['totalCount']}}</i>
                             </span>
                     </td></tr>
-                <tr><td>
+                <tr><td colspan="2">
                         <div>
                             <form method="post" action="{{url('backstage/business/review')}}/{{$result['comment_id']}}">
                                 {{ csrf_field() }}
@@ -110,7 +102,7 @@
                                 {{ method_field('PUT')}}
                                 <input type="hidden" name="_method" value="PUT">
                                 <input name="comment_id" hidden value="{{$result['comment_id']}}">
-                                <button class="layui-btn  layui-btn-warm" type="submit" lay-submit="">Recommend</button>
+                                <button class="layui-btn  layui-btn-normal" type="submit" lay-submit="">Recommend</button>
                             </form>
                         </div>
                     </td>
