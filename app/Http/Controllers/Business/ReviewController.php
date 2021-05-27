@@ -189,8 +189,13 @@ class ReviewController extends Controller
         }
         if (!empty($params['level'])) {
             $level = $params['level'] == 'on' ? 1 : 0;
-            DB::connection('lovbee')->table('comments')->where('comment_id', $id)->update(['level'=>$level]);
+            if ($params['level']=='on') {
+                $result = $this->httpRequest('/api/backstage/review/comment', ['id'=>$id, 'level'=>1, 'reviewer'=>auth()->user()->admin_id]);
+            } else {
+                DB::connection('lovbee')->table('comments')->where('comment_id', $id)->update(['level'=>$level]);
+            }
         }
+
         return redirect(route('business::review.audit'));
     }
 

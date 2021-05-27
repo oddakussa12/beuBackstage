@@ -657,8 +657,14 @@ class OperatorController extends Controller
             'middle'=>strval(ceil($newUserMiddle/1000))."K"
         );
 
-        $online = DB::connection('lovbee')->select('select count(1) num from (select user_id from t_visit_logs_202105 where 1 group by user_id) b');
-        $onlineCurrent = !empty($online[0]->num) ? $online[0]->num : 1;
+        if (Cache::has('helloo_month_online')) {
+            $onlineCurrent = Cache::get('helloo_month_online');
+        }else{
+            $online = DB::connection('lovbee')->select('select count(1) num from (select user_id from t_visit_logs_202105 where 1 group by user_id) b');
+            $onlineCurrent = !empty($online[0]->num) ? $online[0]->num : 1;
+            Cache::put('helloo_month_online', $onlineCurrent, $onlineCurrent, 7200);
+        }
+
         $monthDau = [
             'percentage'=> (round($onlineCurrent/($onlineCurrent*2), 4)*100)."%",
             'current'   => $onlineCurrent,
