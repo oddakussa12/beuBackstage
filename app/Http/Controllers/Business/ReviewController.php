@@ -203,7 +203,7 @@ class ReviewController extends Controller
                 $result = DB::connection('lovbee')->table('comments')->where('comment_id', $id)->update(['level'=>$level]);
             }
         }
-        $this->auditLog($id, $params);
+        $result!==false && $this->auditLog($id, $params);
         return redirect(route('business::review.audit'));
     }
 
