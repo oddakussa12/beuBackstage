@@ -172,16 +172,18 @@ class ReviewController extends Controller
 
     public function auditLog($id, $params)
     {
+        $status = !empty($params['level']) ? $params['level'] : $params['audit'];
         $user = auth()->user();
         $data = [
             'audit_id'  => $id,
             'type'      => 'comment',
             'date'      => date('Y-m-d'),
-            'status'    => $params['audit'],
+            'status'    => $status,
             'admin_id'  => auth()->user()->admin_id,
             'created_at'=> date('Y-m-d H:i:s'),
             'admin_username' => auth()->user()->admin_username,
         ];
+
         DB::table('comments_claim')->where(['admin_id'=>$user->admin_id, 'comment_id'=>$id])->delete();
         DB::table('business_audits')->insert($data);
 
