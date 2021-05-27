@@ -21,18 +21,17 @@
         <table class="layui-table" lay-filter="post_table">
             @if (empty($result['comment_id']))
                 @if(empty($result['unaudited']))
-                <tr><td style="text-align: center; height: 500px; font-size: 18px;">Amazing! The audit is all done! Take a break ☺☺</td></tr>
+                <tr><td colspan="2"><h5>Amazing! The audit is all done! Take a break ☺☺</h5><br></td></tr>
                 @else
-                    <tr>
-                        <td style="text-align: center; height: 500px; font-size: 18px;">
-                            <h5>To Be Reviewed:<i style="font-weight: 600;font-size: 16px;">{{$result['unaudited']}}</i></h5><br>
-                            <h5>Reviewed Today:<i style="font-weight: 600;font-size: 16px;">{{$result['todayCount']}}</i></h5><br>
+                    <tr><td colspan="2">
                             <h5>Total:<i style="font-weight: 600;font-size: 16px;">{{$result['totalCount']}}</i></h5><br>
                             <form method="get" action="{{route('business::review.claim')}}">
                                 <button class="layui-btn layui-btn-normal" type="submit">Continue to review</button>
                             </form>
                         </td></tr>
                 @endif
+                    <tr><td>Reviewed Today:</td><td><i style="font-weight: 600;font-size: 16px;">{{$result['todayCount']}}</i></td></tr>
+                    <tr><td>Total:</td><td><i style="font-weight: 600;font-size: 16px;">{{$result['totalCount']}}</i></td></tr>
             @else
                 <tr><td>ShopName:</td><td><span>{{$result['shop_nick_name']}}</span></td></tr>
                 <tr><td>GoodsName:</td><td><span>{{$result['goods_name']}}</span></td></tr>
