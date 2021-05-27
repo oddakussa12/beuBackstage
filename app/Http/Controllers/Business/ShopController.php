@@ -114,14 +114,18 @@ class ShopController extends Controller
         }
         if (isset($params['audit'])) {
             $result = User::where('user_id', $id)->update(['user_verified'=>$params['audit']=='pass', 'user_verified_at'=>date('Y-m-d H:i:s')]);
-            $this->auditLog($id, $params['audit']);
+            $data = [
+                'audit_id'  => $id,
+                'type'      => 'shop',
+                'date'      => date('Y-m-d'),
+                'status'    => $params['audit'],
+                'admin_id'  => auth()->user()->admin_id,
+                'created_at'=> date('Y-m-d H:i:s'),
+                'admin_username' => auth()->user()->admin_username,
+            ];
+            DB::table('business_audits')->insert($data);
         }
         return response()->json([]);
-    }
-
-    public function auditLog($shopId, $status)
-    {
-
     }
 
     public function search(Request $request)

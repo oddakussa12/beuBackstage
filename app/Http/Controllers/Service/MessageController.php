@@ -223,7 +223,7 @@ class MessageController extends Controller
             empty($mode) && $chat = $chat->orWhere('chat_to_id', $receiveId);
         }
         if (isset($params['type'])) {
-            $type = $params['type']=='shop';
+            $type = $params['type']=='shop' ? 1 : 0;
             $chat = $chat->where(function($query) use($type) {
                 $query->where('chat_from_type', $type)->orWhere('chat_to_type', $type);
             });

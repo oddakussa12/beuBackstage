@@ -656,7 +656,7 @@ class OperatorController extends Controller
             'marginTop'=>strval(round((round(($newUserGoal-$newUserCurrent)/$newUserGoal , 4)*235))).'px',
             'middle'=>strval(ceil($newUserMiddle/1000))."K"
         );
-        
+
         $onlineCurrent = DB::connection('lovbee')->table('dau_counts')->select(DB::raw('sum(dau) num'))->whereBetween('date', [date('Y-m-01'), $end])->first();
         $onlineCurrent = empty($onlineCurrent->num) ? 1 : $onlineCurrent->num;
         $monthDau = [

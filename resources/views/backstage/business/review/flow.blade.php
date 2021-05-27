@@ -86,7 +86,7 @@
                     </td></tr>
                 <tr><td>
                         <div>
-                            <form method="post" action="/backstage/business/review/view/{{$result['comment_id']}}">
+                            <form method="post" action="{{url('backstage/business/review')}}/{{$result['comment_id']}}">
                                 {{ csrf_field() }}
                                 <input name="audit" hidden value="refuse">
                                 <input type="hidden" name="_method" value="PUT">
@@ -95,7 +95,7 @@
                             </form>
                         </div>
                         <div>
-                            <form  method="POST" action="/backstage/business/review/view/{{$result['comment_id']}}">
+                            <form  method="POST" action="{{url('backstage/business/review')}}/{{$result['comment_id']}}">
                                 {{ csrf_field() }}
                                 {{@method_field('PUT')}}
 {{--                                <input name="_method" type="hidden" value="PUT">--}}
@@ -105,7 +105,7 @@
                             </form>
                         </div>
                         <div>
-                            <form method="post" action="/backstage/business/review/view/{{$result['comment_id']}}">
+                            <form method="post" action="{{url('backstage/business/review')}}/{{$result['comment_id']}}">
                                 {{ csrf_field() }}
                                 <input name="level" hidden value="on">
                                 {{ method_field('PUT')}}
