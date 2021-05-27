@@ -113,7 +113,7 @@ class ReviewController extends Controller
 
     public function flow(Request $request)
     {
-        $user = auth()->user();
+        $user   = auth()->user();
         $params = $request->all();
         $uri    = parse_url($request->server('REQUEST_URI'));
         $query  = empty($uri['query']) ? "" : $uri['query'];
@@ -172,7 +172,7 @@ class ReviewController extends Controller
 
     public function auditLog($id, $params)
     {
-        $status = !empty($params['level']) ? $params['level'] : $params['audit'];
+        $status = !empty($params['audit']) ? $params['audit'] : ($params['level']=='on' ? 'recommend' : 'unrecommend');
         $user = auth()->user();
         $data = [
             'audit_id'  => $id,
