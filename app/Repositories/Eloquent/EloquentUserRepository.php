@@ -99,10 +99,14 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
 
     public function findMessage($params, $detail=false, $export=false)
     {
-        $sort = !empty($params['sort']) ? $params['sort'] : 'chat_from_id';
-        $time = !empty($params['dateTime']) ? $params['dateTime'] : date('Y-m-d', time());
-        $date = !empty($params['dateTime']) ? date('Ym', strtotime($params['dateTime'])) : date('Ym');
-        $num  = $sort=='chat_from_id' ? 'send' : 'receive';
+        $params['dateTime'] = !empty($params['dateTime']) ? $params['dateTime'] : (date('Y-m-d 00:00:00'). ' - '. date('Y-m-d 23:59:59'));
+
+        $sort    = !empty($params['sort']) ? $params['sort'] : 'chat_from_id';
+        $allDate = explode(' - ' , $params['dateTime']);
+        $start   = Carbon::createFromFormat('Y-m-d H:i:s' , current($allDate))->subHours(8)->toDateTimeString();
+        $end     = Carbon::createFromFormat('Y-m-d H:i:s' , next($allDate))->subHours(8)->toDateTimeString();
+        $date    =  date('Ym', strtotime(current($allDate)));
+        $num     = $sort=='chat_from_id' ? 'send' : 'receive';
 
         $table= 'ry_chats_'.$date;
         $user = DB::connection('lovbee')->table($table);
@@ -115,6 +119,9 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             ->join('users', 'users.user_id', '=', $table.'.'.$sort)
             ->join('users_countries', 'users.user_id', '=', 'users_countries.user_id')
             ->join('users_phones', 'users.user_id', '=', 'users_phones.user_id');
+
+
+        $user  = $user->whereBetween($table.'.chat_created_at', [$start, $end]);
 
         if (!empty($params['user_id'])) {
             $user    = $user->where('users.user_id', $params['user_id']);
@@ -130,9 +137,6 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
             $user    = $user->where('users_countries.country', strtolower($params['country_code']));
         }
 
-        $start = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 00:00:00')->subHours(8)->toDateTimeString();
-        $end   = Carbon::createFromFormat('Y-m-d H:i:s', $time.' 23:59:59')->subHours(8)->toDateTimeString();
-        $user  = $user->whereBetween($table.'.chat_created_at', [$start, $end]);
         if (empty($detail)) {
             $user = $user->groupBy($table.'.'.$sort);
         } else {

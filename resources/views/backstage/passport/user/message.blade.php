@@ -15,8 +15,6 @@
                         <input class="layui-input" placeholder="fuzzy search" name="phone" id="phone"  @if(!empty($phone)) value="{{$phone}}" @endif />
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                     <div class="layui-input-inline">
@@ -28,13 +26,6 @@
                         </select>
                     </div>
                 </div>
-
-                <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="dateTime" name="dateTime" placeholder="yyyy-MM-dd" value="@if(!empty($dateTime)){{$dateTime}}@else{{date('Y-m-d', time())}}@endif">
-                    </div>
-                </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
@@ -43,6 +34,14 @@
                             <option value="chat_to_id" @if(!empty($sort)&&$sort=='chat_to_id') selected @endif>Quantity received</option>
                         </select>
                     </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
+                    <div class="layui-input-inline" style="width: 300px;">
+                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " value="{{$dateTime}}">
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <div class="layui-input-inline">
                         <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
                     </div>
@@ -65,7 +64,7 @@
                 <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_active_time')}}</th>
                 <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_active_ip')}}</th>
                 <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
-{{--                <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>--}}
+                {{--                <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>--}}
             </tr>
             </thead>
             <tbody>
@@ -84,7 +83,7 @@
                     <td>{{$user->time}}</td>
                     <td>{{$user->ip}}</td>
                     <td>{{ $user->user_format_created_at }}</td>
-{{--                    <td></td>--}}
+                    {{--                    <td></td>--}}
                 </tr>
             @endforeach
             </tbody>
@@ -100,7 +99,7 @@
 @endsection
 @section('footerScripts')
     @parent
-<!--    <script type="text/html" id="operateTpl">
+    <!--    <script type="text/html" id="operateTpl">
         <div class="layui-table-cell laytable-cell-1-6">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="history">{{trans('common.table.button.detail')}}</a>
         </div>
@@ -115,32 +114,17 @@
             let $ = layui.jquery,
                 table = layui.table,
                 flow = layui.flow,
-                laydate = layui.laydate;
-            laydate.render({
-                elem: '#dateTime'
-            });
-            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                let data = obj.data; //获得当前行数据
-                let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                let tr = obj.tr; //获得当前行 tr 的DOM对象
-                let time = $('#dateTime').val();
-                if(layEvent === 'history'){ //活跃历史
-                    layer.open({
-                        type: 2,
-                        title: "{{trans('user.table.button.chat')}}",
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['70%','100%'],
-                        offset: 'auto',
-                        scrollbar:true,
-                        content: '/backstage/passport/user/chat?user_id='+data.user_id+'&dateTime='+time
-                    });
-                }
+                timePicker = layui.timePicker;
+            timePicker.render({
+                elem: '#dateTime',
+                options:{
+                    timeStamp:false,
+                    format:'YYYY-MM-DD HH:ss:mm',
+                },
             });
             table.init('table', {
                 page:false,
             });
-
             flow.lazyimg();
 
         })

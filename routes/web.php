@@ -117,6 +117,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('shop/view/{shopId}' , 'ShopController@view')->name('shop.view');
             Route::get('shop/search' , 'ShopController@search')->name('shop.search');
             Route::get('shop/audit' , 'ShopController@audit')->name('shop.audit');
+            Route::get('shop/manager' , 'ShopController@manager')->name('shop.manager');
+            Route::get('shop/manager/detail/{id}' , 'ShopController@managerDetail')->name('shop.manager.detail');
             Route::get('shop/search/detail' , 'ShopController@searchDetail')->name('shop.searchDetail');
             Route::resource('shop' , 'ShopController');
             Route::get('goods/view/{goodsId}' , 'GoodsController@view')->name('goods.view');

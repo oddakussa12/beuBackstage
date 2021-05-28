@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Business;
 
 use App\Models\Passport\User;
-use App\Models\Shop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -123,7 +122,7 @@ class ShopController extends Controller
                 'created_at'=> date('Y-m-d H:i:s'),
                 'admin_username' => auth()->user()->admin_username,
             ];
-            DB::table('business_audits')->insert($data);
+            $table->insert($data);
         }
         return response()->json([]);
     }
@@ -195,5 +194,85 @@ class ShopController extends Controller
         return view('backstage.business.shop.view' , $params);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * 审核员管理
+     */
+    public function manager()
+    {
+        $role    = DB::table('roles')->where('name', 'jianhuang')->first();
+        $role    = DB::table('roles')->where('name', 'administrator')->first();
+        $hasRole = DB::table('model_has_roles')->where('role_id', $role->id)->get();
+        $userIds = $hasRole->pluck('model_id')->toArray();
+        $admins  = DB::table('admins')->select('admin_id', 'admin_username', 'admin_realname', 'admin_status', 'admin_country')->whereIn('admin_id', $userIds)->paginate(10);
+        $claims  = DB::table('comments_claim')->select(DB::raw('count(1) num, admin_id'))->groupBy('admin_id')->get();
 
+        foreach ($admins as $admin) {
+            $where  = ['admin_id'=>$admin->admin_id, 'type'=>'comment'];
+            $tTime  = [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')];
+            $mTime  = [date('Y-m-01 00:00:00'), date('Y-m-d H:i:s')];
+            $today  = DB::table('business_audits')->where($where)->whereBetween('created_at', $tTime)->count(); // 今日已审核个数
+            $month  = DB::table('business_audits')->where($where)->whereBetween('created_at', $mTime)->count(); // 本月已审核个数
+            $total  = DB::table('business_audits')->where($where)->count(); // 总审核数
+            $refuse = DB::table('business_audits')->where($where)->where('status', 'refuse')->count(); // 拒绝总数
+            $recommend      = DB::table('business_audits')->where($where)->where('status', 'recommend')->count(); // 推荐总数
+            $refuseMonth    = DB::table('business_audits')->where($where)->where('status', 'refuse')->whereBetween('created_at', $mTime)->count(); // 本月拒绝数
+            $recommendMonth = DB::table('business_audits')->where($where)->where('status', 'recommend')->whereBetween('created_at', $mTime)->count(); // 本月推荐数
+            $lastTime       = DB::table('business_audits')->where($where)->orderByDesc('created_at')->first();
+
+            $admin->todayClaim = $today; // 今日领取数
+            $admin->monthClaim = $month; // 本月领取数
+            $admin->totalClaim = $total; // 总领取数
+            $admin->today      = $today; // 今日审核数
+            $admin->month      = $month; // 本月审核数
+            $admin->total      = $total; // 总审核数
+            $admin->pass       = $total - $refuse - $recommend; // 通过总数
+            $admin->passMonth  = $month - $refuseMonth - $recommendMonth; // 本月通过数
+            $admin->refuse     = $refuse; // 不通过总数
+            $admin->refuseMonth= $refuseMonth; // 本月不通过
+            $admin->recommend  = $recommend; // 总推荐数
+            $admin->recommendMonth = $recommendMonth; // 本月推荐数
+            $admin->lastTime   = !empty($lastTime->created_at) ? $lastTime->created_at : ''; // 最后审核时间
+            foreach ($claims as $claim) {
+                if ($claim->admin_id==$admin->admin_id) {
+                    $admin->todayClaim = $today+$claim->num; // 今日领取数
+                    $admin->monthClaim = $month+$claim->num; // 本月领取数
+                    $admin->totalClaim = $total+$claim->num; // 总领取数
+                }
+            }
+        }
+
+        return view('backstage.business.shop.manager' , compact('admins'));
+    }
+
+    /**
+     * @param Request $request
+     * 审核明细
+     */
+    public function managerDetail(Request $request, $id)
+    {
+        $params = $request->all();
+        $result = DB::table('business_audits')->where('admin_id', $id)->where('type', 'comment');
+
+        if (!empty($params['status'])) {
+            $result = $result->where('status', $params['status']);
+        }
+        $result = $this->dateTime($result, $params);
+        $result = $result->orderByDesc('created_at')->paginate(10);
+        if ($result->isNotEmpty()) {
+            $ids    = $result->pluck('audit_id')->toArray();
+            $list   = DB::connection('lovbee')->table('comments')->whereIn('comment_id', $ids)->get();
+            foreach ($result as $item) {
+                foreach ($list as $li) {
+                    $li->media = !empty($li->media) && !is_array($li->media) ? json_decode($li->media, true) : $li->media;
+                    if ($item->audit_id==$li->comment_id) {
+                        $item->comment = $li;
+                    }
+                }
+            }
+        }
+        $params['result'] = $result;
+        return view('backstage.business.shop.managerDetail', $params);
+
+    }
 }

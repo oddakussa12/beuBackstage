@@ -44,8 +44,8 @@
                 <td>
                     @if(!empty($result->user_id))
                         <input type="hidden" id="id" name="id" value="{{$result->user_id}}">
-                        <button class="layui-btn layui-btn-warm submit   @if($result->user_verified==1) layui-btn-disabled @endif" value="pass">Pass</button>
-                        <button class="layui-btn layui-btn-danger submit @if($result->user_verified==0) layui-btn-disabled @endif" value="refuse">Refuse</button>
+                        <button class="layui-btn layui-btn-normal submit   @if($result->user_verified==1) layui-btn-disabled @endif" value="pass">Pass</button>
+                        <button class="layui-btn layui-btn-warm submit @if($result->user_verified==0) layui-btn-disabled @endif" value="refuse">Refuse</button>
                     @endif
                 </td>
             </tr>

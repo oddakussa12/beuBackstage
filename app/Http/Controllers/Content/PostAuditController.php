@@ -140,7 +140,7 @@ class PostAuditController extends Controller
             }
         }
 
-        return view('backstage.content.post.image' , compact('admins'));
+        return view('backstage.content.post.manager' , compact('admins'));
 
     }
 

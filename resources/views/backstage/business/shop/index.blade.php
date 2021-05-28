@@ -103,8 +103,8 @@
                         </span>
                     </td>
                     <td>
-                        <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==1) checked @endif lay-filter="radio" value="pass" title="Pass">
-                        <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==0) checked @endif lay-filter="radio" value="refuse" title="Refuse">
+                        <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==1) checked @endif lay-type="{{$value->user_id}}" lay-filter="radio" value="pass" title="Pass">
+                        <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==0) checked @endif lay-type="{{$value->user_id}}" lay-filter="radio" value="refuse" title="Refuse">
                     </td>
                     <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
@@ -160,14 +160,22 @@
                 },
             });
             form.on('radio(radio)', function(data){
+                debugger
                 let level  = data.value;
+                let t = data.type;
+                let elem   = data.elem;
+                console.log(elem);
+
+                const checked = data.elem.checked;
+                data.elem.checked = !checked;
                 let name   = 'audit';
                 let params = '{"' + name + '":"'+level+'"}';
                 data.id    = data.othis.parents('tr').find("td :first").text();
-                request(data, params, name);
+               // request(data, params, name);
             });
             form.on('switch(switchAll)', function(data){
                 let params;
+                debugger
                 const checked = data.elem.checked;
                 data.elem.checked = !checked;
                 data.id = data.othis.parents('tr').find("td :first").text();
