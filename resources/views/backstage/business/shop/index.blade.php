@@ -171,7 +171,7 @@
                 let name   = 'audit';
                 let params = '{"' + name + '":"'+level+'"}';
                 data.id    = data.othis.parents('tr').find("td :first").text();
-               // request(data, params, name);
+                request(data, params, name);
             });
             form.on('switch(switchAll)', function(data){
                 let params;
