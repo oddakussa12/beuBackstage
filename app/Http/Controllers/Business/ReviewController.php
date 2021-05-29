@@ -206,7 +206,10 @@ class ReviewController extends Controller
             }
         }
         $result!==false && $this->auditLog($id, $params);
-        return redirect(route('business::review.audit'));
+        if (!empty($params['comment_id'])) {
+            return redirect(route('business::review.audit'));
+        }
+        return [];
     }
 
     public function view(Request $request, $id)
