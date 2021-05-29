@@ -23,7 +23,7 @@
                 <th lay-data="{field:'passMonth', minWidth:100}">passMonth</th>
                 <th lay-data="{field:'refuse', minWidth:100}">refuse</th>
                 <th lay-data="{field:'refuseMonth', minWidth:120}">refuseMonth</th>
-                <th lay-data="{field:'recommend', minWidth:100}">PassRecommend</th>
+                <th lay-data="{field:'recommend', minWidth:130}">PassRecommend</th>
                 <th lay-data="{field:'recommendMonth', minWidth:160}">PassRecommendMonth</th>
                 <th lay-data="{field:'lastTime', minWidth:160}">lastAuditAt</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
