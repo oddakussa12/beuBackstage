@@ -3,7 +3,7 @@
     <style>
         .layui-table img{ min-width:100px; max-width: 300px;}
         table div{ margin: 0 5px; float: left;}
-        .layui-btn {border-radius:6px; padding: 0 15px}
+        .layui-btn {border-radius:6px; padding: 0 12px}
         .layui-table td, .layui-table th { padding: 12px 15px}
         .margin-left { margin-left: 5%;}
         @media screen and (min-width:768px) {
