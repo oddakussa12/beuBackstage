@@ -82,8 +82,8 @@
                 <th lay-data="{field:'verified', minWidth:160}">{{trans('business.table.header.verified')}}</th>
 
                 <th lay-data="{field:'point', minWidth:100}">{{trans('business.table.header.shop_score')}}</th>
-                <th lay-data="{field:'service', minWidth:100}">{{trans('business.table.header.service')}}</th>
                 <th lay-data="{field:'quality', minWidth:100}">{{trans('business.table.header.quality')}}</th>
+                <th lay-data="{field:'service', minWidth:100}">{{trans('business.table.header.service')}}</th>
 
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.comment_user')}}</th>
                 <th lay-data="{field:'media', minWidth:160}">{{trans('business.table.header.media')}}</th>
@@ -120,12 +120,10 @@
                         <input type="radio" name="audit_{{$value->comment_id}}" @if($value->verified==1) checked @endif lay-filter="radio" value="pass" title="Pass">
                         <input type="radio" name="audit_{{$value->comment_id}}" @if($value->verified==0) checked @endif lay-filter="radio" value="refuse" title="Refuse">
                     </td>
-                    <td>{{$value->service}}</td>
                     <td>{{$value->point}}</td>
                     <td>{{$value->quality}}</td>
-
+                    <td>{{$value->service}}</td>
                     <td>@if(!empty($value->user_nick_name))<a target="_blank" style="color: #FFB800" href="{{url('/backstage/passport/user')}}?keyword={{$value->user_nick_name}}">{{$value->user_nick_name}}</a>@endif</td>
-
                     <td>
                         @if(!empty($value->media))
                             @foreach($value->media as $image)

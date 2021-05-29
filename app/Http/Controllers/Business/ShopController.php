@@ -62,7 +62,8 @@ class ShopController extends Controller
         foreach ($shops as $shop) {
             foreach ($points as $point) {
                 if ($shop->user_id==$point->user_id) {
-                    $shop->score   = number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/5), 2);
+                    $sum = $point->point_1+$point->point_2+$point->point_3+$point->point_4+$point->point_5;
+                    $shop->score   = number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/$sum), 2);
                     $shop->quality = $point->quality;
                     $shop->service = $point->service;
                 }
