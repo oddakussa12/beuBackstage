@@ -48,7 +48,7 @@
                 <tr><td>Point:</td><td><span>{{$result['point']}}</span></td></tr>
                 <tr><td>Service:</td><td><span>{{$result['service']}}</span></td></tr>
                 <tr><td>Quality:</td><td><span>{{$result['quality']}}</span></td></tr>
-                <tr><td>Content:</td><td><span>{{$result['content']}}content4content4content4content4cont ent4content4content4content4content4content 4content4content4content4content4content4content4content4cont ent4content4content4content4content4content4</span></td></tr>
+                <tr><td>Content:</td><td><span>{{$result['content']}}</span></td></tr>
                 <tr><td colspan="2">
                         @if (!empty($result['media']))
                             <div class="layer-photos-demo">
