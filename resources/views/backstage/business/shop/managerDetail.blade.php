@@ -41,7 +41,6 @@
                 <th lay-data="{field:'content', minWidth:300}">Content</th>
                 <th lay-data="{field:'comment_at', minWidth:160}">CommentAt</th>
                 <th lay-data="{field:'created_at', minWidth:160}">AuditAt</th>
-                <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -102,8 +101,5 @@
                 });
             });
         });
-    </script>
-    <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
     </script>
 @endsection

@@ -10,22 +10,22 @@
             <thead>
             <tr>
                 <th lay-data="{field:'admin_id', minWidth:100, hide:'true'}">ID</th>
-                <th lay-data="{field:'admin_username', minWidth:100, fixed:'left'}">昵称</th>
-                <th lay-data="{field:'admin_realname', minWidth:100, fixed:'left'}">姓名</th>
-                <th lay-data="{field:'admin_country', minWidth:100, fixed:'left'}">国家</th>
-                <th lay-data="{field:'todayClaim', minWidth:100}">今日领取</th>
-                <th lay-data="{field:'monthClaim', minWidth:100}">本月领取</th>
-                <th lay-data="{field:'totalClaim', minWidth:100}">总领取</th>
-                <th lay-data="{field:'today', minWidth:100}">今日审核</th>
-                <th lay-data="{field:'month', minWidth:100}">本月审核</th>
-                <th lay-data="{field:'total', minWidth:100}">总审核</th>
-                <th lay-data="{field:'pass', minWidth:100}">通过</th>
-                <th lay-data="{field:'passMonth', minWidth:100}">本月通过</th>
-                <th lay-data="{field:'refuse', minWidth:100}">拒绝</th>
-                <th lay-data="{field:'refuseMonth', minWidth:100}">本月拒绝</th>
-                <th lay-data="{field:'recommend', minWidth:100}">通过并推荐</th>
-                <th lay-data="{field:'recommendMonth', minWidth:130}">本月通过并推荐</th>
-                <th lay-data="{field:'lastTime', minWidth:160}">最后审核时间</th>
+                <th lay-data="{field:'admin_username', minWidth:100, fixed:'left'}">{{trans('user.table.header.user_nick_name')}}</th>
+                <th lay-data="{field:'admin_realname', minWidth:100, fixed:'left'}">{{trans('user.table.header.user_name')}}</th>
+                <th lay-data="{field:'admin_country', minWidth:100, fixed:'left'}">{{trans('user.table.header.user_country')}}</th>
+                <th lay-data="{field:'todayClaim', minWidth:100}">todayClaim</th>
+                <th lay-data="{field:'monthClaim', minWidth:100}">monthClaim</th>
+                <th lay-data="{field:'totalClaim', minWidth:100}">totalClaim</th>
+                <th lay-data="{field:'today', minWidth:100}">todayAudit</th>
+                <th lay-data="{field:'month', minWidth:100}">monthAudit</th>
+                <th lay-data="{field:'total', minWidth:100}">totalAudit</th>
+                <th lay-data="{field:'pass', minWidth:100}">Pass</th>
+                <th lay-data="{field:'passMonth', minWidth:100}">passMonth</th>
+                <th lay-data="{field:'refuse', minWidth:100}">refuse</th>
+                <th lay-data="{field:'refuseMonth', minWidth:100}">refuseMonth</th>
+                <th lay-data="{field:'recommend', minWidth:100}">PassRecommend</th>
+                <th lay-data="{field:'recommendMonth', minWidth:130}">PassRecommendMonth</th>
+                <th lay-data="{field:'lastTime', minWidth:160}">lastAuditAt</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
