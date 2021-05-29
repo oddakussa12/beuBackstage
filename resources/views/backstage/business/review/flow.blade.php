@@ -24,7 +24,7 @@
                 <tr><td colspan="2"><h5>Amazing! The audit is all done! Take a break ☺☺</h5><br></td></tr>
                 @else
                     <tr><td colspan="2">
-                            <h5>Total:<i style="font-weight: 600;font-size: 16px;">{{$result['totalCount']}}</i></h5><br>
+                            <h5>To Be Reviewed:<i style="font-weight: 600;font-size: 16px;">{{$result['unaudited']}}</i></h5><br>
                             <form method="get" action="{{route('business::review.claim')}}">
                                 <button class="layui-btn layui-btn-normal" type="submit">Continue to review</button>
                             </form>
