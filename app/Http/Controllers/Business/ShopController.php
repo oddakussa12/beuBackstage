@@ -120,7 +120,7 @@ class ShopController extends Controller
                 'created_at'=> date('Y-m-d H:i:s'),
                 'admin_username' => auth()->user()->admin_username,
             ];
-            $table->insert($data);
+            DB::table('business_audits')->insert($data);
         }
         return response()->json([]);
     }
