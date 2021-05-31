@@ -18,8 +18,6 @@ class GoodsController extends Controller
      */
     public function index(Request $request)
     {
-        $uri    = parse_url($request->server('REQUEST_URI'));
-        $query  = empty($uri['query']) ? "" : $uri['query'];
         $keyword= $params['keyword'] ?? '';
         $params = $request->all();
         $goods  = Goods::select(DB::raw('t_goods.*, t_users.user_name shop_name, t_users.user_nick_name shop_nick_name, t_goods_views.num view_num'))
@@ -58,7 +56,6 @@ class GoodsController extends Controller
             }
         }
 
-        $params['query']   = $query;
         $params['appends'] = $params;
         $params['result']  = $goods;
 

@@ -13,8 +13,6 @@ class ReviewController extends Controller
 
     public function base(Request $request)
     {
-        $uri    = parse_url($request->server('REQUEST_URI'));
-        $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
         $result = DB::connection('lovbee')->table('comments')->where('step', 1);
         if (isset($params['recommend'])) {
@@ -42,7 +40,6 @@ class ReviewController extends Controller
         }
         $sort   = !empty($params['sort']) && $params['sort'] == 'asc' ? 'orderBy' : 'orderByDesc';
         $result = $result->$sort('created_at')->paginate(10);
-        $params['query']   = $query;
 
         return $this->select($result, $params);
     }

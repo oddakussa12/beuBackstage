@@ -19,8 +19,6 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-        $uri    = parse_url($request->server('REQUEST_URI'));
-        $query  = empty($uri['query']) ? "" : $uri['query'];
         $params = $request->all();
         $keyword= $params['keyword'] ?? '';
         $phone  = $params['phone'] ?? '';
@@ -70,7 +68,6 @@ class ShopController extends Controller
             }
         }
 
-        $params['query']   = $query;
         $params['appends'] = $params;
         $params['result']  = $shops;
 
