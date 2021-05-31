@@ -205,7 +205,10 @@ class UserController extends Controller
         $countries = config('country');
         $params['countries']=$countries;
         $users = $this->user->findMessage($params);
-
+        if(isset($params['dateTime']))
+        {
+            $params['dateTime'] = Carbon::now("Asia/Shanghai")->toDateTimeString();
+        }
         $block_users = block_user_list();
         $users->each(function ($item) use ($block_users){
             $item->is_block = intval(in_array($item->user_id , array_keys($block_users)));
