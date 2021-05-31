@@ -205,7 +205,7 @@ class UserController extends Controller
         $countries = config('country');
         $params['countries']=$countries;
         $users = $this->user->findMessage($params);
-        if(isset($params['dateTime']))
+        if(!isset($params['dateTime']))
         {
             $params['dateTime'] = Carbon::now("Asia/Shanghai")->toDateTimeString();
         }
