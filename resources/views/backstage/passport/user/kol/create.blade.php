@@ -7,7 +7,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">ID：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="user_id" name="user_id" placeholder="User ID"  required="required" autocomplete="off" class="layui-input" value="">
+                        <input type="text" id="user_id" name="user_id" placeholder="User ID (Numbers only)"  required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
             </div>
