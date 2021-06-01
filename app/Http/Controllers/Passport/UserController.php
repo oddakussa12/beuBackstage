@@ -989,8 +989,11 @@ class UserController extends Controller
         if(!empty($userId))
         {
             $user = DB::connection('lovbee')->table('kol_users')->where('user_id' , $userId)->first();
-            if(empty($user))
-            {
+            $info = DB::connection('lovbee')->table('users')->where('user_id' , $userId)->first();
+            if (empty($info)) {
+                abort('400', 'The account does not exist');
+            }
+            if(empty($user)) {
                 DB::connection('lovbee')->table('kol_users')->insert(array(
                     'user_id'=>$userId,
                     'created_at'=>date('Y-m-d H:i:s'),
