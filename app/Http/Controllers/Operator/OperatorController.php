@@ -592,9 +592,9 @@ class OperatorController extends Controller
             $start = Carbon::createFromFormat('Y-m-d' , $start)->addDays(1)->toDateString();
         }
 
-        $hrCurrent = 29;
+        $hrCurrent = 4;
         $hrMiddle = 36;
-        $hrGoal = 50;
+        $hrGoal = 30;
         $hrData = [
             'percentage'=>strval(round($hrCurrent/$hrGoal , 4)*100)."%" ,
             'current'=>$hrCurrent ,
@@ -640,7 +640,7 @@ class OperatorController extends Controller
 
         $shopMiddle  = 100;
         $shopCurrent = $this->db->table('users')->where('user_shop', 1)->where('user_verified', 1)->count();
-        $shopGoal    = 170;
+        $shopGoal    = 468;
         $shopData    = array('percentage'=>strval(round($shopCurrent/$shopGoal , 4)*100)."%" , 'current'=>$shopCurrent , 'goal'=>$shopGoal, 'marginTop'=>strval(round((round(($shopGoal-$shopCurrent)/$shopGoal , 4)*235))).'px',
             'middle'=>$shopMiddle);
 
