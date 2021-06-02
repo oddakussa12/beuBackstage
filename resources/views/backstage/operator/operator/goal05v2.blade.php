@@ -216,11 +216,7 @@
                         </div>
                     </span>
                     <span id="developer" class="target-content" >
-                        <ul class="site-doc-bgcolor">
-                            @foreach($devData['text'] as $text)
-                                {!! $text !!}
-                            @endforeach
-                        </ul>
+                        <iframe src="https://xcrum-xmt-chat.onrender.com/targets"></iframe>
                     </span>
                     <svg class="editorial-developer"
                          xmlns="http://www.w3.org/2000/svg"
