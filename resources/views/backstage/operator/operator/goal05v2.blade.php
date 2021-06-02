@@ -24,21 +24,21 @@
                 <div class="div-title">
                 </div>
                 <div class="layui-panel">
-                    <div class="layui-panel layui-slider layui-middle layui-panel-operate">
+                    <div class="layui-panel layui-slider layui-pond layui-panel-operate">
                         <div class="layui-row layui-item-title">
                             <h2>Business Account</h2>
                         </div>
                         <span class="shop-icon layui-row layui-icon-div" style="background-size: 30% 50%;">
                         <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-{{--                            <h2 class="number">{{$shopData['current']}}<br />Reach</h2>--}}
+                            <h2 class="number">{{$shopData['current']}}<br />Reach</h2>
                         </div>
                         <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
                             <div style="padding: 5px;">
-                                <h2 style="margin-top: 70px;" class="number">{{$shopData['current']}}<br />Reach</h2>
+{{--                                <h2 style="margin-top: 70px;" class="number">{{$shopData['current']}}<br />Reach</h2>--}}
                             </div>
                         </div>
                         <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-{{--                            <h2 class="number">{{$shopData['goal']}}<br />Target</h2>--}}
+                            <h2 class="number">{{$shopData['goal']}}<br />Target</h2>
                         </div>
                     </span>
                         <svg class="editorial-shop"
@@ -47,7 +47,7 @@
                              viewBox="0 24 150 28"
                              preserveAspectRatio="none">
                             <defs>
-                                <path id="gentle-wave-prod"
+                                <path id="gentle-wave-operate"
                                       d="M-160 44c30 0
     58-18 88-18s
     58 18 88 18
@@ -65,41 +65,6 @@
                             <span></span>
                         </div>
                     </div>
-                    <div class="layui-panel layui-slider layui-middle layui-panel-operate margin-top-10">
-                        <div class="layui-row layui-item-title">
-                            <h2>NewUser</h2>
-                        </div>
-                        <span class="layui-row layui-icon-div">
-                        <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <h2 class="number">{{$newUserData['current']}}<br />Reach</h2>
-                        </div>
-                        <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <div style="padding: 5px;"></div>
-                        </div>
-                        <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <h2 class="number">{{$newUserData['goal']}}<br />Target</h2>
-                        </div>
-                    </span>
-                        <svg class="editorial editorial-newUser" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none">
-                            <defs>
-                                <path id="gentle-wave-operate" d="M-160 44c30 0
-    58-18 88-18s
-    58 18 88 18
-    58-18 88-18
-    58 18 88 18
-    v44h-352z"></path>
-                            </defs>
-                            <g class="parallax">
-                                <use xlink:href="#gentle-wave-operate" x="50" y="0" fill="#FFD24A"></use>
-                                <use xlink:href="#gentle-wave-operate" x="50" y="1" fill="#FFEABF"></use>
-                                <use xlink:href="#gentle-wave-operate" x="50" y="2" fill="#FFDA8F"></use>
-                            </g>
-                        </svg>
-                        <div class="content content-operate">
-                            <span></span>
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <div class="layui-col-md2">
@@ -201,46 +166,8 @@
                 <div class="div-title">
                 </div>
                 <div class="layui-panel layui-slider layui-pond layui-panel-dev">
-                    <div class="layui-row layui-item-title">
-                        <h2>Development</h2>
-                    </div>
-                    <span class="dev-icon layui-row layui-icon-div">
-                        <div onclick="developer('developer')" class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <h2 class="number"><span id="developer-num">{{$devData['current']}}</span><br />Reach</h2>
-                        </div>
-                        <div onclick="developer('developer', 1)" class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <div style="padding: 5px;"></div>
-                        </div>
-                        <div onclick="developer('developer')" class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-                            <h2 class="number">{{$devData['goal']}}<br />Target</h2>
-                        </div>
-                    </span>
-                    <span id="developer" class="target-content" >
-                        <iframe src="https://xcrum-xmt-chat.onrender.com/targets"  id="developer_frame" scrolling="no" frameborder="0"></iframe>
-                    </span>
-                    <svg class="editorial-developer"
-                         xmlns="http://www.w3.org/2000/svg"
-                         xmlns:xlink="http://www.w3.org/1999/xlink"
-                         viewBox="0 24 150 28"
-                         preserveAspectRatio="none">
-                        <defs>
-                            <path id="gentle-wave-dev"
-                                  d="M-160 44c30 0
-    58-18 88-18s
-    58 18 88 18
-    58-18 88-18
-    58 18 88 18
-    v44h-352z" />
-                        </defs>
-                        <g class="parallax">
-                            <use xlink:href="#gentle-wave-dev" x="50" y="0" fill="#55FF00"/>
-                            <use xlink:href="#gentle-wave-dev" x="50" y="1" fill="#D4FFBF"/>
-                            <use xlink:href="#gentle-wave-dev" x="50" y="2" fill="#B4FF8F"/>
-                        </g>
-                    </svg>
-                    <div class="content content-dev">
-                        <span></span>
-                    </div>
+                    <img src="/images/a3934215b8605ca2c63c0c1712ee3b5.png" width="300px" height="480px">
+{{--                    <iframe src="https://xcrum-xmt-chat.onrender.com/targets"  id="developer_frame" scrolling="no" frameborder="0"></iframe>--}}
                     <button id="button2" class="button-2">Show</button>
                 </div>
             </div>
@@ -287,8 +214,8 @@
             });
             var resizeIFrameToFitContent = function (iFrame) {
                 console.log(1);
-                iFrame.width  = "120%";
-                iFrame.height = '300px';
+                iFrame.width  = "100%";
+                iFrame.height = '480px';
             }
             var iFrame = document.getElementById('developer_frame');
             resizeIFrameToFitContent(iFrame);
@@ -413,6 +340,7 @@
             box-shadow: 0px 0px 4px 3px #FF8F8F;
         }
         .layui-panel-dev{
+            width: 100%;
             box-shadow: 0px 0px 4px 3px #B4FF8F;
         }
 

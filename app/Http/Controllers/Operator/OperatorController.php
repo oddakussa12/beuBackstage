@@ -605,16 +605,14 @@ class OperatorController extends Controller
 
         $productSelected = json_decode(Cache::get('goal_product'), true);
         $pText= [
-            'Business account profile 商家账户详情',
-            'Reviews 评论',
-            'Control of purchasing 购买管控',
-            'Website 网站',
-            'New logo 新logo',
-            'Shop QR code 商家二维码',
-            'Coupons 优惠券',
-            'Discover 商店广场',
-            'Shop verification 商家认证',
-            'Categories and filtering 分类和筛选',
+            '💭 Share',
+            '💭 Discover',
+            '💭 Map',
+            '💭 Membership',
+            '💭 Community',
+            '💭 Colors(look)',
+            '💭 Fonts, text',
+            '💭 Ready for delivery',
         ];
         foreach ($pText as $key=>$text) {
             if (!empty($productSelected)) {
