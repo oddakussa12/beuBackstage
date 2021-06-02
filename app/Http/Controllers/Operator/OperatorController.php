@@ -641,7 +641,7 @@ class OperatorController extends Controller
         $shopMiddle  = 100;
         $shopCurrent = $this->db->table('users')->where('user_shop', 1)->where('user_verified', 1)->count();
         $shopGoal    = 468;
-        $shopData    = array('percentage'=>strval(round($shopCurrent/$shopGoal , 4)*100)."%" , 'current'=>$shopCurrent , 'goal'=>$shopGoal, 'marginTop'=>strval(round((round(($shopGoal-$shopCurrent)/$shopGoal , 4)*235))).'px',
+        $shopData    = array('percentage'=>strval(round($shopCurrent/$shopGoal , 4)*100)."%" , 'current'=>$shopCurrent , 'goal'=>$shopGoal, 'marginTop'=>strval(round((round(($shopGoal-$shopCurrent)/$shopGoal , 4)*480))).'px',
             'middle'=>$shopMiddle);
 
         $newUserMiddle  = 20000;
