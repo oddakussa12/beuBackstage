@@ -59,6 +59,7 @@
                 </div>
                 <div class="layui-inline">
                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
                 </div>
             </div>
         </form>
@@ -73,11 +74,6 @@
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
                 <th lay-data="{field:'user_verifiedd', minWidth:100}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_verified', minWidth:150}">{{trans('common.table.header.status')}}</th>
-                <th lay-data="{field:'user_level', minWidth:100}">{{trans('business.table.header.vip')}}</th>
-                <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
-                <th lay-data="{field:'quality', minWidth:120}">{{trans('business.table.header.quality')}}</th>
-                <th lay-data="{field:'service', minWidth:120}">{{trans('business.table.header.service')}}</th>
-                <th lay-data="{field:'num', minWidth:120}">{{trans('business.table.header.goods_num')}}</th>
                 <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
                 <th lay-data="{field:'recommend', minWidth:100}">{{trans('business.table.header.recommend')}}</th>
                 <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
@@ -87,7 +83,7 @@
                 <th lay-data="{field:'user_about', minWidth:200}">{{trans('user.table.header.user_about')}}</th>
                 <th lay-data="{field:'user_verified_at', minWidth:160}">{{trans('user.table.header.user_audit_time')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
-                <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', width:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -106,11 +102,6 @@
                         <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==1) checked @endif lay-type="{{$value->user_id}}" lay-filter="radio" value="pass" title="Pass">
                         <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==0) checked @endif lay-type="{{$value->user_id}}" lay-filter="radio" value="refuse" title="Refuse">
                     </td>
-                    <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
-                    <td>@if(!empty($value->quality)){{$value->quality}}@else 0 @endif</td>
-                    <td>@if(!empty($value->service)){{$value->service}}@else 0 @endif</td>
-                    <td>@if(!empty($value->num)){{$value->num}}@else 0 @endif</td>
                     <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
                     <td><input type="checkbox" @if($value->recommend>0) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
@@ -224,6 +215,27 @@
                         content: '/backstage/business/shop/view/'+data.user_id,
                     });
                 }
+                if(layEvent === 'edit'){
+                    layer.open({
+                        type: 2,
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['95%','95%'],
+                        offset: 'auto',
+                        scrollbar:true,
+                        content: '/backstage/business/shop/'+data.user_id,
+                    });
+                }
+            });
+            $(document).on('click','#add',function(){
+                layer.open({
+                    type: 2,
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['95%','90%'],
+                    offset: 'auto',
+                    content: '/backstage/business/shop/create',
+                });
             });
             $(function () {
                 let img_show = null; // tips提示
@@ -237,5 +249,6 @@
     </script>
     <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('business.table.header.view_history')}}</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
     </script>
 @endsection

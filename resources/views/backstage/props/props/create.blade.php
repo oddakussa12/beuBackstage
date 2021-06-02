@@ -183,12 +183,6 @@
                     }
                 });
             }
-            function handle(e) {
-                var file = e.target.files[0];
-                browserMD5File(file, function (err, md5) {
-                    console.log(md5); // 97027eb624f85892c69c4bcec8ab0f11
-                });
-            }
         });
 
     </script>

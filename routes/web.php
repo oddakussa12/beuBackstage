@@ -115,6 +115,7 @@ Route::group(['prefix'=>'backstage'] , function(){
 
         Route::group(['namespace'=>'Business','prefix'=>'business' , 'as' => 'business::'] , function (){
             Route::get('shop/view/{shopId}' , 'ShopController@view')->name('shop.view');
+            Route::get('shop/virtual' , 'ShopController@virtual')->name('shop.virtual');
             Route::get('shop/search' , 'ShopController@search')->name('shop.search');
             Route::get('shop/audit' , 'ShopController@audit')->name('shop.audit');
             Route::get('shop/manager' , 'ShopController@manager')->name('shop.manager');

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Business;
 
 use App\Models\Passport\User;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -11,25 +13,22 @@ use Illuminate\Support\Facades\Log;
 
 class ShopController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
-     */
-    public function index(Request $request)
+    public function base(Request $request)
     {
         $params = $request->all();
         $keyword= $params['keyword'] ?? '';
         $phone  = $params['phone'] ?? '';
         $shop   = User::select(DB::raw('t_users.*,t_users_phones.*,t_users_countries.country, count(t_goods.id) num, t_shops_views.num view_num, t_recommendation_users.user_id recommend, t_recommendation_users.created_at recommended_at'))
             ->join('users_phones', 'users_phones.user_id', '=', 'users.user_id')
-            ->join('users_countries', 'users_countries.user_id', '=', 'users.user_id')
+            ->leftjoin('users_countries', 'users_countries.user_id', '=', 'users.user_id')
             ->leftjoin('goods', 'goods.user_id', '=', 'users.user_id')
             ->leftjoin('shops_views', 'shops_views.owner', '=', 'users.user_id')
             ->leftjoin('recommendation_users', 'recommendation_users.user_id', '=', 'users.user_id');
         if (isset($params['recommend'])) {
             $shop = $shop->where('recommend', $params['recommend']);
+        }
+        if (!empty($params['virtual'])) {
+            $shop = $shop->where('virtual', $params['virtual']);
         }
         if (isset($params['level'])) {
             $shop = $shop->where('users.user_level', $params['level']);
@@ -71,7 +70,73 @@ class ShopController extends Controller
         $params['appends'] = $params;
         $params['result']  = $shops;
 
+        return $params;
+
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     */
+    public function index(Request $request)
+    {
+        $params = $this->base($request);
         return view('backstage.business.shop.index' , $params);
+    }
+
+    public function virtual(Request $request)
+    {
+        $request->offsetSet('virtual', 1);
+        $params = $this->base($request);
+        return view('backstage.business.shop.virtual' , $params);
+    }
+
+
+    public function create()
+    {
+        return view('backstage.business.shop.create');
+    }
+
+    public function edit($id)
+    {
+        $shop    = User::find($id);
+        $phone   = DB::connection('lovbee')->table('users_phones')->where('user_id', $id)->first();
+        $country = DB::connection('lovbee')->table('users_countries')->where('user_id', $id)->first();
+        return view('backstage.business.shop.edit', compact('shop', 'phone', 'country'));
+    }
+
+    public function show($id)
+    {
+        $user    = User::find($id);
+        $phone   = DB::connection('lovbee')->table('users_phones')->where('user_id', $id)->first();
+        $country = DB::connection('lovbee')->table('users_countries')->where('user_id', $id)->first();
+        return view('backstage.business.shop.edit', compact('user', 'phone', 'country'));
+    }
+
+    public function store(Request $request)
+    {
+        $register = $request->only('user_phone_country', 'user_phone', 'user_name', 'user_nick_name', 'registration_type', 'password');
+        $header   = ['HellooVersion' => '3.3.0', 'deviceId'=>$register['user_phone']];
+        $result   = $this->url('/api/user/signUp', $register, 'POST', $header);
+        $msg      = '';
+        if ($result===true) {
+            $user = DB::connection('lovbee')->table('users_phones')->where(['user_phone'=>$register['user_phone'], 'user_phone_country'=>trim($register['user_phone_country'], '+')])->first();
+            $info = $request->all();
+            $info['user_id'] = $user->user_id;
+            $info['user_id'] = $user->user_id;
+            $update = $this->url('/api/backstage/shop', $info, 'PATCH', $header);
+            return [];
+        } else{
+            if ($result===false) {
+                $msg = 'Server exception';
+            }
+            if (is_array($result) && !empty($result['message'])) {
+                $msg = $result['message'];
+            }
+            $data = ['message'=>$msg];
+        }
+        return response()->json($data);
     }
 
     public function audit(Request $request)
@@ -94,34 +159,47 @@ class ShopController extends Controller
 
     public function update(Request $request, $id)
     {
+        $adminUser = auth()->user();
         $params = $request->all();
-        if (!empty($params['recommend'])) {
-            $result = DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->first();
-            if ($params['recommend']=='on') {
-                if (empty($result)) {
-                    $insert = DB::connection('lovbee')->table('recommendation_users')->insert([
-                        'user_id'=>$id, 'created_at'=>date("Y-m-d H:i:s")
-                    ]);
-                    empty($insert) && abort('403', trans('common.ajax.result.prompt.fail'));
+        if (!empty($params['recommend']) || isset($params['level']) || $params['audit']) {
+            if (!empty($params['recommend'])) {
+                $result = DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->first();
+                Log::info(__CLASS__.'::update:::recommend', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, 'recommend'=>$params['recommend']]);
+                if ($params['recommend']=='on') {
+                    if (empty($result)) {
+                        $insert = DB::connection('lovbee')->table('recommendation_users')->insert([
+                            'user_id'=>$id, 'created_at'=>date("Y-m-d H:i:s")
+                        ]);
+                        empty($insert) && abort('403', trans('common.ajax.result.prompt.fail'));
+                    }
                 }
             }
+            if (isset($params['level'])) {
+                $result = User::where('user_id', $id)->update(['user_level'=>$params['level']=='on']);
+                Log::info(__CLASS__.'::update:::level', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, 'level'=>$params['level']]);
+            }
+            if (isset($params['audit'])) {
+                $result = User::where('user_id', $id)->update(['user_verified'=>$params['audit']=='pass', 'user_verified_at'=>date('Y-m-d H:i:s')]);
+                $data = [
+                    'audit_id'  => $id,
+                    'type'      => 'shop',
+                    'date'      => date('Y-m-d'),
+                    'status'    => $params['audit'],
+                    'admin_id'  => $adminUser->admin_id,
+                    'created_at'=> date('Y-m-d H:i:s'),
+                    'admin_username' => $adminUser->admin_username,
+                ];
+                DB::table('business_audits')->insert($data);
+            }
+        } else {
+            $user   = User::find($id);
+            $info   = collect($params)->except('user_phone_country', 'user_phone')->toArray();
+            $info   = array_diff($info, collect($user)->toArray());
+            if (!empty($info)) {
+                $result = User::where('user_id', $id)->update($info);
+            }
         }
-        if (isset($params['level'])) {
-            $result = User::where('user_id', $id)->update(['user_level'=>$params['level']=='on']);
-        }
-        if (isset($params['audit'])) {
-            $result = User::where('user_id', $id)->update(['user_verified'=>$params['audit']=='pass', 'user_verified_at'=>date('Y-m-d H:i:s')]);
-            $data = [
-                'audit_id'  => $id,
-                'type'      => 'shop',
-                'date'      => date('Y-m-d'),
-                'status'    => $params['audit'],
-                'admin_id'  => auth()->user()->admin_id,
-                'created_at'=> date('Y-m-d H:i:s'),
-                'admin_username' => auth()->user()->admin_username,
-            ];
-            DB::table('business_audits')->insert($data);
-        }
+
         return response()->json([]);
     }
 
@@ -272,5 +350,47 @@ class ShopController extends Controller
         $params['result'] = $result;
         return view('backstage.business.shop.managerDetail', $params);
 
+    }
+
+    /**
+     * @param string $url
+     * @param array $data
+     * @param string $method
+     * @param array $headers
+     * @param false $json
+     * @return bool|mixed|force(kmixed)
+     */
+    protected function url(string $url, array $data=[], string $method='POST', array $headers=[], bool $json=false)
+    {
+        try {
+            $client = new Client();
+            foreach ($data as &$datum) {
+                $datum = is_array($datum) ? json_encode($datum, JSON_UNESCAPED_UNICODE) : $datum;
+            }
+            $signature = common_signature($data);
+            $data['signature'] = $signature;
+            $data     = $json ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
+            if(strtolower($method)=='get')
+            {
+                $response = $client->request($method, front_url($url), array('query'=>$data));
+            }else{
+                $response = $client->request($method, front_url($url), ['form_params'=>$data, 'headers'=>$headers]);
+            }
+            $code     = intval($response->getStatusCode());
+            if ($code>=300) {
+                Log::info('http_request_fail' , array('code'=>$code));
+                return false;
+            }
+            $result = $response->getBody()->getContents();
+            return json_decode($result, true);
+        } catch (GuzzleException $e) {
+            if (stripos($e->getMessage(), 'review')) {
+                return true;
+            } else {
+                // dump('http_request_fail' , array('code'=>$e->getCode() , 'message'=>$e->getMessage()));
+                Log::info('http_request_fail' , array('code'=>$e->getCode() , 'message'=>$e->getMessage()));
+            }
+            return ['code'=>$e->getCode(), 'message'=>$e->getMessage()];
+        }
     }
 }
