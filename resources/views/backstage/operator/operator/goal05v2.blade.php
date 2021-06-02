@@ -216,7 +216,7 @@
                         </div>
                     </span>
                     <span id="developer" class="target-content" >
-                        <iframe src="https://xcrum-xmt-chat.onrender.com/targets"></iframe>
+                        <iframe src="https://xcrum-xmt-chat.onrender.com/targets"  id="developer_frame" scrolling="no" frameborder="0"></iframe>
                     </span>
                     <svg class="editorial-developer"
                          xmlns="http://www.w3.org/2000/svg"
@@ -285,6 +285,17 @@
                     layer.closeAll();
                 }, 'post');
             });
+            var resizeIFrameToFitContent = function (iFrame) {
+                console.log(1);
+                iFrame.width  = "120%";
+                iFrame.height = '300px';
+            }
+            var iFrame = document.getElementById('developer_frame');
+            resizeIFrameToFitContent(iFrame);
+            var iframes = document.querySelectorAll("iframe");
+            for( var i = 0; i < iframes.length; i++) {
+                resizeIFrameToFitContent( iframes[i] );
+            }
             setTimeout(function() {
                 window.location.reload();
             }, 600000);
