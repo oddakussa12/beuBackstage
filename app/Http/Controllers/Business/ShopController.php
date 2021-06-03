@@ -25,8 +25,8 @@ class ShopController extends Controller
             ->leftjoin('goods', 'goods.user_id', '=', 'users.user_id')
             ->leftjoin('shops_views', 'shops_views.owner', '=', 'users.user_id')
             ->leftjoin('recommendation_users', 'recommendation_users.user_id', '=', 'users.user_id');
-        if (isset($params['recommend'])) {
-            $shop = $shop->where('recommend', $params['recommend']);
+        if (!empty($params['recommend'])) {
+            $shop = $shop->whereNotNull('recommendation_users.user_id');
         }
         if (!empty($params['virtual'])) {
             $shop = $shop->where('virtual', $params['virtual']);
