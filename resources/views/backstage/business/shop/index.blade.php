@@ -21,6 +21,18 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="country_code" lay-verify="" lay-search  >
+                            <option value="">{{trans('user.form.placeholder.user_country')}}</option>
+                            @foreach($countries  as $country)
+                                <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
+                            @endforeach
+                            <option value="other" @if(!empty($country_code)&&$country_code=='other') selected @endif>Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.table.header.status')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="state">

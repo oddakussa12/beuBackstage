@@ -18,6 +18,7 @@ class ShopController extends Controller
         $params = $request->all();
         $keyword= $params['keyword'] ?? '';
         $phone  = $params['phone'] ?? '';
+        $country= config('country');
         $shop   = User::select(DB::raw('t_users.*,t_users_phones.*,t_users_countries.country, count(t_goods.id) num, t_shops_views.num view_num, t_recommendation_users.user_id recommend, t_recommendation_users.created_at recommended_at'))
             ->join('users_phones', 'users_phones.user_id', '=', 'users.user_id')
             ->leftjoin('users_countries', 'users_countries.user_id', '=', 'users.user_id')
@@ -50,6 +51,16 @@ class ShopController extends Controller
         if (!empty($phone)) {
             $shop = $shop->where('users_phones.user_phone', $phone);
         }
+        if (!empty($params['country_code'])) {
+            $country_code = $params['country_code'];
+            if ($country_code !='other') {
+                $shop = $shop->where('users_countries.country', strtolower($country_code));
+            } else {
+                $country_code = collect($country)->pluck('code')->toArray();
+                $country_code = array_map('strtolower', $country_code);
+                $shop = $shop->whereNotIn('users_countries.country', $country_code);
+            }
+        }
 
         $sort    = !empty($params['sort']) ? $params['sort'] : 'users.user_created_at';
         $shops   = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
@@ -69,6 +80,7 @@ class ShopController extends Controller
 
         $params['appends'] = $params;
         $params['result']  = $shops;
+        $params['countries']  = $country;
 
         return $params;
 
