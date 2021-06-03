@@ -20,7 +20,7 @@ return [
             'service'=>'Service',
             'quality'=>'Quality',
             'media'=>'Media',
-            'verified'=>'Isverify',
+            'verified'=>'IsVerify',
             'verified_at'=>'VerifyAt',
             'content'=>'Content',
             'shop_score'=>'Score',

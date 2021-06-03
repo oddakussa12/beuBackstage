@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('common.table.header.status')}}:</label>
+                    <label class="layui-form-label">{{trans('business.table.header.verified')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="state">
                             <option value="">ALL</option>
