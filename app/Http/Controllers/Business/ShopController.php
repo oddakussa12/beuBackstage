@@ -179,11 +179,11 @@ class ShopController extends Controller
                 Log::info(__CLASS__.'::update:::recommend', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, 'recommend'=>$params['recommend']]);
                 if ($params['recommend']=='on') {
                     if (empty($result)) {
-                        $insert = DB::connection('lovbee')->table('recommendation_users')->insert([
-                            'user_id'=>$id, 'created_at'=>date("Y-m-d H:i:s")
-                        ]);
+                        $insert = DB::connection('lovbee')->table('recommendation_users')->insert(['user_id'=>$id, 'created_at'=>date("Y-m-d H:i:s")]);
                         empty($insert) && abort('403', trans('common.ajax.result.prompt.fail'));
                     }
+                } else {
+                    DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->delete();
                 }
             }
             if (isset($params['level'])) {
