@@ -166,9 +166,7 @@
                 <div class="div-title">
                 </div>
                 <div class="layui-panel layui-slider layui-pond layui-panel-dev">
-                    <img src="/images/a3934215b8605ca2c63c0c1712ee3b5.png" width="300px" height="480px">
-{{--                    <iframe src="https://xcrum-xmt-chat.onrender.com/targets"  id="developer_frame" scrolling="no" frameborder="0"></iframe>--}}
-                    <button id="button2" class="button-2">Show</button>
+                    <iframe src="https://xcrum-xmt-chat.onrender.com/targets"  id="developer_frame" scrolling="no" frameborder="0"></iframe>
                 </div>
             </div>
             <div class="layui-col-md1">
