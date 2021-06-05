@@ -72,8 +72,8 @@ class ShopController extends Controller
                 if ($shop->user_id==$point->user_id) {
                     $sum = $point->point_1+$point->point_2+$point->point_3+$point->point_4+$point->point_5;
                     $shop->score   = $sum ? number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/$sum), 2) : 0;
-                    $shop->quality = $point->quality;
-                    $shop->service = $point->service;
+                    $shop->quality = number_format(($point->quality/$sum), 2);
+                    $shop->service = number_format(($point->service/$sum), 2);
                 }
             }
         }
@@ -288,9 +288,9 @@ class ShopController extends Controller
      */
     public function manager()
     {
-        $role    = DB::table('roles')->where('name', 'jianhuang')->first();
-        $role    = DB::table('roles')->where('name', 'administrator')->first();
-        $hasRole = DB::table('model_has_roles')->where('role_id', $role->id)->get();
+        $role    = DB::table('roles')->whereIn('name', ['administrator', 'Reviewer'])->get();
+        $roleIds = $role->pluck('id')->toArray();
+        $hasRole = DB::table('model_has_roles')->whereIn('role_id', $roleIds)->get();
         $userIds = $hasRole->pluck('model_id')->toArray();
         $admins  = DB::table('admins')->select('admin_id', 'admin_username', 'admin_realname', 'admin_status', 'admin_country')->whereIn('admin_id', $userIds)->paginate(10);
         $claims  = DB::table('comments_claim')->select(DB::raw('count(1) num, admin_id'))->groupBy('admin_id')->get();
