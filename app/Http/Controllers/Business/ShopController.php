@@ -29,7 +29,7 @@ class ShopController extends Controller
             $shop = $shop->whereNotNull('recommendation_users.user_id');
         }
         if (!empty($params['virtual'])) {
-            $shop = $shop->where('user_online', $params['virtual']);
+            $shop = $shop->where('user_online', 0);
         }
         if (isset($params['level'])) {
             $shop = $shop->where('users.user_level', $params['level']);
