@@ -62,19 +62,19 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180}">{{trans('business.table.header.goods_id')}}</th>
+                <th lay-data="{field:'id', minWidth:180, hide:'true'}">{{trans('business.table.header.goods_id')}}</th>
                 <th lay-data="{field:'shop_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
                 <th lay-data="{field:'shop_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
                 <th lay-data="{field:'name', minWidth:160}">{{trans('business.table.header.goods_name')}}</th>
                 <th lay-data="{field:'image', minWidth:200}">{{trans('common.table.header.image')}}</th>
                 <th lay-data="{field:'like', minWidth:120}">{{trans('business.table.header.like')}}</th>
-                <th lay-data="{field:'price', minWidth:140}">{{trans('business.table.header.price')}}</th>
                 <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
+                <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
+                <th lay-data="{field:'price', minWidth:140}">{{trans('business.table.header.price')}}</th>
                 <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
                 <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
                 <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.in-stock')}}</th>
                 <th lay-data="{field:'description', minWidth:200}">{{trans('common.table.header.description')}}</th>
-                <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
@@ -93,13 +93,13 @@
                         @endif
                     </td>
                     <td>{{$value->like}}</td>
-                    <td>{{$value->price}} {{$value->currency}}</td>
                     <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
+                    <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
+                    <td>{{$value->price}} {{$value->currency}}</td>
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
                     <td><span class="layui-btn layui-btn-xs @if(empty($value->status)) layui-btn-danger @else layui-btn-warm @endif">@if(empty($value->status)) NO @else YES @endif</span></td>
                     <td>{{$value->description}}</td>
-                    <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
                     <td>{{$value->created_at}}</td>
                     <td></td>
                 </tr>

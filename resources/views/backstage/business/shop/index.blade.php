@@ -78,27 +78,28 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'user_id', minWidth:130}">{{trans('business.table.header.shop_id')}}</th>
-                <th lay-data="{field:'user_avatar', minWidth:80}">{{trans('user.table.header.user_avatar')}}</th>
-                <th lay-data="{field:'user_bg', minWidth:80}">{{trans('user.table.header.user_cover')}}</th>
+                <th lay-data="{field:'user_id', minWidth:130, hide:'true'}">{{trans('business.table.header.shop_id')}}</th>
+                <th lay-data="{field:'country', minWidth:80}">{{trans('user.form.label.user_country')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
+
                 <th lay-data="{field:'user_verifiedd', minWidth:100}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_verified', minWidth:150}">{{trans('common.table.header.status')}}</th>
+                <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
                 <th lay-data="{field:'user_level', minWidth:100}">{{trans('business.table.header.vip')}}</th>
-                <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
-                <th lay-data="{field:'quality', minWidth:120}">{{trans('business.table.header.quality')}}</th>
-                <th lay-data="{field:'service', minWidth:120}">{{trans('business.table.header.service')}}</th>
                 <th lay-data="{field:'num', minWidth:120}">{{trans('business.table.header.goods_num')}}</th>
                 <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
-                <th lay-data="{field:'recommend', minWidth:100}">{{trans('business.table.header.recommend')}}</th>
+                <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
+                <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
+                <th lay-data="{field:'user_avatar', minWidth:80}">{{trans('user.table.header.user_avatar')}}</th>
+                <th lay-data="{field:'user_bg', minWidth:80}">{{trans('user.table.header.user_cover')}}</th>
+                <th lay-data="{field:'quality', minWidth:120}">{{trans('business.table.header.quality')}}</th>
+                <th lay-data="{field:'service', minWidth:120}">{{trans('business.table.header.service')}}</th>
                 <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
-                <th lay-data="{field:'country', minWidth:80}">{{trans('user.form.label.user_country')}}</th>
                 <th lay-data="{field:'user_phone', minWidth:150}">{{trans('user.form.label.phone')}}</th>
                 <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.address')}}</th>
                 <th lay-data="{field:'user_about', minWidth:200}">{{trans('user.table.header.user_about')}}</th>
                 <th lay-data="{field:'user_verified_at', minWidth:160}">{{trans('user.table.header.user_audit_time')}}</th>
-                <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
@@ -106,10 +107,10 @@
             @foreach($result as $value)
                 <tr>
                     <td>{{$value->user_id}}</td>
-                    <td><img src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
-                    <td>@if(!empty($value->user_bg))<img src="@if(stripos($value->user_bg, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_bg}}@else{{$value->user_bg}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" />@endif</td>
+                    <td>{{$value->country}}</td>
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
+
                     <td><span class="layui-btn layui-btn-xs @if($value->user_verified==-1) layui-btn-danger @elseif($value->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">
                             @if($value->user_verified==1) Pass @elseif($value->user_verified==0) Refuse @else UnAudited @endif
                         </span>
@@ -118,15 +119,19 @@
                         <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==1) checked @endif lay-type="{{$value->user_id}}" lay-filter="radio" value="pass" title="Pass">
                         <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==0) checked @endif lay-type="{{$value->user_id}}" lay-filter="radio" value="refuse" title="Refuse">
                     </td>
+                    <td><input type="checkbox" @if($value->recommend>0) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
-                    <td>@if(!empty($value->quality)){{$value->quality}}@else 0 @endif</td>
-                    <td>@if(!empty($value->service)){{$value->service}}@else 0 @endif</td>
                     <td>@if(!empty($value->num)){{$value->num}}@else 0 @endif</td>
                     <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
-                    <td><input type="checkbox" @if($value->recommend>0) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
+                    <td>{{$value->user_created_at}}</td>
+                    <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
+                    <td><img src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                    <td>@if(!empty($value->user_bg))<img src="@if(stripos($value->user_bg, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_bg}}@else{{$value->user_bg}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" />@endif</td>
+
+                    <td>@if(!empty($value->quality)){{$value->quality}}@else 0 @endif</td>
+                    <td>@if(!empty($value->service)){{$value->service}}@else 0 @endif</td>
+
                     <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
-                    <td>{{$value->country}}</td>
                     <td>{{$value->user_phone}}</td>
                     <td>{{$value->user_address}}</td>
                     <td>{{$value->user_about}}</td>
