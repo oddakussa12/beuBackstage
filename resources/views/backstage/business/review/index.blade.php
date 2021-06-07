@@ -73,7 +73,7 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'comment_id', minWidth:180}">{{trans('user.table.header.user_id')}}</th>
+                <th lay-data="{field:'comment_id', minWidth:180, hide:'true'}">{{trans('user.table.header.user_id')}}</th>
                 <th lay-data="{field:'shop_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
                 <th lay-data="{field:'goods_name', minWidth:160}">{{trans('business.table.header.goods_name')}}</th>
                 <th lay-data="{field:'image', minWidth:160}">{{trans('common.table.header.image')}}</th>
