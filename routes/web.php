@@ -128,6 +128,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('review/view/{commentId}' , 'ReviewController@view')->name('review.view');
             Route::get('review/audit' , 'ReviewController@audit')->name('review.audit');
             Route::resource('review' , 'ReviewController');
+            Route::get('discovery/order' , 'DiscoveryOrderController@index')->name('discovery.order');
+            Route::patch('discovery/order' , 'DiscoveryOrderController@update')->name('discovery.order.update');
         });
 
         Route::resource('menu' , 'MenuController');
