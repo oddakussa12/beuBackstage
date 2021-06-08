@@ -15,6 +15,7 @@ return [
             'goods_num'=>'产品数量',
             'view_history'=>'浏览历史',
             'recommend'=>'是否推荐',
+            'take_out'=>'外卖',
             'address'=>'地址',
 
             'service'=>'服务级别',
