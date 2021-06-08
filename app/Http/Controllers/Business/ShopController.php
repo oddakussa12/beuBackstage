@@ -72,8 +72,8 @@ class ShopController extends Controller
                 if ($shop->user_id==$point->user_id) {
                     $sum = $point->point_1+$point->point_2+$point->point_3+$point->point_4+$point->point_5;
                     $shop->score   = $sum ? number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/$sum), 2) : 0;
-                    $shop->quality = number_format(($point->quality/$sum), 2);
-                    $shop->service = number_format(($point->service/$sum), 2);
+                    $shop->quality = $sum ? number_format(($point->quality/$sum), 2) : 0;
+                    $shop->service = $sum ? number_format(($point->service/$sum), 2) : 0;
                 }
             }
         }
@@ -173,7 +173,7 @@ class ShopController extends Controller
     {
         $adminUser = auth()->user();
         $params = $request->all();
-        if (!empty($params['recommend']) || isset($params['level']) || $params['audit']) {
+        if (!empty($params['recommend']) || isset($params['level']) || isset($params['audit']) || isset($params['user_delivery'])) {
             if (!empty($params['recommend'])) {
                 $result = DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->first();
                 Log::info(__CLASS__.'::update:::recommend', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, 'recommend'=>$params['recommend']]);
@@ -189,6 +189,10 @@ class ShopController extends Controller
             if (isset($params['level'])) {
                 $result = User::where('user_id', $id)->update(['user_level'=>$params['level']=='on']);
                 Log::info(__CLASS__.'::update:::level', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, 'level'=>$params['level']]);
+            }
+            if (isset($params['user_delivery'])) {
+                $result = User::where('user_id', $id)->update(['user_delivery'=>$params['user_delivery']=='on']);
+                Log::info(__CLASS__.'::update:::user_delivery', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, 'user_delivery'=>$params['user_delivery']]);
             }
             if (isset($params['audit'])) {
                 $result = User::where('user_id', $id)->update(['user_verified'=>$params['audit']=='pass', 'user_verified_at'=>date('Y-m-d H:i:s')]);
@@ -361,6 +365,18 @@ class ShopController extends Controller
         }
         $params['result'] = $result;
         return view('backstage.business.shop.managerDetail', $params);
+
+    }
+
+    public function order(Request $request, $id)
+    {
+        $params = $request->all();
+        $result = DB::connection('lovbee')->table('delivery_orders')->where('owner', $id);
+        $result = $this->dateTime($result, $params);
+        $result = $result->paginate(10);
+
+        $params['result'] = $result;
+        return view('backstage.business.shop.order', $params);
 
     }
 
