@@ -12,6 +12,7 @@ return [
             'price'=>'价格',
             'in-stock'=>'上架',
             'view_num'=>'浏览量',
+            'order_num'=>'订单量',
             'goods_num'=>'产品数量',
             'view_history'=>'浏览历史',
             'recommend'=>'是否推荐',
@@ -30,7 +31,7 @@ return [
             'comment_user'=>'评论人',
             'to_user'=>'被评论人',
             'top_user'=>'顶级用户',
-
+            'order'=>'订单',
             'recommended_at'=>'推荐时间',
         ],
         'button'=>[

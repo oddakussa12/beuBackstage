@@ -12,6 +12,7 @@ return [
             'price'=>'Price',
             'in-stock'=>'InStock',
             'view_num'=>'ViewNum',
+            'order_num'=>'OrderNum',
             'goods_num'=>'GoodsNum',
             'view_history'=>'ViewHistory',
             'recommend'=>'Recommend',
@@ -30,7 +31,7 @@ return [
             'comment_user'=>'CommentUser',
             'to_user'=>'ByReply',
             'top_user'=>'TopUser',
-
+            'order'=>'Order',
             'recommended_at'=>'RecommendTime',
         ],
         'button'=>[

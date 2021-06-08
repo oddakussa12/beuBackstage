@@ -72,8 +72,8 @@ class ShopController extends Controller
                 if ($shop->user_id==$point->user_id) {
                     $sum = $point->point_1+$point->point_2+$point->point_3+$point->point_4+$point->point_5;
                     $shop->score   = $sum ? number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/$sum), 2) : 0;
-                    $shop->quality = number_format(($point->quality/$sum), 2);
-                    $shop->service = number_format(($point->service/$sum), 2);
+                    $shop->quality = $sum ? number_format(($point->quality/$sum), 2) : 0;
+                    $shop->service = $sum ? number_format(($point->service/$sum), 2) : 0;
                 }
             }
         }
@@ -365,6 +365,18 @@ class ShopController extends Controller
         }
         $params['result'] = $result;
         return view('backstage.business.shop.managerDetail', $params);
+
+    }
+
+    public function order(Request $request, $id)
+    {
+        $params = $request->all();
+        $result = DB::connection('lovbee')->table('delivery_orders')->where('owner', $id);
+        $result = $this->dateTime($result, $params);
+        $result = $result->paginate(10);
+
+        $params['result'] = $result;
+        return view('backstage.business.shop.order', $params);
 
     }
 
