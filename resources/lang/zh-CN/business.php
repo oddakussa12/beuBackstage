@@ -15,6 +15,7 @@ return [
             'order_num'=>'订单量',
             'goods_num'=>'产品数量',
             'view_history'=>'浏览历史',
+            'manager'=>'后台管理者',
             'recommend'=>'是否推荐',
             'take_out'=>'外卖',
             'address'=>'地址',

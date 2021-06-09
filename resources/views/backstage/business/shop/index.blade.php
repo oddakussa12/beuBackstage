@@ -78,7 +78,7 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'user_id', minWidth:130, hide:'true'}">{{trans('business.table.header.shop_id')}}</th>
+                <th lay-data="{field:'user_id', minWidth:130}">{{trans('business.table.header.shop_id')}}</th>
                 <th lay-data="{field:'country', minWidth:80}">{{trans('user.form.label.user_country')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
@@ -99,6 +99,10 @@
                 <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
                 <th lay-data="{field:'user_phone', minWidth:150}">{{trans('user.form.label.phone')}}</th>
                 <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.address')}}</th>
+
+                <th lay-data="{field:'admin_username', maxWidth:180, minWidth:150, @if(auth()->user()->admin_id!=1) hide:'true' @endif templet: function(field){
+                    return field.admin_username; },event:'updateStatus'}">{{trans('business.table.header.manager')}}</th>
+
                 <th lay-data="{field:'user_about', minWidth:200}">{{trans('user.table.header.user_about')}}</th>
                 <th lay-data="{field:'user_verified_at', minWidth:160}">{{trans('user.table.header.user_audit_time')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -111,7 +115,6 @@
                     <td>{{$value->country}}</td>
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
-
                     <td><span class="layui-btn layui-btn-xs @if($value->user_verified==-1) layui-btn-danger @elseif($value->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">
                             @if($value->user_verified==1) Pass @elseif($value->user_verified==0) Refuse @else UnAudited @endif
                         </span>
@@ -136,6 +139,7 @@
                     <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
                     <td>{{$value->user_phone}}</td>
                     <td>{{$value->user_address}}</td>
+                    <td>{{$value->admin_username}}</td>
                     <td>{{$value->user_about}}</td>
                     <td>@if($value->user_verified_at!='0000-00-00 00:00:00'){{$value->user_verified_at}}@endif</td>
                     <td>{{$value->user_created_at}}</td>
@@ -160,16 +164,18 @@
         }).extend({
             common: 'lay/modules/admin/common',
             timePicker: 'lay/modules/admin/timePicker',
-        }).use(['common' , 'table' , 'layer' , 'timePicker'], function () {
+            layuiTableColumnSelect: '/lay/modules/admin/table-select/js/layui-table-select',
+        }).use(['common' , 'table' , 'layer' , 'timePicker', 'layuiTableColumnSelect'], function () {
             const form = layui.form,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
                 timePicker = layui.timePicker,
+                layuiTableColumnSelect = layui.layuiTableColumnSelect,
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
-                page:false,
-                toolbar: '#toolbar'
+                page:false,height: '400px;',
+            toolbar: '#toolbar'
             });
             timePicker.render({
                 elem: '#dateTime',
@@ -178,6 +184,7 @@
                     format:'YYYY-MM-DD HH:ss:mm',
                 },
             });
+
             form.on('radio(radio)', function(data){
                 debugger
                 let level  = data.value;
@@ -194,7 +201,6 @@
             });
             form.on('switch(switchAll)', function(data){
                 let params;
-                debugger
                 const checked = data.elem.checked;
                 data.elem.checked = !checked;
                 data.id = data.othis.parents('tr').find("td :first").text();
@@ -251,6 +257,17 @@
                     img_show = layer.tips(img, this, {tips:1});
                 },function(){});
             });
+
+            layuiTableColumnSelect.addSelect({data:@json($admins),layFilter:'table',event:'updateStatus',field:'admin_username',callback:function(obj,update){
+                console.log(update);
+                console.log(obj.data);
+                var params = {'admin_id':update.admin_username , 'user_id':obj.data.user_id};
+                    common.ajax("{{url('/backstage/business/shop/owner')}}", params, function(res){
+                        obj.update(update);
+                        parent.location.reload();
+                    } , 'patch');
+                }});
+            form.render();
         });
 
     </script>

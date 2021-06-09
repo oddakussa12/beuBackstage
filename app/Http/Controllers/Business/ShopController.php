@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class ShopController extends Controller
 {
-    public function base(Request $request)
+    public function base(Request $request, $flag=false)
     {
         $params = $request->all();
         $keyword= $params['keyword'] ?? '';
@@ -63,10 +63,9 @@ class ShopController extends Controller
         }
 
         $sort    = !empty($params['sort']) ? $params['sort'] : 'users.user_created_at';
-        $shops   = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
+        $shops   = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(1);
         $shopIds = $shops->pluck('user_id')->toArray();
         $points  = DB::connection('lovbee')->table('shop_evaluation_points')->whereIn('user_id', $shopIds)->get();
-
         foreach ($shops as $shop) {
             foreach ($points as $point) {
                 if ($shop->user_id==$point->user_id) {
@@ -77,13 +76,23 @@ class ShopController extends Controller
                 }
             }
         }
+        if ($flag) {
+            $manager = DB::table('admins_shops')->whereIn('user_id', $shopIds)->get();
+            foreach ($shops as $shop) {
+                foreach ($manager as $item) {
+                    if ($shop->user_id==$item->user_id) {
+                        $shop->admin_username = $item->admin_username;
+                        $shop->admin_id = $item->admin_id;
+                    }
+                }
+            }
+        }
 
         $params['appends'] = $params;
         $params['result']  = $shops;
         $params['countries']  = $country;
 
         return $params;
-
     }
     /**
      * Display a listing of the resource.
@@ -93,7 +102,15 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-        $params = $this->base($request);
+        $params = $this->base($request, 1);
+
+        $admins = DB::table('admins')->select(DB::raw('admin_id name, admin_username value'))->get();
+        $admins = collect($admins)->toArray();
+        $admins = array_map(function ($arr) { return (array)$arr;}, $admins);
+        $params['admins']  = $admins;
+
+        /*dump(collect($params)->toArray());
+        exit;*/
         return view('backstage.business.shop.index' , $params);
     }
 
@@ -172,11 +189,12 @@ class ShopController extends Controller
     public function update(Request $request, $id)
     {
         $adminUser = auth()->user();
-        $params = $request->all();
+        $params    = $request->all();
+        $header    = ['HellooVersion' => '3.3.0', 'deviceId'=>$id];
+
         if (!empty($params['recommend']) || isset($params['level']) || isset($params['audit']) || isset($params['user_delivery'])) {
             if (!empty($params['recommend'])) {
                 $result = DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->first();
-                Log::info(__CLASS__.'::update:::recommend', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, 'recommend'=>$params['recommend']]);
                 if ($params['recommend']=='on') {
                     if (empty($result)) {
                         $insert = DB::connection('lovbee')->table('recommendation_users')->insert(['user_id'=>$id, 'created_at'=>date("Y-m-d H:i:s")]);
@@ -186,34 +204,40 @@ class ShopController extends Controller
                     DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->delete();
                 }
             }
+            Log::info(__CLASS__.'::update', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, $params]);
+
             if (isset($params['level'])) {
-                $result = User::where('user_id', $id)->update(['user_level'=>$params['level']=='on']);
-                Log::info(__CLASS__.'::update:::level', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, 'level'=>$params['level']]);
+                $update = ['user_level'=>$params['level']=='on'];
             }
             if (isset($params['user_delivery'])) {
-                $result = User::where('user_id', $id)->update(['user_delivery'=>$params['user_delivery']=='on']);
-                Log::info(__CLASS__.'::update:::user_delivery', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, 'user_delivery'=>$params['user_delivery']]);
+                $update = ['user_delivery'=>$params['user_delivery']=='on'];
             }
             if (isset($params['audit'])) {
-                $result = User::where('user_id', $id)->update(['user_verified'=>$params['audit']=='pass', 'user_verified_at'=>date('Y-m-d H:i:s')]);
-                $data = [
-                    'audit_id'  => $id,
-                    'type'      => 'shop',
-                    'date'      => date('Y-m-d'),
-                    'status'    => $params['audit'],
-                    'admin_id'  => $adminUser->admin_id,
-                    'created_at'=> date('Y-m-d H:i:s'),
-                    'admin_username' => $adminUser->admin_username,
-                ];
-                DB::table('business_audits')->insert($data);
+                $update = ['user_verified'=>$params['audit']=='pass', 'user_verified_at'=>date('Y-m-d H:i:s')];
+            }
+
+            // 发送修改请求到前端
+            if (!empty($update)) {
+                $update = array_merge($update, ['user_id'=>$id, 'update'=>'update']);
+                $patch  = $this->url('/api/backstage/shop', $update, 'PATCH', $header);
+                if (isset($params['audit']) && $patch) {
+                    DB::table('business_audits')->insert([
+                        'audit_id'  => $id,
+                        'type'      => 'shop',
+                        'date'      => date('Y-m-d'),
+                        'status'    => $params['audit'],
+                        'admin_id'  => $adminUser->admin_id,
+                        'created_at'=> date('Y-m-d H:i:s'),
+                        'admin_username' => $adminUser->admin_username,
+                    ]);
+                }
             }
         } else {
-            $user   = User::find($id);
-            $info   = collect($params)->except('user_phone_country', 'user_phone')->toArray();
-            $info   = array_diff($info, collect($user)->toArray());
-            if (!empty($info)) {
-                $result = User::where('user_id', $id)->update($info);
-            }
+            $user = User::find($id);
+            unset($params['user_phone_country']);
+            $info = array_diff($params, collect($user)->toArray());
+            $info['user_id'] = $user->user_id;
+            $update = $this->url('/api/backstage/shop', $info, 'PATCH', $header);
         }
 
         return response()->json([]);
@@ -377,7 +401,30 @@ class ShopController extends Controller
 
         $params['result'] = $result;
         return view('backstage.business.shop.order', $params);
+    }
 
+    public function owner(Request $request)
+    {
+        $userId  = $request->input('user_id');
+        $adminId = $request->input('admin_id');
+        $admin   = DB::table('admins')->where('admin_id', $adminId)->first();
+
+        $info = DB::table('admins_shops')->where('user_id',$userId)->first();
+        if (empty($info)) {
+            DB::table('admins_shops')->insert([
+                'user_id'=>$userId,
+                'admin_id'=>$adminId,
+                'admin_username'=> $admin->admin_username,
+                'created_at'=>date('Y-m-d H:i:s'),
+            ]);
+        } else {
+            DB::table('admins_shops')->where('user_id', $userId)->update([
+                    'admin_id'=> $admin->admin_id,
+                    'admin_username'=> $admin->admin_username,
+            ]);
+        }
+
+        return response()->json(['result'=>'success']);
     }
 
     /**

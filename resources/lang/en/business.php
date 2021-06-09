@@ -16,6 +16,7 @@ return [
             'goods_num'=>'GoodsNum',
             'view_history'=>'ViewHistory',
             'recommend'=>'Recommend',
+            'manager'=>'BgManager',
             'take_out'=>'TakeOut',
             'address'=>'Address',
 
