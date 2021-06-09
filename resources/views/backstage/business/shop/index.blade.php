@@ -174,7 +174,7 @@
                 layuiTableColumnSelect = layui.layuiTableColumnSelect,
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
-                page:false,height: '400px;',
+                page:false,height: '550px;',
             toolbar: '#toolbar'
             });
             timePicker.render({
