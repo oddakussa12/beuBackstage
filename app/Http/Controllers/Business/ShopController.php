@@ -31,6 +31,9 @@ class ShopController extends Controller
         if (!empty($params['virtual'])) {
             $shop = $shop->where('user_online', 0);
         }
+        if (isset($params['user_delivery'])) {
+            $shop = $shop->where('users.user_delivery', $params['user_delivery']);
+        }
         if (isset($params['level'])) {
             $shop = $shop->where('users.user_level', $params['level']);
         }

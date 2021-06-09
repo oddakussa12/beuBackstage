@@ -54,6 +54,16 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('business.table.header.take_out')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="user_delivery">
+                            <option value="">All</option>
+                            <option value="1" @if(isset($user_delivery) && $user_delivery=='1') selected @endif>YES</option>
+                            <option value="0" @if(isset($user_delivery) && $user_delivery=='0') selected @endif>NO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.table.header.recommend')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="recommend">
