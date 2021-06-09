@@ -19,21 +19,34 @@
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
-            <div class="layui-inline">
-                <div class="layui-btn-group">
-                    <a href="?type=0" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                    <a href="?type=1" class="layui-btn @if(isset($type)&&$type=='1') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Ordered</a>
-                    <a href="?type=2" class="layui-btn @if(isset($type)&&$type=='2') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ConfirmOrder</a>
-                    <a href="?type=3" class="layui-btn @if(isset($type)&&$type=='3') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ContactedUser</a>
-                    <a href="?type=4" class="layui-btn @if(isset($type)&&$type=='4') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ContactedShop</a>
-                    <a href="?type=5" class="layui-btn @if(isset($type)&&$type=='5') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Delivered</a>
-                    <a href="?type=6" class="layui-btn @if(isset($type)&&$type=='6') layui-btn-disabled @else layui-btn-normal @endif" target="_self">NoResponse</a>
-                    <a href="?type=7" class="layui-btn @if(isset($type)&&$type=='7') layui-btn-disabled @else layui-btn-normal @endif" target="_self">JunkOrder</a>
-                    <a href="?type=8" class="layui-btn @if(isset($type)&&$type=='8') layui-btn-disabled @else layui-btn-normal @endif" target="_self">UserCancelOrder</a>
-                    <a href="?type=9" class="layui-btn @if(isset($type)&&$type=='9') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ShopCancelOrder</a>
-                    <a href="?type=10" class="layui-btn @if(isset($type)&&$type=='10') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Other</a>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-btn-group">
+                        <a href="?type={{$type}}&user_id=0" class="layui-btn @if(isset($userId)&&$userId==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
+                        @foreach($shops as $shop)
+                            <a href="?type={{$type}}&user_id={{$shop->user_id}}" class="layui-btn @if(isset($userId)&&$userId==$shop->user_id) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$shop->user_nick_name}}</a>
+                        @endforeach
+                    </div>
                 </div>
             </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-btn-group">
+                        <a href="?type=0&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
+                        <a href="?type=1&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='1') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Ordered</a>
+                        <a href="?type=2&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='2') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ConfirmOrder</a>
+                        <a href="?type=3&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='3') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ContactedUser</a>
+                        <a href="?type=4&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='4') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ContactedShop</a>
+                        <a href="?type=5&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='5') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Delivered</a>
+                        <a href="?type=6&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='6') layui-btn-disabled @else layui-btn-normal @endif" target="_self">NoResponse</a>
+                        <a href="?type=7&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='7') layui-btn-disabled @else layui-btn-normal @endif" target="_self">JunkOrder</a>
+                        <a href="?type=8&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='8') layui-btn-disabled @else layui-btn-normal @endif" target="_self">UserCancelOrder</a>
+                        <a href="?type=9&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='9') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ShopCancelOrder</a>
+                        <a href="?type=10&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='10') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Other</a>
+                    </div>
+                </div>
+            </div>
+
         </form>
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
@@ -160,6 +173,9 @@
                     } , 'patch');
                 }});
             form.render();
+            setTimeout(function() {
+                location.reload();
+            }, 60000);
         });
     </script>
 @endsection
