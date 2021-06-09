@@ -63,7 +63,7 @@ class ShopController extends Controller
         }
 
         $sort    = !empty($params['sort']) ? $params['sort'] : 'users.user_created_at';
-        $shops   = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(1);
+        $shops   = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
         $shopIds = $shops->pluck('user_id')->toArray();
         $points  = DB::connection('lovbee')->table('shop_evaluation_points')->whereIn('user_id', $shopIds)->get();
         foreach ($shops as $shop) {
