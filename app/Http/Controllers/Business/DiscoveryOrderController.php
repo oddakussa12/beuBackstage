@@ -18,70 +18,74 @@ class DiscoveryOrderController extends Controller
     {
         $userId = $request->input('user_id' , '0');
         $user = auth()->user();
-        if($user->admin_id==1)
-        {
+        if ($user->admin_id==1) {
             $userIds = DB::table('admins_shops')->where('admin_id' , '!=' , 0)->get()->pluck('user_id')->toArray();
-            $shops = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
-        }else{
+        } else {
             $userIds = DB::table('admins_shops')->where('admin_id' , $user->admin_id)->get()->pluck('user_id')->toArray();
-            $shops = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
         }
+        $shops = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
+
         $type = $request->input('type' , '0');
         $appends['type'] = $type;
         $appends['user_id'] = $userId;
-        if($type=='0')
-        {
-            if($userId!=0)
-            {
-                $orders = DB::connection('lovbee')->table('delivery_orders')->where('owner' , $userId)->paginate(10)->appends($appends);
-            }else{
-                $orders = DB::connection('lovbee')->table('delivery_orders')->paginate(10)->appends($appends);
-            }
-        }else{
-            if($userId!=0)
-            {
-                $orders = DB::connection('lovbee')->table('delivery_orders')->where('owner' , $userId)->where('status' , $type)->paginate(10)->appends($appends);
-            }else{
-                $orders = DB::connection('lovbee')->table('delivery_orders')->where('status' , $type)->paginate(10)->appends($appends);
-            }
+
+        $orders = DB::connection('lovbee')->table('delivery_orders');
+        if ($type!=0) {
+            $orders = $orders->where('status', $type);
         }
+        if ($userId!=0) {
+            $orders = $orders->where('owner', $userId);
+        }
+        $orders = $orders->paginate(10)->appends($appends);
+
         $goodsIds = $orders->pluck('goods_id')->toArray();
         $goodsIds = array_unique(array_filter($goodsIds , function($goodsId){
             return !empty($goodsId);
         }));
-        if(empty($goodsIds))
-        {
-            $goods = collect();
-        }else{
-            $goods = DB::connection('lovbee')->table('goods')->whereIn('id' , $goodsIds)->get();
-        }
+
+        $goods    = empty($goodsIds) ? collect() : DB::connection('lovbee')->table('goods')->whereIn('id' , $goodsIds)->get();
         $ownerIds = $orders->pluck('owner')->toArray();
-        $userIds = $orders->pluck('user_id')->toArray();
-        $userIds = array_unique(array_merge($userIds , $ownerIds));
-        $users = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
+        $userIds  = $orders->pluck('user_id')->toArray();
+        $userIds  = array_unique(array_merge($userIds , $ownerIds));
+        $users    = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
+
         $orders->each(function($order) use ($users , $goods){
             $order->owner = $users->where('user_id' , $order->owner)->first();
-            $order->user = $users->where('user_id' , $order->user_id)->first();
-            $order->g = $goods->where('id' , $order->goods_id)->first();
+            $order->user  = $users->where('user_id' , $order->user_id)->first();
+            $order->g     = $goods->where('id' , $order->goods_id)->first();
+            $duration = time()-strtotime($order->created_at);
+            if (($order->status==1 && $duration>300) || ($order->status==2 && $duration>600) || ($order->status==3 && $duration>780) || ($order->status==4 && $duration>3600)) {
+                $order->color = 1;
+            }
         });
+        /*dump(collect($orders)->toArray());
+        exit;*/
         return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId'));
     }
 
     public function update(Request $request)
     {
+        $params = $request->all();
         $status = $request->input('status' , null);
         $id = $request->input('id' , '');
-        if(in_array($status , array(1 , 2 , 3 , 4 , 5 ,6 ,7 , 8 , 9, 10)))
-        {
-            DB::connection('lovbee')->table('delivery_orders')->where('order_id' , $id)->update(
-                array(
-                    'status'=>$status,
-                    'updated_at'=>date('Y-m-d H:i:s'),
-                )
-            );
+        if (in_array($status, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) { // 订单状态
+            $update = ['status'=>$status];
         }
-        return response()->json(array(
-            'result'=>'success'
-        ));
+        if (!empty($params['order_menu'])) { // 点菜单
+            $update = ['menu'=>$params['order_menu']];
+        }
+        if (!empty($params['comment'])) { // 备注
+            $update = ['comment'=>$params['comment']];
+        }
+        if (!empty($params['order_price'])) { // 订单价格
+            $shopPrice = ($params['order_price'] - 30)*0.95;
+            $update = ['price'=>$params['order_price'], 'shop_price'=>$shopPrice];
+        }
+
+        if(!empty($update)) {
+            $update = array_merge($update, ['updated_at'=>date('Y-m-d H:i:s')]);
+            DB::connection('lovbee')->table('delivery_orders')->where('order_id', $id)->update($update);
+        }
+        return response()->json(['result'=>'success']);
     }
 }
