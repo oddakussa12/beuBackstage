@@ -13,9 +13,11 @@ use Illuminate\Database\Concerns\BuildsQueries;
 class DiscoveryOrderController extends Controller
 {
     use BuildsQueries;
+    protected $status = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
 
     public function base($request)
     {
+        $admin_id = $request->input('admin_id' , '0');
         $userId = $request->input('user_id' , '0');
         $type   = $request->input('type' , '0');
 
@@ -23,8 +25,9 @@ class DiscoveryOrderController extends Controller
         $appends['user_id'] = $userId;
 
         $orders = DB::connection('lovbee')->table('delivery_orders');
-        $type!=0   && $orders = $orders->where('status', $type);
-        $userId!=0 && $orders = $orders->where('owner', $userId);
+        $type!=0     && $orders = $orders->where('status', $type);
+        $userId!=0   && $orders = $orders->where('owner', $userId);
+        $admin_id!=0 && $orders = $orders->where('operator', $admin_id);
         $orders = $orders->paginate(10)->appends($appends);
 
         $goodsIds = $orders->pluck('goods_id')->toArray();
@@ -64,9 +67,10 @@ class DiscoveryOrderController extends Controller
             $userIds = DB::table('admins_shops')->where('admin_id' , $user->admin_id)->get()->pluck('user_id')->toArray();
         }
 
-        $shops = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
-
-        return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId'));
+        $shops  = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
+        $status = $this->status;
+        $statusEncode = json_encode($status, true);
+        return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId', 'status', 'statusEncode'));
     }
 
     public function update(Request $request)
@@ -133,11 +137,9 @@ class DiscoveryOrderController extends Controller
         $params['admins'] = $admins;
         $params['user_id']= $params['user_id'] ?? 0;
         $params['type']   = $params['type'] ?? 0;
-        $params['status'] = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
+        $params['status'] = $this->status;
 
-        dump(collect($orders)->toArray());
-        exit;
-        return view('backstage.business.order.manager' , $params);
+        return view('backstage.business.order.manager', $params);
 
     }
 }

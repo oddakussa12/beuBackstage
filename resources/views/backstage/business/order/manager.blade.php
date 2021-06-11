@@ -27,31 +27,24 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?type={{$type}}&user_id=0" class="layui-btn @if(isset($user_id)&&$user_id==0) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">All</a>
+                        <a href="?type={{$type}}&admin_id=0" class="layui-btn @if(isset($user_id)&&$user_id==0) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">All</a>
                         @foreach($admins as $admin)
-                            <a href="?type={{$type}}&user_id={{$admin->admin_id}}" class="layui-btn @if(isset($user_id)&&$user_id==$admin->admin_id) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">{{$admin->admin_username}}</a>
+                            <a href="?type={{$type}}&admin_id={{$admin->admin_id}}" class="layui-btn @if(isset($user_id)&&$user_id==$admin->admin_id) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">{{$admin->admin_username}}</a>
                         @endforeach
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
+
                     <div class="layui-btn-group">
-                        <a href="?type=0&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                        <a href="?type=1&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='1') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Ordered</a>
-                        <a href="?type=2&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='2') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ConfirmOrder</a>
-                        <a href="?type=3&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='3') layui-btn-disabled @else layui-btn-normal @endif" target="_self">CallDriver</a>
-                        <a href="?type=4&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='4') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ContactedShop</a>
-                        <a href="?type=5&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='5') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Delivered</a>
-                        <a href="?type=6&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='6') layui-btn-disabled @else layui-btn-normal @endif" target="_self">NoResponse</a>
-                        <a href="?type=7&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='7') layui-btn-disabled @else layui-btn-normal @endif" target="_self">JunkOrder</a>
-                        <a href="?type=8&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='8') layui-btn-disabled @else layui-btn-normal @endif" target="_self">UserCancelOrder</a>
-                        <a href="?type=9&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='9') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ShopCancelOrder</a>
-                        <a href="?type=10&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='10') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Other</a>
+                        <a href="?type=0&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
+                        @foreach($status as $key=>$value)
+                            <a href="?type={{$key}}&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                        @endforeach
                     </div>
                 </div>
             </div>
-
         </form>
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
@@ -61,8 +54,8 @@
                 <th lay-data="{field:'user_name', minWidth:180}">UserName</th>
                 <th lay-data="{field:'order_created_at', minWidth:160}">StartTime</th>
                 <th lay-data="{field:'order_status', minWidth:180}">OrderStatus</th>
-                <th lay-data="{field:'order_menu', minWidth:200, edit: 'textarea'}">Menu</th>
-                <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
+                <th lay-data="{field:'order_menu', minWidth:200}">Menu</th>
+                <th lay-data="{field:'order_price', minWidth:120}">OrderPrice</th>
                 <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
                 <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
                 <th lay-data="{field:'comment', minWidth:160}">Comment</th>
@@ -81,9 +74,9 @@
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
-                    <td>@if(!empty($order->order_time)){{$order->order_time}}mins@endif</td>
+                    <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
                     <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
-                    <td>@if(!empty($order->admin_usernmae)){{$order->admin_usernmae}}@endif</td>
+                    <td>@if(!empty($order->admin_username)){{$order->admin_username}}@endif</td>
                     <td>{{$order->updated_at}}</td>
                 </tr>
             @endforeach

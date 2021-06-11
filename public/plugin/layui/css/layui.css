@@ -1718,6 +1718,17 @@ a cite {
     position: relative
 }
 
+.layui-bg-yellow{
+    background-color:yellow!important;
+}
+.layui-bg-pink{
+    background-color:pink!important;
+}
+
+.layui-bg-blue{
+    background-color:blue!important;
+}
+
 .layui-bg-red {
     background-color: #FF5722!important
 }
@@ -1727,7 +1738,8 @@ a cite {
 }
 
 .layui-bg-green {
-    background-color: #009688!important
+    background-color: green!important
+    /*background-color: #009688!important*/
 }
 
 .layui-bg-cyan {
@@ -1745,8 +1757,9 @@ a cite {
     background-color: #FFFFFF!important
 }
 .layui-bg-gray {
-    background-color: #eee!important;
-    color: #666!important
+    background-color: gray!important;
+    /*background-color: #eee!important;
+    color: #666!important*/
 }
 
 .layui-badge-rim,.layui-colla-content,.layui-colla-item,.layui-collapse,.layui-elem-field,.layui-form-pane .layui-form-item[pane],.layui-form-pane .layui-form-label,.layui-input,.layui-layedit,.layui-layedit-tool,.layui-quote-nm,.layui-select,.layui-tab-bar,.layui-tab-card,.layui-tab-title,.layui-tab-title .layui-this:after,.layui-textarea {

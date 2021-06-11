@@ -1,21 +1,6 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <style>
-        .layui-bg-yellow{
-            background-color:yellow;
-        }
-        .layui-bg-pink{
-            background-color:pink;
-        }
-        .layui-bg-green{
-            background-color:green;
-        }
-        .layui-bg-blue{
-            background-color:blue;
-        }
-        .layui-badge-gray{
-            background-color:gray;
-        }
         .layui-table-select-dl { color: black}
         textarea.layui-textarea.layui-table-edit {
             min-width: 300px;
@@ -39,20 +24,12 @@
                 <div class="layui-inline">
                     <div class="layui-btn-group">
                         <a href="?type=0&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                        <a href="?type=1&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='1') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Ordered</a>
-                        <a href="?type=2&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='2') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ConfirmOrder</a>
-                        <a href="?type=3&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='3') layui-btn-disabled @else layui-btn-normal @endif" target="_self">CallDriver</a>
-                        <a href="?type=4&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='4') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ContactedShop</a>
-                        <a href="?type=5&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='5') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Delivered</a>
-                        <a href="?type=6&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='6') layui-btn-disabled @else layui-btn-normal @endif" target="_self">NoResponse</a>
-                        <a href="?type=7&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='7') layui-btn-disabled @else layui-btn-normal @endif" target="_self">JunkOrder</a>
-                        <a href="?type=8&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='8') layui-btn-disabled @else layui-btn-normal @endif" target="_self">UserCancelOrder</a>
-                        <a href="?type=9&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='9') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ShopCancelOrder</a>
-                        <a href="?type=10&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='10') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Other</a>
+                        @foreach($status as $key=>$value)
+                            <a href="?type={{$key}}&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                        @endforeach
                     </div>
                 </div>
             </div>
-
         </form>
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
@@ -66,18 +43,7 @@
                 <th lay-data="{field:'order_user_contact', minWidth:180}">OrderUserPhone</th>
                 <th lay-data="{field:'order_user_address', minWidth:180}">OrderUserAddress</th>
                 <th lay-data="{field:'order_status', minWidth:150, templet: function(field){
-                    var selectParams = {
-                        '1':'Ordered',
-                        '2':'ConfirmOrder',
-                        '3':'CallDriver',
-                        '4':'ContactedShop',
-                        '5':'Delivered',
-                        '6':'NoResponse',
-                        '7':'JunkOrder',
-                        '8':'UserCancelOrder',
-                        '9':'ShopCancelOrder',
-                        '10':'Other'
-                    };
+                    var selectParams = {{$statusEncode}};
                     var status = field.order_status;
                     let c = 'layui-bg-white';
                     if(status==1){ c='layui-bg-white'}
@@ -90,7 +56,6 @@
                     if(status==8||status==9||status==10){ c='layui-bg-gray'}
                     console.log(c);
                     return '<span class=\'layui-btn layui-btn-sm '+c+'\' style=\'color:black\'>'+selectParams[field.order_status]+'</span>';
-
                 },event:'updateStatus'}">Status</th>
                 <th lay-data="{field:'order_menu', minWidth:200, edit: 'textarea'}">Menu</th>
                 <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
@@ -195,6 +160,7 @@
                     common.ajax("{{url('/backstage/business/discovery/order')}}", params , function(res){
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                         table.render();
+                        parent.location.reload();
                     } , 'PATCH' , function (event,xhr,options,exc) {
                         setTimeout(function(){
                             common.init_error(event,xhr,options,exc);
@@ -210,25 +176,17 @@
                     table.render();
                 });
             });
-            var selectParams = [
-                {name:'1',value:'Ordered'},
-                {name:'2',value:'ConfirmOrder'},
-                {name:'3',value:'CallDriver'},
-                {name:'4',value:'ContactedShop'},
-                {name:'5',value:'Delivered'},
-                {name:'6',value:'NoResponse'},
-                {name:'7',value:'JunkOrder'},
-                {name:'8',value:'UserCancelOrder'},
-                {name:'9',value:'ShopCancelOrder'},
-                {name:'10',value:'Other'},
-            ];
+            let selectParams = [];
+                @foreach($status as $k=>$v)
+                   selectParams[{{$k-1}}] = {name:"{{$k}}", value:"{{$v}}"},
+                @endforeach
             layuiTableColumnSelect.addSelect({data:selectParams,layFilter:'table',event:'updateStatus',field:'order_status',callback:function(obj,update){
-                    var params = {'status':update.order_status , 'id':obj.data.id};
-                    common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
-                        obj.update(update);
-                        parent.location.reload();
-                    } , 'patch');
-                }});
+                var params = {'status':update.order_status , 'id':obj.data.id};
+                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                    obj.update(update);
+                    parent.location.reload();
+                } , 'patch');
+            }});
             form.render();
             setTimeout(function() {
                 location.reload();
