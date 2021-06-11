@@ -656,8 +656,17 @@ class OperatorController extends Controller
         if (Cache::has('helloo_month_online')) {
             $onlineCurrent = Cache::get('helloo_month_online');
         }else{
-            $online = DB::connection('lovbee')->select('select count(1) num from (select user_id from t_visit_logs_202105 where 1 group by user_id) b');
-            $onlineCurrent = !empty($online[0]->num) ? $online[0]->num : 1;
+            $beforeMonthDay = date("Y-m-d H:i:s", strtotime("-1 month"));
+            $beforeMonth    = date("Ym", strtotime("-1 month"));
+            $thisMonth= date('Ym');
+            $beforeMonthSql = "select count(1) num from (select user_id from t_visit_logs_{$beforeMonth} where created_at >= \"{$beforeMonthDay}\" group by user_id) b";
+            $thisMonthSql   = "select count(1) num from (select user_id from t_visit_logs_{$thisMonth} where 1 group by user_id) b";
+
+            $beforeOnline = DB::connection('lovbee')->select($beforeMonthSql); // 上一个月
+            $thisOnline = DB::connection('lovbee')->select($thisMonthSql); // 当前月
+            $beforeCurrent = !empty($beforeOnline[0]->num) ? $beforeOnline[0]->num : 1;
+            $thisCurrent   = !empty($thisOnline[0]->num) ? $thisOnline[0]->num : 1;
+            $onlineCurrent = $beforeCurrent+$thisCurrent;
             Cache::put('helloo_month_online', $onlineCurrent, $onlineCurrent, 7200);
         }
 
