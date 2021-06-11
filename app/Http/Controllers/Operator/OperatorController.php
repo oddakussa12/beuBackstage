@@ -658,12 +658,12 @@ class OperatorController extends Controller
         }else{
             $beforeMonthDay = date("Y-m-d H:i:s", strtotime("-1 month"));
             $beforeMonth    = date("Ym", strtotime("-1 month"));
-            $thisMonth= date('Ym');
+            $thisMonth      = date('Ym');
             $beforeMonthSql = "select count(1) num from (select user_id from t_visit_logs_{$beforeMonth} where created_at >= \"{$beforeMonthDay}\" group by user_id) b";
             $thisMonthSql   = "select count(1) num from (select user_id from t_visit_logs_{$thisMonth} where 1 group by user_id) b";
 
-            $beforeOnline = DB::connection('lovbee')->select($beforeMonthSql); // 上一个月
-            $thisOnline = DB::connection('lovbee')->select($thisMonthSql); // 当前月
+            $beforeOnline  = DB::connection('lovbee')->select($beforeMonthSql); // 上一个月
+            $thisOnline    = DB::connection('lovbee')->select($thisMonthSql); // 当前月
             $beforeCurrent = !empty($beforeOnline[0]->num) ? $beforeOnline[0]->num : 1;
             $thisCurrent   = !empty($thisOnline[0]->num) ? $thisOnline[0]->num : 1;
             $onlineCurrent = $beforeCurrent+$thisCurrent;
