@@ -593,14 +593,12 @@ class OperatorController extends Controller
         }
 
         $hrCurrent = 4;
-        $hrMiddle = 36;
-        $hrGoal = 30;
+        $hrGoal = 8;
         $hrData = [
             'percentage'=>strval(round($hrCurrent/$hrGoal , 4)*100)."%" ,
             'current'=>$hrCurrent ,
             'goal'=>$hrGoal ,
             'marginTop'=>strval(round((round(($hrGoal-$hrCurrent)/$hrGoal , 4)*480))).'px',
-            'middle'=>$hrMiddle
         ];
 
         $productSelected = json_decode(Cache::get('goal_product'), true);
