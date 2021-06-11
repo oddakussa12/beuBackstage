@@ -16,6 +16,11 @@
         .layui-badge-gray{
             background-color:gray;
         }
+        textarea.layui-textarea.layui-table-edit {
+            min-width: 300px;
+            min-height: 200px;
+            z-index: 2;
+        }
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
