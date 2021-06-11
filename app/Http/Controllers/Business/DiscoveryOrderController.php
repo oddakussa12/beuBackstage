@@ -79,7 +79,7 @@ class DiscoveryOrderController extends Controller
         }
         if (!empty($params['order_price'])) { // 订单价格
             $shopPrice = ($params['order_price'] - 30)*0.95;
-            $update = ['price'=>$params['order_price'], 'shop_price'=>$shopPrice];
+            $update = ['order_price'=>$params['order_price'], 'shop_price'=>$shopPrice];
         }
 
         if(!empty($update)) {

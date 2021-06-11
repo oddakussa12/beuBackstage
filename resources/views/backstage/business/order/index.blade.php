@@ -96,7 +96,7 @@
                 <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
                 <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
                 <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
-                <th lay-data="{field:'color', maxWidth:1}"></th>
+                <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
                 <th lay-data="{field:'order_created_at', minWidth:160}">CreatedAt</th>
                 <th lay-data="{field:'order_updated_at', minWidth:160}">UpdatedAt</th>
             </tr>
@@ -113,9 +113,9 @@
                     <td>{{$order->user_contact}}</td>
                     <td>{{$order->user_address}}</td>
                     <td>{{$order->status}}</td>
-                    <td>@if(!empty($order->order_menu)){{$order->order_menu}}@endif</td>
+                    <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
-                    <td>@if(!empty($order->order_shop_price)){{$order->order_shop_price}}@endif</td>
+                    <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                     <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
                     <td>@if(!empty($order->order_time)){{$order->order_time}}@endif</td>
                     <td>@if(!empty($order->color)){{$order->color}}@endif</td>
@@ -179,7 +179,6 @@
                 @endif
                     params[field] = value;
                     params['id'] = data.id;
-                    debugger
                 if (field=='order_price') {
                     let arg = /^\d+(\.\d+)?$/;
                     if (!arg.exec(value)) {
