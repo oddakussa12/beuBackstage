@@ -91,7 +91,7 @@ class DiscoveryOrderController extends Controller
             $shopPrice = ($params['order_price'] - 30)*0.95;
             $update    = ['order_price'=>$params['order_price'], 'shop_price'=>$shopPrice];
         }
-        Log::info('delivery_orders::update::', $update);
+        Log::info('delivery_orders::update::', array_merge(['order_id'=>$id], $update));
         if(!empty($update)) {
             DB::transaction(function() use ($update, $id, $status, $list) {
                 $update = array_merge($update, ['updated_at'=>date('Y-m-d H:i:s')]);
