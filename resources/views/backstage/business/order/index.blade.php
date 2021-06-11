@@ -104,6 +104,8 @@
                     return '<span class=\'layui-badge '+c+'\'>'+selectParams[field.order_status]+'</span>';
 
                 },event:'updateStatus'}">Status</th>
+                <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
+
                 <th lay-data="{field:'order_created_at', maxWidth:180, minWidth:100}">CreatedAt</th>
                 <th lay-data="{field:'order_updated_at', maxWidth:180, minWidth:100}">UpdatedAt</th>
             </tr>
@@ -120,6 +122,7 @@
                     <td>{{$order->user_contact}}</td>
                     <td>{{$order->user_address}}</td>
                     <td>{{$order->status}}</td>
+                    <td>{{$order->comment}}</td>
                     <td>{{$order->created_at}}</td>
                     <td>{{$order->updated_at}}</td>
                 </tr>
@@ -152,6 +155,55 @@
             var order = table.init('table', { //转化静态表格
                 page:false
                 ,height: '700px;'
+            });
+            //监听单元格编辑
+            table.on('edit(table)', function(obj){
+                var that = this;
+                var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field //得到字段
+                    ,original = $(this).prev().text(); //得到字段
+                var params = d = {};
+                d[field] = original;
+                @if(!Auth::user()->can('business::discovery.order.update'))
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
+                obj.update(d);
+                $(this).val(original);
+                table.render();
+                return true;
+                @endif
+                    params[field] = value;
+                params['id'] = data.id;
+                if (field=='order_price') {
+                    let arg = /^\d+(\.\d+)?$/;
+                    if (!arg.exec(value)) {
+                        layer.alert('You can only enter numbers and decimals', {icon: 5});
+                        return false;
+                    }
+                    if (value <= 30) {
+                        layer.alert('The price cannot be lower than 30', {icon: 5});
+                        return false;
+                    }
+                }
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax("{{url('/backstage/business/discovery/order')}}", params , function(res){
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                        table.render();
+                        parent.location.reload();
+                    } , 'PATCH' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            obj.update(d);
+                            $(that).val(original);
+                            table.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                    d[field] = original;
+                    obj.update(d);
+                    $(that).val(original);
+                    table.render();
+                });
             });
             var selectParams = [
                 {name:'1',value:'Ordered'},
