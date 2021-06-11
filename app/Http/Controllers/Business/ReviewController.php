@@ -133,8 +133,8 @@ class ReviewController extends Controller
         $count     = DB::connection('lovbee')->table('comments')->join('users_countries', 'users_countries.user_id', '=', 'comments.owner')
             ->where('verified', -1)->where('country', $user->admin_country)->count();
 
-        $totayCount= DB::table('business_audits')->where('admin_id', $adminId)->where('created_at', '>=', $today)->groupBy('audit_id')->count();
-        $totalCount= DB::table('business_audits')->where('admin_id', $adminId)->groupBy('audit_id')->count();
+        $totayCount= DB::table('business_audits')->where('admin_id', $adminId)->where('created_at', '>=', $today)->count();
+        $totalCount= DB::table('business_audits')->where('admin_id', $adminId)->count();
 
         $result['todayCount'] = $totayCount ?? 0;
         $result['totalCount'] = $totalCount ?? 0;
