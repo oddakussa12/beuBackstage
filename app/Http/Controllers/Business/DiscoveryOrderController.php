@@ -67,9 +67,12 @@ class DiscoveryOrderController extends Controller
     {
         $params = $request->all();
         $status = $request->input('status' , null);
-        $id = $request->input('id' , '');
+        $id     = $request->input('id' , '');
+        $order  = DB::connection('lovbee')->table('delivery_orders')->where('order_id', $id)->first();
+
         if (in_array($status, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) { // 订单状态
-            $update = ['status'=>$status];
+           $time = intval((time()- strtotime($order->created_at))/60);
+            $update = ['status'=>$status, 'order_time'=>$time];
         }
         if (!empty($params['order_menu'])) { // 点菜单
             $update = ['menu'=>$params['order_menu']];
