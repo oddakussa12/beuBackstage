@@ -159,7 +159,7 @@
                 $ = layui.jquery;
             var order = table.init('table', { //转化静态表格
                 page:false
-                ,height: '700px;'
+                ,height: '600px;'
             });
             //监听单元格编辑
             table.on('edit(table)', function(obj){
