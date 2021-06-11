@@ -35,7 +35,7 @@
                         <a href="?type=0&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
                         <a href="?type=1&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='1') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Ordered</a>
                         <a href="?type=2&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='2') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ConfirmOrder</a>
-                        <a href="?type=3&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='3') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ContactedUser</a>
+                        <a href="?type=3&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='3') layui-btn-disabled @else layui-btn-normal @endif" target="_self">CalledDriver</a>
                         <a href="?type=4&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='4') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ContactedShop</a>
                         <a href="?type=5&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='5') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Delivered</a>
                         <a href="?type=6&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='6') layui-btn-disabled @else layui-btn-normal @endif" target="_self">NoResponse</a>
@@ -63,7 +63,7 @@
                     var selectParams = {
                         '1':'Ordered',
                         '2':'ConfirmOrder',
-                        '3':'ContactedUser',
+                        '3':'CalledDriver',
                         '4':'ContactedShop',
                         '5':'Delivered',
                         '6':'NoResponse',
@@ -156,7 +156,7 @@
             var selectParams = [
                 {name:'1',value:'Ordered'},
                 {name:'2',value:'ConfirmOrder'},
-                {name:'3',value:'ContactedUser'},
+                {name:'3',value:'CalledDriver'},
                 {name:'4',value:'ContactedShop'},
                 {name:'5',value:'Delivered'},
                 {name:'6',value:'NoResponse'},
