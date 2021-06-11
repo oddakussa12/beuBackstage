@@ -230,9 +230,6 @@
                     } , 'patch');
                 }});
             form.render();
-            setTimeout(function() {
-                location.reload();
-            }, 60000);
         });
     </script>
 @endsection
