@@ -16,6 +16,7 @@
         .layui-badge-gray{
             background-color:gray;
         }
+        .layui-table-select-dl { color: black}
         textarea.layui-textarea.layui-table-edit {
             min-width: 300px;
             min-height: 200px;
@@ -105,9 +106,9 @@
             @foreach($orders as $order)
                 <tr>
                     <td>{{$order->order_id}}</td>
-                    <td>{{$order->owner->user_nick_name}}</td>
-                    <td>{{$order->owner->user_contact}}</td>
-                    <td>{{$order->owner->user_address}}</td>
+                    <td>{{$order->shop->user_nick_name}}</td>
+                    <td>{{$order->shop->user_contact}}</td>
+                    <td>{{$order->shop->user_address}}</td>
                     <td>{{empty($order->g)?'':$order->g->name}}</td>
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->user_contact}}</td>
@@ -117,7 +118,7 @@
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                     <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
-                    <td>@if(!empty($order->order_time)){{$order->order_time}}@endif</td>
+                    <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
                     <td>@if(!empty($order->color)){{$order->color}}@endif</td>
                     <td>{{$order->created_at}}</td>
                     <td>{{$order->updated_at}}</td>
@@ -156,7 +157,7 @@
                     for(var i in res.data){		//遍历整个表格数据
                         var item = res.data[i];		//获取当前行数据
                         if(item.color==1){
-                            $("tr[data-index='" + i + "']").attr({"style":"background:#ff3333"});  //将当前行变成绿色
+                            $("tr[data-index='" + i + "']").attr({"style":"background:#ff3333; color:#fff"});  //将当前行变成绿色
                         }
                     }
                 }
