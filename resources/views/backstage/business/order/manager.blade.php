@@ -82,11 +82,23 @@
             @endforeach
             </tbody>
         </table>
+
         @if(empty($appends))
             {{ $orders->links('vendor.pagination.default') }}
         @else
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
         @endif
+        <table class="layui-table" lay-filter="table" id="table">
+            <tr>
+                <th lay-data="{field:'order_price', width:180 , fixed:'left'}">All the money received</th>
+                <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Money for the store</th>
+                <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Gross profit</th>
+            <tr>
+                <td>{{$money->order_price}}</td>
+                <td>{{$money->shop_price}}</td>
+                <td>{{$money->order_price-$money->shop_price}}</td>
+            </tr>
+        </table>
     </div>
 @endsection
 @section('footerScripts')

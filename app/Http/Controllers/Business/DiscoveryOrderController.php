@@ -96,7 +96,7 @@ class DiscoveryOrderController extends Controller
             $shopPrice = ($params['order_price'] - 30)*0.95;
             $update    = ['order_price'=>$params['order_price'], 'shop_price'=>$shopPrice];
         }
-        Log::info('delivery_orders::update::', $update);
+        Log::info('delivery_orders::update::', array_merge(['order_id'=>$id], $update));
         if(!empty($update)) {
             DB::transaction(function() use ($update, $id, $status, $list) {
                 $update = array_merge($update, ['updated_at'=>date('Y-m-d H:i:s')]);
@@ -133,11 +133,14 @@ class DiscoveryOrderController extends Controller
                 }
             }
         }
+
+        $allMoney = DB::connection('lovbee')->table('delivery_orders')->select(DB::raw('sum(order_price) order_price, sum(shop_price) shop_price'))->where('status', 5)->first();
         $params['orders'] = $orders;
         $params['admins'] = $admins;
         $params['user_id']= $params['user_id'] ?? 0;
         $params['type']   = $params['type'] ?? 0;
         $params['status'] = $this->status;
+        $params['money']  = $allMoney;
 
         return view('backstage.business.order.manager', $params);
 
