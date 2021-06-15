@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Business;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -64,6 +65,8 @@ class DiscoveryOrderController extends Controller
             $order->owner = $users->where('user_id' , $order->owner)->first();
             $order->user = $users->where('user_id' , $order->user_id)->first();
             $order->g = $goods->where('id' , $order->goods_id)->first();
+            $order->created_at = Carbon::createFromFormat('Y-m-d H:i:s', $order->created_at)->addHours(3)->toDateTimeString();
+            $order->updated_at = Carbon::createFromFormat('Y-m-d H:i:s', $order->updated_at)->addHours(3)->toDateTimeString();
         });
         return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId'));
     }
