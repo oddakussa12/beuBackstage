@@ -129,6 +129,10 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('review/view/{commentId}' , 'ReviewController@view')->name('review.view');
             Route::get('review/audit' , 'ReviewController@audit')->name('review.audit');
             Route::resource('review' , 'ReviewController');
+            Route::get('discovery/order/detail' , 'DiscoveryOrderController@order')->name('discovery.deposits.order.detail');
+            Route::get('discovery/money/{id}' , 'DiscoveryOrderController@depositsMoney')->name('discovery.deposits.money');
+            Route::get('discovery/deposits' , 'DiscoveryOrderController@deposits')->name('discovery.deposits');
+            Route::patch('discovery/deposits' , 'DiscoveryOrderController@depositsUpdate')->name('discovery.deposits.update');
             Route::get('discovery/order' , 'DiscoveryOrderController@index')->name('discovery.order');
             Route::patch('discovery/order' , 'DiscoveryOrderController@update')->name('discovery.order.update');
             Route::get('discovery/manager' , 'DiscoveryOrderController@manager')->name('discovery.manager');
