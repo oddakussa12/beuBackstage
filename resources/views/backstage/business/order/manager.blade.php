@@ -40,7 +40,9 @@
                     <div class="layui-btn-group">
                         <a href="?type=0&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
                         @foreach($status as $key=>$value)
-                            <a href="?type={{$key}}&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                            @if($key>=5)
+                                <a href="?type={{$key}}&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -88,7 +90,7 @@
         @else
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
         @endif
-        <table class="layui-table" lay-filter="table" id="table">
+        <table class="layui-table" lay-filter="table" id="table2">
             <tr>
                 <th lay-data="{field:'order_price', width:180 , fixed:'left'}">All the money received</th>
                 <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Money for the store</th>
@@ -110,6 +112,9 @@
         }).use(['table'], function () {
             const table = layui.table;
             table.init('table', {
+                page:false
+            });
+            table.init('table2', {
                 page:false
             });
             setTimeout(function() {

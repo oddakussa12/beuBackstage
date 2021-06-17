@@ -21,12 +21,17 @@ class DiscoveryOrderController extends Controller
         $admin_id = $request->input('admin_id' , '0');
         $userId   = $request->input('user_id' , '0');
         $type     = $request->input('type' , '0');
+        $state    = $request->input('status' , '0');
         $delivery = $request->input('user_delivery', '');
         $appends['type'] = $type;
         $appends['user_id'] = $userId;
 
         $orders = DB::connection('lovbee')->table('delivery_orders');
-        $type!=0     && $orders = $orders->where('status', $type);
+        if (!empty($state)) {
+            $orders = $orders->where('status', '>=', $state);
+        } else {
+            $type!=0 && $orders = $orders->where('status', $type);
+        }
         $admin_id!=0 && $orders = $orders->where('operator', $admin_id);
         if (!empty($delivery)) {
             if (empty($userId)) {
@@ -130,6 +135,7 @@ class DiscoveryOrderController extends Controller
 
     public function manager(Request $request)
     {
+        $request->offsetSet('status', 5);
         $orders = $this->base($request);
         $params = $request->all();
         $role    = DB::table('roles')->whereIn('name', ['administrator'])->get();
@@ -160,6 +166,7 @@ class DiscoveryOrderController extends Controller
 
     public function order(Request $request)
     {
+        $request->offsetSet('status', 5);
         $params = $request->all();
         $orders = $this->base($request);
 
@@ -215,6 +222,7 @@ class DiscoveryOrderController extends Controller
             }
             $log = DB::connection('lovbee')->table('shops_deposits_logs')->orderByDesc('id')->first();
             $data['created_at'] = $data['created_at'] ?? $time;
+            !empty($params['money']) && $data['money'] = $params['money'];
             if (empty($log) || (!empty($log->money) && !empty($log->money_time))) {
                 DB::connection('lovbee')->table('shops_deposits_logs')->insert(array_merge($data, $base));
             } else {
