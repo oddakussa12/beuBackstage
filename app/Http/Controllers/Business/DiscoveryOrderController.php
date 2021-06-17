@@ -100,8 +100,12 @@ class DiscoveryOrderController extends Controller
         $update = [];
 
         if (in_array($status, $list)) { // 订单状态
-            $time = intval((time()- strtotime($order->created_at))/60);
-            $update = ['status'=>$status, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+            $time    = intval((time()- strtotime($order->created_at))/60);
+            $update  = ['status'=>$status, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+            $deposit = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $id)->first();
+            if (!empty($deposit)) {
+                $update['deposit'] = $deposit - $order->order_price;
+            }
         }
         if (!empty($params['order_menu'])) { // 点菜单
             $update = ['menu'=>$params['order_menu']];
@@ -118,7 +122,9 @@ class DiscoveryOrderController extends Controller
             DB::transaction(function() use ($update, $id, $status, $list) {
                 $update = array_merge($update, ['updated_at'=>date('Y-m-d H:i:s')]);
                 DB::connection('lovbee')->table('delivery_orders')->where('order_id', $id)->update($update);
-
+                if (!empty($update['deposit'])) {
+                    DB::connection('lovbee')->table('shops_deposits')->where('user_id', $id)->update(['money'=>$update['deposit']]);
+                }
                 // 插入Log 日志
                 if (in_array($status, $list)) { // 订单状态
                     DB::table('delivery_orders_logs')->insert([
@@ -138,7 +144,7 @@ class DiscoveryOrderController extends Controller
         $request->offsetSet('status', 5);
         $orders = $this->base($request);
         $params = $request->all();
-        $role    = DB::table('roles')->whereIn('name', ['administrator'])->get();
+        $role    = DB::table('roles')->whereIn('name', ['administrator', 'calling center'])->get();
         $roleIds = $role->pluck('id')->toArray();
         $hasRole = DB::table('model_has_roles')->whereIn('role_id', $roleIds)->get();
         $userIds = $hasRole->pluck('model_id')->toArray();
@@ -200,7 +206,7 @@ class DiscoveryOrderController extends Controller
         }
 
         try {
-          //  DB::beginTransaction();
+            DB::beginTransaction();
             $time  = date('Y-m-d H:i:s');
             $base  = ['admin_id'=>auth()->user()->admin_id, 'admin_username'=>auth()->user()->admin_username];
             $money = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $params['user_id'])->first();
@@ -228,9 +234,9 @@ class DiscoveryOrderController extends Controller
             } else {
                 DB::connection('lovbee')->table('shops_deposits_logs')->where('id', $log->id)->update(array_merge($data, $base));
             }
-          //  DB::commit();
+            DB::commit();
         } catch (\Exception $exception) {
-          //  DB::rollBack();
+            DB::rollBack();
             Log::error('Transaction update:', ['code'=>$exception->getCode(), 'message'=>$exception->getMessage()]);
         }
 
