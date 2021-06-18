@@ -90,15 +90,15 @@
         @else
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
         @endif
-        <table class="layui-table" id="table2">
-            <tr style="background-color: #f2f2f2;">
-                <th lay-data="{field:'order_price', width:180}">All the money received</th>
-                <th lay-data="{field:'shop_price', width:180}">Money for the store</th>
-                <th lay-data="{field:'shop_price', width:180}">Gross profit</th>
+        <table class="layui-table" lay-filter="table" id="table2">
             <tr>
-                <td>{{$money['order_price']}}</td>
-                <td>{{$money['shop_price']}}</td>
-                <td>{{$money['order_price']-$money['shop_price']}}</td>
+                <th lay-data="{field:'order_price', width:180 , fixed:'left'}">All the money received</th>
+                <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Money for the store</th>
+                <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Gross profit</th>
+            <tr>
+                <td>{{$money->order_price}}</td>
+                <td>{{$money->shop_price}}</td>
+                <td>{{$money->order_price-$money->shop_price}}</td>
             </tr>
         </table>
     </div>
@@ -114,7 +114,9 @@
             table.init('table', {
                 page:false
             });
-
+            table.init('table2', {
+                page:false
+            });
             setTimeout(function() {
                 location.reload();
             }, 60000);

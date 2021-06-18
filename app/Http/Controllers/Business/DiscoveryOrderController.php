@@ -78,11 +78,9 @@ class DiscoveryOrderController extends Controller
         $orders = $this->base($request);
         $user   = auth()->user();
 
-        if ($user->admin_id==1) {
-            $userIds = DB::table('admins_shops')->where('admin_id' , '!=' , 0)->get()->pluck('user_id')->toArray();
-        } else {
-            $userIds = DB::table('admins_shops')->where('admin_id' , $user->admin_id)->get()->pluck('user_id')->toArray();
-        }
+        $userIds= DB::table('admins_shops');
+        $user->admin_id!=1 && $userIds = $userIds->where('admin_id', $user->admin_id);
+        $userIds= $userIds->get()->pluck('user_id')->toArray();
 
         $shops  = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
         $status = $this->status;
@@ -95,15 +93,22 @@ class DiscoveryOrderController extends Controller
         $params = $request->all();
         $state  = $request->input('status' , null);
         $id     = $request->input('id' , '');
-        $order  = DB::connection('lovbee')->table('delivery_orders')->where('order_id', $id)->first();
+        $table  = !empty($params['version']) ? 'orders' : 'delivery_orders';
+        $order  = DB::connection('lovbee')->table($table)->where('order_id', $id)->first();
+
+        if (empty($order)) {
+            abort('The order information is wrong, please refresh the page and try again');
+        }
+        $shopId = !empty($params['version']) ? $order->shop_id : $order->owner;
+
         $list   = range(1, 10);
         $update = [];
 
         if (in_array($state, $list)) { // 订单状态
             $time    = intval((time()- strtotime($order->created_at))/60);
             $update  = ['status'=>$state, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
-            $deposit = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $order->owner)->first();
-            if (!empty($deposit) && $order->deposit=='0.00') {
+            $deposit = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $shopId)->first();
+            if (!empty($deposit) && $order->deposit=='0.00' && $state==5) {
                 $update['deposit'] = $deposit->balance - $order->shop_price;
             }
         }
@@ -119,14 +124,14 @@ class DiscoveryOrderController extends Controller
         }
         Log::info('delivery_orders::update::', array_merge(['order_id'=>$id], $update));
         if(!empty($update)) {
-            DB::transaction(function() use ($update, $state, $order, $list) {
-                $update = array_merge($update, ['updated_at'=>date('Y-m-d H:i:s')]);
-                DB::connection('lovbee')->table('delivery_orders')->where('order_id', $order->order_id)->update($update);
+            try {
+                DB::beginTransaction();
+                DB::connection('lovbee')->table($table)->where('order_id', $order->order_id)->update(array_merge($update, ['updated_at'=>date('Y-m-d H:i:s')]));
+
                 if (!empty($update['deposit'])) {
-                    DB::connection('lovbee')->table('shops_deposits')->where('user_id', $order->owner)->update(['balance'=>$update['deposit']]);
+                    DB::connection('lovbee')->table('shops_deposits')->where('user_id', $shopId)->update(['balance'=>$update['deposit']]);
                 }
-                // 插入Log 日志
-                if (in_array($state, $list)) { // 订单状态
+                if (in_array($state, $list)) { // 插入Log 日志 订单状态
                     DB::table('delivery_orders_logs')->insert([
                        'order_id'  => $order->order_id,
                        'status'    => $state,
@@ -134,7 +139,11 @@ class DiscoveryOrderController extends Controller
                        'created_at'=> date('Y-m-d H:i:s')
                     ]);
                 }
-            });
+                DB::commit();
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                Log::error('Transaction update:', ['code'=>$exception->getCode(), 'message'=>$exception->getMessage(), 'params'=>$params]);
+            }
         }
         return response()->json(['result'=>'success']);
     }
@@ -159,12 +168,18 @@ class DiscoveryOrderController extends Controller
         }
 
         $allMoney = DB::connection('lovbee')->table('delivery_orders')->select(DB::raw('sum(order_price) order_price, sum(shop_price) shop_price'))->where('status', 5)->first();
+//        $deliveryMoney = DB::connection('lovbee')->table('delivery_orders')->select(DB::raw('sum(order_price) order_price, sum(shop_price) shop_price'))->where('status', 5)->first();
+//        $orderMoney    = DB::connection('lovbee')->table('orders')->select(DB::raw('sum(order_price) order_price, sum(shop_price) shop_price'))->where('status', 5)->first();
         $params['orders'] = $orders;
         $params['admins'] = $admins;
         $params['user_id']= $params['user_id'] ?? 0;
         $params['type']   = $params['type'] ?? 0;
         $params['status'] = $this->status;
-        $params['money']  = $allMoney;
+        $params['money']  = (array)$allMoney;
+        /*$params['money']  = [
+            'order_price'=> $deliveryMoney->order_price + $orderMoney->order_price,
+            'shop_price' => $deliveryMoney->shop_price + $orderMoney->shop_price,
+        ];*/
 
         return view('backstage.business.order.manager', $params);
 

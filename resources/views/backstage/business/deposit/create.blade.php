@@ -53,7 +53,7 @@
                 laydate = layui.laydate;
             laydate.render({
                 elem: '#dateTime'
-                ,max : 'today'
+                // ,max : 'today'
                 ,type: 'datetime'
                 ,lang: 'en'
             });
