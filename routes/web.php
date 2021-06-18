@@ -138,6 +138,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('discovery/order' , 'DiscoveryOrderController@index')->name('discovery.order');
             Route::patch('discovery/order' , 'DiscoveryOrderController@update')->name('discovery.order.update');
             Route::get('discovery/manager' , 'DiscoveryOrderController@manager')->name('discovery.manager');
+            Route::get('order' , 'OrderController@index')->name('order.index');
         });
 
         Route::resource('menu' , 'MenuController');

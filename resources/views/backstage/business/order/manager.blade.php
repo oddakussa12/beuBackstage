@@ -90,7 +90,7 @@
         @else
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
         @endif
-        <table class="layui-table" lay-filter="table" id="table2">
+        <table class="layui-table" id="table2">
             <tr>
                 <th lay-data="{field:'order_price', width:180 , fixed:'left'}">All the money received</th>
                 <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Money for the store</th>
@@ -114,9 +114,7 @@
             table.init('table', {
                 page:false
             });
-            table.init('table2', {
-                page:false
-            });
+
             setTimeout(function() {
                 location.reload();
             }, 60000);

@@ -13,7 +13,7 @@
 
                 <th lay-data="{field:'created_at', minWidth:180, hide:'true'}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:180, hide:'true'}">{{trans('common.table.header.updated_at')}}</th>
-                <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', minWidth:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -85,7 +85,7 @@
                 if(obj.event=== 'add'){
                     let device = layui.device();
                     console.log(device);
-                    let area = device.android===true || device.ios===true ? ['95%','95%'] : ['40%', '80%'];
+                    let area = device.android===true || device.ios===true ? ['95%','95%'] : ['430px', '600px'];
                     layer.open({
                         type: 2,
                         shadeClose: true,

@@ -11,7 +11,7 @@
                     <label class="layui-form-label">Money：</label>
                     <div class="layui-input-block">
                         <input type="hidden" name="user_id" id="user_id" value="{{$id}}">
-                        <input type="text" id="money" name="money" placeholder="only number"  required="required" autocomplete="off" class="layui-input" value="">
+                        <input type="text" id="money" name="money" lay-verify="required|number" placeholder="only number"  required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="dateTime" name="dateTime" placeholder="{{trans('common.form.label.date')}}" value="@if(!empty($dateTime)){{$dateTime}}@endif">
+                        <input type="text" class="layui-input" lay-verify="required" id="dateTime" readonly required="required" name="dateTime" placeholder="{{trans('common.form.label.date')}}" value="@if(!empty($dateTime)){{$dateTime}}@endif">
                     </div>
                 </div>
             </div>
