@@ -129,10 +129,12 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('review/view/{commentId}' , 'ReviewController@view')->name('review.view');
             Route::get('review/audit' , 'ReviewController@audit')->name('review.audit');
             Route::resource('review' , 'ReviewController');
-            Route::get('discovery/order/detail' , 'DiscoveryOrderController@order')->name('discovery.deposits.order.detail');
-            Route::get('discovery/money/{id}' , 'DiscoveryOrderController@depositsMoney')->name('discovery.deposits.money');
-            Route::get('discovery/deposits' , 'DiscoveryOrderController@deposits')->name('discovery.deposits');
-            Route::patch('discovery/deposits' , 'DiscoveryOrderController@depositsUpdate')->name('discovery.deposits.update');
+            Route::get('deposits/create/{id}' , 'DepositController@create')->name('deposits.create');
+            Route::get('deposits/order/detail' , 'DepositController@order')->name('deposits.order.detail');
+            Route::get('deposits/money/{id}' , 'DepositController@money')->name('deposits.money');
+            Route::get('deposits' , 'DepositController@index')->name('deposits.index');
+            Route::post('deposits' , 'DepositController@store')->name('deposits.store');
+            Route::patch('deposits' , 'DepositController@update')->name('deposits.update');
             Route::get('discovery/order' , 'DiscoveryOrderController@index')->name('discovery.order');
             Route::patch('discovery/order' , 'DiscoveryOrderController@update')->name('discovery.order.update');
             Route::get('discovery/manager' , 'DiscoveryOrderController@manager')->name('discovery.manager');

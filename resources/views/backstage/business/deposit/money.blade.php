@@ -4,20 +4,20 @@
             <thead>
             <tr>
                 <th lay-data="{field:'money', minWidth:180, edit:'text'}">Deposits</th>
+                <th lay-data="{field:'balance', minWidth:180}">Balance</th>
                 <th lay-data="{field:'money_time', minWidth:180}">DepositsTime</th>
                 <th lay-data="{field:'admin_username', minWidth:180}">Operator</th>
                 <th lay-data="{field:'created_at', minWidth:180}">{{trans('common.table.header.created_at')}}</th>
-                <th lay-data="{field:'updated_at', minWidth:180}">{{trans('common.table.header.updated_at')}}</th>
             </tr>
             </thead>
             <tbody>
             @foreach($result as $item)
                 <tr>
                     <td>{{$item->money}}</td>
+                    <td>{{$item->balance}}</td>
                     <td>{{$item->money_time}}</td>
                     <td>{{$item->admin_username}}</td>
                     <td>{{$item->created_at}}</td>
-                    <td>{{$item->updated_at}}</td>
                 </tr>
             @endforeach
             </tbody>

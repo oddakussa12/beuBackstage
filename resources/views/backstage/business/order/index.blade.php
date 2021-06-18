@@ -107,7 +107,7 @@
         }).extend({
             common: 'lay/modules/admin/common',
             layuiTableColumnSelect: '/lay/modules/admin/table-select/js/layui-table-select'
-        }).use(['common' , 'table' , 'layer' , 'layuiTableColumnSelect'], function () {
+        }).use(['common', 'table' , 'layer' , 'layuiTableColumnSelect'], function () {
             const form = layui.form,
                 layer = layui.layer,
                 table = layui.table,

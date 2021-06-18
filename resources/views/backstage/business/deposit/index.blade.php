@@ -7,8 +7,10 @@
                 <th lay-data="{field:'user_id', minWidth:180, hide:'true'}">UserId</th>
                 <th lay-data="{field:'user_name', minWidth:180}">ShopName</th>
                 <th lay-data="{field:'user_nick_name', minWidth:180}">ShopNickName</th>
-                <th lay-data="{field:'money', minWidth:180, edit:'text'}">Deposits</th>
-                <th lay-data="{field:'money_time', minWidth:180, edit:'text', event:'date'}">DepositsTime</th>
+                <th lay-data="{field:'money', minWidth:180}">Deposits</th>
+                <th lay-data="{field:'money_time', minWidth:180}">DepositsTime</th>
+                <th lay-data="{field:'balance', minWidth:180}">DepositsBalance</th>
+
                 <th lay-data="{field:'created_at', minWidth:180, hide:'true'}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:180, hide:'true'}">{{trans('common.table.header.updated_at')}}</th>
                 <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -22,6 +24,7 @@
                     <td>{{$shop->user_nick_name}}</td>
                     <td>{{$shop->money}}</td>
                     <td>{{$shop->money_time}}</td>
+                    <td>{{$shop->balance}}</td>
                     <td>{{$shop->created_at}}</td>
                     <td>{{$shop->updated_at}}</td>
                     <td></td>
@@ -78,33 +81,18 @@
                 // layer.msg('[ID: ' + data.user_id + '] ' + field + ' 字段更改为：' + value);
             });
             table.on('tool(table)', function (obj) {
-                @if(!Auth::user()->can('business::discovery.deposits.update'))
-                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
-                obj.update(d);
-                $(this).val(original);
-                table.render();
-                return true;
-                @endif
-                var newdata = {};
-                var params = d = {};
                 var data = obj.data;
-                if (obj.event === 'date') {
-                    debugger
-                    var field = $(this).data('field');
-                    laydate.render({
-                        elem: this.firstChild
-                        , lang: 'en'
-                        , show: true //直接显示
-                        , closeStop: this
-                        , type: 'datetime'
-                        , format: "yyyy-MM-dd HH:mm:ss"
-                        , done: function (value, date) {
-                            newdata[field] = value;
-                            obj.update(newdata);
-                            params[field] = value;
-                            params['user_id'] = data.user_id;
-                            request(params);
-                        }
+                if(obj.event=== 'add'){
+                    let device = layui.device();
+                    console.log(device);
+                    let area = device.android===true || device.ios===true ? ['95%','95%'] : ['40%', '80%'];
+                    layer.open({
+                        type: 2,
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: area,
+                        offset: 'auto',
+                        content: '/backstage/business/deposits/create/'+data.user_id,
                     });
                 }
                 if(obj.event=== 'detail'){
@@ -114,7 +102,7 @@
                         shade: 0.8,
                         area: ['95%','95%'],
                         offset: 'auto',
-                        content: '/backstage/business/discovery/money/'+data.user_id,
+                        content: '/backstage/business/deposits/money/'+data.user_id,
                     });
                 }
                 if(obj.event=== 'order'){
@@ -124,7 +112,7 @@
                         shade: 0.8,
                         area: ['95%','95%'],
                         offset: 'auto',
-                        content: '/backstage/business/discovery/order/detail/?user_id='+data.user_id,
+                        content: '/backstage/business/deposits/order/detail/?user_id='+data.user_id,
                     });
                 }
             });
@@ -154,6 +142,7 @@
         });
     </script>
     <script type="text/html" id="op">
+        <a class="layui-btn layui-btn-xs" lay-event="add">{{trans('common.form.button.add')}}</a>
         <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
         <a class="layui-btn layui-btn-xs" lay-event="order">{{trans('business.table.header.order')}}</a>
     </script>

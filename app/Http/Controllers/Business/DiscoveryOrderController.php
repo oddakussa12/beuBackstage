@@ -93,18 +93,18 @@ class DiscoveryOrderController extends Controller
     public function update(Request $request)
     {
         $params = $request->all();
-        $status = $request->input('status' , null);
+        $state  = $request->input('status' , null);
         $id     = $request->input('id' , '');
         $order  = DB::connection('lovbee')->table('delivery_orders')->where('order_id', $id)->first();
         $list   = range(1, 10);
         $update = [];
 
-        if (in_array($status, $list)) { // 订单状态
+        if (in_array($state, $list)) { // 订单状态
             $time    = intval((time()- strtotime($order->created_at))/60);
-            $update  = ['status'=>$status, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
-            $deposit = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $id)->first();
-            if (!empty($deposit)) {
-                $update['deposit'] = $deposit - $order->order_price;
+            $update  = ['status'=>$state, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+            $deposit = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $order->owner)->first();
+            if (!empty($deposit) && $order->deposit=='0.00') {
+                $update['deposit'] = $deposit->balance - $order->shop_price;
             }
         }
         if (!empty($params['order_menu'])) { // 点菜单
@@ -119,17 +119,17 @@ class DiscoveryOrderController extends Controller
         }
         Log::info('delivery_orders::update::', array_merge(['order_id'=>$id], $update));
         if(!empty($update)) {
-            DB::transaction(function() use ($update, $id, $status, $list) {
+            DB::transaction(function() use ($update, $state, $order, $list) {
                 $update = array_merge($update, ['updated_at'=>date('Y-m-d H:i:s')]);
-                DB::connection('lovbee')->table('delivery_orders')->where('order_id', $id)->update($update);
+                DB::connection('lovbee')->table('delivery_orders')->where('order_id', $order->order_id)->update($update);
                 if (!empty($update['deposit'])) {
-                    DB::connection('lovbee')->table('shops_deposits')->where('user_id', $id)->update(['money'=>$update['deposit']]);
+                    DB::connection('lovbee')->table('shops_deposits')->where('user_id', $order->owner)->update(['balance'=>$update['deposit']]);
                 }
                 // 插入Log 日志
-                if (in_array($status, $list)) { // 订单状态
+                if (in_array($state, $list)) { // 订单状态
                     DB::table('delivery_orders_logs')->insert([
-                       'order_id'  => $id,
-                       'status'    => $status,
+                       'order_id'  => $order->order_id,
+                       'status'    => $state,
                        'admin_id'  => auth()->user()->admin_id,
                        'created_at'=> date('Y-m-d H:i:s')
                     ]);
@@ -213,17 +213,18 @@ class DiscoveryOrderController extends Controller
             if (empty($money)) {
                 $data = [
                     'user_id'   => $params['user_id'],
-                    'money'     => $params['money'] ?? null,
-                    'money_time'=> $params['money_time'] ?? null,
+                    'money'     => $params['money'],
+                    'balance'   => $params['money'],
+                    'money_time'=> $params['money_time'],
                     'created_at'=> $time,
                 ];
                 $data['deposit_id'] = DB::connection('lovbee')->table('shops_deposits')->insertGetId($data);
             } else {
                 $data['user_id']    = $params['user_id'];
                 $data['updated_at'] = $time;
-                !empty($params['money']) && $data['money'] = $money->money+$params['money'];
-                !empty($params['money_time']) && $data['money_time'] = $params['money_time'];
-                !empty($data) && DB::connection('lovbee')->table('shops_deposits')->where('user_id', $params['user_id'])->update($data);
+                $data['money']      = $money->money+$params['money'];
+                $data['money_time'] = $params['money_time'];
+                DB::connection('lovbee')->table('shops_deposits')->where('user_id', $params['user_id'])->update($data);
                 $data['deposit_id'] = $money->id;
             }
             $log = DB::connection('lovbee')->table('shops_deposits_logs')->orderByDesc('id')->first();
