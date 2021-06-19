@@ -7,13 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Database\Concerns\BuildsQueries;
 
 
 class OrderController extends Controller
 {
-    use BuildsQueries;
     protected $status = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
 
     public function base($request)
@@ -106,7 +103,7 @@ class OrderController extends Controller
         $params['user_id']= $params['user_id'] ?? 0;
         $params['type']   = $params['type'] ?? 0;
         $params['status'] = $this->status;
-        $params['money']  = $allMoney;
+        $params['money']  = (array)$allMoney;
 
         return view('backstage.business.order.manager', $params);
 

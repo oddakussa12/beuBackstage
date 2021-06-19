@@ -9,6 +9,7 @@
         }
     </style>
     <div  class="layui-fluid">
+        <button onclick="graph()">Graph</button>
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
@@ -125,6 +126,17 @@
                     }
                 }
             });
+
+            function graph() {
+                layer.open({
+                    type: 2,
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['95%','95%'],
+                    offset: 'auto',
+                    content: '/backstage/business/graph',
+                });
+            }
             //监听单元格编辑
             table.on('edit(table)', function(obj){
                 var that = this;

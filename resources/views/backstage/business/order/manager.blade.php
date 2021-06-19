@@ -96,8 +96,8 @@
                 <th lay-data="{field:'shop_price', width:180}">Money for the store</th>
                 <th lay-data="{field:'shop_price', width:180}">Gross profit</th>
             <tr>
-                <td>{{$money['order_price']}}</td>
-                <td>{{$money['shop_price']}}</td>
+                <td>@if(!empty($money['order_price'])){{$money['order_price']}}@else 0 @endif</td>
+                <td>@if(!empty($money['shop_price'])){{$money['shop_price']}}@else 0 @endif</td>
                 <td>{{$money['order_price']-$money['shop_price']}}</td>
             </tr>
         </table>

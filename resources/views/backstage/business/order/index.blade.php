@@ -24,7 +24,8 @@
                 <div class="layui-inline">
                     <div class="layui-btn-group">
                         <a href="?type=0&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                        @foreach($status as $key=>$value)
+                        <a href="?type=pending&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='pending') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Pending</a>
+                    @foreach($status as $key=>$value)
                             <a href="?type={{$key}}&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
                         @endforeach
                     </div>
