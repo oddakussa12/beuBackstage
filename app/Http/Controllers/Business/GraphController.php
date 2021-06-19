@@ -13,6 +13,16 @@ class GraphController extends Controller
 {
     protected $status = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
 
+
+    public function index()
+    {
+        $type = ['orderStatus'];
+        foreach ($type as $item) {
+            $result[$item] = $this->$item();
+        }
+
+        return view('backstage.business.graph.index', compact('result'));
+    }
     // 购物车商品统计
     public function cartGoods()
     {
@@ -56,32 +66,55 @@ class GraphController extends Controller
             }
         }
         return $result;
-
     }
 
 
-    public function pie($result)
+    /**
+     * @param $result
+     * @param string $title
+     * @param string $titleLeft
+     * @param string $legendOrient
+     * @param string $legendLeft
+     * @return array
+     * 饼状图
+     */
+    public function pie($result, string $title='', string $titleLeft='center', string $legendOrient='vertical', string $legendLeft='left')
     {
         $result = array_map(function($value) {return (array)$value;}, $result);
 
-        $params['title']   = ['text'=>'', 'left'=>'center'] ;
-        $params['tooltip'] = ['tooltip'=>'item', 'formatter'=>'{b}: {c} <br />{d}%'] ;
-        $params['legend']  = ['orient'=>'vertical', 'left'=>'left'] ;
-        $params['series'][]= [
-            'type'   => 'pie',
-            'radius' => '50%',
-            'data'   => $result ?? [],
-            'label'  => ['normal'=>['formatter'=>"{b}: {c} {d}%"]]
+        return [
+            'title'   => ['text'=>$title, 'left'=>$titleLeft],
+            'tooltip' => ['trigger'=>'item', 'formatter'=>'{b} : {c} <br>  {d}%'],
+            'legend'  => ['orient'=>$legendOrient, 'left'=>$legendLeft], // 'orient'=>vertical/ horizontal
+            'series'  => [
+                [
+                    'type'   => 'pie',
+                    'radius' => '50%',
+                    'data'   => $result ?? [],
+                    'label'  => ['normal'=>['formatter'=>'{b} : {c} '.PHP_EOL.' {d}%']]
+                ]
+            ]
         ];
-        return $params;
     }
 
     // 订单状态统计
     public function orderStatus()
     {
-        $result = DB::connection('lovbee')->table('orders')->select(DB::raw('count(*) num, status'))->groupBy('status')->orderByDesc('status')->get()->toArray();
-        $this->pie($result, 'status');
-
+        $data   = [];
+        $table  = 'orders';
+        $table  = 'delivery_orders';
+        $result = DB::connection('lovbee')->table($table)->select(DB::raw('count(*) num, status'))->groupBy('status')->orderBy('status')->get()->toArray();
+        foreach ($result as $item) {
+            foreach ($this->status as $key=>$status) {
+                if ($item->status==$key) {
+                    $data[] = [
+                        'name' =>$status,
+                        'value'=>$item->num
+                    ];
+                }
+            }
+        }
+        return $this->pie($data, 'orderStatus');
     }
 
     public function test()

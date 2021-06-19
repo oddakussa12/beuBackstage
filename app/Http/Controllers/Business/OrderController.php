@@ -48,7 +48,7 @@ class OrderController extends Controller
 
         $orders->shops = $shops ?? [];
         $orders->each(function($order) use ($users){
-            $order->goods= !empty($order->detail) ? json_decode($order->detail, true) : [];
+            $order->detail= !empty($order->detail) ? json_decode($order->detail, true) : [];
             $order->shop = $users->where('user_id', $order->shop_id)->first();
             $order->user = $users->where('user_id', $order->user_id)->first();
             $duration = time()-strtotime($order->created_at);
