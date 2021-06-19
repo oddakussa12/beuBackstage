@@ -9,7 +9,6 @@
         }
     </style>
     <div  class="layui-fluid">
-        <button id="graph">Graph</button>
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
@@ -32,7 +31,7 @@
                 </div>
             </div>
         </form>
-        <tbody class="layui-table" lay-filter="table" id="table">
+        <table class="layui-table" lay-filter="table" id="table">
         <thead>
         <tr>
             <th lay-data="{field:'id', width:180 , fixed:'left'}">OrderId</th>
@@ -57,7 +56,6 @@
                     console.log(c);
                     return '<span class=\'layui-btn layui-btn-sm '+c+'\' style=\'color:black\'>'+selectParams[field.order_status]+'</span>';
                 },event:'updateStatus'}">Status</th>
-            <th lay-data="{field:'order_menu', minWidth:200}">Menu</th>
             <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
             <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
             <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
@@ -65,6 +63,7 @@
             <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
             <th lay-data="{field:'order_created_at', minWidth:160}">CreatedAt</th>
             <th lay-data="{field:'order_updated_at', minWidth:160}">UpdatedAt</th>
+            <th lay-data="{fixed: 'right', minWidth:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -78,27 +77,6 @@
                 <td>{{$order->user_contact}}</td>
                 <td>{{$order->user_address}}</td>
                 <td>{{$order->status}}</td>
-                <td>
-                    <table style="display: none">
-                        <tr>
-                            <th>GoodsId</th>
-                            <th>GoodsName</th>
-                            <th>GoodsImage</th>
-                            <th>GoodsNum</th>
-                        </tr>
-                        @if(!empty($order->detail))
-                            @foreach($order->detail as $key=>$value)
-                                <tr>
-                                    <td>{{$value->goods_id}}</td>
-                                    <td>{{$value->goods_name}}</td>
-                                    <td>{{$value->goods_image}}</td>
-                                    <td>{{$value->goods_num}}</td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </table>
-                    <button class="layui-btn layui-btn-xs">Detail</button>
-                </td>
                 <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                 <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                 <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
@@ -106,6 +84,7 @@
                 <td>@if(!empty($order->color)){{$order->color}}@endif</td>
                 <td>{{$order->created_at}}</td>
                 <td>{{$order->updated_at}}</td>
+                <td></td>
             </tr>
         @endforeach
         </tbody>
@@ -120,7 +99,6 @@
 @section('footerScripts')
     @parent
     <script>
-        //内容修改弹窗
         layui.config({
             base: "{{url('plugin/layui')}}/"
         }).extend({
@@ -146,35 +124,37 @@
                     }
                 }
             });
+            let select = function () {
+                let selectParams = [];
+                @foreach($status as $k=>$v)
+                    selectParams[{{$k-1}}] = {name:"{{$k}}", value:"{{$v}}"},
+                        @endforeach
+                        layuiTableColumnSelect.addSelect({data:selectParams,layFilter:'table',event:'updateStatus',field:'order_status',callback:function(obj,update){
+                                var params = {'status':update.order_status , 'id':obj.data.id, 'version':1};
+                                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                                    obj.update(update);
+                                    parent.location.reload();
+                                }, 'patch');
+                            }});
+            }
 
-            $("#graph").on('click', function () {
-                layer.open({
-                    type: 2,
-                    shadeClose: true,
-                    shade: 0.8,
-                    area: ['95%','95%'],
-                    offset: 'auto',
-                    content: '/backstage/business/graph',
-                });
-            });
-
-            /*table.on('tool(table)', function (obj) {
+            table.on('tool(table)', function (obj) {
+                console.log(obj);
                 var data = obj.data;
                 if (obj.event === 'goods') {
-                    var field = $(this).data('field');
-                    obj.field = field;
-
+                    layer.open({
+                        type: 1,
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['95%', '95%'],
+                        offset: 'auto',
+                        content: '/backstage/business/order/'+data.order_id,
+                    });
                 }
-                if(obj.event=== 'detail'){
-                    open(['95%','95%'], '/backstage/business/discovery/money/'+data.user_id)
+                if (obj.event==='updateStatus') {
+                    select();
                 }
-                if(obj.event=== 'order'){
-                    open(['95%','95%'], '/backstage/business/discovery/order/detail/?user_id='+data.user_id)
-                }
-            });*/
-
-
-
+            });
 
             //监听单元格编辑
             table.on('edit(table)', function(obj){
@@ -226,21 +206,12 @@
                     table.render();
                 });
             });
-            let selectParams = [];
-            @foreach($status as $k=>$v)
-                selectParams[{{$k-1}}] = {name:"{{$k}}", value:"{{$v}}"},
-                    @endforeach
-                    layuiTableColumnSelect.addSelect({data:selectParams,layFilter:'table',event:'updateStatus',field:'order_status',callback:function(obj,update){
-                            var params = {'status':update.order_status , 'id':obj.data.id, 'version':1};
-                            common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
-                                obj.update(update);
-                                parent.location.reload();
-                            } , 'patch');
-                        }});
-            form.render();
             setTimeout(function() {
                 location.reload();
             }, 600000);
         });
+    </script>
+    <script type="text/html" id="op">
+        <a class="layui-btn layui-btn-xs" lay-event="goods">Goods</a>
     </script>
 @endsection

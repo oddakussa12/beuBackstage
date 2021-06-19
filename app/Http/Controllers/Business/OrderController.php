@@ -78,6 +78,17 @@ class OrderController extends Controller
         return view('backstage.business.shopCartOrder.index', compact('orders', 'type', 'shops', 'userId', 'status', 'statusEncode'));
     }
 
+    public function show($orderId)
+    {
+        $result = DB::connection('lovbee')->table('orders')->where('order_id', $orderId)->first();
+        if (!empty($result)) {
+            $result->detail= !empty($order->detail) ? json_decode($order->detail, true) : [];
+        }
+
+        return view('backstage.business.shopCartOrder.view', compact('result'));
+
+    }
+
     public function manager(Request $request)
     {
         $request->offsetSet('status', 5);
