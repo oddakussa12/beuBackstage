@@ -90,11 +90,11 @@ class DiscoveryOrderController extends Controller
 
     public function update(Request $request)
     {
-        $params = $request->all();
-        $state  = $request->input('status' , null);
-        $id     = $request->input('id' , '');
-        $table  = !empty($params['version']) ? 'orders' : 'delivery_orders';
-        $order  = DB::connection('lovbee')->table($table)->where('order_id', $id)->first();
+        $params  = $request->all();
+        $schedule= $request->input('status' , null);
+        $id      = $request->input('id' , '');
+        $table   = !empty($params['version']) ? 'orders' : 'delivery_orders';
+        $order   = DB::connection('lovbee')->table($table)->where('order_id', $id)->first();
 
         if (empty($order)) {
             abort('The order information is wrong, please refresh the page and try again');
@@ -104,14 +104,14 @@ class DiscoveryOrderController extends Controller
         $list   = range(1, 10);
         $update = [];
 
-        if (in_array($state, $list)) { // 订单状态
+        if (in_array($schedule, $list)) { // 订单状态
             $time    = intval((time()- strtotime($order->created_at))/60);
-            $state==5 && $orderState = 1;
-            $state>6  && $orderState = 2;
-            $update  = ['status'=>$orderState ?? 0, 'schedule'=>$state, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+            $schedule==5 && $orderState = 1;
+            $schedule>6  && $orderState = 2;
+            $update  = ['status'=>$orderState ?? 0, 'schedule'=>$schedule, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
 
             $deposit = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $shopId)->first();
-            if (!empty($deposit) && $order->deposit=='0.00' && $state==5) {
+            if (!empty($deposit) && $order->deposit=='0.00' && $schedule==5) {
                 $update['deposit'] = $deposit->balance - $order->shop_price;
             }
         }
@@ -134,10 +134,10 @@ class DiscoveryOrderController extends Controller
                 if (!empty($update['deposit'])) {
                     DB::connection('lovbee')->table('shops_deposits')->where('user_id', $shopId)->update(['balance'=>$update['deposit']]);
                 }
-                if (in_array($state, $list)) { // 插入Log 日志 订单状态
+                if (in_array($schedule, $list)) { // 插入Log 日志 订单状态
                     DB::table('delivery_orders_logs')->insert([
                        'order_id'  => $order->order_id,
-                       'status'    => $state,
+                       'status'    => $schedule,
                        'admin_id'  => auth()->user()->admin_id,
                        'created_at'=> date('Y-m-d H:i:s')
                     ]);

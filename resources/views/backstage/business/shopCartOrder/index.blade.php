@@ -1,12 +1,10 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <style>
-        .layui-table-select-dl { color: black}
-        textarea.layui-textarea.layui-table-edit {
-            min-width: 300px;
-            min-height: 200px;
-            z-index: 2;
-        }
+        textarea.layui-textarea.layui-table-edit {min-width: 300px; min-height: 200px; z-index: 2;}
+        table tr td select {border: none; height: 29px;}
+        table tr td select option{ color: #000000; background: #FFFFFF;}
+        .layui-table-cell {}
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
@@ -51,7 +49,7 @@
             <th lay-data="{field:'order_user_name', maxWidth:180, minWidth:180}">OrderUserName</th>
             <th lay-data="{field:'order_user_contact', minWidth:180}">OrderUserPhone</th>
             <th lay-data="{field:'order_user_address', minWidth:180}">OrderUserAddress</th>
-            <th lay-data="{field:'order_status', minWidth:150, templet: function(field){
+<!--            <th lay-data="{field:'order_status', minWidth:150, templet: function(field){
                     var selectParams = {{$statusEncode}};
                     var status = field.order_status;
                     let c = 'layui-bg-white';
@@ -65,9 +63,9 @@
                     if(status==8||status==9||status==10){ c='layui-bg-gray'}
                     console.log(c);
                     return '<span class=\'layui-btn layui-btn-sm '+c+'\' style=\'color:black\'>'+selectParams[field.order_status]+'</span>';
-                },event:'updateStatus'}">Status</th>
+                },event:'updateStatus'}">Status</th>-->
+            <th lay-data="{field:'order_status', minWidth:170}">Status</th>
             <th lay-data="{field:'status', minWidth:120}">OrderProcess</th>
-            <th lay-data="{field:'detail', minWidth:120, event:'goods'}">Goods</th>
             <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
             <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
             <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
@@ -75,7 +73,7 @@
             <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
             <th lay-data="{field:'order_created_at', minWidth:160}">CreatedAt</th>
             <th lay-data="{field:'order_updated_at', minWidth:160}">UpdatedAt</th>
-            <th lay-data="{fixed: 'right', minWidth:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+            <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -88,11 +86,16 @@
                 <td>{{$order->user_name}}</td>
                 <td>@if(!empty($order->user_contact)){{$order->user_contact}}@endif</td>
                 <td>{{$order->user_address}}</td>
-                <td>{{$order->schedule}}</td>
+                <td>
+                    <select lay-filter="select" class="select layui-bg-{{$colorStyle[$order->schedule]}}" lay-ignore name="status" data="{{$order->order_id}}">
+                        @foreach($schedule as $k=>$v)
+                            <option value="{{$k}}" @if($order->schedule==$k) selected @endif>{{$v}}</option>
+                        @endforeach
+                    </select>
+                </td>
                 <td><span class="layui-btn layui-btn-sm @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
                         @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif</span>
                 </td>
-                <td><button class="detail">Detail</button></td>
                 <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                 <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                 <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
@@ -105,7 +108,7 @@
         @endforeach
         </tbody>
         </table>
-        @if(empty($appends))
+    @if(empty($appends))
             {{ $orders->links('vendor.pagination.default') }}
         @else
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
@@ -166,20 +169,23 @@
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });*/
+            $('.select').on('change', function() {
+                var params = {'status':$(this).val(), 'id':$(this).attr('data'), 'version':1};
+                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                    location.reload();
+                }, 'patch');
+            });
 
             table.on('tool(table)', function (obj) {
-                $('dl').remove();
-                console.log(123);
-                console.log(obj);
                 var data = obj.data;
                 if (obj.event === 'goods') {
                     layer.open({
-                        type: 1,
+                        type: 2,
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['95%', '95%'],
+                        area: ['80%', '80%'],
                         offset: 'auto',
-                        content: '/backstage/business/order/'+data.order_id,
+                        content: '/backstage/business/order/'+data.id,
                     });
                 }
                 if (obj.event==='updateStatus') {
@@ -200,11 +206,8 @@
                    // table.render();*/
                 }
             });
-            $('button').on('onclick', function() {
-                console.log(1111111111);
-                alert(1111);
-            });
-            select();
+
+            // select();
 
             // select();
             //监听单元格编辑
@@ -262,7 +265,7 @@
             }, 600000);
         });
     </script>
-<!--    <script type="text/html" id="op">
+    <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="goods">Goods</a>
-    </script>-->
+    </script>
 @endsection

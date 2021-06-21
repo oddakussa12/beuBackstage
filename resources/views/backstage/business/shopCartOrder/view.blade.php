@@ -1,5 +1,4 @@
-@extends('layouts.dashboard')
-@section('layui-content')
+@extends('layouts.app')
     <style>
         .layui-table-select-dl { color: black}
         textarea.layui-textarea.layui-table-edit {
@@ -20,28 +19,25 @@
             </tr>
             </thead>
             <tbody>
-            @if(!empty($result->detail))
-                @foreach($result->detail as $value)
+            @if(!empty($result))
+                @foreach($result as $value)
                     <tr>
-                        <td>{{$value->goods_id}}</td>
-                        <td>{{$value->goods_name}}</td>
-                        <td>@if(!empty($value->goods_image))
-                                @foreach($value->goods_image as $image)
+                        <td>{{$value['id']}}</td>
+                        <td>{{$value['name']}}</td>
+                        <td>@if(!empty($value['image']))
+                                @foreach($value['image'] as $image)
                                     <img src="{{$image['url']}}">
                                 @endforeach
                             @endif
                         </td>
-                        <td>{{$value->goods_price}}</td>
-                        <td>{{$value->goods_num}}</td>
-
-                        <td></td>
+                        <td>@if(!empty($value['price'])){{$value['price']}}@endif</td>
+                        <td>@if(!empty($value['goodsNumber'])){{$value['goodsNumber']}}@endif</td>
                     </tr>
                 @endforeach
             @endif
             </tbody>
         </table>
     </div>
-@endsection
 @section('footerScripts')
     @parent
     <script type="text/html" id="op">

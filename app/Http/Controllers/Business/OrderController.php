@@ -14,13 +14,14 @@ class OrderController extends Controller
 {
     protected $status   = ['InProcess', 'Completed', 'Canceled'];
     protected $schedule = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
+    protected $colorStyle = ['1'=>'white', '2'=>'yellow', '3'=>'orange', '4'=>'pink', '5'=>'green', '6'=>'blue', '7'=>'orange', '8'=>'gray', '9'=>'gray', '10'=>'gray'];
 
     public function base($request)
     {
         $admin_id = $request->input('admin_id', '0');
         $userId   = $request->input('user_id', '0');
         $schedule = $request->input('type', '0');
-        $status   = $request->input('status', '0');
+        $status   = $request->input('status');
         $delivery = $request->input('user_delivery', '');
         $params   = $request->all();
 
@@ -84,6 +85,7 @@ class OrderController extends Controller
         $params['orders'] = $orders;
         $params['orderStatus'] = $this->status;
         $params['schedule']    = $schedule;
+        $params['colorStyle']  = $this->colorStyle;
         $params['statusEncode'] = json_encode($this->schedule, true);
         return view('backstage.business.shopCartOrder.index', $params);
     }
@@ -92,10 +94,10 @@ class OrderController extends Controller
     {
         $result = DB::connection('lovbee')->table('orders')->where('order_id', $orderId)->first();
         if (!empty($result)) {
-            $result->detail= !empty($order->detail) ? json_decode($order->detail, true) : [];
+            $result->detail= !empty($result->detail) ? json_decode($result->detail, true) : [];
         }
-
-        return view('backstage.business.shopCartOrder.view', compact('result'));
+        $params['result'] = $result->detail ?? [];
+        return view('backstage.business.shopCartOrder.view', $params);
 
     }
 
