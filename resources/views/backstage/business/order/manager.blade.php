@@ -39,7 +39,7 @@
 
                     <div class="layui-btn-group">
                         <a href="?type=0&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                        @foreach($status as $key=>$value)
+                        @foreach($schedule as $key=>$value)
                             @if($key>=5)
                                 <a href="?type={{$key}}&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
                             @endif
@@ -55,7 +55,8 @@
                 <th lay-data="{field:'shop_name', minWidth:180}">ShopName</th>
                 <th lay-data="{field:'user_name', minWidth:180}">UserName</th>
                 <th lay-data="{field:'order_created_at', minWidth:160}">StartTime</th>
-                <th lay-data="{field:'order_status', minWidth:180}">OrderStatus</th>
+                <th lay-data="{field:'order_schedule', minWidth:180}">OrderStatus</th>
+                <th lay-data="{field:'order_status', minWidth:180}">OrderProcess</th>
                 <th lay-data="{field:'order_menu', minWidth:200}">Menu</th>
                 <th lay-data="{field:'order_price', minWidth:120}">OrderPrice</th>
                 <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
@@ -72,7 +73,10 @@
                     <td>{{$order->shop->user_nick_name}}</td>
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->created_at}}</td>
-                    <td>{{$status[$order->status]}}</td>
+                    <td>{{$schedule[$order->schedule]}}</td>
+                    <td><span class="layui-btn layui-btn-xs @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
+                        @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif</span>
+                    </td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>

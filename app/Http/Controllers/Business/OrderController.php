@@ -54,7 +54,7 @@ class OrderController extends Controller
             $order->shop = $users->where('user_id', $order->shop_id)->first();
             $order->user = $users->where('user_id', $order->user_id)->first();
             $duration = time()-strtotime($order->created_at);
-            if (($order->status==1 && $duration>300) || ($order->status==2 && $duration>600) || ($order->status==3 && $duration>780) || ($order->status==4 && $duration>3600)) {
+            if (($order->schedule==1 && $duration>300) || ($order->schedule==2 && $duration>600) || ($order->schedule==3 && $duration>780) || ($order->schedule==4 && $duration>3600)) {
                 $order->color = 1;
             }
         });
@@ -122,8 +122,8 @@ class OrderController extends Controller
         $params['admins'] = $admins;
         $params['user_id']= $params['user_id'] ?? 0;
         $params['type']   = $params['type'] ?? 0;
-        $params['status'] = $this->status;
         $params['money']  = (array)$allMoney;
+        $params['schedule'] = $this->schedule;
 
         return view('backstage.business.order.manager', $params);
 

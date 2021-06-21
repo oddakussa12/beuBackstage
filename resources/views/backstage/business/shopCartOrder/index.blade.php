@@ -90,8 +90,8 @@
                 <td>{{$order->user_address}}</td>
                 <td>{{$order->schedule}}</td>
                 <td><span class="layui-btn layui-btn-xs @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
-                        @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif
-                    </span></td>
+                        @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif</span>
+                </td>
                 <td><button class="detail">Detail</button></td>
                 <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                 <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
