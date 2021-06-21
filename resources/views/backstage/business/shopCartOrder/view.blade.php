@@ -21,22 +21,23 @@
             </thead>
             <tbody>
             @if(!empty($result->detail))
-            @foreach($result->detail as $value)
-                <tr>
-                    <td>{{$value->goods_id}}</td>
-                    <td>{{$value->goods_name}}</td>
-                    <td>@if(!empty($value->goods_image))
-                            @foreach($value->goods_image as $image)
-                                <img src="{{$image['url']}}">
-                            @endforeach
-                        @endif
-                    </td>
-                    <td>{{$value->goods_price}}</td>
-                    <td>{{$value->goods_num}}</td>
+                @foreach($result->detail as $value)
+                    <tr>
+                        <td>{{$value->goods_id}}</td>
+                        <td>{{$value->goods_name}}</td>
+                        <td>@if(!empty($value->goods_image))
+                                @foreach($value->goods_image as $image)
+                                    <img src="{{$image['url']}}">
+                                @endforeach
+                            @endif
+                        </td>
+                        <td>{{$value->goods_price}}</td>
+                        <td>{{$value->goods_num}}</td>
 
-                    <td></td>
-                </tr>
-            @endforeach
+                        <td></td>
+                    </tr>
+                @endforeach
+            @endif
             </tbody>
         </table>
     </div>

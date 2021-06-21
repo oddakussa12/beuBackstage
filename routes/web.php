@@ -139,8 +139,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::patch('discovery/order' , 'DiscoveryOrderController@update')->name('discovery.order.update');
             Route::get('discovery/manager' , 'DiscoveryOrderController@manager')->name('discovery.manager');
             Route::get('order' , 'OrderController@index')->name('order.index');
-            Route::get('order/{id}' , 'OrderController@show')->name('order.show');
             Route::get('order/manager' , 'OrderController@manager')->name('order.manager');
+            Route::get('order/{id}' , 'OrderController@show')->name('order.show');
             Route::get('graph' , 'GraphController@index')->name('graph.index');
         });
 
