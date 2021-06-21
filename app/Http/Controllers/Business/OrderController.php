@@ -12,23 +12,24 @@ use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
 {
-    protected $status = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
+    protected $status   = ['InProcess', 'Completed', 'Canceled'];
+    protected $schedule = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
 
     public function base($request)
     {
         $admin_id = $request->input('admin_id', '0');
         $userId   = $request->input('user_id', '0');
-        $type     = $request->input('type', '0');
-        $state    = $request->input('status', '0');
+        $schedule = $request->input('type', '0');
+        $status   = $request->input('status', '0');
         $delivery = $request->input('user_delivery', '');
-        $appends['type'] = $type;
-        $appends['user_id'] = $userId;
+        $params   = $request->all();
 
         $orders = DB::connection('lovbee')->table('orders');
-        if (!empty($state)) {
-            $orders = $orders->where('status', '>=', $state);
-        } else {
-            $type!=0 && $orders = $orders->where('status', $type);
+        if (isset($status)) {
+            $orders = $orders->where('status', $status);
+        }
+        if (!empty($schedule)) {
+            $orders = $orders->where('schedule', $schedule);
         }
         $admin_id!=0 && $orders = $orders->where('operator', $admin_id);
         if (!empty($delivery)) {
@@ -41,7 +42,7 @@ class OrderController extends Controller
             $userId!=0  && $orders = $orders->where('owner', $userId);
         }
 
-        $orders   = $orders->paginate(10)->appends($appends);
+        $orders   = $orders->paginate(10)->appends($params);
         $ownerIds = $orders->pluck('owner')->toArray();
         $userIds  = $orders->pluck('user_id')->toArray();
         $userIds  = array_unique(array_merge($userIds, $ownerIds));
@@ -58,14 +59,12 @@ class OrderController extends Controller
             }
         });
 
-
         return $orders;
     }
 
     public function index(Request $request)
     {
-        $userId = $request->input('user_id', '0');
-        $type   = $request->input('type', '0');
+        $params = $request->all();
         $orders = $this->base($request);
         $user   = auth()->user();
 
@@ -73,10 +72,19 @@ class OrderController extends Controller
         $user->admin_id!=1 && $userIds = $userIds->where('admin_id', $user->admin_id);
         $userIds= $userIds->get()->pluck('user_id')->toArray();
 
-        $shops  = DB::connection('lovbee')->table('users')->whereIn('user_id', $userIds)->get();
-        $status = $this->status;
-        $statusEncode = json_encode($status, true);
-        return view('backstage.business.shopCartOrder.index', compact('orders', 'type', 'shops', 'userId', 'status', 'statusEncode'));
+        $params['shops']  = DB::connection('lovbee')->table('users')->whereIn('user_id', $userIds)->get();
+
+        $schedule = $this->schedule;
+        if (isset($params['status'])) {
+            $params['status'] == 0 && $schedule = collect($schedule)->only('1','2','3','4','6');
+            $params['status'] == 1 && $schedule = collect($schedule)->only('5');
+            $params['status'] == 2 && $schedule = collect($schedule)->only('7', '8', '9', '10');
+        }
+        $params['orders'] = $orders;
+        $params['orderStatus'] = $this->status;
+        $params['schedule']    = $schedule;
+        $params['statusEncode'] = json_encode($this->schedule, true);
+        return view('backstage.business.shopCartOrder.index', $params);
     }
 
     public function show($orderId)
@@ -92,7 +100,7 @@ class OrderController extends Controller
 
     public function manager(Request $request)
     {
-        $request->offsetSet('status', 5);
+        $request->offsetSet('status', 2);
         $orders = $this->base($request);
         $params = $request->all();
         $role    = DB::table('roles')->whereIn('name', ['administrator', 'calling center'])->get();

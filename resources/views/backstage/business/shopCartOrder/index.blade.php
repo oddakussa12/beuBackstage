@@ -13,9 +13,9 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?type={{$type}}&user_id=0" class="layui-btn @if(isset($userId)&&$userId==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
+                        <a href="?type={{$type}}&user_id=0&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($user_id)&&$user_id==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
                         @foreach($shops as $shop)
-                            <a href="?type={{$type}}&user_id={{$shop->user_id}}" class="layui-btn @if(isset($userId)&&$userId==$shop->user_id) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$shop->user_nick_name}}</a>
+                            <a href="?type={{$type}}&user_id={{$shop->user_id}}&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($user_id)&&$user_id==$shop->user_id) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$shop->user_nick_name}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -23,9 +23,19 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?type=0&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                        @foreach($status as $key=>$value)
-                            <a href="?type={{$key}}&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                        <a href="?type={{$type}}&user_id={{$user_id}}&status=" class="layui-btn @if(!isset($status)) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
+                    @foreach($orderStatus as $key=>$value)
+                            <a href="?type={{$type}}&user_id={{$user_id}}&status={{$key}}" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$value}}</a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-btn-group">
+                        <a href="?type=0&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
+                        @foreach($schedule as $key=>$value)
+                            <a href="?type={{$key}}&user_id={{$user_id}}&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -49,13 +59,14 @@
                     if(status==2){ c='layui-bg-yellow'}
                     if(status==3){ c='layui-bg-orange'}
                     if(status==4){ c='layui-bg-pink'}
-                    if(status==5){ c='llayui-bg-green'}
+                    if(status==5){ c='layui-bg-green'}
                     if(status==6){ c='layui-bg-blue'}
                     if(status==7){ c='layui-bg-orange'}
                     if(status==8||status==9||status==10){ c='layui-bg-gray'}
                     console.log(c);
                     return '<span class=\'layui-btn layui-btn-sm '+c+'\' style=\'color:black\'>'+selectParams[field.order_status]+'</span>';
                 },event:'updateStatus'}">Status</th>
+            <th lay-data="{field:'status', minWidth:120}">OrderProcess</th>
             <th lay-data="{field:'detail', minWidth:120, event:'goods'}">Goods</th>
             <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
             <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
@@ -77,7 +88,10 @@
                 <td>{{$order->user_name}}</td>
                 <td>@if(!empty($order->user_contact)){{$order->user_contact}}@endif</td>
                 <td>{{$order->user_address}}</td>
-                <td>{{$order->status}}</td>
+                <td>{{$order->schedule}}</td>
+                <td><span class="layui-btn layui-btn-xs @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
+                        @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif
+                    </span></td>
                 <td><button class="detail">Detail</button></td>
                 <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                 <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
@@ -128,7 +142,7 @@
             });
             let select = function () {
                 let selectParams = [];
-                @foreach($status as $k=>$v)
+                @foreach($schedule as $k=>$v)
                     selectParams[{{$k-1}}] = {name:"{{$k}}", value:"{{$v}}"},
                         @endforeach
                         layuiTableColumnSelect.addSelect({data:selectParams,layFilter:'table',event:'updateStatus',field:'order_status',callback:function(obj,update){
@@ -175,7 +189,7 @@
                     // delete carChange['table'];
                     /*console.log(this.innerHTML);
                     let option = '';
-                    @foreach($status as $k=>$v)
+                    @foreach($schedule as $k=>$v)
                         option += '<dd class=\'layui-table-select-dd\' lay-value="{{$k}}">{{$v}}</dd>';
                     @endforeach
                    let dl = '<dl class=\'layui-table-select-dl\'>'+option+'</dl>';
