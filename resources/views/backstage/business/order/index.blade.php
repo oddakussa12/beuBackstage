@@ -2,11 +2,9 @@
 @section('layui-content')
     <style>
         .layui-table-select-dl { color: black}
-        textarea.layui-textarea.layui-table-edit {
-            min-width: 300px;
-            min-height: 200px;
-            z-index: 2;
-        }
+        textarea.layui-textarea.layui-table-edit {min-width: 300px; min-height: 200px; z-index: 2;}
+        table tr td select {border: none; height: 29px;}
+        table tr td select option{ color: #000000; background: #FFFFFF;}
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
@@ -43,7 +41,7 @@
                 <th lay-data="{field:'order_user_name', maxWidth:180, minWidth:180}">OrderUserName</th>
                 <th lay-data="{field:'order_user_contact', minWidth:180}">OrderUserPhone</th>
                 <th lay-data="{field:'order_user_address', minWidth:180}">OrderUserAddress</th>
-                <th lay-data="{field:'order_status', minWidth:150, templet: function(field){
+<!--                <th lay-data="{field:'order_status', minWidth:150, templet: function(field){
                     var selectParams = {{$statusEncode}};
                     var status = field.order_status;
                     let c = 'layui-bg-white';
@@ -57,7 +55,8 @@
                     if(status==8||status==9||status==10){ c='layui-bg-gray'}
                     console.log(c);
                     return '<span class=\'layui-btn layui-btn-sm '+c+'\' style=\'color:black\'>'+selectParams[field.order_status]+'</span>';
-                },event:'updateStatus'}">Status</th>
+                },event:'updateStatus'}">Status</th>-->
+                <th lay-data="{field:'order_status', minWidth:170}">Status</th>
                 <th lay-data="{field:'order_menu', minWidth:200, edit: 'textarea'}">Menu</th>
                 <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
                 <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
@@ -79,7 +78,13 @@
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->user_contact}}</td>
                     <td>{{$order->user_address}}</td>
-                    <td>{{$order->status}}</td>
+                    <td>
+                        <select lay-filter="select" class="select layui-bg-{{$colorStyle[$order->status]}}" lay-ignore name="status" data="{{$order->order_id}}">
+                            @foreach($status as $k=>$v)
+                                <option value="{{$k}}" @if($order->status==$k) selected @endif>{{$v}}</option>
+                            @endforeach
+                        </select>
+                    </td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
@@ -127,6 +132,12 @@
                         }
                     }
                 }
+            });
+            $('.select').on('change', function() {
+                var params = {'status':$(this).val(), 'id':$(this).attr('data'), 'version':1};
+                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                    location.reload();
+                }, 'patch');
             });
             //监听单元格编辑
             table.on('edit(table)', function(obj){
@@ -177,7 +188,7 @@
                     table.render();
                 });
             });
-            let selectParams = [];
+            /*let selectParams = [];
                 @foreach($status as $k=>$v)
                    selectParams[{{$k-1}}] = {name:"{{$k}}", value:"{{$v}}"},
                 @endforeach
@@ -187,7 +198,7 @@
                     obj.update(update);
                     parent.location.reload();
                 } , 'patch');
-            }});
+            }});*/
             form.render();
             setTimeout(function() {
                 location.reload();

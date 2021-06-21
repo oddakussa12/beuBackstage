@@ -15,6 +15,7 @@ class DiscoveryOrderController extends Controller
 {
     use BuildsQueries;
     protected $status = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
+    protected $colorStyle = ['1'=>'white', '2'=>'yellow', '3'=>'orange', '4'=>'pink', '5'=>'green', '6'=>'blue', '7'=>'orange', '8'=>'gray', '9'=>'gray', '10'=>'gray'];
 
     public function base($request)
     {
@@ -85,7 +86,8 @@ class DiscoveryOrderController extends Controller
         $shops  = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
         $status = $this->status;
         $statusEncode = json_encode($status, true);
-        return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId', 'status', 'statusEncode'));
+        $colorStyle = $this->colorStyle;
+        return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId', 'status', 'statusEncode', 'colorStyle'));
     }
 
     public function update(Request $request)
