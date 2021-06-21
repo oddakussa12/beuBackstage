@@ -57,7 +57,6 @@
                 <th lay-data="{field:'image', minWidth:200}">{{trans('common.table.header.image')}}</th>
                 <th lay-data="{field:'number', minWidth:200}">{{trans('business.table.header.goods_num')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
-                <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -75,7 +74,6 @@
                     </td>
                     <td>{{$value->number}}</td>
                     <td>{{$value->created_at}}</td>
-                    <td></td>
                 </tr>
             @endforeach
             </tbody>
@@ -168,8 +166,5 @@
                 },function(){});
             });
         });
-    </script>
-    <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('business.table.header.view_history')}}</a>
     </script>
 @endsection

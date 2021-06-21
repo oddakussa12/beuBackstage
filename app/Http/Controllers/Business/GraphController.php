@@ -11,18 +11,19 @@ use App\Http\Controllers\Controller;
 
 class GraphController extends Controller
 {
-    protected $status = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
+    protected $status   = ['InProcess', 'Completed', 'Canceled'];
+    protected $schedule = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
 
 
     public function index()
     {
-        $type = ['orderStatus'];
+        $type = ['cartShopsTop', 'orderSchedule', 'orderStatus'];
         foreach ($type as $item) {
             $result[$item] = $this->$item();
         }
-
         return view('backstage.business.graph.index', compact('result'));
     }
+
     // 购物车商品统计
     public function cartGoods()
     {
@@ -38,6 +39,22 @@ class GraphController extends Controller
             }
         }
         return $result;
+    }
+
+    public function cartShopsTop()
+    {
+        $result = $this->users('user_id');
+        $result = collect($result)->toArray();
+        $result = $result['data'];
+
+        foreach ($result as $item) {
+            $data[] = [
+              'name' => $item->nick_name,
+              'value'=> $item->num,
+            ];
+        }
+
+        return $this->pie($data ?? [], 'TopShops');
     }
 
     // 加入购物车最多的店铺统计
@@ -98,11 +115,28 @@ class GraphController extends Controller
     }
 
     // 订单状态统计
+    public function orderSchedule()
+    {
+        $data   = [];
+        $table  = 'orders';
+        $result = DB::connection('lovbee')->table($table)->select(DB::raw('count(*) num, schedule'))->groupBy('schedule')->orderBy('schedule')->get()->toArray();
+        foreach ($result as $item) {
+            foreach ($this->schedule as $key=>$status) {
+                if ($item->schedule==$key) {
+                    $data[] = [
+                        'name' =>$status,
+                        'value'=>$item->num
+                    ];
+                }
+            }
+        }
+        return $this->pie($data, 'orderSchedule');
+    }
+    // 订单状态统计
     public function orderStatus()
     {
         $data   = [];
         $table  = 'orders';
-        $table  = 'delivery_orders';
         $result = DB::connection('lovbee')->table($table)->select(DB::raw('count(*) num, status'))->groupBy('status')->orderBy('status')->get()->toArray();
         foreach ($result as $item) {
             foreach ($this->status as $key=>$status) {
@@ -117,8 +151,4 @@ class GraphController extends Controller
         return $this->pie($data, 'orderStatus');
     }
 
-    public function test()
-    {
-
-    }
 }
