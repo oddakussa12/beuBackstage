@@ -39,7 +39,7 @@
 
                     <div class="layui-btn-group">
                         <a href="?type=0&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                        @foreach($status as $key=>$value)
+                        @foreach($schedule as $key=>$value)
                             @if($key>=5)
                                 <a href="?type={{$key}}&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
                             @endif
@@ -55,7 +55,8 @@
                 <th lay-data="{field:'shop_name', minWidth:180}">ShopName</th>
                 <th lay-data="{field:'user_name', minWidth:180}">UserName</th>
                 <th lay-data="{field:'order_created_at', minWidth:160}">StartTime</th>
-                <th lay-data="{field:'order_status', minWidth:180}">OrderStatus</th>
+                <th lay-data="{field:'order_schedule', minWidth:180}">OrderStatus</th>
+                <th lay-data="{field:'order_status', minWidth:180}">OrderProcess</th>
                 <th lay-data="{field:'order_menu', minWidth:200}">Menu</th>
                 <th lay-data="{field:'order_price', minWidth:120}">OrderPrice</th>
                 <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
@@ -72,7 +73,10 @@
                     <td>{{$order->shop->user_nick_name}}</td>
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->created_at}}</td>
-                    <td>{{$status[$order->status]}}</td>
+                    <td>{{$schedule[$order->schedule]}}</td>
+                    <td><span class="layui-btn layui-btn-sm @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
+                        @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif</span>
+                    </td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
@@ -90,15 +94,15 @@
         @else
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
         @endif
-        <table class="layui-table" lay-filter="table" id="table2">
+        <table class="layui-table" id="table2">
+            <tr style="background-color: #f2f2f2;">
+                <th lay-data="{field:'order_price', width:180}">All the money received</th>
+                <th lay-data="{field:'shop_price', width:180}">Money for the store</th>
+                <th lay-data="{field:'shop_price', width:180}">Gross profit</th>
             <tr>
-                <th lay-data="{field:'order_price', width:180 , fixed:'left'}">All the money received</th>
-                <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Money for the store</th>
-                <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Gross profit</th>
-            <tr>
-                <td>{{$money->order_price}}</td>
-                <td>{{$money->shop_price}}</td>
-                <td>{{$money->order_price-$money->shop_price}}</td>
+                <td>@if(!empty($money['order_price'])){{$money['order_price']}}@else 0 @endif</td>
+                <td>@if(!empty($money['shop_price'])){{$money['shop_price']}}@else 0 @endif</td>
+                <td>{{$money['order_price']-$money['shop_price']}}</td>
             </tr>
         </table>
     </div>
@@ -114,9 +118,7 @@
             table.init('table', {
                 page:false
             });
-            table.init('table2', {
-                page:false
-            });
+
             setTimeout(function() {
                 location.reload();
             }, 60000);

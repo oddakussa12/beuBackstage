@@ -126,7 +126,7 @@ class OrderController extends Controller
         $params['money']  = (array)$allMoney;
         $params['schedule'] = $this->schedule;
 
-        return view('backstage.business.order.manager', $params);
+        return view('backstage.business.shopCartOrder.manager', $params);
 
     }
 
