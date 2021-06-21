@@ -56,6 +56,7 @@
                     console.log(c);
                     return '<span class=\'layui-btn layui-btn-sm '+c+'\' style=\'color:black\'>'+selectParams[field.order_status]+'</span>';
                 },event:'updateStatus'}">Status</th>
+            <th lay-data="{field:'detail', minWidth:120, event:'goods'}">Goods</th>
             <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
             <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
             <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
@@ -70,13 +71,14 @@
         @foreach($orders as $order)
             <tr>
                 <td>{{$order->order_id}}</td>
-                <td>{{$order->shop->user_nick_name}}</td>
-                <td>{{$order->shop->user_contact}}</td>
-                <td>{{$order->shop->user_address}}</td>
+                <td>@if(!empty($order->shop->user_nick_name)){{$order->shop->user_nick_name}}@endif</td>
+                <td>@if(!empty($order->shop->user_contact)){{$order->shop->user_contact}}@endif</td>
+                <td>@if(!empty($order->shop->user_address)){{$order->shop->user_address}}@endif</td>
                 <td>{{$order->user_name}}</td>
-                <td>{{$order->user_contact}}</td>
+                <td>@if(!empty($order->user_contact)){{$order->user_contact}}@endif</td>
                 <td>{{$order->user_address}}</td>
                 <td>{{$order->status}}</td>
+                <td><button class="detail">Detail</button></td>
                 <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                 <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                 <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
@@ -135,10 +137,25 @@
                                     obj.update(update);
                                     parent.location.reload();
                                 }, 'patch');
+                                // layui.off('update(updateStatus)', 'layuiTableColumnSelect'); //移除 carousel 模块的 change(test) 事件
+                                // var layEvents = layui.cache.event,carChange = layEvents['carousel.change'] || {};
+                                // delete carChange['test'];
+                                // console.log(layEvents);
                             }});
+                /*var layEvents = layui.cache.event
+                    ,carChange = layEvents['table.tool'] || {};
+                delete carChange['table'];*/
+                // layui.off('table(tool)', 'table'); //移除 carousel 模块的 change(test) 事件
+
             }
+            /*$("body").on('click','.layui-btn-container .layui-btn', function(){
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });*/
 
             table.on('tool(table)', function (obj) {
+                $('dl').remove();
+                console.log(123);
                 console.log(obj);
                 var data = obj.data;
                 if (obj.event === 'goods') {
@@ -152,10 +169,30 @@
                     });
                 }
                 if (obj.event==='updateStatus') {
-                    select();
+                    console.log(layui.cache.event);
+                    var layEvents = layui.cache.event
+                        ,carChange = layEvents['table.tool'] || {};
+                    // delete carChange['table'];
+                    /*console.log(this.innerHTML);
+                    let option = '';
+                    @foreach($status as $k=>$v)
+                        option += '<dd class=\'layui-table-select-dd\' lay-value="{{$k}}">{{$v}}</dd>';
+                    @endforeach
+                   let dl = '<dl class=\'layui-table-select-dl\'>'+option+'</dl>';
+                   let html = this.innerHTML+dl;
+                   console.log(html);
+                    // obj.update(html);
+                    this.append(html);
+                   // table.render();*/
                 }
             });
+            $('button').on('onclick', function() {
+                console.log(1111111111);
+                alert(1111);
+            });
+            select();
 
+            // select();
             //监听单元格编辑
             table.on('edit(table)', function(obj){
                 var that = this;
@@ -211,7 +248,7 @@
             }, 600000);
         });
     </script>
-    <script type="text/html" id="op">
+<!--    <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="goods">Goods</a>
-    </script>
+    </script>-->
 @endsection

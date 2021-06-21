@@ -33,6 +33,7 @@ return [
             'to_user'=>'ByReply',
             'top_user'=>'TopUser',
             'order'=>'Order',
+            'new_order'=>'NewOrder',
             'recommended_at'=>'RecommendTime',
         ],
         'button'=>[

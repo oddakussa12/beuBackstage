@@ -92,14 +92,25 @@ class DepositController extends Controller
     public function order(Request $request)
     {
         $request->offsetSet('status', 5);
-        $params = $request->all();
-        $orders = $this->base($request);
-
-        $params['orders'] = $orders;
-        $params['user_id']= $params['user_id'] ?? 0;
-        $params['status'] = $this->status;
+        $params  = $request->all();
+        $version = $request->input('version');
+        $orders  = (!empty($version)) ? $this->newOrder($request) : $this->base($request);
+        $params['orders']  = $orders;
+        $params['user_id'] = $params['user_id'] ?? 0;
+        $params['status']  = $this->status;
 
         return view('backstage.business.deposit.detail', $params);
+    }
+
+    public function newOrder(Request $request)
+    {
+        $userId = $request->input('user_id' , '0');
+        $orders = DB::connection('lovbee')->table('orders')->where('shop_id', $userId)->where('status', 5)->orderByDesc('created_at')->paginate(10);
+        $shop   = User::where('user_id', $userId)->first();
+        foreach ($orders as $order) {
+            $order->shop = $shop;
+        }
+        return $orders;
     }
 
     public function store(Request $request)

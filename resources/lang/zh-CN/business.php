@@ -33,6 +33,7 @@ return [
             'to_user'=>'被评论人',
             'top_user'=>'顶级用户',
             'order'=>'订单',
+            'new_order'=>'新订单',
             'recommended_at'=>'推荐时间',
         ],
         'button'=>[
