@@ -23,9 +23,9 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?type={{$type}}&user_id={{$user_id}}&status=" class="layui-btn @if(!isset($status)) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
+                        <a href="?type={{$type}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status=" class="layui-btn @if(!isset($status)) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
                     @foreach($orderStatus as $key=>$value)
-                            <a href="?type={{$type}}&user_id={{$user_id}}&status={{$key}}" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$value}}</a>
+                            <a href="?type={{$type}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status={{$key}}" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$value}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -33,9 +33,9 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?type=0&user_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
+                        <a href="?type=0&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
                         @foreach($schedule as $key=>$value)
-                            <a href="?type={{$key}}&user_id={{$user_id}}&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                            <a href="?type={{$key}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                 <td>@if(!empty($order->user_contact)){{$order->user_contact}}@endif</td>
                 <td>{{$order->user_address}}</td>
                 <td>{{$order->schedule}}</td>
-                <td><span class="layui-btn layui-btn-xs @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
+                <td><span class="layui-btn layui-btn-sm @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
                         @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif</span>
                 </td>
                 <td><button class="detail">Detail</button></td>

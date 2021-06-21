@@ -74,7 +74,7 @@
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->created_at}}</td>
                     <td>{{$schedule[$order->schedule]}}</td>
-                    <td><span class="layui-btn layui-btn-xs @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
+                    <td><span class="layui-btn layui-btn-sm @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
                         @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif</span>
                     </td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>

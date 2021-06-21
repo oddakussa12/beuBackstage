@@ -80,6 +80,7 @@ class OrderController extends Controller
             $params['status'] == 1 && $schedule = collect($schedule)->only('5');
             $params['status'] == 2 && $schedule = collect($schedule)->only('7', '8', '9', '10');
         }
+        $params['type' ] = $params['type'] ?? 0;
         $params['orders'] = $orders;
         $params['orderStatus'] = $this->status;
         $params['schedule']    = $schedule;
