@@ -4,7 +4,7 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'user_id', minWidth:180, hide:'true'}">ShopId</th>
+                <th lay-data="{field:'user_id', minWidth:180}">ShopId</th>
                 <th lay-data="{field:'user_name', minWidth:180}">ShopName</th>
                 <th lay-data="{field:'user_nick_name', minWidth:180}">ShopNickName</th>
                 <th lay-data="{field:'money', minWidth:180}">Deposits</th>

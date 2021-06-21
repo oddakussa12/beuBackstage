@@ -37,16 +37,16 @@ class OrderController extends Controller
             if (empty($userId)) {
                 $shops  = User::where(['user_delivery'=>1, 'user_shop'=>1])->get();
                 $shopIds= $shops->pluck('user_id')->toArray();
-                $orders = $orders->whereIn('owner', $shopIds);
+                $orders = $orders->whereIn('shop_id', $shopIds);
             }
         } else {
-            $userId!=0  && $orders = $orders->where('owner', $userId);
+            $userId!=0  && $orders = $orders->where('shop_id', $userId);
         }
 
         $orders   = $orders->paginate(10)->appends($params);
-        $ownerIds = $orders->pluck('owner')->toArray();
         $userIds  = $orders->pluck('user_id')->toArray();
-        $userIds  = array_unique(array_merge($userIds, $ownerIds));
+        $shopIds  = $orders->pluck('shop_id')->toArray();
+        $userIds  = array_diff(array_unique(array_merge($userIds, $shopIds)), ['', null]);
         $users    = DB::connection('lovbee')->table('users')->select('user_id', 'user_nick_name', 'user_contact', 'user_address')->whereIn('user_id', $userIds)->get();
 
         $orders->shops = $shops ?? [];
@@ -129,7 +129,6 @@ class OrderController extends Controller
         $params['schedule'] = $this->schedule;
 
         return view('backstage.business.shopCartOrder.manager', $params);
-
     }
 
     /**

@@ -57,13 +57,14 @@
                 <th lay-data="{field:'order_created_at', minWidth:160}">StartTime</th>
                 <th lay-data="{field:'order_schedule', minWidth:180}">OrderStatus</th>
                 <th lay-data="{field:'order_status', minWidth:180}">OrderProcess</th>
-                <th lay-data="{field:'order_menu', minWidth:200}">Menu</th>
                 <th lay-data="{field:'order_price', minWidth:120}">OrderPrice</th>
                 <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
                 <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
                 <th lay-data="{field:'comment', minWidth:160}">Comment</th>
                 <th lay-data="{field:'admin_username', minWidth:160}">Operator</th>
                 <th lay-data="{field:'updated_at', minWidth:160}">EndTime</th>
+                <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+
             </tr>
             </thead>
             <tbody>
@@ -77,13 +78,13 @@
                     <td><span class="layui-btn layui-btn-sm @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
                         @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif</span>
                     </td>
-                    <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                     <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
                     <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
                     <td>@if(!empty($order->admin_username)){{$order->admin_username}}@endif</td>
                     <td>{{$order->updated_at}}</td>
+                    <td></td>
                 </tr>
             @endforeach
             </tbody>
@@ -118,10 +119,25 @@
             table.init('table', {
                 page:false
             });
-
+            table.on('tool(table)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'goods') {
+                    layer.open({
+                        type: 2,
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['80%', '80%'],
+                        offset: 'auto',
+                        content: '/backstage/business/order/'+data.id,
+                    });
+                }
+            });
             setTimeout(function() {
                 location.reload();
             }, 60000);
         });
+    </script>
+    <script type="text/html" id="op">
+        <a class="layui-btn layui-btn-xs" lay-event="goods">Goods</a>
     </script>
 @endsection

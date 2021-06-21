@@ -82,7 +82,6 @@ class DepositController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
-        // $money  = DB::connection('lovbee')->table('shops_deposits')->paginate(10);
         $shops  = User::select(DB::raw('t_shops_deposits.*'),'users.user_id', 'users.user_name', 'users.user_nick_name')->
         where(['user_delivery'=>1, 'user_shop'=>1])->leftJoin('shops_deposits', 'shops_deposits.user_id', '=', 'users.user_id')->paginate(10);
         $params['shops'] = $shops;

@@ -37,7 +37,6 @@
                 <th lay-data="{field:'admin_username', minWidth:160}">Operator</th>
                 <th lay-data="{field:'updated_at', minWidth:160}">EndTime</th>
                 <th lay-data="{field:'deposit', minWidth:160}">DepositBalance</th>
-
             </tr>
             </thead>
             <tbody>
