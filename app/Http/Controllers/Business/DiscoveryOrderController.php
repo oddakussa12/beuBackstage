@@ -110,7 +110,11 @@ class DiscoveryOrderController extends Controller
             $time    = intval((time()- strtotime($order->created_at))/60);
             $schedule==5 && $orderState = 1;
             $schedule>6  && $orderState = 2;
-            $update  = ['status'=>$orderState ?? 0, 'schedule'=>$schedule, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+            if (!empty($params['version'])) {
+                $update  = ['status'=>$orderState ?? 0, 'schedule'=>$schedule, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+            } else {
+                $update  = ['status'=>$schedule, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+            }
 
             $deposit = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $shopId)->first();
             if (!empty($deposit) && $order->deposit=='0.00' && $schedule==5) {
