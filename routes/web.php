@@ -140,6 +140,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('discovery/manager' , 'DiscoveryOrderController@manager')->name('discovery.manager');
             Route::get('order' , 'OrderController@index')->name('order.index');
             Route::get('order/manager' , 'OrderController@manager')->name('order.manager');
+            Route::get('order/shopcart' , 'OrderController@shopCart')->name('order.shopcart');
             Route::get('order/{id}' , 'OrderController@show')->name('order.show');
             Route::get('graph' , 'GraphController@index')->name('graph.index');
         });

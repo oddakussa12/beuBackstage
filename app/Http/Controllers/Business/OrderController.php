@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Business;
 
 use App\Models\Passport\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -118,5 +119,71 @@ class OrderController extends Controller
 
         return view('backstage.business.order.manager', $params);
 
+    }
+
+    /**
+     * @param Request $request
+     * 购物车管理
+     */
+    public function shopCart(Request $request)
+    {
+        $params = $request->all();
+        $result = DB::connection('lovbee')->table('shopping_carts');
+        if (!empty($params['shopName'])) {
+            $users   = User::where('user_name', 'like', "%{$params['shopName']}%")->orWhere('user_nick_name', 'like', "%{$params['shopName']}%")->get();
+            $userIds = $users->pluck('user_id')->toArray();
+            $result  = $result->whereIn('shop_id', $userIds);
+        }
+        if (!empty($params['userName'])) {
+            $users   = User::where('user_name', 'like', "%{$params['userName']}%")->orWhere('user_nick_name', 'like', "%{$params['userName']}%")->get();
+            $userIds = $users->pluck('user_id')->toArray();
+            $result  = $result->whereIn('user_id', $userIds);
+        }
+        if (!empty($params['goodsName'])) {
+            $goods   = DB::connection('lovbee')->table('goods')->where('name', 'like', "%{$params['goodsName']}%")->get();
+            $goodsIds= $goods->pluck('id')->toArray();
+            $result  = $result->whereIn('goods_id', $goodsIds);
+        }
+        if (!empty($params['dateTime'])) {
+            $timezone= 3;
+            $allDate = explode(' - ' , $params['dateTime']);
+            $start   = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->addHours($timezone)->toDateTimeString();
+            $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->addHours($timezone)->toDateTimeString();
+            $createAt= !empty($tablePre) ? "$tablePre.created_at" : 'created_at';
+            $result  = $result->whereBetween($createAt, [$start, $end]);
+        }
+        if (!empty($params['sort'])) {
+            $result = $result->orderByDesc($params['sort']);
+        }
+
+        $result  = $result->paginate(10);
+        $shopIds = $result->pluck('shop_id')->toArray();
+        $userIds = $result->pluck('user_id')->toArray();
+        $goodsIds= $result->pluck('goods_id')->toArray();
+        $ids     = array_diff(array_unique(array_merge($shopIds, $userIds)), ['', null]);
+
+        $goods   = DB::connection('lovbee')->table('goods')->whereIn('id', $goodsIds)->get();
+        $users   = User::whereIn('user_id', $ids)->select('user_id', 'user_name', 'user_nick_name', 'user_avatar')->get();
+        foreach ($result as $item) {
+            foreach ($users as $user) {
+                if ($item->shop_id==$user->user_id) {
+                    $item->shop_name = $user->user_name;
+                    $item->shop_nick_name = $user->user_nick_name;
+                }
+                if ($item->user_id==$user->user_id) {
+                    $item->user_name = $user->user_name;
+                    $item->user_nick_name = $user->user_nick_name;
+                }
+            }
+            foreach ($goods as $good) {
+                if ($item->goods_id==$good->id) {
+                    $item->goods_name  = $good->name;
+                    $item->goods_image = !empty($good->image) ? json_decode($good->image, true) : [];
+                }
+            }
+        }
+
+        $params['result'] = $result;
+        return view('backstage.business.order.shopCart', $params);
     }
 }
