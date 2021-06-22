@@ -30,10 +30,10 @@
     </div>
 
 
-    <div class="layui-footer">
-        <!-- 底部固定区域 -->
+<!--    <div class="layui-footer">
+        &lt;!&ndash; 底部固定区域 &ndash;&gt;
         © {{ trans('common.company_name') }}
-    </div>
+    </div>-->
 @endsection
 
 @section('footerScripts')

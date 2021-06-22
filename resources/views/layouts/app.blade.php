@@ -20,7 +20,8 @@
     </div>
     @section('footerScripts')
         <!-- 引入layui插件 -->
-        <script src="{{ asset('plugin/layui/layui.all.js') }}"></script>
+        <script src="{{ asset('plugin/layui/layui.js') }}"></script>
+{{--        <script src="{{ asset('plugin/layui/layui.all.js') }}"></script>--}}
         <script src="{{ asset('plugin/layui/lay/modules/global.js') }}"></script>
     @show
     </body>
