@@ -30,7 +30,7 @@
                                 @endforeach
                             @endif
                         </td>
-                        <td>@if(!empty($value['price'])){{$value['price']}}@endif</td>
+                        <td>@if(!empty($value['format_price'])){{$value['format_price']}}@endif</td>
                         <td>@if(!empty($value['goodsNumber'])){{$value['goodsNumber']}}@endif</td>
                     </tr>
                 @endforeach

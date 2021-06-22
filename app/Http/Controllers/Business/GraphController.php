@@ -11,37 +11,46 @@ use App\Http\Controllers\Controller;
 
 class GraphController extends Controller
 {
-    protected $status   = ['InProcess', 'Completed', 'Canceled'];
-    protected $schedule = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
+    protected $status = ['InProcess', 'Completed', 'Canceled'];
+    protected $schedule = ['1' => 'Ordered', '2' => 'ConfirmOrder', '3' => 'CallDriver', '4' => 'ContactedShop', '5' => 'Delivered', '6' => 'NoResponse', '7' => 'JunkOrder', '8' => 'UserCancelOrder', '9' => 'ShopCancelOrder', '10' => 'Other'];
 
 
     public function index()
     {
-        $type = ['cartShopsTop', 'orderSchedule', 'orderStatus'];
+        $type = ['orderSchedule', 'orderStatus', 'shopCartByTopShops', 'shopCartByTopGoods', 'OrderByTopShop', 'OrderByTopGoods'];
         foreach ($type as $item) {
             $result[$item] = $this->$item();
         }
         return view('backstage.business.graph.index', compact('result'));
     }
 
-    // 购物车商品统计
-    public function cartGoods()
+    /**
+     * @return \any[]
+     * 购物车中的商品排行
+     */
+    public function shopCartByTopGoods()
     {
-        $result   = DB::connection('lovbee')->table('shopping_carts')->select(DB::raw('count(*) num, goods_id'))->groupBy('goods_id')->orderByDesc('num')->paginate(10);
-        $goodsIds = $result->pluck('goods_id')->toArray();
-        $goods    = DB::connection('lovbee')->table('shopping_carts')->whereIn('id', $goodsIds)->get();
+        $result = DB::connection('lovbee')->table('shopping_carts')->select(DB::raw('count(*) num, goods_id'))->groupBy('goods_id')->orderByDesc('num')->limit(10)->get();
+        $goodsIds = $result->pluck('goods_id')->unique()->toArray();
+        $goods = DB::connection('lovbee')->table('goods')->whereIn('id', $goodsIds)->get();
         foreach ($result as $item) {
             foreach ($goods as $good) {
-                if ($item->goods_id==$good->id) {
-                    $item->goods_name  = $good->name;
-                    $item->goods_image = json_decode($good->image, true);
+                if ($item->goods_id == $good->id) {
+                    $data[] = [
+                        'name' => $good->name,
+                        'value' => $item->num,
+                    ];
                 }
             }
         }
-        return $result;
+        return $this->pie($data ?? [], 'ShopCart-GoodsTop10');
     }
 
-    public function cartShopsTop()
+    /**
+     * @return \any[]
+     * 购物车中的店铺排行
+     */
+    public function shopCartByTopShops()
     {
         $result = $this->users('user_id');
         $result = collect($result)->toArray();
@@ -49,70 +58,14 @@ class GraphController extends Controller
 
         foreach ($result as $item) {
             $data[] = [
-              'name' => $item->nick_name,
-              'value'=> $item->num,
+                'name' => $item->nick_name,
+                'value' => $item->num,
             ];
         }
-
-        return $this->pie($data ?? [], 'TopShops');
-    }
-
-    // 加入购物车最多的店铺统计
-    public function cartShops()
-    {
-        return $this->users('shop_id');
-    }
-    // 加入购物车最多的用户统计
-    public function cartUsers()
-    {
-        return $this->users('user_id');
-    }
-
-    public function users($keyword)
-    {
-        $result  = DB::connection('lovbee')->table('shopping_carts')->select(DB::raw('count(*) num'), $keyword)->groupBy($keyword)->orderByDesc('num')->paginate(10);
-        $ids = $result->pluck($keyword)->toArray();
-        $users   = User::whereIn('user_id', $ids)->get();
-        foreach ($result as $item) {
-            foreach ($users as $user) {
-                if ($item->$keyword==$user->user_id) {
-                    $item->nick_name   = $user->user_nick_name;
-                    $item->name        = $user->user_name;
-                    $item->user_avatar = $user->user_avatar;
-                }
-            }
-        }
-        return $result;
+        return $this->pie($data ?? [], 'ShopCart-ShopsTop10');
     }
 
 
-    /**
-     * @param $result
-     * @param string $title
-     * @param string $titleLeft
-     * @param string $legendOrient
-     * @param string $legendLeft
-     * @return array
-     * 饼状图
-     */
-    public function pie($result, string $title='', string $titleLeft='center', string $legendOrient='vertical', string $legendLeft='left')
-    {
-        $result = array_map(function($value) {return (array)$value;}, $result);
-
-        return [
-            'title'   => ['text'=>$title, 'left'=>$titleLeft],
-            'tooltip' => ['trigger'=>'item', 'formatter'=>'{b} : {c} <br>  {d}%'],
-            'legend'  => ['orient'=>$legendOrient, 'left'=>$legendLeft], // 'orient'=>vertical/ horizontal
-            'series'  => [
-                [
-                    'type'   => 'pie',
-                    'radius' => '50%',
-                    'data'   => $result ?? [],
-                    'label'  => ['normal'=>['formatter'=>'{b} : {c} '.PHP_EOL.' {d}%']]
-                ]
-            ]
-        ];
-    }
 
     // 订单状态统计
     public function orderSchedule()
@@ -149,6 +102,99 @@ class GraphController extends Controller
             }
         }
         return $this->pie($data, 'orderStatus');
+    }
+
+    /**
+     * @return \any[]
+     * 订单中商品
+     */
+    public function OrderByTopGoods()
+    {
+        $result = DB::connection('lovbee')->table('orders_goods')->select(DB::raw('count(*) value, goods_name name'))->groupBy('goods_id')->orderByDesc('value')->limit(10)->get();
+        $result = collect($result)->toArray();
+        return $this->pie($result ?? [], 'Order-GoodsTop10');
+    }
+
+    /**
+     * @return \any[]
+     * 订单中商品
+     */
+    public function OrderByTopShop()
+    {
+        $result = DB::connection('lovbee')->table('orders_goods')->select(DB::raw('count(*) num, shop_id'))->groupBy('goods_id')->orderByDesc('num')->limit(10)->get();
+        $shopIds= $result->pluck('shop_id')->unique()->toArray();
+        $shops  = User::whereIn('user_id', $shopIds)->get();
+
+        foreach ($result as $item) {
+            foreach ($shops as $shop) {
+                if ($shop->user_id==$item->shop_id) {
+                    $data[] = [
+                        'name'=>$shop->user_nick_name,
+                        'value'=>$item->num,
+                    ];
+                }
+            }
+        }
+        return $this->pie($data ?? [], 'Order-ShopsTop10');
+    }
+/*
+    // 加入购物车最多的店铺统计
+    public function cartShops()
+    {
+        return $this->users('shop_id');
+    }
+    // 加入购物车最多的用户统计
+    public function cartUsers()
+    {
+        return $this->users('user_id');
+    }*/
+
+    public function users($keyword)
+    {
+        $result  = DB::connection('lovbee')->table('shopping_carts')->select(DB::raw('count(*) num'), $keyword)->groupBy($keyword)->orderByDesc('num')->paginate(10);
+        $ids = $result->pluck($keyword)->toArray();
+        $users   = User::whereIn('user_id', $ids)->get();
+        foreach ($result as $item) {
+            foreach ($users as $user) {
+                if ($item->$keyword  == $user->user_id) {
+                    $item->nick_name = $user->user_nick_name;
+                    $item->name = $user->user_name;
+                    $item->user_avatar = $user->user_avatar;
+                }
+            }
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * @param $result
+     * @param string $title
+     * @param string $titleLeft
+     * @param string $legendOrient
+     * @param string $legendLeft
+     * @return array
+     * 饼状图
+     */
+    public function pie($result, string $title='', string $titleLeft='center', string $legendOrient='vertical', string $legendLeft='left')
+    {
+        $t = $result;
+        $result = array_map(function($value) {return (array)$value;}, $result);
+
+        return [
+            'title'   => ['text'=>$title, 'left'=>$titleLeft],
+            'tooltip' => ['trigger'=>'item', 'formatter'=>'{b} : {c} <br>  {d}%'],
+            'legend'  => ['orient'=>$legendOrient, 'left'=>$legendLeft], // 'orient'=>vertical/ horizontal
+            'series'  => [
+                [
+                    'type'   => 'pie',
+                    'radius' => '50%',
+                    'data'   => $result ?? [],
+                    'label'  => ['normal'=>['formatter'=>'{b} : {c} '.PHP_EOL.' {d}%']]
+                ]
+            ]
+        ];
     }
 
 }
