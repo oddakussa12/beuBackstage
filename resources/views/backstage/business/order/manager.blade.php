@@ -117,7 +117,7 @@
 
             setTimeout(function() {
                 location.reload();
-            }, 60000);
+            }, 300000);
         });
     </script>
 @endsection

@@ -262,7 +262,7 @@
             });
             setTimeout(function() {
                 location.reload();
-            }, 600000);
+            }, 300000);
         });
     </script>
     <script type="text/html" id="op">
