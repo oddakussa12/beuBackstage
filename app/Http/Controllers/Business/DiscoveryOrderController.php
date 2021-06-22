@@ -83,11 +83,13 @@ class DiscoveryOrderController extends Controller
         $user->admin_id!=1 && $userIds = $userIds->where('admin_id', $user->admin_id);
         $userIds= $userIds->get()->pluck('user_id')->toArray();
 
-        $shops  = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
-        $status = $this->status;
+        $shops        = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
+        $status       = $this->status;
         $statusEncode = json_encode($status, true);
-        $colorStyle = $this->colorStyle;
-        return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId', 'status', 'statusEncode', 'colorStyle'));
+        $colorStyle   = $this->colorStyle;
+        $statusKv     = array_map(function ($value, $key) {return ['title'=>$value, 'id'=>$key];}, $status, array_keys($status));
+
+        return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId', 'status', 'statusEncode', 'colorStyle', 'statusKv'));
     }
 
     public function update(Request $request)

@@ -5,6 +5,7 @@
         textarea.layui-textarea.layui-table-edit {min-width: 300px; min-height: 200px; z-index: 2;}
         table tr td select {border: none; height: 29px;}
         table tr td select option{ color: #000000; background: #FFFFFF;}
+        .layui-menu{margin-top:-5px;}
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
@@ -41,22 +42,7 @@
                 <th lay-data="{field:'order_user_name', maxWidth:180, minWidth:180}">OrderUserName</th>
                 <th lay-data="{field:'order_user_contact', minWidth:180}">OrderUserPhone</th>
                 <th lay-data="{field:'order_user_address', minWidth:180}">OrderUserAddress</th>
-<!--                <th lay-data="{field:'order_status', minWidth:150, templet: function(field){
-                    var selectParams = {{$statusEncode}};
-                    var status = field.order_status;
-                    let c = 'layui-bg-white';
-                    if(status==1){ c='layui-bg-white'}
-                    if(status==2){ c='layui-bg-yellow'}
-                    if(status==3){ c='layui-bg-orange'}
-                    if(status==4){ c='layui-bg-pink'}
-                    if(status==5){ c='llayui-bg-green'}
-                    if(status==6){ c='layui-bg-blue'}
-                    if(status==7){ c='layui-bg-orange'}
-                    if(status==8||status==9||status==10){ c='layui-bg-gray'}
-                    console.log(c);
-                    return '<span class=\'layui-btn layui-btn-sm '+c+'\' style=\'color:black\'>'+selectParams[field.order_status]+'</span>';
-                },event:'updateStatus'}">Status</th>-->
-                <th lay-data="{field:'order_status', minWidth:170}">Status</th>
+                <th lay-data="{field:'order_status', minWidth:170, event:'updateStatus'}">Status</th>
                 <th lay-data="{field:'order_menu', minWidth:200, edit: 'textarea'}">Menu</th>
                 <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
                 <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
@@ -79,11 +65,12 @@
                     <td>{{$order->user_contact}}</td>
                     <td>{{$order->user_address}}</td>
                     <td>
-                        <select lay-filter="select" class="select layui-bg-{{$colorStyle[$order->status]}}" lay-ignore name="status" data="{{$order->order_id}}">
+<!--                        <select lay-filter="select" class="select layui-bg-{{$colorStyle[$order->status]}}" lay-ignore name="status" data="{{$order->order_id}}">
                             @foreach($status as $k=>$v)
                                 <option value="{{$k}}" @if($order->status==$k) selected @endif>{{$v}}</option>
                             @endforeach
-                        </select>
+                        </select>-->
+                        <span class="layui-bg-{{$colorStyle[$order->status]}} layui-btn layui-btn-sm ">{{$status[$order->status]}}</span>
                     </td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
@@ -113,11 +100,12 @@
         }).extend({
             common: 'lay/modules/admin/common',
             layuiTableColumnSelect: '/lay/modules/admin/table-select/js/layui-table-select'
-        }).use(['common', 'table' , 'layer' , 'layuiTableColumnSelect'], function () {
+        }).use(['common', 'table', 'dropdown', 'layer', 'layuiTableColumnSelect'], function () {
             const form = layui.form,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
+                dropdown = layui.dropdown,
                 layuiTableColumnSelect = layui.layuiTableColumnSelect,
                 $ = layui.jquery;
             var order = table.init('table', { //转化静态表格
@@ -133,11 +121,28 @@
                     }
                 }
             });
-            $('.select').on('change', function() {
+            /*$('.select').on('change', function() {
                 var params = {'status':$(this).val(), 'id':$(this).attr('data')};
                 common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
                     location.reload();
                 }, 'patch');
+            });*/
+
+            table.on('tool(table)', function (obj) {
+                var data = obj.data;
+                if (obj.event ==='updateStatus') {
+                    dropdown.render({
+                        elem: this
+                        ,show: true
+                        ,data: @json($statusKv)
+                        ,click: function(obj){
+                            var params = {'status':obj.id, 'id':data.id};
+                            common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                                location.reload();
+                            }, 'patch');
+                        }
+                    });
+                }
             });
             //监听单元格编辑
             table.on('edit(table)', function(obj){
