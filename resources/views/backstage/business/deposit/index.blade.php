@@ -12,7 +12,7 @@
                 <th lay-data="{field:'money_time', minWidth:180}">DepositsTime</th>
                 <th lay-data="{field:'created_at', minWidth:180, hide:'true'}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:180, hide:'true'}">{{trans('common.table.header.updated_at')}}</th>
-                <th lay-data="{fixed: 'right', minWidth:220, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', minWidth:240, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>

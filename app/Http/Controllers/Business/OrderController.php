@@ -87,6 +87,8 @@ class OrderController extends Controller
         $params['schedule']    = $schedule;
         $params['colorStyle']  = $this->colorStyle;
         $params['statusEncode'] = json_encode($this->schedule, true);
+        $params['statusKv'] = array_map(function ($value, $key) {return ['title'=>$value, 'id'=>$key];}, $this->schedule, array_keys($this->schedule));
+
         return view('backstage.business.shopCartOrder.index', $params);
     }
 
