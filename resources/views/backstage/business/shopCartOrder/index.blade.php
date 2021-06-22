@@ -4,7 +4,7 @@
         textarea.layui-textarea.layui-table-edit {min-width: 300px; min-height: 200px; z-index: 2;}
         table tr td select {border: none; height: 29px;}
         table tr td select option{ color: #000000; background: #FFFFFF;}
-        .layui-table-cell {}
+        .layui-menu{margin-top:-5px;}
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
@@ -43,29 +43,14 @@
         <thead>
         <tr>
             <th lay-data="{field:'id', width:180 , fixed:'left'}">OrderId</th>
+            <th lay-data="{field:'status', minWidth:120, fixed:'left'}">OrderProcess</th>
             <th lay-data="{field:'shop', minWidth:180}">ShopName</th>
             <th lay-data="{field:'shop_contact', minWidth:180}">ShopPhone</th>
             <th lay-data="{field:'shop_address', minWidth:180}">ShopAddress</th>
             <th lay-data="{field:'order_user_name', maxWidth:180, minWidth:180}">OrderUserName</th>
             <th lay-data="{field:'order_user_contact', minWidth:180}">OrderUserPhone</th>
             <th lay-data="{field:'order_user_address', minWidth:180}">OrderUserAddress</th>
-<!--            <th lay-data="{field:'order_status', minWidth:150, templet: function(field){
-                    var selectParams = {{$statusEncode}};
-                    var status = field.order_status;
-                    let c = 'layui-bg-white';
-                    if(status==1){ c='layui-bg-white'}
-                    if(status==2){ c='layui-bg-yellow'}
-                    if(status==3){ c='layui-bg-orange'}
-                    if(status==4){ c='layui-bg-pink'}
-                    if(status==5){ c='layui-bg-green'}
-                    if(status==6){ c='layui-bg-blue'}
-                    if(status==7){ c='layui-bg-orange'}
-                    if(status==8||status==9||status==10){ c='layui-bg-gray'}
-                    console.log(c);
-                    return '<span class=\'layui-btn layui-btn-sm '+c+'\' style=\'color:black\'>'+selectParams[field.order_status]+'</span>';
-                },event:'updateStatus'}">Status</th>-->
-            <th lay-data="{field:'order_status', minWidth:170}">Status</th>
-            <th lay-data="{field:'status', minWidth:120}">OrderProcess</th>
+            <th lay-data="{field:'order_status', minWidth:170, event:'updateStatus'}">Status</th>
             <th lay-data="{field:'order_price', minWidth:120}">OrderPrice</th>
             <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
             <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
@@ -80,6 +65,9 @@
         @foreach($orders as $order)
             <tr>
                 <td>{{$order->order_id}}</td>
+                <td><span class="layui-btn layui-btn-sm @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
+                        @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif</span>
+                </td>
                 <td>@if(!empty($order->shop->user_nick_name)){{$order->shop->user_nick_name}}@endif</td>
                 <td>@if(!empty($order->shop->user_contact)){{$order->shop->user_contact}}@endif</td>
                 <td>@if(!empty($order->shop->user_address)){{$order->shop->user_address}}@endif</td>
@@ -87,15 +75,14 @@
                 <td>@if(!empty($order->user_contact)){{$order->user_contact}}@endif</td>
                 <td>{{$order->user_address}}</td>
                 <td>
-                    <select lay-filter="select" class="select layui-bg-{{$colorStyle[$order->schedule]}}" lay-ignore name="status" data="{{$order->order_id}}">
+<!--                   <select lay-filter="select" class="select layui-bg-{{$colorStyle[$order->schedule]}}" lay-ignore name="status" data="{{$order->order_id}}">
                         @foreach($schedule as $k=>$v)
                             <option value="{{$k}}" @if($order->schedule==$k) selected @endif>{{$v}}</option>
                         @endforeach
-                    </select>
+                    </select>-->
+                    <span class="layui-bg-{{$colorStyle[$order->schedule]}} layui-btn layui-btn-sm ">{{$schedule[$order->schedule]}}</span>
                 </td>
-                <td><span class="layui-btn layui-btn-sm @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
-                        @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif</span>
-                </td>
+
                 <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                 <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                 <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
@@ -123,8 +110,9 @@
         }).extend({
             common: 'lay/modules/admin/common',
             layuiTableColumnSelect: '/lay/modules/admin/table-select/js/layui-table-select'
-        }).use(['common', 'table' , 'layer' , 'layuiTableColumnSelect'], function () {
+        }).use(['common', 'table' , 'dropdown', 'layer' , 'layuiTableColumnSelect'], function () {
             const form = layui.form,
+                dropdown = layui.dropdown,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
@@ -143,32 +131,7 @@
                     }
                 }
             });
-            let select = function () {
-                let selectParams = [];
-                @foreach($schedule as $k=>$v)
-                    selectParams[{{$k-1}}] = {name:"{{$k}}", value:"{{$v}}"},
-                        @endforeach
-                        layuiTableColumnSelect.addSelect({data:selectParams,layFilter:'table',event:'updateStatus',field:'order_status',callback:function(obj,update){
-                                var params = {'status':update.order_status , 'id':obj.data.id, 'version':1};
-                                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
-                                    obj.update(update);
-                                    parent.location.reload();
-                                }, 'patch');
-                                // layui.off('update(updateStatus)', 'layuiTableColumnSelect'); //移除 carousel 模块的 change(test) 事件
-                                // var layEvents = layui.cache.event,carChange = layEvents['carousel.change'] || {};
-                                // delete carChange['test'];
-                                // console.log(layEvents);
-                            }});
-                /*var layEvents = layui.cache.event
-                    ,carChange = layEvents['table.tool'] || {};
-                delete carChange['table'];*/
-                // layui.off('table(tool)', 'table'); //移除 carousel 模块的 change(test) 事件
 
-            }
-            /*$("body").on('click','.layui-btn-container .layui-btn', function(){
-                var type = $(this).data('type');
-                active[type] ? active[type].call(this) : '';
-            });*/
             $('.select').on('change', function() {
                 var params = {'status':$(this).val(), 'id':$(this).attr('data'), 'version':1};
                 common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
@@ -188,28 +151,21 @@
                         content: '/backstage/business/order/'+data.id,
                     });
                 }
-                if (obj.event==='updateStatus') {
-                    console.log(layui.cache.event);
-                    var layEvents = layui.cache.event
-                        ,carChange = layEvents['table.tool'] || {};
-                    // delete carChange['table'];
-                    /*console.log(this.innerHTML);
-                    let option = '';
-                    @foreach($schedule as $k=>$v)
-                        option += '<dd class=\'layui-table-select-dd\' lay-value="{{$k}}">{{$v}}</dd>';
-                    @endforeach
-                   let dl = '<dl class=\'layui-table-select-dl\'>'+option+'</dl>';
-                   let html = this.innerHTML+dl;
-                   console.log(html);
-                    // obj.update(html);
-                    this.append(html);
-                   // table.render();*/
+                if (obj.event ==='updateStatus') {
+                    dropdown.render({
+                        elem: this
+                        ,show: true
+                        ,data: @json($statusKv)
+                        ,click: function(obj){
+                            var params = {'status':obj.id, 'id':data.id, 'version':1};
+                            common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                                location.reload();
+                            }, 'patch');
+                        }
+                    });
                 }
             });
 
-            // select();
-
-            // select();
             //监听单元格编辑
             table.on('edit(table)', function(obj){
                 var that = this;
