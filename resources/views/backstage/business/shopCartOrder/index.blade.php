@@ -66,7 +66,7 @@
                 },event:'updateStatus'}">Status</th>-->
             <th lay-data="{field:'order_status', minWidth:170}">Status</th>
             <th lay-data="{field:'status', minWidth:120}">OrderProcess</th>
-            <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
+            <th lay-data="{field:'order_price', minWidth:120}">OrderPrice</th>
             <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
             <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
             <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>

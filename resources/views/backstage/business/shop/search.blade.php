@@ -10,6 +10,16 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
+                    <div class="layui-input-inline">
+                        <select name="sort">
+                            <option value="contentCount">{{trans('common.form.label.num')}}</option>
+                            <option value="userCount" @if(isset($sort) && $sort=='userCount') selected @endif>{{trans('user.table.header.user_count')}}</option>
+                            <option value="created_at" @if(isset($sort) && $sort=='created_at') selected @endif>{{trans('common.table.header.created_at')}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline" style="width: 300px;">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>

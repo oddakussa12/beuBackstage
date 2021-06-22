@@ -111,7 +111,8 @@ class DiscoveryOrderController extends Controller
             $schedule==5 && $orderState = 1;
             $schedule>6  && $orderState = 2;
             if (!empty($params['version'])) {
-                $update  = ['status'=>$orderState ?? 0, 'schedule'=>$schedule, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+                $shopPrice = ($params['order_price'] - 30)*0.95;
+                $update  = ['status'=>$orderState ?? 0, 'shop_price'=>$shopPrice, 'schedule'=>$schedule, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
             } else {
                 $update  = ['status'=>$schedule, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
             }
@@ -127,10 +128,11 @@ class DiscoveryOrderController extends Controller
         if (!empty($params['comment'])) { // 备注
             $update = ['comment'=>$params['comment']];
         }
-        if (!empty($params['order_price'])) { // 订单价格
+        if (empty($params['version']) && !empty($params['order_price'])) { // 订单价格
             $shopPrice = ($params['order_price'] - 30)*0.95;
             $update    = ['order_price'=>$params['order_price'], 'shop_price'=>$shopPrice];
         }
+
         Log::info('delivery_orders::update::', array_merge(['order_id'=>$id], $update));
         if(!empty($update)) {
             try {
