@@ -102,7 +102,7 @@ class DiscoveryOrderController extends Controller
         $id      = $request->input('id' , '');
         $table   = !empty($params['version']) ? 'orders' : 'delivery_orders';
         $order   = DB::connection('lovbee')->table($table)->where('order_id', $id)->first();
-        $time    = Carbon::createFromFormat('Y-m-d H:i:s', now())->subHour(8)->toDateTimeString();
+        $time    = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'))->subHour(8)->toDateTimeString();
 
         if (empty($order)) {
             abort('The order information is wrong, please refresh the page and try again');
@@ -113,14 +113,14 @@ class DiscoveryOrderController extends Controller
         $update = [];
 
         if (in_array($schedule, $list)) { // 订单状态
-            $time    = intval((time()- strtotime($order->created_at))/60);
+            $duration = intval((strtotime($time)- strtotime($order->created_at))/60);
             $schedule==5 && $orderState = 1;
             $schedule>6  && $orderState = 2;
             if (!empty($params['version'])) {
                 $shopPrice = ($order->order_price - 30)*0.95;
-                $update  = ['status'=>$orderState ?? 0, 'shop_price'=>$shopPrice, 'schedule'=>$schedule, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+                $update  = ['status'=>$orderState ?? 0, 'shop_price'=>$shopPrice, 'schedule'=>$schedule, 'order_time'=>$duration, 'operator'=>auth()->user()->admin_id];
             } else {
-                $update  = ['status'=>$schedule, 'order_time'=>$time, 'operator'=>auth()->user()->admin_id];
+                $update  = ['status'=>$schedule, 'order_time'=>$duration, 'operator'=>auth()->user()->admin_id];
             }
 
             $deposit = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $shopId)->first();
@@ -240,7 +240,7 @@ class DiscoveryOrderController extends Controller
 
         try {
             DB::beginTransaction();
-            $time  = Carbon::createFromFormat('Y-m-d H:i:s', now())->subHour(8)->toDateTimeString();
+            $time  = Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'))->subHour(8)->toDateTimeString();
             $base  = ['admin_id'=>auth()->user()->admin_id, 'admin_username'=>auth()->user()->admin_username];
             $money = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $params['user_id'])->first();
             if (empty($money)) {
