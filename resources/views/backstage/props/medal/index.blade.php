@@ -126,8 +126,8 @@
                     ,data = obj.data //得到所在行所有键值
                     ,field = obj.field //得到字段
                     ,original = $(this).prev().text(); //得到字段
-                let d;
-                let params = d = {};
+
+                let params, d = {};
                 d[field] = original;
                 @if(!Auth::user()->can('props::medal.update'))
                 common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));

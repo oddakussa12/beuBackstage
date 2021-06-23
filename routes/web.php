@@ -129,8 +129,20 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('review/view/{commentId}' , 'ReviewController@view')->name('review.view');
             Route::get('review/audit' , 'ReviewController@audit')->name('review.audit');
             Route::resource('review' , 'ReviewController');
+            Route::get('deposits/create/{id}' , 'DepositController@create')->name('deposits.create');
+            Route::get('deposits/order/detail' , 'DepositController@order')->name('deposits.order.detail');
+            Route::get('deposits/money/{id}' , 'DepositController@money')->name('deposits.money');
+            Route::get('deposits' , 'DepositController@index')->name('deposits.index');
+            Route::post('deposits' , 'DepositController@store')->name('deposits.store');
+            Route::patch('deposits' , 'DepositController@update')->name('deposits.update');
             Route::get('discovery/order' , 'DiscoveryOrderController@index')->name('discovery.order');
             Route::patch('discovery/order' , 'DiscoveryOrderController@update')->name('discovery.order.update');
+            Route::get('discovery/manager' , 'DiscoveryOrderController@manager')->name('discovery.manager');
+            Route::get('order' , 'OrderController@index')->name('order.index');
+            Route::get('order/manager' , 'OrderController@manager')->name('order.manager');
+            Route::get('order/shopcart' , 'OrderController@shopCart')->name('order.shopcart');
+            Route::get('order/{id}' , 'OrderController@show')->name('order.show');
+            Route::get('graph' , 'GraphController@index')->name('graph.index');
         });
 
         Route::resource('menu' , 'MenuController');

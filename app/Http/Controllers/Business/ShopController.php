@@ -250,13 +250,14 @@ class ShopController extends Controller
     {
         $params  = $request->all();
         $keyword = $request->input('keyword');
+        $sort    = $request->input('sort', 'contentCount');
         $result  = DB::connection('lovbee')->table('business_search_logs')->select(DB::raw('count(distinct user_id) userCount, count(content) contentCount, content, created_at'));
         $result  = $this->dateTime($result, $params);
         if (!empty($keyword)) {
             $result = $result->where('content', 'like', "%{$keyword}%");
         }
 
-        $params['result'] = $result->GroupBy('content')->paginate(10);
+        $params['result'] = $result->GroupBy('content')->orderByDesc($sort)->paginate(10);
         return view('backstage.business.shop.search' , $params);
     }
 

@@ -1,26 +1,11 @@
 @extends('layouts.dashboard')
 @section('layui-content')
     <style>
-        .layui-bg-yellow{
-            background-color:yellow;
-        }
-        .layui-bg-pink{
-            background-color:pink;
-        }
-        .layui-bg-green{
-            background-color:green;
-        }
-        .layui-bg-blue{
-            background-color:blue;
-        }
-        .layui-badge-gray{
-            background-color:gray;
-        }
-        textarea.layui-textarea.layui-table-edit {
-            min-width: 300px;
-            min-height: 200px;
-            z-index: 2;
-        }
+        .layui-table-select-dl { color: black}
+        textarea.layui-textarea.layui-table-edit {min-width: 300px; min-height: 200px; z-index: 2;}
+        table tr td select {border: none; height: 29px;}
+        table tr td select option{ color: #000000; background: #FFFFFF;}
+        .layui-menu{margin-top:-5px;}
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
@@ -38,96 +23,61 @@
                 <div class="layui-inline">
                     <div class="layui-btn-group">
                         <a href="?type=0&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                        <a href="?type=1&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='1') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Ordered</a>
-                        <a href="?type=2&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='2') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ConfirmOrder</a>
-                        <a href="?type=3&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='3') layui-btn-disabled @else layui-btn-normal @endif" target="_self">CalledDriver</a>
-                        <a href="?type=4&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='4') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ContactedShop</a>
-                        <a href="?type=5&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='5') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Delivered</a>
-                        <a href="?type=6&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='6') layui-btn-disabled @else layui-btn-normal @endif" target="_self">NoResponse</a>
-                        <a href="?type=7&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='7') layui-btn-disabled @else layui-btn-normal @endif" target="_self">JunkOrder</a>
-                        <a href="?type=8&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='8') layui-btn-disabled @else layui-btn-normal @endif" target="_self">UserCancelOrder</a>
-                        <a href="?type=9&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='9') layui-btn-disabled @else layui-btn-normal @endif" target="_self">ShopCancelOrder</a>
-                        <a href="?type=10&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='10') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Other</a>
+<!--                        <a href="?type=pending&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='pending') layui-btn-disabled @else layui-btn-normal @endif" target="_self">Pending</a>-->
+                    @foreach($status as $key=>$value)
+                            <a href="?type={{$key}}&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                        @endforeach
                     </div>
                 </div>
             </div>
-
         </form>
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
                 <th lay-data="{field:'id', width:180 , fixed:'left'}">OrderId</th>
-                <th lay-data="{field:'shop', minWidth:180}">Shop</th>
-                <th lay-data="{field:'shop_contact', maxWidth:100}">ShopContact</th>
-                <th lay-data="{field:'shop_address', maxWidth:100}">ShopAddress</th>
-                <th lay-data="{field:'goods_name', maxWidth:100}">GoodsName</th>
-                <th lay-data="{field:'order_user_name', maxWidth:180, minWidth:120}">OrderUserName</th>
-                <th lay-data="{field:'order_user_contact', maxWidth:180, minWidth:120}">OrderUserContact</th>
-                <th lay-data="{field:'order_user_address', maxWidth:180, minWidth:120}">OrderUserAddress</th>
-                <th lay-data="{field:'order_status', maxWidth:180, minWidth:150, templet: function(field){
-                    var selectParams = {
-                        '1':'Ordered',
-                        '2':'ConfirmOrder',
-                        '3':'CalledDriver',
-                        '4':'ContactedShop',
-                        '5':'Delivered',
-                        '6':'NoResponse',
-                        '7':'JunkOrder',
-                        '8':'UserCancelOrder',
-                        '9':'ShopCancelOrder',
-                        '10':'Other'
-                    };
-                    var status = field.order_status;
-                    if(status==1)
-                    {
-                        var c = 'layui-badge-rim';
-                    }else if(status==2)
-                    {
-                        var c = 'layui-bg-yellow';
-                    }else if(status==3)
-                    {
-                        var c = 'layui-bg-orange';
-                    }else if(status==4)
-                    {
-                        var c = 'layui-bg-pink';
-                    }else if(status==5)
-                    {
-                        var c = 'llayui-bg-green';
-                    }else if(status==6)
-                    {
-                        var c = 'layui-bg-blue';
-                    }else if(status==7)
-                    {
-                        var c = 'layui-bg-orange';
-                    }else if(status==8||status==9||status==10)
-                    {
-                        var c = 'layui-bg-gray';
-                    }else{
-                        var c = '';
-                    }
-                    console.log(c);
-                    return '<span class=\'layui-badge '+c+'\'>'+selectParams[field.order_status]+'</span>';
-
-                },event:'updateStatus'}">Status</th>
+                <th lay-data="{field:'shop', minWidth:180}">ShopName</th>
+                <th lay-data="{field:'shop_contact', minWidth:180}">ShopPhone</th>
+                <th lay-data="{field:'shop_address', minWidth:180}">ShopAddress</th>
+                <th lay-data="{field:'goods_name', minWidth:180}">GoodsName</th>
+                <th lay-data="{field:'order_user_name', maxWidth:180, minWidth:180}">OrderUserName</th>
+                <th lay-data="{field:'order_user_contact', minWidth:180}">OrderUserPhone</th>
+                <th lay-data="{field:'order_user_address', minWidth:180}">OrderUserAddress</th>
+                <th lay-data="{field:'order_status', minWidth:170, event:'updateStatus'}">Status</th>
+                <th lay-data="{field:'order_menu', minWidth:200, edit: 'textarea'}">Menu</th>
+                <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
+                <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
                 <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
-
-                <th lay-data="{field:'order_created_at', maxWidth:180, minWidth:100}">CreatedAt</th>
-                <th lay-data="{field:'order_updated_at', maxWidth:180, minWidth:100}">UpdatedAt</th>
+                <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
+                <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
+                <th lay-data="{field:'order_created_at', minWidth:160}">CreatedAt</th>
+                <th lay-data="{field:'order_updated_at', minWidth:160}">UpdatedAt</th>
             </tr>
             </thead>
             <tbody>
             @foreach($orders as $order)
                 <tr>
                     <td>{{$order->order_id}}</td>
-                    <td>{{$order->owner->user_nick_name}}</td>
-                    <td>{{$order->owner->user_contact}}</td>
-                    <td>{{$order->owner->user_address}}</td>
+                    <td>{{$order->shop->user_nick_name}}</td>
+                    <td>{{$order->shop->user_contact}}</td>
+                    <td>{{$order->shop->user_address}}</td>
                     <td>{{empty($order->g)?'':$order->g->name}}</td>
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->user_contact}}</td>
                     <td>{{$order->user_address}}</td>
-                    <td>{{$order->status}}</td>
-                    <td>{{$order->comment}}</td>
+                    <td>
+<!--                        <select lay-filter="select" class="select layui-bg-{{$colorStyle[$order->status]}}" lay-ignore name="status" data="{{$order->order_id}}">
+                            @foreach($status as $k=>$v)
+                                <option value="{{$k}}" @if($order->status==$k) selected @endif>{{$v}}</option>
+                            @endforeach
+                        </select>-->
+                        <span class="layui-bg-{{$colorStyle[$order->status]}} layui-btn layui-btn-sm ">{{$status[$order->status]}}</span>
+                    </td>
+                    <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
+                    <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
+                    <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
+                    <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
+                    <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
+                    <td>@if(!empty($order->color)){{$order->color}}@endif</td>
                     <td>{{$order->created_at}}</td>
                     <td>{{$order->updated_at}}</td>
                 </tr>
@@ -150,16 +100,49 @@
         }).extend({
             common: 'lay/modules/admin/common',
             layuiTableColumnSelect: '/lay/modules/admin/table-select/js/layui-table-select'
-        }).use(['common' , 'table' , 'layer' , 'layuiTableColumnSelect'], function () {
+        }).use(['common', 'table', 'dropdown', 'layer', 'layuiTableColumnSelect'], function () {
             const form = layui.form,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
+                dropdown = layui.dropdown,
                 layuiTableColumnSelect = layui.layuiTableColumnSelect,
                 $ = layui.jquery;
             var order = table.init('table', { //转化静态表格
-                page:false
-                ,height: '600px;'
+                page:false,
+                done: function(res, curr, count){
+                    console.log(res.data);
+                    $('th').css({'font-size': '15'});	//进行表头样式设置
+                    for(var i in res.data){		//遍历整个表格数据
+                        var item = res.data[i];		//获取当前行数据
+                        if(item.color==1){
+                            $("tr[data-index='" + i + "']").attr({"style":"background:#ff3333; color:#fff"});  //将当前行变成绿色
+                        }
+                    }
+                }
+            });
+            /*$('.select').on('change', function() {
+                var params = {'status':$(this).val(), 'id':$(this).attr('data')};
+                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                    location.reload();
+                }, 'patch');
+            });*/
+
+            table.on('tool(table)', function (obj) {
+                var data = obj.data;
+                if (obj.event ==='updateStatus') {
+                    dropdown.render({
+                        elem: this
+                        ,show: true
+                        ,data: @json($statusKv)
+                        ,click: function(obj){
+                            var params = {'status':obj.id, 'id':data.id};
+                            common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                                location.reload();
+                            }, 'patch');
+                        }
+                    });
+                }
             });
             //监听单元格编辑
             table.on('edit(table)', function(obj){
@@ -171,14 +154,14 @@
                 var params = d = {};
                 d[field] = original;
                 @if(!Auth::user()->can('business::discovery.order.update'))
-                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
-                obj.update(d);
-                $(this).val(original);
-                table.render();
-                return true;
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
+                    obj.update(d);
+                    $(this).val(original);
+                    table.render();
+                    return true;
                 @endif
                     params[field] = value;
-                params['id'] = data.id;
+                    params['id'] = data.id;
                 if (field=='order_price') {
                     let arg = /^\d+(\.\d+)?$/;
                     if (!arg.exec(value)) {
@@ -210,26 +193,21 @@
                     table.render();
                 });
             });
-            var selectParams = [
-                {name:'1',value:'Ordered'},
-                {name:'2',value:'ConfirmOrder'},
-                {name:'3',value:'CalledDriver'},
-                {name:'4',value:'ContactedShop'},
-                {name:'5',value:'Delivered'},
-                {name:'6',value:'NoResponse'},
-                {name:'7',value:'JunkOrder'},
-                {name:'8',value:'UserCancelOrder'},
-                {name:'9',value:'ShopCancelOrder'},
-                {name:'10',value:'Other'},
-            ];
+            /*let selectParams = [];
+                @foreach($status as $k=>$v)
+                   selectParams[{{$k-1}}] = {name:"{{$k}}", value:"{{$v}}"},
+                @endforeach
             layuiTableColumnSelect.addSelect({data:selectParams,layFilter:'table',event:'updateStatus',field:'order_status',callback:function(obj,update){
-                    var params = {'status':update.order_status , 'id':obj.data.id};
-                    common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
-                        obj.update(update);
-                        parent.location.reload();
-                    } , 'patch');
-                }});
+                var params = {'status':update.order_status , 'id':obj.data.id};
+                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                    obj.update(update);
+                    parent.location.reload();
+                } , 'patch');
+            }});*/
             form.render();
+            setTimeout(function() {
+                location.reload();
+            }, 300000);
         });
     </script>
 @endsection
