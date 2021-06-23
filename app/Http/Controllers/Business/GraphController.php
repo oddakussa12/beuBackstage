@@ -196,4 +196,29 @@ class GraphController extends Controller
         ];
     }
 
+
+    public function lineBar($result, $header= [], $xAxis=[])
+    {
+        $result = array_map(function($value) {return (array)$value;}, $result);
+
+        return [
+            'tooltip' => ['trigger'=>'axis', 'axisPointer'=>['type'=>'cross', 'crossStyle'=>['color'=>'#999']]],
+            'toolbox' => ['feature'=>['dataView'=>['show'=>true, 'readOnly'=>false], 'magicType'=>['show'=>true, 'type'=>['line', 'bar']], 'restore'=>['show'=>true], 'saveAsImage'=>['show'=>true]]],
+            'legend'  => ['data'=>$header],
+            'xAxis'   => [['type'=>'category', 'data'=>$xAxis, 'axisPointer'=>['type'=>'shadow']]],
+            'yAxis'   => ['type'=>'value'],
+            'series'  => [
+                [
+                    "name" => 'Friend Count',
+                    "type" => "line",
+                    "data" => $result ?? [],
+                    'markPoint' => ['data' =>[['type'=>'max', 'name'=>'MAX'], ['type'=>'min', 'name'=>'MIN']]],
+                    'markLine'  => ['data' =>[['type'=>'average']]],
+                    'itemStyle' => ['normal'=>['label'=>['show'=>true]]]
+                ]
+            ]
+        ];
+    }
+
+
 }
