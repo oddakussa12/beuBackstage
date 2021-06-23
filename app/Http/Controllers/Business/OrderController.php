@@ -54,6 +54,8 @@ class OrderController extends Controller
             $order->detail= !empty($order->detail) ? json_decode($order->detail, true) : [];
             $order->shop = $users->where('user_id', $order->shop_id)->first();
             $order->user = $users->where('user_id', $order->user_id)->first();
+            $order->created_at = Carbon::createFromFormat('Y-m-d H:i:s', $order->created_at)->addHours(3)->toDateTimeString();
+            $order->updated_at = Carbon::createFromFormat('Y-m-d H:i:s', $order->updated_at)->addHours(3)->toDateTimeString();
             $duration = time()-strtotime($order->created_at);
             if (($order->schedule==1 && $duration>300) || ($order->schedule==2 && $duration>600) || ($order->schedule==3 && $duration>780) || ($order->schedule==4 && $duration>3600)) {
                 $order->color = 1;

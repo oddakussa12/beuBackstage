@@ -49,8 +49,8 @@
                 <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
                 <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
                 <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
-                <th lay-data="{field:'order_created_at', minWidth:160}">CreatedAt</th>
-                <th lay-data="{field:'order_updated_at', minWidth:160}">UpdatedAt</th>
+                <th lay-data="{field:'order_created_at', minWidth:170}">CreatedAt</th>
+                <th lay-data="{field:'order_updated_at', minWidth:170}">UpdatedAt</th>
             </tr>
             </thead>
             <tbody>

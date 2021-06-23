@@ -56,8 +56,8 @@
             <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
             <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
             <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
-            <th lay-data="{field:'order_created_at', minWidth:160}">CreatedAt</th>
-            <th lay-data="{field:'order_updated_at', minWidth:160}">UpdatedAt</th>
+            <th lay-data="{field:'order_created_at', minWidth:170}">CreatedAt</th>
+            <th lay-data="{field:'order_updated_at', minWidth:170}">UpdatedAt</th>
             <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
         </tr>
         </thead>
@@ -75,7 +75,7 @@
                 <td>@if(!empty($order->user_contact)){{$order->user_contact}}@endif</td>
                 <td>{{$order->user_address}}</td>
                 <td>
-                    <span class="layui-bg-{{$colorStyle[$order->schedule]}} layui-btn layui-btn-sm ">{{$order->schedule}}{{$schedule[$order->schedule]}}</span>
+                    <span class="layui-bg-{{$colorStyle[$order->schedule]}} layui-btn layui-btn-sm ">{{$schedule[$order->schedule]}}</span>
                 </td>
                 <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                 <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
