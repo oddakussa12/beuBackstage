@@ -64,14 +64,7 @@
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->user_contact}}</td>
                     <td>{{$order->user_address}}</td>
-                    <td>
-<!--                        <select lay-filter="select" class="select layui-bg-{{$colorStyle[$order->status]}}" lay-ignore name="status" data="{{$order->order_id}}">
-                            @foreach($status as $k=>$v)
-                                <option value="{{$k}}" @if($order->status==$k) selected @endif>{{$v}}</option>
-                            @endforeach
-                        </select>-->
-                        <span class="layui-bg-{{$colorStyle[$order->status]}} layui-btn layui-btn-sm ">{{$status[$order->status]}}</span>
-                    </td>
+                    <td><span class="layui-bg-{{$colorStyle[$order->status]}} layui-btn layui-btn-sm ">{{$status[$order->status]}}</span></td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>

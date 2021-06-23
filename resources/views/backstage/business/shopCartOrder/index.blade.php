@@ -75,14 +75,8 @@
                 <td>@if(!empty($order->user_contact)){{$order->user_contact}}@endif</td>
                 <td>{{$order->user_address}}</td>
                 <td>
-<!--                   <select lay-filter="select" class="select layui-bg-{{$colorStyle[$order->schedule]}}" lay-ignore name="status" data="{{$order->order_id}}">
-                        @foreach($schedule as $k=>$v)
-                            <option value="{{$k}}" @if($order->schedule==$k) selected @endif>{{$v}}</option>
-                        @endforeach
-                    </select>-->
-                    <span class="layui-bg-{{$colorStyle[$order->schedule]}} layui-btn layui-btn-sm ">{{$schedule[$order->schedule]}}</span>
+                    <span class="layui-bg-{{$colorStyle[$order->schedule]}} layui-btn layui-btn-sm ">{{$order->schedule}}{{$schedule[$order->schedule]}}</span>
                 </td>
-
                 <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                 <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                 <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
