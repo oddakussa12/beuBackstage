@@ -183,7 +183,7 @@ class GraphController extends Controller
 
         return [
             'title'   => ['text'=>$title, 'left'=>$titleLeft],
-            'tooltip' => ['trigger'=>'item', 'formatter'=>'{b} : {c} <br>  ({d}%)'],
+            'tooltip' => ['trigger'=>'item', 'formatter'=>'{b} : {c} ({d}%)'],
             'legend'  => ['orient'=>$legendOrient, 'left'=>$legendLeft], // 'orient'=>vertical/ horizontal
             'series'  => [
                 [
