@@ -42,8 +42,8 @@
         <table class="layui-table" lay-filter="table" id="table">
         <thead>
         <tr>
-            <th lay-data="{field:'id', width:180 , fixed:'left'}">OrderId</th>
-            <th lay-data="{field:'status', minWidth:120, fixed:'left'}">OrderProcess</th>
+            <th lay-data="{field:'id', width:180}">OrderId</th>
+            <th lay-data="{field:'status', minWidth:120}">OrderProcess</th>
             <th lay-data="{field:'shop', minWidth:180}">ShopName</th>
             <th lay-data="{field:'shop_contact', minWidth:180}">ShopPhone</th>
             <th lay-data="{field:'shop_address', minWidth:180}">ShopAddress</th>

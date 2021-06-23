@@ -121,7 +121,7 @@ class GraphController extends Controller
      */
     public function OrderByTopShop()
     {
-        $result = DB::connection('lovbee')->table('orders_goods')->select(DB::raw('count(*) num, shop_id'))->groupBy('goods_id')->orderByDesc('num')->limit(10)->get();
+        $result = DB::connection('lovbee')->table('orders_goods')->select(DB::raw('count(*) num, shop_id'))->groupBy('shop_id')->orderByDesc('num')->limit(10)->get();
         $shopIds= $result->pluck('shop_id')->unique()->toArray();
         $shops  = User::whereIn('user_id', $shopIds)->get();
 
@@ -179,19 +179,18 @@ class GraphController extends Controller
      */
     public function pie($result, string $title='', string $titleLeft='center', string $legendOrient='vertical', string $legendLeft='left')
     {
-        $t = $result;
         $result = array_map(function($value) {return (array)$value;}, $result);
 
         return [
             'title'   => ['text'=>$title, 'left'=>$titleLeft],
-            'tooltip' => ['trigger'=>'item', 'formatter'=>'{b} : {c} <br>  {d}%'],
+            'tooltip' => ['trigger'=>'item', 'formatter'=>'{b} : {c} <br>  ({d}%)'],
             'legend'  => ['orient'=>$legendOrient, 'left'=>$legendLeft], // 'orient'=>vertical/ horizontal
             'series'  => [
                 [
                     'type'   => 'pie',
                     'radius' => '50%',
                     'data'   => $result ?? [],
-                    'label'  => ['normal'=>['formatter'=>'{b} : {c} '.PHP_EOL.' {d}%']]
+                    'label'  => ['normal'=>['formatter'=>'{b} : {c} '.PHP_EOL.' ({d}%)']]
                 ]
             ]
         ];
