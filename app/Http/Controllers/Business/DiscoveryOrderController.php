@@ -102,6 +102,7 @@ class DiscoveryOrderController extends Controller
         $id      = $request->input('id' , '');
         $table   = !empty($params['version']) ? 'orders' : 'delivery_orders';
         $order   = DB::connection('lovbee')->table($table)->where('order_id', $id)->first();
+        $time    = Carbon::createFromFormat('Y-m-d H:i:s', now())->subHour(8)->toDateTimeString();
 
         if (empty($order)) {
             abort('The order information is wrong, please refresh the page and try again');
@@ -142,7 +143,7 @@ class DiscoveryOrderController extends Controller
         if(!empty($update)) {
             try {
                 DB::beginTransaction();
-                DB::connection('lovbee')->table($table)->where('order_id', $order->order_id)->update(array_merge($update, ['updated_at'=>date('Y-m-d H:i:s')]));
+                DB::connection('lovbee')->table($table)->where('order_id', $order->order_id)->update(array_merge($update, ['updated_at'=>$time]));
 
                 if (!empty($update['deposit'])) {
                     DB::connection('lovbee')->table('shops_deposits')->where('user_id', $shopId)->update(['balance'=>$update['deposit']]);
@@ -236,9 +237,10 @@ class DiscoveryOrderController extends Controller
             abort('404');
         }
 
+
         try {
             DB::beginTransaction();
-            $time  = date('Y-m-d H:i:s');
+            $time  = Carbon::createFromFormat('Y-m-d H:i:s', now())->subHour(8)->toDateTimeString();
             $base  = ['admin_id'=>auth()->user()->admin_id, 'admin_username'=>auth()->user()->admin_username];
             $money = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $params['user_id'])->first();
             if (empty($money)) {
