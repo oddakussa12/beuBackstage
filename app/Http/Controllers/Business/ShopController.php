@@ -157,7 +157,7 @@ class ShopController extends Controller
             $info = $request->all();
             $info['user_id'] = $user->user_id;
             $info['user_id'] = $user->user_id;
-            $update = $this->url('/api/backstage/shop', $info, 'PATCH', $header);
+            $update = $this->url('api/backstage/shop', $info, 'PATCH', $header);
             return [];
         } else{
             if ($result===false) {
@@ -222,7 +222,7 @@ class ShopController extends Controller
             // 发送修改请求到前端
             if (!empty($update)) {
                 $update = array_merge($update, ['user_id'=>$id, 'update'=>'update']);
-                $patch  = $this->url('/api/backstage/shop', $update, 'PATCH', $header);
+                $patch  = $this->url('api/backstage/shop', $update, 'PATCH', $header);
                 if (isset($params['audit']) && $patch) {
                     DB::table('business_audits')->insert([
                         'audit_id'  => $id,
@@ -240,7 +240,7 @@ class ShopController extends Controller
             unset($params['user_phone_country']);
             $info = array_diff($params, collect($user)->toArray());
             $info['user_id'] = $user->user_id;
-            $update = $this->url('/api/backstage/shop', $info, 'PATCH', $header);
+            $update = $this->url('api/backstage/shop', $info, 'PATCH', $header);
         }
 
         return response()->json([]);
