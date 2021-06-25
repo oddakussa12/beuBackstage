@@ -143,6 +143,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('order/shopcart' , 'OrderController@shopCart')->name('order.shopcart');
             Route::get('order/{id}' , 'OrderController@show')->name('order.show');
             Route::get('graph' , 'GraphController@index')->name('graph.index');
+            Route::resource('promocode' , 'PromoCodeController');
         });
 
         Route::resource('menu' , 'MenuController');
