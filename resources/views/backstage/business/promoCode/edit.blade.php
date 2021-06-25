@@ -41,7 +41,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">DiscountType：</label>
                     <div class="layui-input-inline">
-                        <select name="discount_type">
+                        <select id="discount_type" name="discount_type">
                             <option value="reduction">Reduction</option>
                             <option value="discount" @if($result->discount_type=='discount') selected @endif>Discount</option>
                         </select>
@@ -50,7 +50,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Reduction：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction" name="reduction" value="{{$result->reduction}}">
+                        <input class="layui-input" type="number" min="0" placeholder="Reduction" name="reduction" value="{{$result->reduction}}">
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Percentage：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Percentage" name="percentage" value="{{$result->percentage}}">
+                        <input class="layui-input" type="number" min="0" max="100" placeholder="Percentage" name="percentage" value="{{$result->percentage}}">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -88,6 +88,7 @@
             common: 'lay/modules/admin/common',
         }).use(['common', 'table', 'layer', 'laydate'], function () {
             var form = layui.form,
+                layer = layui.layer,
                 laydate = layui.laydate,
                 common = layui.common,
                 $=layui.jquery;
@@ -103,6 +104,23 @@
                     if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
+                let select = $("#discount_type").val();
+                debugger
+                if (select==='discount') {
+                    let val = $("#percentage").val();
+                    if (val<0 || val>100) {
+                        $("#percentage").focus();
+                        layer.msg('percentage between 0 and 100');
+                        return false;
+                    }
+                }else {
+                    let val = $("#reduction").val();
+                    if (!$.isNumeric(val)) {
+                        $("#reduction").focus();
+                        layer.msg('reduction has to be a number ');
+                        return false;
+                    }
+                }
                 let id = $('#id').val();
                 common.ajax("{{url('/backstage/business/promocode')}}/"+id, params , function(res){
                     parent.location.reload();

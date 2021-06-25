@@ -40,7 +40,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">DiscountType：</label>
                     <div class="layui-input-inline">
-                        <select name="discount_type">
+                        <select id="discount_type" name="discount_type">
                             <option value="reduction">Reduction</option>
                             <option value="discount">Discount</option>
                         </select>
@@ -49,7 +49,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Reduction：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction" name="reduction">
+                        <input class="layui-input" type="number" min="0" placeholder="Reduction" id="reduction" name="reduction">
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Percentage：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Percentage" name="percentage">
+                        <input class="layui-input" type="number" min="0" max="100"  placeholder="Percentage" id="percentage" name="percentage">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -98,10 +98,26 @@
             });
             form.on('submit(prop_form)', function(data){
                 let params = {};
-                $.each(data.field , function (k ,v) {
-                    if(v===''||v===undefined) {return true;}
+                $.each(data.field, function (k ,v) {
+                    if(v===''||v===undefined) {return false;}
                     params[k] = v;
                 });
+                let select = $("#discount_type").val();
+                if (select==='discount') {
+                    let val = $("#percentage").val();
+                    if (val<0 || val>100) {
+                        $("#percentage").focus();
+                        layer.msg('percentage between 0 and 100');
+                        return false;
+                    }
+                }else {
+                    let val = $("#reduction").val();
+                    if (!$.isNumeric(val)) {
+                        $("#reduction").focus();
+                        layer.msg('reduction has to be a number ');
+                        return false;
+                    }
+                }
                 common.ajax("{{url('/backstage/business/promocode')}}/", params , function(res){
                     parent.location.reload();
                 } , 'post');
