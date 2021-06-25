@@ -8,14 +8,14 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180}">{{trans('user.table.header.user_id')}}</th>
+                <th lay-data="{field:'id', minWidth:180, hide:'true'}">{{trans('user.table.header.user_id')}}</th>
                 <th lay-data="{field:'description', minWidth:180}">Description</th>
-                <th lay-data="{field:'promo_code', minWidth:180}">PromoCode</th>
-                <th lay-data="{field:'free_delivery', minWidth:180}">FreeDelivery</th>
-                <th lay-data="{field:'deadline', minWidth:180}">DeadLine</th>
-                <th lay-data="{field:'discount_type', minWidth:180}">DiscountType</th>
-                <th lay-data="{field:'reduction', minWidth:180}">Reduction</th>
-                <th lay-data="{field:'limit', minWidth:180}">Limit</th>
+                <th lay-data="{field:'promo_code', minWidth:130}">PromoCode</th>
+                <th lay-data="{field:'free_delivery', minWidth:110}">FreeDelivery</th>
+                <th lay-data="{field:'deadline', minWidth:110}">DeadLine</th>
+                <th lay-data="{field:'discount_type', minWidth:130}">DiscountType</th>
+                <th lay-data="{field:'reduction', minWidth:110}">Reduction</th>
+                <th lay-data="{field:'limit', minWidth:100}">Limit</th>
                 <th lay-data="{field:'created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
