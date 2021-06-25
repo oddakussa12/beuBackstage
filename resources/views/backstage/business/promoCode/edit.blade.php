@@ -58,7 +58,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Percentage：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Percentage" name="percentage" value="{{$result->percentage}} @endif">
+                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Percentage" name="percentage" value="{{$result->percentage}}">
                     </div>
                 </div>
                 <div class="layui-inline">
