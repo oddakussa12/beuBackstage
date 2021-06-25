@@ -49,11 +49,17 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Reduction：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction/Discount" name="value">
+                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction" name="reduction">
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">Percentage：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Percentage" name="percentage">
+                    </div>
+                </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Limit：</label>
                     <div class="layui-input-inline">

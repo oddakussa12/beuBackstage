@@ -50,11 +50,17 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Reduction：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction/Discount" name="value" value="@if(!empty($result->reduction)){{$result->reduction}}@else {{$result->percentage}} @endif">
+                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction" name="reduction" value="{{$result->reduction}}">
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">Percentage：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Percentage" name="percentage" value="{{$result->percentage}} @endif">
+                    </div>
+                </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Limit：</label>
                     <div class="layui-input-inline">

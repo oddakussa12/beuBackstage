@@ -15,6 +15,7 @@
                 <th lay-data="{field:'deadline', minWidth:110}">DeadLine</th>
                 <th lay-data="{field:'discount_type', minWidth:130}">DiscountType</th>
                 <th lay-data="{field:'reduction', minWidth:110}">Reduction</th>
+                <th lay-data="{field:'percentage', minWidth:110}">Percentage</th>
                 <th lay-data="{field:'limit', minWidth:100}">Limit</th>
                 <th lay-data="{field:'created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
@@ -30,7 +31,8 @@
                     <td><span class="layui-btn layui-btn-xs @if(!empty($value->free_delivery)) layui-btn-normal @else layui-btn-warm @endif">@if(!empty($value->free_delivery)) YES @else NO @endif</span></td>
                     <td>{{$value->deadline}}</td>
                     <td><span class="layui-btn layui-btn-xs @if($value->discount_type=='reduction') layui-btn-normal @else layui-btn-warm @endif">{{$value->discount_type}}</span></td>
-                    <td>@if(!empty($value->reduction)){{$value->reduction}}@else {{$value->percentage}} @endif</td>
+                    <td>{{$value->reduction}}</td>
+                    <td>{{$value->percentage}}</td>
                     <td>{{$value->limit}}</td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>

@@ -30,13 +30,12 @@ class PromoCodeController extends Controller
             'description'=> 'required|string|max:128',
             'promo_code' => 'required|string|max:16',
             'deadline'   => 'required|date',
-            'value' => 'required|numeric',
-            'limit' => 'filled|numeric',
+            'reduction'  => 'filled|numeric',
+            'percentage' => 'filled|numeric',
+            'limit'      => 'filled|numeric',
         ]);
         $params = $request->all();
-        $field  = $params['discount_type'] == 'reduction' ? 'reduction' : 'percentage';
-        $params[$field] = $params['value'];
-        unset($params['_token'], $params['value']);
+        unset($params['_token']);
         $params['id'] = Uuid::uuid1()->toString();
         $params['created_at'] = $params['updated_at'] = Carbon::now()->toDateTimeString();
 
@@ -64,17 +63,14 @@ class PromoCodeController extends Controller
             'description'=> 'required|string|max:128',
             'promo_code' => 'required|string|max:16',
             'deadline'   => 'required|date',
-            'value' => 'required|numeric',
-            'limit' => 'filled|numeric',
+            'reduction'  => 'filled|numeric',
+            'percentage' => 'filled|numeric',
+            'limit'      => 'filled|numeric',
         ]);
         $params = $request->all();
-        $params['reduction']  = '';
-        $params['percentage'] = '';
-        $field  = $params['discount_type'] == 'reduction' ? 'reduction' : 'percentage';
-        $params[$field] = $params['value'];
 
         $params['updated_at'] = Carbon::now()->toDateTimeString();
-        unset($params['_token'], $params['value'], $params['id']);
+        unset($params['_token'], $params['id']);
 
         $info = DB::connection('lovbee')->table('promo_codes')->where('promo_code', $params['promo_code'])->where('id', '!=', $id)->first();
         if (!empty($info)) {
