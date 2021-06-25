@@ -57,7 +57,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Limit：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" placeholder="Limit" name="limit">
+                        <input class="layui-input" type="text" placeholder="Limit" name="limit">
                     </div>
                 </div>
             </div>
