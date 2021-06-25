@@ -26,12 +26,28 @@ class PromoCodeController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'description'=> 'required|string|max:128',
+            'promo_code' => 'required|string|max:16',
+            'deadline'   => 'required|date',
+            'value' => 'required|numeric',
+            'limit' => 'filled|numeric',
+        ]);
         $params = $request->all();
         $params[$params['discount_type']] = $params['value'];
         unset($params['_token'], $params['value']);
         $params['id'] = Uuid::uuid1()->toString();
         $params['created_at'] = $params['updated_at'] = Carbon::now()->toDateTimeString();
-        DB::connection('lovbee')->table('promo_codes')->insert($params);
+
+        $info = DB::connection('lovbee')->table('promo_codes')->where('promo_code', $params['promo_code'])->first();
+        if (!empty($info)) {
+            abort(403, "Field PromoCode ({$params['promo_code']}) already exists");
+        }
+        try {
+            DB::connection('lovbee')->table('promo_codes')->insert($params);
+        } catch (\Exception $e) {
+            abort(403, $e->getMessage());
+        }
         return response()->json(['result'=>'success']);
     }
 
@@ -43,6 +59,13 @@ class PromoCodeController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'description'=> 'required|string|max:128',
+            'promo_code' => 'required|string|max:16',
+            'deadline'   => 'required|date',
+            'value' => 'required|numeric',
+            'limit' => 'filled|numeric',
+        ]);
         $params = $request->all();
         $params['reduction']  = '';
         $params['percentage'] = '';
@@ -50,7 +73,16 @@ class PromoCodeController extends Controller
         $params['updated_at'] = Carbon::now()->toDateTimeString();
         unset($params['_token'], $params['value'], $params['id']);
 
-        DB::connection('lovbee')->table('promo_codes')->where('id', $id)->update($params);
+        $info = DB::connection('lovbee')->table('promo_codes')->where('promo_code', $params['promo_code'])->where('id', '!=', $id)->first();
+        if (!empty($info)) {
+            abort(403, "Field PromoCode ({$params['promo_code']}) already exists");
+        }
+
+        try {
+            DB::connection('lovbee')->table('promo_codes')->where('id', $id)->update($params);
+        } catch (\Exception $e) {
+            abort(403, $e->getMessage());
+        }
         return response()->json(['result'=>'success']);
     }
 
