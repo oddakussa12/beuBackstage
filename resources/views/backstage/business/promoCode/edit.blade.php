@@ -43,14 +43,14 @@
                     <div class="layui-input-inline">
                         <select name="discount_type">
                             <option value="reduction">Reduction</option>
-                            <option value="percentage" @if($result->discount_type=='percentage') selected @endif>Percentage</option>
+                            <option value="discount" @if($result->discount_type=='discount') selected @endif>Discount</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Reduction：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction/Percentage" name="value" value="@if(!empty($result->reduction)){{$result->reduction}}@else {{$result->percentage}} @endif">
+                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction/Discount" name="value" value="@if(!empty($result->reduction)){{$result->reduction}}@else {{$result->percentage}} @endif">
                     </div>
                 </div>
             </div>

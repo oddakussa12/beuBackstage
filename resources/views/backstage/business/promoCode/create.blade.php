@@ -42,14 +42,14 @@
                     <div class="layui-input-inline">
                         <select name="discount_type">
                             <option value="reduction">Reduction</option>
-                            <option value="percentage">Percentage</option>
+                            <option value="discount">Discount</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Reduction：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction/Percentage" name="value">
+                        <input class="layui-input" type="text" lay-verify="number" required  placeholder="Reduction/Discount" name="value">
                     </div>
                 </div>
             </div>
