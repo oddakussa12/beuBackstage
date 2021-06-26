@@ -40,7 +40,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">DiscountType：</label>
                     <div class="layui-input-inline">
-                        <select id="discount_type" name="discount_type">
+                        <select lay-filter="select" id="discount_type" name="discount_type">
                             <option value="reduction">Reduction</option>
                             <option value="discount">Discount</option>
                         </select>
@@ -63,7 +63,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Limit：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" placeholder="Limit" name="limit">
+                        <input class="layui-input" type="number" placeholder="Limit" name="limit">
                     </div>
                 </div>
             </div>
@@ -95,6 +95,10 @@
                 ,min : 'today'
                 ,type: 'date'
                 ,lang: 'en'
+            });
+            form.on('select', function(data){
+                let field = data.value==='discount' ? 'reduction' : 'percentage';
+                $("#"+field).val('');
             });
             form.on('submit(prop_form)', function(data){
                 let params = {};

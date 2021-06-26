@@ -41,7 +41,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">DiscountType：</label>
                     <div class="layui-input-inline">
-                        <select id="discount_type" name="discount_type">
+                        <select lay-filter="select" id="discount_type" name="discount_type">
                             <option value="reduction">Reduction</option>
                             <option value="discount" @if($result->discount_type=='discount') selected @endif>Discount</option>
                         </select>
@@ -50,7 +50,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Reduction：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="number" min="0" placeholder="Reduction" name="reduction" value="{{$result->reduction}}">
+                        <input class="layui-input" type="number" min="0" placeholder="Reduction" id="reduction" name="reduction" value="{{$result->reduction}}">
                     </div>
                 </div>
             </div>
@@ -58,13 +58,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Percentage：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="number" min="0" max="100" placeholder="Percentage" name="percentage" value="{{$result->percentage}}">
+                        <input class="layui-input" type="number" min="0" max="100" placeholder="Percentage" id="percentage" name="percentage" value="{{$result->percentage}}">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">Limit：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" placeholder="Limit" name="limit" value="{{$result->limit}}">
+                        <input class="layui-input" type="number" placeholder="Limit" name="limit" value="{{$result->limit}}">
                     </div>
                 </div>
             </div>
@@ -98,6 +98,11 @@
                 ,type: 'date'
                 ,lang: 'en'
             });
+
+            form.on('select', function(data){
+                let field = data.value==='discount' ? 'reduction' : 'percentage';
+                $("#"+field).val('');
+            });
             form.on('submit(prop_form)', function(data){
                 let params = {};
                 $.each(data.field , function (k ,v) {
@@ -105,7 +110,6 @@
                     params[k] = v;
                 });
                 let select = $("#discount_type").val();
-                debugger
                 if (select==='discount') {
                     let val = $("#percentage").val();
                     if (val<0 || val>100) {
