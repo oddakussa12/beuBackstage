@@ -115,7 +115,7 @@
 
                 <th lay-data="{field:'user_about', minWidth:200}">{{trans('user.table.header.user_about')}}</th>
                 <th lay-data="{field:'user_verified_at', minWidth:160}">{{trans('user.table.header.user_audit_time')}}</th>
-                <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', width:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -194,7 +194,16 @@
                     format:'YYYY-MM-DD HH:ss:mm',
                 },
             });
-
+            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                let data = obj.data; //获得当前行数据
+                let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                if(layEvent === 'view'){
+                    open(['95%','95%'], '/backstage/business/shop/view/'+data.user_id)
+                }
+                if(layEvent === 'follow'){
+                    open(['95%','95%'], '/backstage/business/shop/follow/'+data.user_id)
+                }
+            });
             form.on('radio(radio)', function(data){
                 debugger
                 let level  = data.value;
@@ -245,21 +254,17 @@
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
             }
 
-            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                let data = obj.data; //获得当前行数据
-                let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                if(layEvent === 'view'){
-                    layer.open({
-                        type: 2,
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['95%','95%'],
-                        offset: 'auto',
-                        scrollbar:true,
-                        content: '/backstage/business/shop/view/'+data.user_id,
-                    });
-                }
-            });
+
+            function open(area, content, types=2) {
+                layer.open({
+                    type: types,
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: area,
+                    offset: 'auto',
+                    content: content,
+                });
+            }
             $(function () {
                 let img_show = null; // tips提示
                 $('td img').hover(function(){
@@ -283,5 +288,6 @@
     </script>
     <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('business.table.header.view_history')}}</a>
+        <a class="layui-btn layui-btn-xs" lay-event="follow">{{trans('user.table.button.follow')}}</a>
     </script>
 @endsection

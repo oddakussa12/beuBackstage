@@ -52,13 +52,19 @@
             <th lay-data="{field:'order_user_address', minWidth:180}">OrderUserAddress</th>
             <th lay-data="{field:'order_status', minWidth:170, event:'updateStatus'}">Status</th>
             <th lay-data="{field:'order_price', minWidth:120}">OrderPrice</th>
-            <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
+            <th lay-data="{field:'promo_code', minWidth:120}">PromoCode</th>
+            <th lay-data="{field:'delivery_coast', minWidth:120}">DeliveryCoast</th>
+            <th lay-data="{field:'discount_type', minWidth:120}">DiscountType</th>
+            <th lay-data="{field:'reduction', minWidth:120}">Reduction</th>
+            <th lay-data="{field:'discount', minWidth:120}">Discount</th>
+            <th lay-data="{field:'discounted_price', minWidth:150}">DiscountedPrice</th>
+            @if(auth()->user()->admin_id==1)<th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>@endif
             <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
             <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
             <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
             <th lay-data="{field:'order_created_at', minWidth:170}">CreatedAt</th>
             <th lay-data="{field:'order_updated_at', minWidth:170}">UpdatedAt</th>
-            <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+            <th lay-data="{fixed: 'right', minWidth:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -78,7 +84,15 @@
                     <span class="layui-bg-{{$colorStyle[$order->schedule]}} layui-btn layui-btn-sm ">{{$schedule[$order->schedule]}}</span>
                 </td>
                 <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
-                <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
+                <td>{{$order->promo_code}}</td>
+                <td>{{$order->delivery_coast}}</td>
+                <td>{{$order->discount_type}}</td>
+                <td>{{$order->reduction}}</td>
+                <td>{{$order->discount}}</td>
+                <td>{{$order->discounted_price}}</td>
+                @if(auth()->user()->admin_id==1)
+                    <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
+                @endif
                 <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
                 <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
                 <td>@if(!empty($order->color)){{$order->color}}@endif</td>
@@ -103,14 +117,12 @@
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-            layuiTableColumnSelect: '/lay/modules/admin/table-select/js/layui-table-select'
-        }).use(['common', 'table' , 'dropdown', 'layer' , 'layuiTableColumnSelect'], function () {
+        }).use(['common', 'table' , 'dropdown', 'layer'], function () {
             const form = layui.form,
                 dropdown = layui.dropdown,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
-                layuiTableColumnSelect = layui.layuiTableColumnSelect,
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
@@ -132,18 +144,23 @@
                     location.reload();
                 }, 'patch');
             });
-
+            function open(area, content, types=2) {
+                layer.open({
+                    type: types,
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: area,
+                    offset: 'auto',
+                    content: content,
+                });
+            }
             table.on('tool(table)', function (obj) {
                 var data = obj.data;
                 if (obj.event === 'goods') {
-                    layer.open({
-                        type: 2,
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['80%', '80%'],
-                        offset: 'auto',
-                        content: '/backstage/business/order/'+data.id,
-                    });
+                    open(['80%', '80%'], '/backstage/business/order/'+data.id+'?type=goods');
+                }
+                if (obj.event === 'edit') {
+                    open(['50%', '80%'], '/backstage/business/order/'+data.id);
                 }
                 if (obj.event ==='updateStatus') {
                     dropdown.render({
@@ -216,6 +233,7 @@
         });
     </script>
     <script type="text/html" id="op">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">Price</a>
         <a class="layui-btn layui-btn-xs" lay-event="goods">Goods</a>
     </script>
 @endsection

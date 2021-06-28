@@ -36,6 +36,7 @@ return [
             'friend'=>'好友数',
             'history'=>'活跃历史',
             'friend_active'=>'好友活跃',
+            'follow' =>'关注列表',
             'friend_yesterday_active'=>'好友昨日活跃',
         ]
     ],

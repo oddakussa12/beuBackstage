@@ -114,6 +114,7 @@ Route::group(['prefix'=>'backstage'] , function(){
         });
 
         Route::group(['namespace'=>'Business','prefix'=>'business' , 'as' => 'business::'] , function (){
+            Route::get('shop/follow/{id}' , 'ShopController@follow')->name('shop.follow');
             Route::patch('shop/owner' , 'ShopController@owner')->name('shop.owner');
             Route::get('shop/view/{shopId}' , 'ShopController@view')->name('shop.view');
             Route::get('shop/virtual' , 'ShopController@virtual')->name('shop.virtual');
@@ -142,8 +143,16 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('order/manager' , 'OrderController@manager')->name('order.manager');
             Route::get('order/shopcart' , 'OrderController@shopCart')->name('order.shopcart');
             Route::get('order/{id}' , 'OrderController@show')->name('order.show');
+            Route::patch('order' , 'OrderController@update')->name('order.update');
             Route::get('graph' , 'GraphController@index')->name('graph.index');
             Route::resource('promocode' , 'PromoCodeController');
+            Route::get('category/goods/{id}' , 'GoodsCategoryController@show')->name('category.goods.show');
+            Route::get('category/goods/' , 'GoodsCategoryController@index')->name('category.goods.index');
+            Route::get('category/goods/create' , 'GoodsCategoryController@create')->name('category.goods.create');
+            Route::patch('category/goods' , 'GoodsCategoryController@update')->name('category.goods.update');
+            Route::post('category/goods' , 'GoodsCategoryController@store')->name('category.goods.store');
+            Route::delete('category/goods' , 'GoodsCategoryController@destroy')->name('category.goods.destroy');
+            Route::resource('category/shop' , 'ShopCategoryController');
         });
 
         Route::resource('menu' , 'MenuController');

@@ -4,36 +4,61 @@
          table td { height: 40px; line-height: 40px;}
     </style>
     <div class="layui-fluid">
-        <button class="layui-btn" id="add">{{trans('common.form.button.add')}}</button>
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="sort">
+                            <option value="created_at">CreatedAt</option>
+                            <option value="sort"       @if(isset($sort) && $sort=='sort') selected @endif>Sort</option>
+                            <option value="goods_num"  @if(isset($sort) && $sort=='goods_num') selected @endif>GoodsNum</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">IsDefault:</label>
+                    <div class="layui-input-inline">
+                        <select name="default">
+                            <option value="">All</option>
+                            <option value="1" @if(isset($default) && $default=='1') selected @endif>YES</option>
+                            <option value="0" @if(isset($default) && $default=='0') selected @endif>NO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
+                    <div class="layui-input-inline" style="width: 300px;">
+                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    <button class="layui-btn layui-btn-normal" id="add">{{trans('common.form.button.add')}}</button>
+                </div>
+            </div>
+        </form>
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180, hide:'true'}">{{trans('user.table.header.user_id')}}</th>
-                <th lay-data="{field:'description', minWidth:180}">Description</th>
-                <th lay-data="{field:'promo_code', minWidth:130}">PromoCode</th>
-                <th lay-data="{field:'free_delivery', minWidth:110}">FreeDelivery</th>
-                <th lay-data="{field:'deadline', minWidth:110}">DeadLine</th>
-                <th lay-data="{field:'discount_type', minWidth:130}">DiscountType</th>
-                <th lay-data="{field:'reduction', minWidth:110}">Reduction</th>
-                <th lay-data="{field:'percentage', minWidth:110}">Percentage</th>
-                <th lay-data="{field:'limit', minWidth:100}">Limit</th>
+                <th lay-data="{field:'category_id', minWidth:180, hide:'true'}">{{trans('user.table.header.user_id')}}</th>
+                <th lay-data="{field:'name', minWidth:180}">{{trans('common.form.label.name')}}</th>
+                <th lay-data="{field:'goods_num', minWidth:130}">{{trans('business.table.header.goods_num')}}</th>
+                <th lay-data="{field:'default', minWidth:110}">IsDefualt</th>
+                <th lay-data="{field:'sort', minWidth:110, edit:'text'}">{{trans('common.form.label.sort')}}</th>
                 <th lay-data="{field:'created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
-                <th lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
             @foreach($result as $value)
                 <tr>
-                    <td>{{$value->id}}</td>
-                    <td>{{$value->description}}</td>
-                    <td>{{$value->promo_code}}</td>
-                    <td><span class="layui-btn layui-btn-xs @if(!empty($value->free_delivery)) layui-btn-normal @else layui-btn-warm @endif">@if(!empty($value->free_delivery)) YES @else NO @endif</span></td>
-                    <td>{{$value->deadline}}</td>
-                    <td><span class="layui-btn layui-btn-xs @if($value->discount_type=='reduction') layui-btn-normal @else layui-btn-warm @endif">{{$value->discount_type}}</span></td>
-                    <td>{{$value->reduction}}</td>
-                    <td>{{$value->percentage}}</td>
-                    <td>{{$value->limit}}</td>
+                    <td>{{$value->category_id}}</td>
+                    <td>{{$value->name}}</td>
+                    <td>{{$value->goods_num}}</td>
+                    <td><span class="layui-btn layui-btn-xs @if(!empty($value->default)) layui-btn-normal @else layui-btn-warm @endif">@if(!empty($value->default)) YES @else NO @endif</span></td>
+                    <td>{{$value->sort}}</td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>
                     <td></td>
@@ -80,11 +105,11 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'edit'){
-                    open(['50%', '90%'], '/backstage/business/promocode/'+data.id);
+                    open(['50%', '90%'], '/backstage/business/category/goods/'+data.id);
                 }
                 if(layEvent === 'delete'){
                     common.confirm("{{trans('common.confirm.delete')}}" , function(){
-                        common.ajax("{{url('/backstage/business/promocode')}}/"+data.id , {} , function(res){
+                        common.ajax("{{url('/backstage/business/category/goods')}}/"+data.category_id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
                                 location.reload();
                             });
@@ -93,7 +118,7 @@
                 }
             });
             $(document).on('click','#add',function(){
-                open(['50%', '90%'], '/backstage/business/promocode/create');
+                open(['50%', '90%'], '/backstage/business/category/goods/create');
             });
             function open(area, content, types=2) {
                 layer.open({
@@ -109,6 +134,5 @@
     </script>
     <script type="text/html" id="op">
         <a class="layui-btn layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
-        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">{{trans('common.table.button.delete')}}</a>
     </script>
 @endsection

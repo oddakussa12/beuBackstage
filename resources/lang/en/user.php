@@ -36,6 +36,7 @@ return [
             'friend'=>'Friend',
             'history'=>'History',
             'friend_active'=>'Friend Active',
+            'follow' =>'Follow',
             'friend_yesterday_active'=>'Friend Yesterday Active',
         ]
     ],

@@ -44,21 +44,33 @@ class OrderController extends Controller
         }
 
         $orders   = $orders->paginate(10)->appends($params);
+        $promoIds = array_diff($orders->pluck('promo_code')->unique()->toArray(), ['', null]);
         $userIds  = $orders->pluck('user_id')->toArray();
         $shopIds  = $orders->pluck('shop_id')->toArray();
         $userIds  = array_diff(array_unique(array_merge($userIds, $shopIds)), ['', null]);
         $users    = DB::connection('lovbee')->table('users')->select('user_id', 'user_nick_name', 'user_contact', 'user_address')->whereIn('user_id', $userIds)->get();
-
+        $promoCode= DB::connection('lovbee')->table('promo_codes')->whereIn('id', $promoIds)->get();
         $orders->shops = $shops ?? [];
         $time = Carbon::now()->subHour(8)->toDateTimeString();
 
-        $orders->each(function($order) use ($users, $time){
+        $orders->each(function($order) use ($users, $promoCode, $time){
             $order->detail= !empty($order->detail) ? json_decode($order->detail, true) : [];
             $order->shop = $users->where('user_id', $order->shop_id)->first();
             $order->user = $users->where('user_id', $order->user_id)->first();
             $duration = strtotime($time)-strtotime($order->created_at);
             if (($order->schedule==1 && $duration>300) || ($order->schedule==2 && $duration>600) || ($order->schedule==3 && $duration>780) || ($order->schedule==4 && $duration>3600)) {
                 $order->color = 1;
+            }
+            foreach ($promoCode as $item) {
+                if ($item->promo_code==$order->promo_code) {
+                    $order->description = $item->description;
+                    !empty($order->promo_code)    && $order->description    = $item->description;
+                    empty($order->free_delivery)  && $order->free_delivery  = $item->free_delivery;
+                    empty($order->reduction)      && $order->reduction      = $item->reduction;
+                    empty($order->discount)       && $order->discount       = $item->discount;
+                    empty($order->discount_type)  && $order->discount_type  = $item->discount_type;
+                    empty($order->delivery_coast) && $order->delivery_coast = $item->delivery_coast;
+                }
             }
             $order->created_at = Carbon::createFromFormat('Y-m-d H:i:s', $order->created_at)->addHours(3)->toDateTimeString();
             $order->updated_at = Carbon::createFromFormat('Y-m-d H:i:s', $order->updated_at)->addHours(3)->toDateTimeString();
@@ -96,14 +108,120 @@ class OrderController extends Controller
         return view('backstage.business.shopCartOrder.index', $params);
     }
 
-    public function show($orderId)
+    public function update(Request $request)
     {
+        $params  = $request->all();
+        $schedule= $request->input('status');
+        $id      = $request->input('id' , '');
+        $table   = 'orders';
+        $order   = DB::connection('lovbee')->table($table)->where('order_id', $id)->first();
+        $time    = Carbon::now()->subHour(8)->toDateTimeString();
+
+        if (empty($order)) {
+            abort('The order information is wrong, please refresh the page and try again');
+        }
+        $shopId = $order->shop_id;
+
+        $list   = range(1, 10);
+        $update = [];
+
+        if (in_array($schedule, $list)) { // 订单状态
+            $duration = intval((strtotime($time)- strtotime($order->created_at))/60);
+            $schedule==5 && $orderState = 1;
+            $schedule>6  && $orderState = 2;
+            $shopPrice = ($order->order_price - 30)*0.95;
+            $update  = ['status'=>$orderState ?? 0, 'shop_price'=>$shopPrice, 'schedule'=>$schedule, 'order_time'=>$duration, 'operator'=>auth()->user()->admin_id];
+        }
+
+        if (!empty($params['order_price']) || $schedule==5) { // 订单价格
+            $orderPrice     = $params['order_price'];
+            $freeDelivery   = $params['free_delivery'];
+            $discountType   = $params['discount_type']  ?? $order->discount_type;
+            $discount       = $params['discount']       ?? $order->discount;
+            $reduction      = $params['reduction']      ?? $order->reduction;
+            $deliveryCoast  = $params['delivery_coast'] ?? $order->delivery_coast;
+            $discountedPrice= $orderPrice;
+            $discountType && $discountedPrice = $discountType=='discount' ? $orderPrice*$discount/100 : $orderPrice-$reduction;
+
+            $discountedPrice = round($discountedPrice+$deliveryCoast , 2);
+
+            $shopPrice = $orderPrice*0.95; // 给商家的钱
+            $update    = [
+                'shop_price'=>$shopPrice,
+                'discount'  =>$discount,
+                'reduction' =>$reduction,
+                'order_price'=>$params['order_price'],
+                'free_delivery'=>$freeDelivery,
+                'discount_type'=>$discountType,
+                'delivery_coast'=>$deliveryCoast,
+                'discounted_price'=>$discountedPrice,
+            ];
+
+            $deposit = DB::connection('lovbee')->table('shops_deposits')->where('user_id', $shopId)->first();
+            if (!empty($deposit) && $schedule==5) {
+                $update['deposit'] = $deposit->balance+$order->shop_price - $shopPrice;
+            }
+            $order->admin_id = auth()->user()->admin_id;
+            $order->admin_username = auth()->user()->admin_username;
+            $order->created_at = $time;
+        }
+
+        if (!empty($params['comment'])) { // 备注
+            $update = ['comment'=>$params['comment']];
+        }
+
+
+        Log::info('Order::update::', array_merge(['order_id'=>$id], $update, ['params'=>$params]));
+        if(!empty($update)) {
+            try {
+                DB::beginTransaction();
+                DB::connection('lovbee')->table('orders_logs')->insert((array)$order);
+
+                DB::connection('lovbee')->table($table)->where('order_id', $order->order_id)->update(array_merge($update, ['updated_at'=>$time]));
+
+                if (!empty($update['deposit'])) {
+                    DB::connection('lovbee')->table('shops_deposits')->where('user_id', $shopId)->update(['balance'=>$update['deposit']]);
+                }
+                if (in_array($schedule, $list)) { // 插入Log 日志 订单状态
+                    DB::table('Order_logs')->insert([
+                        'order_id'  => $order->order_id,
+                        'status'    => $schedule,
+                        'admin_id'  => auth()->user()->admin_id,
+                        'created_at'=> date('Y-m-d H:i:s')
+                    ]);
+                }
+                DB::commit();
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                Log::error('Transaction update:', ['code'=>$exception->getCode(), 'message'=>$exception->getMessage(), 'params'=>$params]);
+            }
+        }
+        return response()->json(['result'=>'success']);
+    }
+
+    public function show(Request $request, $orderId)
+    {
+        $params = $request->all();
         $result = DB::connection('lovbee')->table('orders')->where('order_id', $orderId)->first();
         if (!empty($result)) {
             $result->detail= !empty($result->detail) ? json_decode($result->detail, true) : [];
         }
-        $params['result'] = $result->detail ?? [];
-        return view('backstage.business.shopCartOrder.view', $params);
+
+        if (!empty($params['type']) && $params['type']=='goods') {
+            $params['result'] = $result->detail ?? [];
+            return view('backstage.business.shopCartOrder.view', $params);
+        } else {
+            if(!empty($result->promo_code)) {
+                $promoCode= DB::connection('lovbee')->table('promo_codes')->where('id', $result->promo_code)->first();
+                $result->discount_type = $promoCode->discount_type;
+                empty($result->free_delivery) && $result->free_delivery = $promoCode->free_delivery;
+                empty($result->reduction) && $result->reduction = $promoCode->reduction;
+                empty($result->discount)  && $result->discount  = $promoCode->discount;
+                empty($result->delivery_coast)  && $result->delivery_coast  = $promoCode->discount;
+            }
+            $params['result'] = $result;
+            return view('backstage.business.shopCartOrder.price', $params);
+        }
 
     }
 

@@ -63,7 +63,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">Limit：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="number" min="0" placeholder="Limit" name="limit">
+                        <input class="layui-input" type="number" placeholder="Limit" name="limit">
                     </div>
                 </div>
             </div>
@@ -102,9 +102,8 @@
             });
             form.on('submit(prop_form)', function(data){
                 let params = {};
-                debugger
                 $.each(data.field, function (k ,v) {
-                    if(v===''||v===undefined) {return true;}
+                    if(v===''||v===undefined) {return false;}
                     params[k] = v;
                 });
                 let select = $("#discount_type").val();

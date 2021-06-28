@@ -431,6 +431,37 @@ class ShopController extends Controller
         return response()->json(['result'=>'success']);
     }
 
+    public function follow(Request $request, $id)
+    {
+        $params = $request->all();
+        $result = DB::connection('lovbee')->table('users_follows')->where('user_id', $id);
+        if (!empty($params['keyword'])) {
+            $user    = User::where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_name', 'like', "%{$params['keyword']}%")->get();
+            $userIds = $user->pluck('user_id')->toArray();
+            $result  = $result->whereIn('followed_id', $userIds);
+        }
+        $result  = $this->dateTime($result, $params);
+        $result  = $result->paginate(10);
+        $userIds = $result->pluck('followed_id')->toArray();
+
+        if (!empty($userIds)) {
+            $users  = User::whereIn('user_id', $userIds)->get();
+            foreach ($result as $item) {
+                foreach ($users as $user) {
+                    if ($item->followed_id == $user->user_id) {
+                        $item->user_nick_name = $user->user_nick_name;
+                        $item->user_name = $user->user_name;
+                        $item->user_id = $user->user_id;
+                        $item->user_avatar = $user->user_avatar;
+                    }
+                }
+            }
+        }
+
+        $params['result'] = $result;
+        return view('backstage.business.shop.follow', $params);
+    }
+
     /**
      * @param string $url
      * @param array $data
