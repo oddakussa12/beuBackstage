@@ -35,7 +35,7 @@ class GoodsCategoryController extends Controller
             }
         }
         $params['result'] = $result;
-        return view('backstage.business.GoodsCategory.index', $params);
+        return view('backstage.business.goodsCategory.index', $params);
 
     }
 
