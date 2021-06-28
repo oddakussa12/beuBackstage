@@ -244,7 +244,7 @@ class OrderController extends Controller
             }
         }
 
-        $allMoney = DB::connection('lovbee')->table('orders')->select(DB::raw('sum(order_price) order_price, sum(shop_price) shop_price'))->where('status', 5)->first();
+        $allMoney = DB::connection('lovbee')->table('orders')->select(DB::raw('sum(order_price) order_price, sum(discounted_price) discounted_price, sum(delivery_coast) delivery_coast, sum(shop_price) shop_price'))->where('status', 5)->first();
         $params['orders'] = $orders;
         $params['admins'] = $admins;
         $params['user_id']= $params['user_id'] ?? 0;

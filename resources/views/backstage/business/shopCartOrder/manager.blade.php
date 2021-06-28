@@ -111,13 +111,15 @@
         @endif
         <table class="layui-table" id="table2">
             <tr style="background-color: #f2f2f2;">
-                <th lay-data="{field:'order_price', width:180}">All the money received</th>
+                <th lay-data="{field:'discounted_price', width:180}">All the money received</th>
                 <th lay-data="{field:'shop_price', width:180}">Money for the store</th>
+                <th lay-data="{field:'delivery_coast', width:180}">Delivery coast</th>
                 <th lay-data="{field:'shop_price', width:180}">Gross profit</th>
             <tr>
-                <td>@if(!empty($money['order_price'])){{$money['order_price']}}@else 0 @endif</td>
+                <td>@if(!empty($money['discounted_price'])){{$money['discounted_price']}}@else 0 @endif</td>
+                <td>@if(!empty($money['delivery_coast'])){{$money['delivery_coast']}}@else 0 @endif</td>
                 <td>@if(!empty($money['shop_price'])){{$money['shop_price']}}@else 0 @endif</td>
-                <td>{{$money['order_price']-$money['shop_price']}}</td>
+                <td>{{$money['discounted_price']-$money['shop_price']}}</td>
             </tr>
         </table>
     </div>
