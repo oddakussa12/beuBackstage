@@ -9,67 +9,47 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.table.header.shop_name')}}:</label>
+                    <label class="layui-form-label">{{trans('business.form.label.shop.user_name')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="keyword" placeholder="{{trans('business.table.header.shop_name')}}" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                        <input class="layui-input" name="user_name" placeholder="{{trans('business.form.label.shop.user_name')}}" id="user_name" @if(!empty($user_name)) value="{{$user_name}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.label.phone')}}:</label>
+                    <label class="layui-form-label">{{trans('business.form.label.shop.user_phone')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="phone" placeholder="{{trans('user.form.label.phone')}}" id="phone" @if(!empty($phone)) value="{{$phone}}" @endif/>
+                        <input class="layui-input" name="user_phone" placeholder="{{trans('business.form.label.shop.user_phone')}}" id="user_phone" @if(!empty($user_phone)) value="{{$user_phone}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
+                    <label class="layui-form-label">{{trans('business.form.label.shop.user_country')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="country_code" lay-verify="" lay-search  >
                             <option value="">{{trans('user.form.placeholder.user_country')}}</option>
                             @foreach($countries  as $country)
                                 <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
                             @endforeach
-                            <option value="other" @if(!empty($country_code)&&$country_code=='other') selected @endif>Other</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.table.header.verified')}}:</label>
+                    <label class="layui-form-label">{{trans('business.form.label.shop.user_verified')}}:</label>
                     <div class="layui-input-inline">
-                        <select  name="state">
+                        <select  name="user_verified">
                             <option value="">ALL</option>
-                            <option value="1" @if(isset($state) && $state=='1') selected @endif>Pass</option>
-                            <option value="-1" @if(isset($state) && $state=='-1') selected @endif>UnReviewed</option>
-                            <option value="0" @if(isset($state) && $state=='0') selected @endif>Refuse</option>
+                            @foreach(trans('business.form.select.shop_review') as $k=>$v)
+                            <option value="{{$k}}" @if(isset($user_verified) && $user_verified==$k) selected @endif>{{$v}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
+
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
-                    <div class="layui-input-inline">
-                        <select  name="sort">
-                            <option value="">CreatedAt</option>
-                            <option value="num" @if(isset($sort) && $sort=='num') selected @endif>GoodsNum</option>
-                            <option value="view_num" @if(isset($sort) && $sort=='view_num') selected @endif>ViewNum</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.table.header.take_out')}}:</label>
+                    <label class="layui-form-label">{{trans('business.form.label.shop.user_delivery')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="user_delivery">
-                            <option value="">All</option>
-                            <option value="1" @if(isset($user_delivery) && $user_delivery=='1') selected @endif>YES</option>
-                            <option value="0" @if(isset($user_delivery) && $user_delivery=='0') selected @endif>NO</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.table.header.recommend')}}:</label>
-                    <div class="layui-input-inline">
-                        <select  name="recommend">
-                            <option value="">All</option>
-                            <option value="1" @if(isset($recommend) && $recommend=='1') selected @endif>YES</option>
-                            <option value="0" @if(isset($recommend) && $recommend=='0') selected @endif>NO</option>
+                            @foreach(trans('business.form.select.user_delivery') as $k=>$v)
+                                <option value="{{$k}}" @if(isset($user_delivery) && $user_delivery==$k) selected @endif>{{$v}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -92,12 +72,20 @@
                 <th lay-data="{field:'country', minWidth:80}">{{trans('user.form.label.user_country')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
-
-                <th lay-data="{field:'user_verifiedd', minWidth:100}">{{trans('common.table.header.status')}}</th>
-                <th lay-data="{field:'user_verified', minWidth:150}">{{trans('common.table.header.status')}}</th>
-                <th lay-data="{field:'user_delivery', minWidth:120}">{{trans('business.table.header.take_out')}}</th>
+                <th lay-data="{field:'user_status', minWidth:150}">{{trans('common.table.header.status')}}</th>
+                <th lay-data="{field:'user_verified', minWidth:150 , templet: function(field){
+                    if(field.user_verified==1)
+                    {
+                        var str = '<div id='+field.user_id+'><input type=\'radio\' name='+field.user_id+' field=\'user_verified\' checked lay-filter=\'radio\' value=\'yes\' title=\'YES\'><input type=\'radio\' field=\'user_verified\' name='+field.user_id+' lay-filter=\'radio\' value=\'no\' title=\'NO\'></div>';
+                    }else if(field.user_verified==0)
+                    {
+                        var str = '<div id='+field.user_id+'><input type=\'radio\' name='+field.user_id+' field=\'user_verified\' lay-filter=\'radio\' value=\'yes\' title=\'YES\'><input type=\'radio\' field=\'user_verified\' name='+field.user_id+' checked lay-filter=\'radio\' value=\'no\' title=\'NO\'></div>';
+                    }else{
+                        var str = '<div id='+field.user_id+'><input type=\'radio\' name='+field.user_id+' field=\'user_verified\' lay-filter=\'radio\' value=\'yes\' title=\'YES\'><input type=\'radio\' field=\'user_verified\' name='+field.user_id+' lay-filter=\'radio\' value=\'no\' title=\'NO\'></div>';
+                    }
+                    return str; }}">{{trans('business.table.header.verified')}}</th>
+                <th lay-data="{field:'user_delivery', minWidth:150}">{{trans('business.table.header.take_out')}}</th>
                 <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
-                <th lay-data="{field:'user_level', minWidth:100}">{{trans('business.table.header.vip')}}</th>
                 <th lay-data="{field:'num', minWidth:120}">{{trans('business.table.header.goods_num')}}</th>
                 <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
@@ -111,7 +99,7 @@
                 <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.address')}}</th>
 
                 <th lay-data="{field:'admin_username', maxWidth:180, minWidth:150, @if(auth()->user()->admin_id!=1) hide:'true' @endif templet: function(field){
-                    return field.admin_username; },event:'updateStatus'}">{{trans('business.table.header.manager')}}</th>
+                    return field.admin_username; },event:'updateAmin'}">{{trans('business.table.header.manager')}}</th>
 
                 <th lay-data="{field:'user_about', minWidth:200}">{{trans('user.table.header.user_about')}}</th>
                 <th lay-data="{field:'user_verified_at', minWidth:160}">{{trans('user.table.header.user_audit_time')}}</th>
@@ -126,16 +114,12 @@
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
                     <td><span class="layui-btn layui-btn-xs @if($value->user_verified==-1) layui-btn-danger @elseif($value->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">
-                            @if($value->user_verified==1) Pass @elseif($value->user_verified==0) Refuse @else UnAudited @endif
+                            @if($value->user_verified==1) YES @elseif($value->user_verified==0) YES @else Unreviewed @endif
                         </span>
                     </td>
-                    <td>
-                        <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==1) checked @endif lay-type="{{$value->user_id}}" lay-filter="radio" value="pass" title="Pass">
-                        <input type="radio" name="audit_{{$value->user_id}}" @if($value->user_verified==0) checked @endif lay-type="{{$value->user_id}}" lay-filter="radio" value="refuse" title="Refuse">
-                    </td>
+                    <td>{{$value->user_verified}}</td>
                     <td><input type="checkbox" @if($value->user_delivery>0) checked @endif name="user_delivery" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td><input type="checkbox" @if($value->recommend>0) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td><input type="checkbox" @if($value->user_level==1) checked @endif name="level" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td>@if(!empty($value->num)){{$value->num}}@else 0 @endif</td>
                     <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
                     <td>{{$value->user_created_at}}</td>
@@ -173,19 +157,18 @@
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-            timePicker: 'lay/modules/admin/timePicker',
-            layuiTableColumnSelect: '/lay/modules/admin/table-select/js/layui-table-select',
-        }).use(['common' , 'table' , 'layer' , 'timePicker', 'layuiTableColumnSelect'], function () {
+            timePicker: 'lay/modules/admin/timePicker'
+        }).use(['common' , 'table' , 'layer' , 'timePicker' , 'dropdown'], function () {
             const form = layui.form,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
+                dropdown = layui.dropdown,
                 timePicker = layui.timePicker,
-                layuiTableColumnSelect = layui.layuiTableColumnSelect,
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
-                page:false,height: '550px;',
-            toolbar: '#toolbar'
+                page:false,
+                toolbar: '#toolbar'
             });
             timePicker.render({
                 elem: '#dateTime',
@@ -202,23 +185,82 @@
                 }
                 if(layEvent === 'follow'){
                     open(['95%','95%'], '/backstage/business/shop/follow/'+data.user_id)
+                }else if(obj.event ==='updateAmin') {
+                    dropdown.render({
+                        elem: this
+                        ,show: true
+                        ,data: @json($admins)
+                        ,click: function(obj){
+                            let params = {'admin_id':obj.id};
+                            common.confirm("{{trans('common.confirm.update')}}" , function(){
+                                common.ajax("{{url('/backstage/business/shop')}}/"+data.user_id, params, function(res){
+                                    location.reload();
+                                }, 'patch');
+                            } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                                table.render();
+                            });
+                        }
+                    });
                 }
             });
             form.on('radio(radio)', function(data){
-                debugger
-                let level  = data.value;
+                let value  = data.value;
                 let t = data.type;
                 let elem   = data.elem;
-                console.log(elem);
-
-                const checked = data.elem.checked;
-                data.elem.checked = !checked;
-                let name   = 'audit';
-                let params = '{"' + name + '":"'+level+'"}';
-                data.id    = data.othis.parents('tr').find("td :first").text();
-                request(data, params, name);
+                let that = this;
+                let thatVal = $(that).val();
+                let id = data.othis.parent().attr('id');
+                let n = $(elem).attr('name');
+                @if(!Auth::user()->can('business::shop.update'))
+                    $("div[lay-id=table] input[name="+n+"]").each(function(e){
+                        if(this.defaultChecked)
+                        {
+                            $(this).prop("checked",true);
+                        }else{
+                            $(this).prop("checked",false);
+                        }
+                    });
+                form.render();
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", '#'+id);
+                return false;
+                @endif;
+                $("div[lay-id=table] input[name="+n+"]").each(function(e){
+                    if(this.defaultChecked)
+                    {
+                        $(this).prop("checked",true);
+                    }else{
+                        $(this).prop("checked",false);
+                    }
+                });
+                form.render();
+                let field = $(that).attr('field');
+                let params = {};
+                params[field] = value;
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax("{{url('/backstage/business/shop')}}/"+id, params , function(res){
+                        $(that).prop("checked",true);
+                        form.render();
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                        location.reload();
+                    } , 'put' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            console.log(n);
+                            $("div[lay-id=table] input[name="+n+"]").each(function(e){
+                                if(this.defaultChecked)
+                                {
+                                    $(this).prop("checked",true);
+                                }else{
+                                    $(this).prop("checked",false);
+                                }
+                            });
+                            form.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
             });
             form.on('switch(switchAll)', function(data){
+                console.log(data);
                 let params;
                 const checked = data.elem.checked;
                 data.elem.checked = !checked;
@@ -272,16 +314,6 @@
                     img_show = layer.tips(img, this, {tips:1});
                 },function(){});
             });
-
-            layuiTableColumnSelect.addSelect({data:@json($admins),layFilter:'table',event:'updateStatus',field:'admin_username',callback:function(obj,update){
-                console.log(update);
-                console.log(obj.data);
-                var params = {'admin_id':update.admin_username , 'user_id':obj.data.user_id};
-                    common.ajax("{{url('/backstage/business/shop/owner')}}", params, function(res){
-                        obj.update(update);
-                        parent.location.reload();
-                    } , 'patch');
-                }});
             form.render();
         });
 

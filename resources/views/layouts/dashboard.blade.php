@@ -43,4 +43,9 @@
             var element = layui.element;
         });
     </script>
+    <style>
+        .layui-layout-admin .layui-body{
+            overflow-y: scroll;
+        }
+    </style>
 @endsection

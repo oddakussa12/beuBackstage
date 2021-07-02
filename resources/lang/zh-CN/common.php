@@ -60,6 +60,13 @@ return [
         ]
     ],
     'form'=>[
+        'select'=>[
+            'query'=>[
+                ''=>'全部',
+                '1'=>'是',
+                '0'=>'否',
+            ]
+        ],
         'button'=>[
             'submit'=>'查询',
             'export'=>'导出',
@@ -67,6 +74,7 @@ return [
             'add'=>'添加',
             'update'=>'修改',
             'reset'=>'重置',
+            'clear'=>'刷新',
         ],
         'placeholder'=>[
             'select_first'=>'请选择',

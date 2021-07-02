@@ -2,6 +2,74 @@
 return [
     'table' => [
         'header'=>[
+            'goods'=>[
+                'id'=>'商品编号',
+                'name'=>'商品名称',
+                'category'=>'商品类别',
+                'image'=>'图片',
+                'like'=>'点赞',
+                'view_num'=>'浏览量',
+                'number'=>'数量',
+                'point'=>'评分',
+                'price'=>'价格',
+                'recommendation'=>'推荐',
+                'status'=>'是否上架',
+                'comment'=>'Mark',
+            ],
+            'order'=>[
+                'order_id'=>'订单号',
+                'schedule'=>'订单进程',
+                'user_name'=>'用户名',
+                'user_contact'=>'用户联系方式',
+                'user_address'=>'用户地址',
+                'status'=>'订单状态',
+                'order_price'=>'订单金额',
+                'brokerage'=>'佣金',
+                'currency'=>'订单货币',
+                'promo_code'=>'优惠码',
+                'free_delivery'=>'免配送费',
+                'delivery_coast'=>'配送费',
+                'discount_type'=>'优惠类型',
+                'reduction'=>'抵扣',
+                'discount'=>'折扣',
+                'discounted_price'=>'优惠后金额',
+                'profit'=>'利润',
+                'brokerage_percentage'=>'佣金%',
+                'shop_price'=>'商家金额',
+                'comment'=>'Mark',
+                'order_time_consuming'=>'持续时间',
+            ],
+            'shop'=>[
+                'user_id'=>'商家编号',
+                'user_name'=>'商家名称',
+                'user_nick_name'=>'商家昵称',
+                'user_address'=>'商家地址',
+                'user_contact'=>'商家联系方式',
+                'user_status'=>'状态',
+                'user_verified'=>'审核',
+            ],
+            'promo_code'=>[
+                'description'=>'描述',
+                'promo_code'=>'优惠码',
+                'free_delivery'=>'运费',
+                'deadline'=>'截止日期',
+                'discount_type'=>'类型',
+                'reduction'=>'抵扣',
+                'limit'=>'限制',
+                'percentage'=>'折扣',
+            ],
+            'shopping_cart'=>[
+                'user_nick_name'=>'用户昵称',
+                'shop_user_name'=>'商家名',
+                'shop_nick_name'=>'商家昵称',
+                'goods_name'=>'商品名',
+                'goods_image'=>'商品图片',
+                'goods_number'=>'商品数量',
+            ],
+            'shop_tag'=>[
+                'id'=>'ID',
+                'tag'=>'Tag',
+            ],
             'goods_id'=>'商品编号',
             'goods_name'=>'商品名称',
             'shop_id'=>'店铺编号',
@@ -32,7 +100,6 @@ return [
             'comment_user'=>'评论人',
             'to_user'=>'被评论人',
             'top_user'=>'顶级用户',
-            'order'=>'订单',
             'new_order'=>'新订单',
             'recommended_at'=>'推荐时间',
         ],
@@ -41,8 +108,69 @@ return [
     ],
     'form'=>[
         'label'=>[
+            'tag'=>'标签',
+            'goods'=>[
+                'id'=>'商品ID(编码)',
+                'name'=>'商品名',
+                'category'=>'商品分类',
+                'recommendation'=>'推荐',
+            ],
+            'shop'=>[
+                'name'=>'商家名',
+                'user_id'=>'编号',
+                'user_name'=>'商家名',
+                'user_nick_name'=>'昵称',
+                'user_address'=>'地址',
+                'user_contact'=>'联系方式',
+                'user_phone'=>'手机号',
+                'user_country'=>'商家国家',
+                'user_verified'=>'审核',
+                'user_delivery'=>'外卖',
+            ],
+            'shopping_cart'=>[
+                'shop_name'=>'商家名',
+                'goods_name'=>'商品名',
+                'user_name'=>'用户名'
+            ],
+            'shop_tag'=>[
+                'tag'=>'Tag',
+                'tag_content'=>'Tag名',
+            ],
         ],
         'placeholder'=>[
+            'goods'=>[
+                'id'=>'商品ID(编码)',
+                'name'=>'商品名',
+            ],
+            'shop'=>[
+                'name'=>'商家名',
+            ],
+            'shop_tag'=>[
+                'tag'=>'Tag',
+                'tag_content'=>'Tag名',
+            ],
+        ],
+        'select'=>[
+            'goods_sort'=>[
+                'created_at'=>'时间',
+                'like'=>'点赞',
+                'price'=>'价格',
+                'view_num'=>'浏览量',
+            ],
+            'shopping_cart'=>[
+                'created_at'=>'时间',
+                'number'=>'数量',
+            ],
+            'shop_review'=>[
+                '1'=>'已审核',
+                '0'=>'已拒绝',
+                '-1'=>'待审核',
+            ],
+            'user_delivery'=>[
+                ''=>'',
+                '1'=>'YES',
+                '0'=>'NO'
+            ]
         ],
     ]
 

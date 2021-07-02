@@ -15,23 +15,23 @@ class PromoCodeController extends Controller
         $params = $request->all();
         $result = DB::connection('lovbee')->table('promo_codes')->orderByDesc('created_at')->paginate(10);
         $params['result'] = $result;
-        return view('backstage.business.promoCode.index', $params);
+        return view('backstage.business.promo_code.index', $params);
 
     }
 
     public function create()
     {
-        return view('backstage.business.promoCode.create');
+        return view('backstage.business.promo_code.create');
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
             'description'=> 'required|string|max:128',
-            'promo_code' => 'required|string|max:16',
+            'promo_code' => 'required|alpha_num|max:16|regex:/^[a-zA-Z0-9]{4,16}$/',
             'deadline'   => 'required|date',
             'reduction'  => 'filled|numeric',
-            'percentage' => 'filled|numeric',
+            'percentage' => 'filled|numeric|between:0,100',
             'limit'      => 'filled|numeric',
         ]);
         $params = $request->all();
@@ -54,17 +54,17 @@ class PromoCodeController extends Controller
     public function show($id)
     {
         $result = DB::connection('lovbee')->table('promo_codes')->where('id', $id)->first();
-        return view('backstage.business.promoCode.edit', compact('result'));
+        return view('backstage.business.promo_code.edit', compact('result'));
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'description'=> 'required|string|max:128',
-            'promo_code' => 'required|string|max:16',
+            'promo_code' => 'required|alpha_num|max:16|regex:/^[a-zA-Z0-9]{4,16}$/',
             'deadline'   => 'required|date',
             'reduction'  => 'filled|numeric',
-            'percentage' => 'filled|numeric',
+            'percentage' => 'filled|numeric|between:0,100',
             'limit'      => 'filled|numeric',
         ]);
         $params = $request->all();

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Business;
 
-use App\Models\Goods;
-use App\Models\Passport\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\Passport\User;
+use App\Models\Business\Goods;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class ReviewController extends Controller
 {

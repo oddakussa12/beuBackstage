@@ -8,15 +8,15 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180, hide:'true'}">{{trans('user.table.header.user_id')}}</th>
-                <th lay-data="{field:'description', minWidth:180}">Description</th>
-                <th lay-data="{field:'promo_code', minWidth:130}">PromoCode</th>
-                <th lay-data="{field:'free_delivery', minWidth:110}">FreeDelivery</th>
-                <th lay-data="{field:'deadline', minWidth:110}">DeadLine</th>
-                <th lay-data="{field:'discount_type', minWidth:130}">DiscountType</th>
-                <th lay-data="{field:'reduction', minWidth:110}">Reduction</th>
-                <th lay-data="{field:'percentage', minWidth:110}">Percentage</th>
-                <th lay-data="{field:'limit', minWidth:100}">Limit</th>
+                <th lay-data="{field:'id', minWidth:180, hide:'true'}"></th>
+                <th lay-data="{field:'description', minWidth:180}">{{trans('business.table.header.promo_code.description')}}</th>
+                <th lay-data="{field:'promo_code', minWidth:130}">{{trans('business.table.header.promo_code.promo_code')}}</th>
+                <th lay-data="{field:'free_delivery', minWidth:110}">{{trans('business.table.header.promo_code.free_delivery')}}</th>
+                <th lay-data="{field:'deadline', minWidth:110}">{{trans('business.table.header.promo_code.deadline')}}</th>
+                <th lay-data="{field:'discount_type', minWidth:130}">{{trans('business.table.header.promo_code.discount_type')}}</th>
+                <th lay-data="{field:'reduction', minWidth:110}">{{trans('business.table.header.promo_code.reduction')}}</th>
+                <th lay-data="{field:'percentage', minWidth:110}">{{trans('business.table.header.promo_code.percentage')}}</th>
+                <th lay-data="{field:'limit', minWidth:100}">{{trans('business.table.header.promo_code.limit')}}</th>
                 <th lay-data="{field:'created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
                 <th lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -80,7 +80,8 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'edit'){
-                    open(['50%', '90%'], '/backstage/business/promocode/'+data.id);
+                    open('/backstage/business/promo_code/'+data.id);
+
                 }
                 if(layEvent === 'delete'){
                     common.confirm("{{trans('common.confirm.delete')}}" , function(){
@@ -93,17 +94,26 @@
                 }
             });
             $(document).on('click','#add',function(){
-                open(['50%', '90%'], '/backstage/business/promocode/create');
+                open('/backstage/business/promo_code/create');
             });
-            function open(area, content, types=2) {
-                layer.open({
-                    type: types,
-                    shadeClose: true,
+            function open(content , type=2) {
+                var clientWidth = document.body.clientWidth;
+                if(clientWidth<=600)
+                {
+                    var area = ['90%','90%'];
+                }else if(clientWidth<=1200&&clientWidth>600){
+                    var area = ['72%','90%'];
+                }else{
+                    var area = ['40%','90%'];
+                }
+                common.open(content , {
+                    shadeClose: false,
                     shade: 0.8,
                     area: area,
                     offset: 'auto',
-                    content: content,
-                });
+                    scrollbar:true,
+                } , type);
+
             }
         });
     </script>

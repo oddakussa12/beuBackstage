@@ -142,16 +142,21 @@ layui.define(['jquery'], function(exports){
                 type: type,
                 content: content //这里content是一个普通的String
             };
-            options.resize = other.hasOwnProperty('resize')?other.resize:true;
             options.scrollbar = other.hasOwnProperty('scrollbar ')?other.scrollbar :true;
-            options.title = other.hasOwnProperty('title')?other.title:false;
             options.anim = other.hasOwnProperty('anim')?other.anim:2;
             options.time = other.hasOwnProperty('time')?other.time:0;
-            options.closeBtn = other.hasOwnProperty('closeBtn')?other.closeBtn:2;
             options.shadeClose = other.hasOwnProperty('shadeClose')?other.shadeClose:true;
             options.shade = other.hasOwnProperty('shade')?other.shade:0.8;
             options.area = other.hasOwnProperty('area')?other.area:'auto';
             options.maxmin = other.hasOwnProperty('maxmin')?other.maxmin:false;
+            if(other.hasOwnProperty('title'))
+            {
+                options.title = other.title;
+            }
+            if(other.hasOwnProperty('closeBtn'))
+            {
+                options.closeBtn = other.closeBtn;
+            }
             switch (type) {
                 case 0:
                     break;

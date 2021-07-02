@@ -16,8 +16,8 @@ class ShopController extends Controller
     public function base(Request $request, $flag=false)
     {
         $params = $request->all();
-        $keyword= $params['keyword'] ?? '';
-        $phone  = $params['phone'] ?? '';
+        $userName = $params['user_name'] ?? '';
+        $userPhone  = $params['user_phone'] ?? '';
         $country= config('country');
         $shop   = User::select(DB::raw('t_users.*,t_users_phones.*,t_users_countries.country, count(t_goods.id) num, t_shops_views.num view_num, t_recommendation_users.user_id recommend, t_recommendation_users.created_at recommended_at'))
             ->join('users_phones', 'users_phones.user_id', '=', 'users.user_id')
@@ -44,15 +44,15 @@ class ShopController extends Controller
             $shop  = $shop->whereBetween('users.user_created_at', [$start, $end]);
         }
         if (!empty($keyword)) {
-            $shop = $shop->where(function ($query) use ($keyword){
-                $query->where('users.user_name', 'like', "%{$keyword}%")->orWhere('users.user_nick_name', 'like', "%{$keyword}%");
+            $shop = $shop->where(function ($query) use ($userName){
+                $query->where('users.user_name', 'like', "%{$userName}%")->orWhere('users.user_nick_name', 'like', "%{$userName}%");
             });
         }
-        if (isset($params['state'])) {
-            $shop = $shop->where('users.user_verified', $params['state']);
+        if (isset($params['user_verified'])) {
+            $shop = $shop->where('users.user_verified', $params['user_verified']);
         }
-        if (!empty($phone)) {
-            $shop = $shop->where('users_phones.user_phone', $phone);
+        if (!empty($userPhone)) {
+            $shop = $shop->where('users_phones.user_phone', $userPhone);
         }
         if (!empty($params['country_code'])) {
             $country_code = $params['country_code'];
@@ -65,7 +65,7 @@ class ShopController extends Controller
             }
         }
 
-        $sort    = !empty($params['sort']) ? $params['sort'] : 'users.user_created_at';
+        $sort    = 'users.user_created_at';
         $shops   = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
         $shopIds = $shops->pluck('user_id')->toArray();
         $points  = DB::connection('lovbee')->table('shop_evaluation_points')->whereIn('user_id', $shopIds)->get();
@@ -107,13 +107,10 @@ class ShopController extends Controller
     {
         $params = $this->base($request, 1);
 
-        $admins = DB::table('admins')->select(DB::raw('admin_id name, admin_username value'))->get();
+        $admins = DB::table('admins')->select(DB::raw('admin_id id, admin_username title'))->get();
         $admins = collect($admins)->toArray();
         $admins = array_map(function ($arr) { return (array)$arr;}, $admins);
         $params['admins']  = $admins;
-
-        /*dump(collect($params)->toArray());
-        exit;*/
         return view('backstage.business.shop.index' , $params);
     }
 
@@ -192,58 +189,80 @@ class ShopController extends Controller
     public function update(Request $request, $id)
     {
         $adminUser = auth()->user();
-        $params    = $request->all();
         $header    = ['HellooVersion' => '3.3.0', 'deviceId'=>$id];
-
-        if (!empty($params['recommend']) || isset($params['level']) || isset($params['audit']) || isset($params['user_delivery'])) {
-            if (!empty($params['recommend'])) {
-                $result = DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->first();
-                if ($params['recommend']=='on') {
-                    if (empty($result)) {
-                        $insert = DB::connection('lovbee')->table('recommendation_users')->insert(['user_id'=>$id, 'created_at'=>date("Y-m-d H:i:s")]);
-                        empty($insert) && abort('403', trans('common.ajax.result.prompt.fail'));
-                    }
-                } else {
-                    DB::connection('lovbee')->table('recommendation_users')->where('user_id', $id)->delete();
-                }
+        $fields  = array();
+        $user_verified   = $request->input('user_verified');
+        $user_delivery   = $request->input('user_delivery');
+        $admin_id   = $request->input('admin_id');
+        if($admin_id===null)
+        {
+            if($user_verified!==null)
+            {
+                $fields['user_verified'] = $user_verified=='yes'?1:0;
             }
-            Log::info(__CLASS__.'::update', ['user_id'=>$id, 'admin_username'=>$adminUser->admin_username, $params]);
-
-            if (isset($params['level'])) {
-                $update = ['user_level'=>$params['level']=='on'];
+            if($user_delivery!==null)
+            {
+                $fields['user_delivery'] = $user_delivery=='on'?1:0;
             }
-            if (isset($params['user_delivery'])) {
-                $update = ['user_delivery'=>$params['user_delivery']=='on'];
+            if(empty($fields))
+            {
+                abort(422 , 'Parameter cannot be empty!');
             }
-            if (isset($params['audit'])) {
-                $update = ['user_verified'=>$params['audit']=='pass', 'user_verified_at'=>date('Y-m-d H:i:s')];
-            }
-
-            // 发送修改请求到前端
-            if (!empty($update)) {
-                $update = array_merge($update, ['user_id'=>$id, 'update'=>'update']);
-                $patch  = $this->url('api/backstage/shop', $update, 'PATCH', $header);
-                if (isset($params['audit']) && $patch) {
+            $connect = DB::connection('lovbee');
+            try{
+                $connect->beginTransaction();
+                if(isset($fields['user_verified']))
+                {
                     DB::table('business_audits')->insert([
                         'audit_id'  => $id,
                         'type'      => 'shop',
                         'date'      => date('Y-m-d'),
-                        'status'    => $params['audit'],
+                        'status'    => $fields['user_verified']==1?'pass':'refuse',
                         'admin_id'  => $adminUser->admin_id,
-                        'created_at'=> date('Y-m-d H:i:s'),
                         'admin_username' => $adminUser->admin_username,
+                        'created_at'=> date('Y-m-d H:i:s'),
                     ]);
                 }
+                $patch  = $this->url('api/backstage/shop/'.$id, $fields, 'PATCH', $header);
+                if(!$patch)
+                {
+                    abort(500 , 'Front-end user information update error!');
+                }
+                $connect->commit();
+            }catch (\Exception $e)
+            {
+                $connect->rollBack();
+                Log::info('user_update_fail' , array(
+                    'message'=>$e->getMessage(),
+                    'data'=>$request->all(),
+                ));
             }
-        } else {
-            $user = User::find($id);
-            unset($params['user_phone_country']);
-            $info = array_diff($params, collect($user)->toArray());
-            $info['user_id'] = $user->user_id;
-            $update = $this->url('api/backstage/shop', $info, 'PATCH', $header);
+        }else{
+            $now = date('Y-m-d H:i:s');
+            $adminUser = DB::table('admins_shops')->where('user_id' , $id)->first();
+            $admin = DB::table('admins')->where('admin_id' , $admin_id)->first();
+            if(empty($admin))
+            {
+                abort(404 , 'The administrator does not exist!');
+            }
+            if(empty($adminUser))
+            {
+                DB::table('admins_shops')->insert(array(
+                    'admin_id'=>$admin_id,
+                    'admin_username'=>$admin->admin_username,
+                    'user_id'=>$admin_id,
+                    'created_at'=>$now,
+                    'updated_at'=>$now,
+                ));
+            }else{
+                DB::table('admins_shops')->where('user_id' , $id)->update(array(
+                    'admin_id'=>$admin_id,
+                    'admin_username'=>$admin->admin_username,
+                    'updated_at'=>$now,
+                ));
+            }
         }
-
-        return response()->json([]);
+        return response()->json(['result'=>'success']);
     }
 
     public function search(Request $request)

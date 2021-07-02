@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {
@@ -62,6 +62,24 @@ class Controller extends BaseController
         }
 
         return $result;
+    }
+
+    public function parseTime($dateTime, $function='addHours')
+    {
+        $allDate = explode(' - ' , $dateTime);
+        $startTime = array_shift($allDate);
+        $endTime = array_pop($allDate);
+        $format = 'Y-m-d H:i:s';
+        if(date($format , strtotime($startTime))!=$startTime||date($format , strtotime($endTime))!=$endTime)
+        {
+            return false;
+        }
+        $start   = Carbon::createFromFormat($format , $startTime)->$function(8)->toDateTimeString();
+        $end     = Carbon::createFromFormat($format , $endTime)->$function(8)->toDateTimeString();
+        return array(
+            'start'=>$start,
+            'end'=>$end,
+        );
     }
 
 

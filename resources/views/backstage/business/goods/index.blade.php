@@ -9,41 +9,40 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.table.header.shop_name')}}:</label>
+                    <label class="layui-form-label">{{trans('business.form.label.shop.name')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="shopName" placeholder="{{trans('business.table.header.shop_name')}}" id="shopName" @if(!empty($shopName)) value="{{$shopName}}" @endif/>
+                        <input class="layui-input" name="shop_name" placeholder="{{trans('business.form.placeholder.shop.name')}}" id="shop_name" @if(!empty($shopName)) value="{{$shopName}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.table.header.goods_name')}}:</label>
+                    <label class="layui-form-label">{{trans('business.form.label.goods.name')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="keyword" placeholder="{{trans('business.table.header.goods_name')}}" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                        <input class="layui-input" name="goods_name" placeholder="{{trans('business.form.placeholder.goods.name')}}" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.table.header.goods_id')}}:</label>
+                    <label class="layui-form-label">{{trans('business.form.label.goods.id')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" style="width: 300px" name="goods_id" placeholder="{{trans('business.table.header.goods_id')}}" id="goods_id" @if(!empty($goods_id)) value="{{$goods_id}}" @endif/>
+                        <input class="layui-input"  name="goods_id" placeholder="{{trans('business.form.placeholder.goods.id')}}" id="goods_id" @if(!empty($goods_id)) value="{{$goods_id}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="sort">
-                            <option value="created_at">CreatedAt</option>
-                            <option value="like" @if(isset($sort) && $sort=='like') selected @endif>Liked</option>
-                            <option value="price" @if(isset($sort) && $sort=='price') selected @endif>Price</option>
-                            <option value="view_num" @if(isset($sort) && $sort=='view_num') selected @endif>ViewNum</option>
+                            @foreach(trans('business.form.select.goods_sort') as $key=>$translation)
+                                <option value="{{$key}}" @if(!empty($sort)&&$sort==$key) selected @endif>{{$translation}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.table.header.recommend')}}:</label>
+                    <label class="layui-form-label">{{trans('business.form.label.goods.recommendation')}}:</label>
                     <div class="layui-input-inline">
-                        <select  name="recommend">
-                            <option value="">All</option>
-                            <option value="1" @if(isset($recommend) && $recommend=='1') selected @endif>YES</option>
-                            <option value="0" @if(isset($recommend) && $recommend=='0') selected @endif>NO</option>
+                        <select  name="recommendation">
+                            @foreach(trans('common.form.select.query') as $key=>$translation)
+                                <option value="{{$key}}" @if(isset($recommendation)&&$recommendation===strval($key)) selected @endif>{{$translation}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -52,9 +51,9 @@
                     <div class="layui-input-inline" style="width: 300px;">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
-                </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -62,19 +61,19 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180, hide:'true'}">{{trans('business.table.header.goods_id')}}</th>
-                <th lay-data="{field:'shop_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
-                <th lay-data="{field:'shop_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
-                <th lay-data="{field:'name', minWidth:160}">{{trans('business.table.header.goods_name')}}</th>
-                <th lay-data="{field:'image', minWidth:200}">{{trans('common.table.header.image')}}</th>
-                <th lay-data="{field:'like', minWidth:120}">{{trans('business.table.header.like')}}</th>
-                <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
-                <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
-                <th lay-data="{field:'price', minWidth:140}">{{trans('business.table.header.price')}}</th>
-                <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
-                <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
-                <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.in-stock')}}</th>
-                <th lay-data="{field:'description', minWidth:200}">{{trans('common.table.header.description')}}</th>
+                <th lay-data="{field:'id', minWidth:180}">{{trans('business.table.header.goods.id')}}</th>
+                <th lay-data="{field:'shop_name', minWidth:160}">{{trans('business.table.header.shop.user_name')}}</th>
+                <th lay-data="{field:'shop_nick_name', minWidth:160}">{{trans('business.table.header.shop.user_nick_name')}}</th>
+                <th lay-data="{field:'name', minWidth:160}">{{trans('business.table.header.goods.name')}}</th>
+                <th lay-data="{field:'category', minWidth:100}">{{trans('business.table.header.goods.category')}}</th>
+                <th lay-data="{field:'image', minWidth:200}">{{trans('business.table.header.goods.image')}}</th>
+                <th lay-data="{field:'like', minWidth:120}">{{trans('business.table.header.goods.like')}}</th>
+                <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.goods.view_num')}}</th>
+                <th lay-data="{field:'format_point', minWidth:120}">{{trans('business.table.header.goods.point')}}</th>
+                <th lay-data="{field:'price', minWidth:140}">{{trans('business.table.header.goods.price')}}</th>
+                <th lay-data="{field:'recommendation', minWidth:120}">{{trans('business.table.header.goods.recommendation')}}</th>
+                <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.goods.status')}}</th>
+                <th lay-data="{field:'comment', minWidth:200}">{{trans('business.table.header.goods.comment')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
@@ -83,9 +82,10 @@
             @foreach($result as $value)
                 <tr>
                     <td>{{$value->id}}</td>
-                    <td>{{$value->shop_name}}</td>
-                    <td>{{$value->shop_nick_name}}</td>
+                    <td>{{$value->user_name}}</td>
+                    <td>{{$value->user_nick_name}}</td>
                     <td>{{$value->name}}</td>
+                    <td>{{$value->category}}</td>
                     <td>@if(!empty($value->image))
                             @foreach($value->image as $image)
                                 <img src="{{$image['url']}}">
@@ -94,10 +94,9 @@
                     </td>
                     <td>{{$value->like}}</td>
                     <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
-                    <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
+                    <td>@if(!empty($value->format_point)){{$value->format_point}}@else 0 @endif</td>
                     <td>{{$value->price}} {{$value->currency}}</td>
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
                     <td><span class="layui-btn layui-btn-xs @if(empty($value->status)) layui-btn-danger @else layui-btn-warm @endif">@if(empty($value->status)) NO @else YES @endif</span></td>
                     <td>{{$value->description}}</td>
                     <td>{{$value->created_at}}</td>
@@ -175,15 +174,14 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'view'){
-                    layer.open({
-                        type: 2,
+                    common.open('/backstage/business/goods/'+data.id+'/view/' , {
                         shadeClose: true,
                         shade: 0.8,
-                        area: ['95%','95%'],
+                        area: ['90%','90%'],
                         offset: 'auto',
                         scrollbar:true,
-                        content: '/backstage/business/goods/view/'+data.id,
-                    });
+                        closeBtn:2
+                    } , 2);
                 }
             });
             $(function () {
