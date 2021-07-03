@@ -100,7 +100,9 @@
                 common = layui.common,
                 dropdown = layui.dropdown,
                 layuiTableColumnSelect = layui.layuiTableColumnSelect,
+                //var a = {{$perPage}},
                 $ = layui.jquery;
+
             var order = table.init('table', { //转化静态表格
                 page:false,
                 limit:{{$perPage??10}},
@@ -116,12 +118,6 @@
                     }
                 }
             });
-            /*$('.select').on('change', function() {
-                var params = {'status':$(this).val(), 'id':$(this).attr('data')};
-                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
-                    location.reload();
-                }, 'patch');
-            });*/
 
             table.on('tool(table)', function (obj) {
                 var data = obj.data;
