@@ -82,7 +82,7 @@ class DiscoveryOrderController extends Controller
         $type   = $request->input('type' , '0');
         $orders = $this->base($request);
         $user   = auth()->user();
-
+        $perPage =  intval($request->input('perPage', 10));
         $userIds= DB::table('admins_shops');
         $user->admin_id!=1 && $userIds = $userIds->where('admin_id', $user->admin_id);
         $userIds= $userIds->get()->pluck('user_id')->toArray();
@@ -93,7 +93,7 @@ class DiscoveryOrderController extends Controller
         $colorStyle   = $this->colorStyle;
         $statusKv     = array_map(function ($value, $key) {return ['title'=>$value, 'id'=>$key];}, $status, array_keys($status));
 
-        return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId', 'status', 'statusEncode', 'colorStyle', 'statusKv'));
+        return view('backstage.business.order.index' , compact('orders' , 'type' , 'shops' , 'userId', 'status', 'statusEncode', 'colorStyle', 'statusKv' , 'perPage'));
     }
 
     public function update(Request $request)

@@ -103,6 +103,7 @@
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
+                limit:{{$perPage??10}},
                 toolbar: '#toolbar'
             });
             timePicker.render({

@@ -100,7 +100,6 @@
                 common = layui.common,
                 dropdown = layui.dropdown,
                 layuiTableColumnSelect = layui.layuiTableColumnSelect,
-                //var a = {{$perPage}},
                 $ = layui.jquery;
 
             var order = table.init('table', { //转化静态表格
