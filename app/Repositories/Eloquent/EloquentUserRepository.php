@@ -67,33 +67,21 @@ class EloquentUserRepository  extends EloquentBaseRepository implements UserRepo
         } else {
             $result  = $user->get();
         }
-        $result = $this->friend($result);
-        return $result;
+        return $this->friend($result);
     }
 
     public function friend($result) {
         $userIds = $result->pluck('user_id')->toArray();
-        $str     = !empty($userIds) ? implode(',', $userIds) : 1;
-        $logs    = DB::connection('lovbee')->select("select * from (select * from `t_status_logs` where `user_id` in ($str)  order by `created_at` desc) b group by user_id");
         $friends = DB::connection('lovbee')->table('users_friends')->select(DB::raw('count(1) num'), 'user_id')->whereIn('user_id', $userIds)->groupBy('user_id')->get();
-
         foreach ($result as $item) {
             $item->ip = $item->time = '';
             $item->friends = 0;
-
-            foreach ($logs as $log) {
-                if ($item->user_id==$log->user_id) {
-                    $item->ip   = $log->ip;
-                    $item->time = date('Y-m-d H:i:s', $log->time);
-                }
-            }
             foreach ($friends as $friend) {
                 if ($item->user_id==$friend->user_id) {
                     $item->friends = $friend->num;
                 }
             }
         }
-
         return $result;
     }
 

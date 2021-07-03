@@ -55,16 +55,14 @@
                         <th  lay-data="{field:'user_nick_name', minWidth:150}">{{trans('user.table.header.user_nick_name')}}</th>
                         <th  lay-data="{field:'user_name', minWidth:190}">{{trans('user.table.header.user_name')}}</th>
                         <th  lay-data="{field:'user_phone', minWidth:180}">{{trans('user.table.header.phone')}}</th>
-{{--                        <th  lay-data="{field:'user_shop', minWidth:120}">{{trans('user.table.header.business')}}</th>--}}
                         <th  lay-data="{field:'friends', minWidth:120,sort:true}">{{trans('user.table.header.friend_count')}}</th>
                         <th  lay-data="{field:'user_is_block', width:100}">{{trans('user.table.header.user_block')}}</th>
                         <th  lay-data="{field:'user_gender', width:70}">{{trans('user.table.header.user_gender')}}</th>
                         <th  lay-data="{field:'country', width:80}">{{trans('user.table.header.user_country')}}</th>
-                        <th  lay-data="{field:'time', width:160,sort:true}">{{trans('user.table.header.last_active_time')}}</th>
-                        <th  lay-data="{field:'ip', width:160}">{{trans('user.table.header.last_active_ip')}}</th>
+
                         <th  lay-data="{field:'activation', width:70}">{{trans('user.table.header.user_activation')}}</th>
                         <th  lay-data="{field:'user_created_at', width:160}">{{trans('user.table.header.user_registered')}}</th>
-                        <th  lay-data="{field:'user_op', minWidth:400 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                        <th  lay-data="{field:'user_op', minWidth:480 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -75,13 +73,11 @@
                             <td>{{$user->user_nick_name}}</td>
                             <td>{{$user->user_name}}</td>
                             <td>{{$user->user_phone_country}} {{$user->user_phone}}</td>
-{{--                            <td><input type="checkbox" @if($user->user_shop>0) checked @endif name="user_shop" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>--}}
                             <td>{{$user->friends}}</td>
                             <td><input type="checkbox" @if($user->is_block==true) checked @endif name="is_block" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                             <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1){{trans('common.cast.sex.other')}}@elseif($user->user_gender==0){{trans('common.cast.sex.female')}}@else{{trans('common.cast.sex.male')}}@endif</span></td>
                             <td>{{ $user->country }}</td>
-                            <td>{{$user->time}}</td>
-                            <td>{{$user->ip}}</td>
+
                             <td><span class="layui-btn layui-btn-xs">@if($user->activation==0) YES @else NO @endif</span></td>
                             <td>{{ $user->user_format_created_at }}</td>
                             <td></td>
@@ -111,6 +107,8 @@
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="history">{{trans('user.table.button.history')}}</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="friend_active">{{trans('user.table.button.friend_active')}}</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="friend_yesterday_active">{{trans('user.table.button.friend_yesterday_active')}}</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="follow">{{trans('user.table.button.follow')}}</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="followed">{{trans('user.table.button.followed')}}</a>
         </div>
     </script>
 
@@ -184,8 +182,7 @@
                         'scrollbar':true,
                         content: '/backstage/passport/user/friend/'+data.user_id,
                     });
-                }
-                if(layEvent === 'history'){ //活跃历史
+                }else if(layEvent === 'history'){ //活跃历史
                     layer.open({
                         type: 2,
                         title: "{{trans('user.table.button.history')}}",
@@ -196,8 +193,7 @@
                         'scrollbar':true,
                         content: '/backstage/passport/user/history/'+data.user_id
                     });
-                }
-                if(layEvent === 'device'){ //设备列表
+                }else if(layEvent === 'device'){ //设备列表
                     layer.open({
                         type: 2,
                         shadeClose: true,
@@ -207,12 +203,14 @@
                         'scrollbar':true,
                         content: '/backstage/passport/user/device/'+data.user_id
                     });
-                }
-                if(layEvent === 'friend_active'){
+                }else if(layEvent === 'friend_active'){
                     window.open('/backstage/passport/user/'+data.user_id+'/friend/status');
-                }
-                if(layEvent === 'friend_yesterday_active'){
+                }else if(layEvent === 'friend_yesterday_active'){
                     window.open('/backstage/passport/user/'+data.user_id+'/friend/yesterday/status');
+                }else if(layEvent === 'follow'){
+                    window.open('/backstage/passport/follow?follow_id='+data.user_id);
+                }else if(layEvent === 'followed'){
+                    window.open('/backstage/passport/follow?followed_id='+data.user_id);
                 }
             });
             table.init('table', { //转化静态表格

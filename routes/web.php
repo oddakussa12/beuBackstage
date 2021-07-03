@@ -85,6 +85,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user/deviceInfo', 'UserController@deviceInfo')->name('user.deviceInfo');
             Route::post('user/device/block', 'UserController@deviceBlock')->name('user.device.block');
 
+            Route::get('follow' , 'FollowController@index')->name('follow.index');
+
             Route::get('friend/index', 'FriendController@index')->name('friend.index');
             Route::get('friend/request', 'FriendController@request')->name('friend.request');
             Route::get('group', 'GroupController@index')->name('group.index'); // 群组列表管理
