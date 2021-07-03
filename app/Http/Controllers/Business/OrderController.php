@@ -18,6 +18,7 @@ class OrderController extends Controller
 
     public function base($request)
     {
+        $perPage =  intval($request->input('perPage', 10));
         $admin_id = $request->input('admin_id', '0');
         $userId   = $request->input('user_id', '0');
         $schedule = $request->input('type', '0');
@@ -43,7 +44,7 @@ class OrderController extends Controller
             $userId!=0  && $orders = $orders->where('shop_id', $userId);
         }
 
-        $orders   = $orders->paginate(10)->appends($params);
+        $orders   = $orders->orderByDesc('created_at')->paginate($perPage)->appends($params);
         $userIds  = $orders->pluck('user_id')->toArray();
         $shopIds  = $orders->pluck('shop_id')->toArray();
         $userIds  = array_diff(array_unique(array_merge($userIds, $shopIds)), ['', null]);

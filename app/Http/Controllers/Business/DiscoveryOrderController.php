@@ -20,6 +20,7 @@ class DiscoveryOrderController extends Controller
 
     public function base($request)
     {
+        $perPage =  intval($request->input('perPage', 10));
         $admin_id = $request->input('admin_id' , '0');
         $userId   = $request->input('user_id' , '0');
         $type     = $request->input('type' , '0');
@@ -45,7 +46,7 @@ class DiscoveryOrderController extends Controller
             $userId!=0  && $orders = $orders->where('owner', $userId);
         }
 
-        $orders = $orders->paginate(10)->appends($appends);
+        $orders = $orders->orderByDesc('created_at')->paginate($perPage)->appends($appends);
 
         $goodsIds = $orders->pluck('goods_id')->toArray();
         $goodsIds = array_unique(array_filter($goodsIds , function($goodsId){
