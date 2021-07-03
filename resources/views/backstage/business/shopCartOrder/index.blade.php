@@ -114,6 +114,7 @@
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
+                limit:{{$perPage??10}},
                 toolbar: '#toolbar',
                 done: function(res, curr, count){
                     console.log(res.data);
