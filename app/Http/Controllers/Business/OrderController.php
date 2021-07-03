@@ -73,7 +73,7 @@ class OrderController extends Controller
         $params = $request->all();
         $orders = $this->base($request);
         $user   = auth()->user();
-
+        $perPage =  intval($request->input('perPage', 10));
         $userIds= DB::table('admins_shops');
         $user->admin_id!=1 && $userIds = $userIds->where('admin_id', $user->admin_id);
         $userIds= $userIds->get()->pluck('user_id')->toArray();
@@ -88,6 +88,7 @@ class OrderController extends Controller
         }
         $params['type' ] = $params['type'] ?? 0;
         $params['orders'] = $orders;
+        $params['perPage'] = $perPage;
         $params['orderStatus'] = $this->status;
         $params['schedule']    = $schedule;
         $params['colorStyle']  = $this->colorStyle;
