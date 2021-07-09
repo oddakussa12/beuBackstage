@@ -9,6 +9,7 @@
             <tr>
                 <th lay-data="{field:'id', minWidth:100}">{{trans('business.table.header.shop_tag.id')}}</th>
                 <th  lay-data="{field:'tag', width:120}">{{trans('business.table.header.shop_tag.tag')}}</th>
+                <th  lay-data="{field:'image', width:120,hide:true}">Image</th>
                 <?php foreach (config('laravellocalization.supportedLocales') as $locale => $language): ?>
                 <th  lay-data="{field:'{{ $locale }}_tag_content', width:300}">{{ $locale }}</th>
                 <?php endforeach; ?>
@@ -20,6 +21,7 @@
                 <tr>
                     <td>{{ $shopTag->id }}</td>
                     <td>{{ $shopTag->tag }}</td>
+                    <td>{{ $shopTag->image }}</td>
                     <?php foreach (config('laravellocalization.supportedLocales') as $locale => $language): ?>
                     <td>{{ is_array(array_get($shopTag, $locale, null)) ?: array_get($shopTag, $locale, '') }}</td>
                     <?php endforeach; ?>
@@ -54,6 +56,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <div class="layui-upload" style="margin-left: 110px;">
+                            <button type="button" class="layui-btn" id="image"><i class="layui-icon"></i></button>
+                            <input type="hidden" name="image" />
+                            <div class="layui-upload-list">
+                                <img class="layui-upload-img" id="show_image" width="90px" height="90px">
+                            </div>
+                            <div style="width: 95px;">
+                                <div class="layui-progress layui-progress-big" lay-showpercent="yes" lay-filter="image_progress">
+                                    <div class="layui-progress-bar" lay-percent=""></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a name="list-progress"> </a>
                 @if(count($supportedLocales)>=1)
                     @foreach($supportedLocales as $localeCode => $properties)
                         <div class="layui-tab-item {{ App::getLocale() == $localeCode ? 'layui-show' : '' }}">
@@ -94,12 +113,15 @@
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-        }).use(['common' , 'table' , 'layer'], function () {
+        }).use(['common' , 'table' , 'layer' , 'upload' , 'element'], function () {
             var $ = layui.jquery,
+                element = layui.element,
+                upload = layui.upload,
                 table = layui.table,
                 form = layui.form,
                 common = layui.common,
-                layer = layui.layer;
+                layer = layui.layer,
+                $=layui.jquery;
 
 
 
@@ -115,9 +137,16 @@
                 var tr = obj.tr;
                 console.log(tr);
                 if(layEvent === 'edit'){ //编辑
+                    if(data.image!=''&&data.image!=undefined)
+                    {
+                        $('#show_image').attr('src', data.image);
+                    }else{
+                        $('#show_image').attr('src' , 'https://imgservices-1252317822.image.myqcloud.com/image/20201015/45prvdakqe.svg');
+                    }
                     form.val("tag_form", {
                         "id": data.id,
-                        "tag": data.tag
+                        "tag": data.tag,
+                        "image": data.image
                         @if(count($supportedLocales)>=1)
                         @foreach($supportedLocales as $localeCode => $properties)
                         ,"{{$localeCode}}_tag_content": data["{{$localeCode}}_tag_content"]
@@ -126,6 +155,7 @@
                     });
                     console.log(form);
                 }
+                form.render();
             });
 
 
@@ -162,6 +192,71 @@
                     });
                 } , 'patch');
                 return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+            var jqureAjaxXhrOnProgress = function(fun) {
+                jqureAjaxXhrOnProgress.onprogress = fun; //绑定监听
+                //使用闭包实现监听绑
+                return function() {
+                    //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
+                    var xhr = $.ajaxSettings.xhr();
+                    //判断监听函数是否为函数
+                    if (typeof jqureAjaxXhrOnProgress.onprogress !== 'function')
+                        return xhr;
+                    //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
+                    if (jqureAjaxXhrOnProgress.onprogress && xhr.upload) {
+                        xhr.upload.onprogress = jqureAjaxXhrOnProgress.onprogress;
+                    }
+                    return xhr;
+                }
+            }
+
+            var image = upload.render({
+                elem: '#image'
+                ,accept: 'images' //视频
+                ,auto: false
+                ,choose:function (obj , test){
+                    var formData = new FormData();
+                    var files = obj.pushFile();
+                    // console.log(files);
+                    var keys = Object.keys(files);
+                    var end = keys[keys.length-1]
+                    var file = files[end];
+                    var formData = new FormData();
+
+                    common.ajax("{{config('common.lovbee_domain')}}api/aws/image/form?file="+file.name , {} , function(res){
+                        image.config.url = res.action;
+                        for (p in res.form) {
+                            formData.append(p, res.form[p]);
+                        }
+                        formData.append('file',file);
+                        $.ajax({
+                            url:res.action,
+                            type:'POST',
+                            data: formData,
+                            processData:false,
+                            cache:false,
+                            contentType:false,
+                            xhr:jqureAjaxXhrOnProgress(function(e){
+                                var percent=e.loaded / e.total;
+                                percent = Math.round((percent + Number.EPSILON) * 100);
+                                element.progress('image_progress', percent+'%'); //进度条复位
+                            }),
+                            beforeSend: function(obj){
+                                element.progress('image_progress', '0%');
+                            },
+                            success:function(data){
+                                $('input[name=image]').attr('value' , res.domain+res.form.key);
+                                $('#show_image').attr('src', res.domain+res.form.key); //图片链接（base64）
+                            },
+                            error:function(){
+                                alert('upload failed');
+                            },
+                            complete:function (){
+                                layer.closeAll();
+                            }
+                        })
+                    } , 'get' , undefined , undefined , false);
+                }
             });
 
         })

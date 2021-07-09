@@ -17,7 +17,7 @@ class ShopTagTranslation extends Model
 
     protected $fillable = ['locale' , 'tag_content'];
 
-    protected $hidden = ['id' , 'tag_id'];
+//    protected $hidden = ['id' , 'tag_id'];
 
 
     const UPDATED_AT = null;

@@ -49,8 +49,10 @@ class ShopTagController extends Controller
         }
         $this->validate($request, [
             'tag'=> 'required|string|max:32|regex:/^[a-zA-Z0-9]{2,16}$/',
+            'image'=> 'required|string|url',
         ]);
-        $tag = $request->input('tag');
+        $image = strval($request->input('image'));
+        $tag = strval($request->input('tag'));
         $shopTag = ShopTag::where('tag' , $tag)->first();
         if(!empty($shopTag))
         {
@@ -74,6 +76,7 @@ class ShopTagController extends Controller
             $connection->table('shops_tags')->insert(array(
                 'id'=>$id,
                 'tag'=>$tag,
+                'image'=>$image,
                 'created_at'=>$now,
                 'updated_at'=>$now,
             ));
@@ -111,18 +114,33 @@ class ShopTagController extends Controller
         }
         $this->validate($request, [
             'tag'=> 'required|string|max:32|regex:/^[a-zA-Z0-9]{2,16}$/',
+            'image'=> 'required|string|url',
         ]);
-        $tag = $request->input('tag');
+        $tag = strval($request->input('tag'));
+        $image = strval($request->input('image'));
         $shopTag = ShopTag::where('id' , $id)->firstOrFail();
         $shopTag->tag = $tag;
+        $shopTag->image = $image;
         $shopTag->save();
+        $shopTagTranslations = ShopTagTranslation::where('tag_id' , $id)->whereIn('locale' , array_keys($fields))->get()->pluck('locale')->toArray();
         foreach ($fields as $locale=>$field)
         {
-            ShopTagTranslation::where('tag_id' , $id)->where('locale' , $locale)->update(
-                array(
+            if(in_array($locale , $shopTagTranslations))
+            {
+                ShopTagTranslation::where('tag_id' , $id)->where('locale' , $locale)->update(
+                    array(
+                        'tag_content'=>$field,
+                    )
+                );
+            }else{
+                !empty($field)&&DB::connection('lovbee')->table('shops_tags_translations')->insert(array(
+                    'id'=>Uuid::uuid1()->toString(),
+                    'tag_id'=>$id,
+                    'locale'=>$locale,
                     'tag_content'=>$field,
-                )
-            );
+                ));
+            }
+
         }
         $this->clear();
         return response()->json(['result'=>'success']);
@@ -130,7 +148,7 @@ class ShopTagController extends Controller
 
     private function clear()
     {
-
+        $this->httpRequest('/api/backstage/shop_tag/refresh', [] , 'PATCH');
     }
 
 }
