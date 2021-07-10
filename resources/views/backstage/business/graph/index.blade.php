@@ -11,15 +11,6 @@
 @endsection
 @section('footerScripts')
     @parent
-    <script type="text/html" id="operateTpl">
-        <div class="layui-btn-group">
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="device">Device</a>
-            <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="friend">{{trans('user.table.button.friend')}}</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="history">{{trans('user.table.button.history')}}</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="friend_active">{{trans('user.table.button.friend_active')}}</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="friend_yesterday_active">{{trans('user.table.button.friend_yesterday_active')}}</a>
-        </div>
-    </script>
 
     <script>
         layui.config({
@@ -42,17 +33,13 @@
             }
             window.onresize = function () {//用于使chart自适应高度和宽度
                 autoContainer();//重置容器高宽
-                console.log('重置容器高宽');
                 resize();
             };
-
             let autoContainer = function () {
                 console.log($('.layui-body').height());
                 $('#layui-echarts').height($('.layui-body').height()-200);
                 resize();
-                console.log('autoContainer');
             };
-
             autoContainer();
         })
     </script>

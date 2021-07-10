@@ -138,9 +138,9 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('deposits' , 'DepositController@index')->name('deposits.index');
             Route::post('deposits' , 'DepositController@store')->name('deposits.store');
             Route::patch('deposits' , 'DepositController@update')->name('deposits.update');
-            Route::get('discovery/order' , 'DiscoveryOrderController@index')->name('discovery.order');
-            Route::patch('discovery/order' , 'DiscoveryOrderController@update')->name('discovery.order.update');
-            Route::get('discovery/manager' , 'DiscoveryOrderController@manager')->name('discovery.manager');
+            Route::get('discovery_order' , 'DiscoveryOrderController@index')->name('discovery_order.index');
+            Route::patch('discovery_order/{discovery_order}' , 'DiscoveryOrderController@update')->name('discovery_order.update');
+            Route::get('discovery_order/browse' , 'DiscoveryOrderController@browse')->name('discovery_order.browse');
             Route::get('shop_order' , 'ShopOrderController@index')->name('shop_order.index');
             Route::get('shop_order/browse' , 'ShopOrderController@browse')->name('shop_order.browse');
             Route::get('shopping_cart' , 'ShoppingCartController@index')->name('shopping_cart.index');
@@ -151,13 +151,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::patch('shop_order/{shop_order}' , 'ShopOrderController@update')->name('shop_order.update');
             Route::get('graph' , 'GraphController@index')->name('graph.index');
             Route::resource('promo_code' , 'PromoCodeController');
-            Route::get('category/goods/{id}' , 'GoodsCategoryController@show')->name('category.goods.show');
-            Route::get('category/goods/' , 'GoodsCategoryController@index')->name('category.goods.index');
-            Route::get('category/goods/create' , 'GoodsCategoryController@create')->name('category.goods.create');
-            Route::patch('category/goods' , 'GoodsCategoryController@update')->name('category.goods.update');
-            Route::post('category/goods' , 'GoodsCategoryController@store')->name('category.goods.store');
-            Route::delete('category/goods' , 'GoodsCategoryController@destroy')->name('category.goods.destroy');
-            Route::resource('category/shop' , 'ShopCategoryController');
+            Route::get('goods_category' , 'GoodsCategoryController@index')->name('goods_category.index');
+
         });
 
         Route::resource('menu' , 'MenuController');

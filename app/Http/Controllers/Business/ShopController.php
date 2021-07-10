@@ -336,6 +336,7 @@ class ShopController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      * 审核员管理
+     * @throws \Throwable
      */
     public function manager()
     {

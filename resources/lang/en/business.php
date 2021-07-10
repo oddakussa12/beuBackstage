@@ -16,6 +16,22 @@ return [
                 'status'=>'In-stock',
                 'comment'=>'Mark',
             ],
+            'shop_order'=>[
+                'All'=>'All',
+                'Ordered'=>'Ordered',
+                'ConfirmOrder'=>'ConfirmOrder',
+                'CallDriver'=>'CallDriver',
+                'ContactedShop'=>'ContactedShop',
+                'Delivered'=>'Delivered',
+                'NoResponse'=>'NoResponse',
+                'JunkOrder'=>'JunkOrder',
+                'UserCancelOrder'=>'UserCancelOrder',
+                'ShopCancelOrder'=>'ShopCancelOrder',
+                'Other'=>'Other',
+                'InProcess'=>'InProcess',
+                'Completed'=>'Completed',
+                'Canceled'=>'Canceled',
+            ],
             'order'=>[
                 'order_id'=>'OrderId',
                 'schedule'=>'OrderSchedule',
@@ -98,6 +114,9 @@ return [
             'recommended_at'=>'推荐时间',
         ],
         'button'=>[
+            'shop_order'=>[
+                'goods'=>'Goods'
+            ]
         ]
     ],
     'form'=>[

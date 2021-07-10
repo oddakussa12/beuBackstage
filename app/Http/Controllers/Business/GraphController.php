@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Business;
 
 use App\Models\Passport\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
 
@@ -17,7 +15,7 @@ class GraphController extends Controller
 
     public function index()
     {
-        $type = ['orderSchedule', 'orderStatus', 'shopCartByTopShops', 'shopCartByTopGoods', 'OrderByTopShop', 'OrderByTopGoods'];
+        $type = ['orderSchedule', 'orderStatus', 'shoppingCartByTopShops', 'shoppingCartByTopGoods', 'OrderByTopShop', 'OrderByTopGoods'];
         foreach ($type as $item) {
             $result[$item] = $this->$item();
         }
@@ -28,7 +26,7 @@ class GraphController extends Controller
      * @return \any[]
      * 购物车中的商品排行
      */
-    public function shopCartByTopGoods()
+    public function shoppingCartByTopGoods()
     {
         $result = DB::connection('lovbee')->table('shopping_carts')->select(DB::raw('count(*) num, goods_id'))->groupBy('goods_id')->orderByDesc('num')->limit(10)->get();
         $goodsIds = $result->pluck('goods_id')->unique()->toArray();
@@ -43,14 +41,14 @@ class GraphController extends Controller
                 }
             }
         }
-        return $this->pie($data ?? [], 'ShopCart-GoodsTop10');
+        return $this->pie($data ?? [], 'ShoppingCart-GoodsTop10');
     }
 
     /**
      * @return \any[]
      * 购物车中的店铺排行
      */
-    public function shopCartByTopShops()
+    public function shoppingCartByTopShops()
     {
         $result = $this->users('user_id');
         $result = collect($result)->toArray();
@@ -62,7 +60,7 @@ class GraphController extends Controller
                 'value' => $item->num,
             ];
         }
-        return $this->pie($data ?? [], 'ShopCart-ShopsTop10');
+        return $this->pie($data ?? [], 'ShoppingCart-ShopsTop10');
     }
 
 
@@ -137,17 +135,6 @@ class GraphController extends Controller
         }
         return $this->pie($data ?? [], 'Order-ShopsTop10');
     }
-/*
-    // 加入购物车最多的店铺统计
-    public function cartShops()
-    {
-        return $this->users('shop_id');
-    }
-    // 加入购物车最多的用户统计
-    public function cartUsers()
-    {
-        return $this->users('user_id');
-    }*/
 
     public function users($keyword)
     {

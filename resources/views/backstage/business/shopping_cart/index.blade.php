@@ -96,10 +96,8 @@
             common: 'lay/modules/admin/common',
             timePicker: 'lay/modules/admin/timePicker',
         }).use(['common' , 'table' , 'layer' , 'timePicker'], function () {
-            const form = layui.form,
-                layer = layui.layer,
+            const layer = layui.layer,
                 table = layui.table,
-                common = layui.common,
                 timePicker = layui.timePicker,
                 $ = layui.jquery;
             table.init('table', { //转化静态表格

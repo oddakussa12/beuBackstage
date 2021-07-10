@@ -27,9 +27,9 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?type={{$type}}&admin_id=0" class="layui-btn @if(isset($user_id)&&$user_id==0) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">All</a>
+                        <a href="?status={{$status}}&admin_id=0" class="layui-btn @if(isset($admin_id)&&$admin_id==0) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">All</a>
                         @foreach($admins as $admin)
-                            <a href="?type={{$type}}&admin_id={{$admin->admin_id}}" class="layui-btn @if(isset($user_id)&&$user_id==$admin->admin_id) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">{{$admin->admin_username}}</a>
+                            <a href="?status={{$status}}&admin_id={{$admin->admin_id}}" class="layui-btn @if(isset($admin_id)&&$admin_id==$admin->admin_id) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">{{$admin->admin_username}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -38,10 +38,10 @@
                 <div class="layui-inline">
 
                     <div class="layui-btn-group">
-                        <a href="?type=0&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                        @foreach($status as $key=>$value)
+                        <a href="?status=0&admin_id={{$admin_id}}" class="layui-btn @if(isset($status)&&$status=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
+                        @foreach($statuses as $key=>$value)
                             @if($key>=5)
-                                <a href="?type={{$key}}&admin_id={{$user_id}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                                <a href="?status={{$key}}&admin_id={{$admin_id}}" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
                             @endif
                         @endforeach
                     </div>
@@ -69,7 +69,7 @@
             @foreach($orders as $order)
                 <tr>
                     <td>{{$order->order_id}}</td>
-                    <td>{{$order->shop->user_nick_name}}</td>
+                    <td>@if(!empty($order->shop->user_nick_name)){{$order->shop->user_nick_name}}@endif</td>
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->created_at}}</td>
                     <td>{{$status[$order->status]}}</td>
@@ -95,11 +95,8 @@
                 <th lay-data="{field:'order_price', width:180 , fixed:'left'}">All the money received</th>
                 <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Money for the store</th>
                 <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Gross profit</th>
-            <tr>
-                <td>@if(!empty($money['order_price'])){{$money['order_price']}}@else 0 @endif</td>
-                <td>@if(!empty($money['shop_price'])){{$money['shop_price']}}@else 0 @endif</td>
-                <td>{{$money['order_price']-$money['shop_price']}}</td>
             </tr>
+
         </table>
     </div>
 @endsection

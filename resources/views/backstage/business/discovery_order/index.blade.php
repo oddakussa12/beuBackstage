@@ -12,9 +12,9 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?type={{$type}}&user_id=0" class="layui-btn @if(isset($userId)&&$userId==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
+                        <a href="?status={{$status}}&user_id=0" class="layui-btn @if(isset($userId)&&$userId==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
                         @foreach($shops as $shop)
-                            <a href="?type={{$type}}&user_id={{$shop->user_id}}" class="layui-btn @if(isset($userId)&&$userId==$shop->user_id) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$shop->user_nick_name}}</a>
+                            <a href="?status={{$status}}&user_id={{$shop->user_id}}" class="layui-btn @if(isset($userId)&&$userId==$shop->user_id) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$shop->user_nick_name}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -22,9 +22,9 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?type=0&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
-                        @foreach($status as $key=>$value)
-                            <a href="?type={{$key}}&user_id={{$userId}}" class="layui-btn @if(isset($type)&&$type==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                        <a href="?status=0&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($status)&&$status=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
+                        @foreach($statuses as $key=>$value)
+                            <a href="?status={{$key}}&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -33,23 +33,23 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', width:180 , fixed:'left'}">OrderId</th>
-                <th lay-data="{field:'shop', minWidth:180}">ShopName</th>
-                <th lay-data="{field:'shop_contact', minWidth:180}">ShopPhone</th>
-                <th lay-data="{field:'shop_address', minWidth:180}">ShopAddress</th>
-                <th lay-data="{field:'goods_name', minWidth:180}">GoodsName</th>
-                <th lay-data="{field:'order_user_name', maxWidth:180, minWidth:180}">OrderUserName</th>
-                <th lay-data="{field:'order_user_contact', minWidth:180}">OrderUserPhone</th>
-                <th lay-data="{field:'order_user_address', minWidth:180}">OrderUserAddress</th>
-                <th lay-data="{field:'order_status', minWidth:170, event:'updateStatus'}">Status</th>
-                <th lay-data="{field:'order_menu', minWidth:200, edit: 'textarea'}">Menu</th>
-                <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">OrderPrice</th>
-                <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
-                <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
-                <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
+                <th lay-data="{field:'id', width:180 , fixed:'left'}">{{trans('business.table.header.order.order_id')}}</th>
+                <th lay-data="{field:'shop', minWidth:180}">{{trans('business.table.header.shop.user_name')}}</th>
+                <th lay-data="{field:'shop_contact', minWidth:180}">{{trans('business.table.header.shop.user_contact')}}</th>
+                <th lay-data="{field:'shop_address', minWidth:180}">{{trans('business.table.header.shop.user_address')}}</th>
+                <th lay-data="{field:'goods_name', minWidth:180}">{{trans('business.table.header.discovery_order.goods_name')}}</th>
+                <th lay-data="{field:'order_user_name', maxWidth:180, minWidth:180}">{{trans('business.table.header.order.user_name')}}</th>
+                <th lay-data="{field:'order_user_contact', minWidth:180}">{{trans('business.table.header.order.user_contact')}}</th>
+                <th lay-data="{field:'order_user_address', minWidth:180}">{{trans('business.table.header.order.user_address')}}</th>
+                <th lay-data="{field:'order_status', minWidth:170, event:'updateStatus'}">{{trans('business.table.header.order.schedule')}}</th>
+                <th lay-data="{field:'order_menu', minWidth:200, edit: 'textarea'}">{{trans('business.table.header.discovery_order.menu')}}</th>
+                <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">{{trans('business.table.header.order.order_price')}}</th>
+                <th lay-data="{field:'order_shop_price', minWidth:120}">{{trans('business.table.header.discovery_order.shop_price')}}</th>
+                <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">{{trans('business.table.header.discovery_order.comment')}}</th>
+                <th lay-data="{field:'order_time', minWidth:180}">{{trans('business.table.header.order.order_time_consuming')}}</th>
                 <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
-                <th lay-data="{field:'order_created_at', minWidth:170}">CreatedAt</th>
-                <th lay-data="{field:'order_updated_at', minWidth:170}">UpdatedAt</th>
+                <th lay-data="{field:'order_created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
+                <th lay-data="{field:'order_updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -63,7 +63,7 @@
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->user_contact}}</td>
                     <td>{{$order->user_address}}</td>
-                    <td><span class="layui-bg-{{$colorStyle[$order->status]}} layui-btn layui-btn-sm ">{{$status[$order->status]}}</span></td>
+                    <td><span class="layui-bg-{{$colorStyles[$order->status]}} layui-btn layui-btn-sm ">{{$statuses[$order->status]}}</span></td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
@@ -185,17 +185,6 @@
                     table.render();
                 });
             });
-            /*let selectParams = [];
-                @foreach($status as $k=>$v)
-                   selectParams[{{$k-1}}] = {name:"{{$k}}", value:"{{$v}}"},
-                @endforeach
-            layuiTableColumnSelect.addSelect({data:selectParams,layFilter:'table',event:'updateStatus',field:'order_status',callback:function(obj,update){
-                var params = {'status':update.order_status , 'id':obj.data.id};
-                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
-                    obj.update(update);
-                    parent.location.reload();
-                } , 'patch');
-            }});*/
             form.render();
             setTimeout(function() {
                 location.reload();

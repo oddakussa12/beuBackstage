@@ -16,6 +16,28 @@ return [
                 'status'=>'是否上架',
                 'comment'=>'Mark',
             ],
+            'shop_order'=>[
+                'All'=>'所有',
+                'Ordered'=>'已下单',
+                'ConfirmOrder'=>'已确认订单',
+                'CallDriver'=>'已呼叫骑手',
+                'ContactedShop'=>'已联系商家',
+                'Delivered'=>'已送达',
+                'NoResponse'=>'未联系到',
+                'JunkOrder'=>'垃圾订单',
+                'UserCancelOrder'=>'用户取消订单',
+                'ShopCancelOrder'=>'商家取消订单',
+                'Other'=>'其他',
+                'InProcess'=>'进行中',
+                'Completed'=>'已完成',
+                'Canceled'=>'已取消',
+            ],
+            'discovery_order'=>[
+                'menu'=>'菜单',
+                'goods_name'=>'商品名',
+                'shop_price'=>'商家佣金',
+                'comment'=>'Mark',
+            ],
             'order'=>[
                 'order_id'=>'订单号',
                 'schedule'=>'订单进程',
@@ -104,6 +126,9 @@ return [
             'recommended_at'=>'推荐时间',
         ],
         'button'=>[
+            'shop_order'=>[
+                'goods'=>'商品'
+            ]
         ]
     ],
     'form'=>[
@@ -114,6 +139,9 @@ return [
                 'name'=>'商品名',
                 'category'=>'商品分类',
                 'recommendation'=>'推荐',
+            ],
+            'goods_category'=>[
+                'is_default'=>'默认',
             ],
             'shop'=>[
                 'name'=>'商家名',

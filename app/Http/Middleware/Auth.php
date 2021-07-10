@@ -16,7 +16,6 @@ class Auth
     public function handle($request, Closure $next)
     {
         $route = $request->route()->getName();
-
         if(!auth()->user()->can($route))
         {
             if($request->ajax())

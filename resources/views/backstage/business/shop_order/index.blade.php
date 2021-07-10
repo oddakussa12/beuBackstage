@@ -13,7 +13,7 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?schedule={{$schedule}}&user_id=0&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($user_id)&&$user_id==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
+                        <a href="?schedule={{$schedule}}&user_id=0&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($user_id)&&$user_id==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
                         @foreach($shops as $shop)
                             <a href="?schedule={{$schedule}}&user_id={{$shop->user_id}}&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($user_id)&&$user_id==$shop->user_id) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$shop->user_nick_name}}</a>
                         @endforeach
@@ -23,9 +23,9 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?schedule={{$schedule}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status=" class="layui-btn @if(!isset($status)) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
+                        <a href="?schedule={{$schedule}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status=" class="layui-btn @if(!isset($status)) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
                         @foreach($orderStatuses as $key=>$value)
-                            <a href="?schedule={{$schedule}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status={{$key}}" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$value}}</a>
+                            <a href="?schedule={{$schedule}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status={{$key}}" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{trans('business.table.header.shop_order.'.$value)}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -33,9 +33,9 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?schedule=0&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($schedule)&&$schedule=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
+                        <a href="?schedule=0&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($schedule)&&$schedule=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
                         @foreach($schedules as $key=>$value)
-                            <a href="?schedule={{$key}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($schedule)&&$schedule==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                            <a href="?schedule={{$key}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($schedule)&&$schedule==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.'.$value)}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                 <td>{{$order->order_id}}</td>
                 <td>
                     <span class="layui-btn layui-btn-sm @if($order->status==1) layui-bg-green @elseif($order->status==2) layui-bg-gray @else layui-btn-warm @endif">
-                        @if($order->status==1) Completed @elseif($order->status==2) Canceled @else InProcess @endif
+                        @if($order->status==1) {{trans('business.table.header.shop_order.Completed')}} @elseif($order->status==2) {{trans('business.table.header.shop_order.Canceled')}} @else {{trans('business.table.header.shop_order.InProcess')}} @endif
                     </span>
                 </td>
                 <td>@if(!empty($order->shop->user_nick_name)){{$order->shop->user_nick_name}}@endif</td>
@@ -88,7 +88,7 @@
                 <td>@if(!empty($order->user_contact)){{$order->user_contact}}@endif</td>
                 <td>{{$order->user_address}}</td>
                 <td>
-                    <span class="layui-bg-{{$colorStyles[$order->schedule]}} layui-btn layui-btn-sm ">{{$schedules[$order->schedule]}}</span>
+                    <span class="layui-bg-{{$colorStyles[$order->schedule]}} layui-btn layui-btn-sm ">{{trans('business.table.header.shop_order.'.$schedules[$order->schedule])}}</span>
                 </td>
                 <td>{{$order->promo_code}}</td>
                 <td>{{$order->delivery_coast}}</td>

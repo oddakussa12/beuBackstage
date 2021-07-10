@@ -26,69 +26,6 @@ class ShopOrderController extends Controller
 
     protected $colorStyles = ['1'=>'white', '2'=>'yellow', '3'=>'orange', '4'=>'pink', '5'=>'green', '6'=>'blue', '7'=>'orange', '8'=>'gray', '9'=>'gray', '10'=>'gray'];
 
-    public function base($request)
-    {
-        $admin_id = $request->input('admin_id', '0');
-        $userId   = $request->input('user_id', '0');
-        $schedule = $request->input('type', '0');
-        $status   = $request->input('status');
-        $delivery = $request->input('user_delivery', '');
-        $params   = $request->all();
-
-        $orders = DB::connection('lovbee')->table('orders');
-        if (isset($status)) {
-            $orders = $orders->where('status', $status);
-        }
-        if (!empty($schedule)) {
-            $orders = $orders->where('schedule', $schedule);
-        }
-        $admin_id!=0 && $orders = $orders->where('operator', $admin_id);
-        if (!empty($delivery)) {
-            if (empty($userId)) {
-                $shops  = User::where(['user_delivery'=>1, 'user_shop'=>1])->get();
-                $shopIds= $shops->pluck('user_id')->toArray();
-                $orders = $orders->whereIn('shop_id', $shopIds);
-            }
-        } else {
-            $userId!=0  && $orders = $orders->where('shop_id', $userId);
-        }
-
-        $orders   = $orders->paginate(10)->appends($params);
-        $promoIds = array_diff($orders->pluck('promo_code')->unique()->toArray(), ['', null]);
-        $userIds  = $orders->pluck('user_id')->toArray();
-        $shopIds  = $orders->pluck('shop_id')->toArray();
-        $userIds  = array_diff(array_unique(array_merge($userIds, $shopIds)), ['', null]);
-        $users    = DB::connection('lovbee')->table('users')->select('user_id', 'user_nick_name', 'user_contact', 'user_address')->whereIn('user_id', $userIds)->get();
-        $promoCode= DB::connection('lovbee')->table('promo_codes')->whereIn('id', $promoIds)->get();
-        $orders->shops = $shops ?? [];
-        $time = Carbon::now()->subHour(8)->toDateTimeString();
-
-        $orders->each(function($order) use ($users, $promoCode, $time){
-            $order->detail= !empty($order->detail) ? json_decode($order->detail, true) : [];
-            $order->shop = $users->where('user_id', $order->shop_id)->first();
-            $order->user = $users->where('user_id', $order->user_id)->first();
-            $duration = strtotime($time)-strtotime($order->created_at);
-            if (($order->schedule==1 && $duration>300) || ($order->schedule==2 && $duration>600) || ($order->schedule==3 && $duration>780) || ($order->schedule==4 && $duration>3600)) {
-                $order->color = 1;
-            }
-            foreach ($promoCode as $item) {
-                if ($item->promo_code==$order->promo_code) {
-                    $order->description = $item->description;
-                    !empty($order->promo_code)    && $order->description    = $item->description;
-                    empty($order->free_delivery)  && $order->free_delivery  = $item->free_delivery;
-                    empty($order->reduction)      && $order->reduction      = $item->reduction;
-                    empty($order->discount)       && $order->discount       = $item->discount;
-                    empty($order->discount_type)  && $order->discount_type  = $item->discount_type;
-                    empty($order->delivery_coast) && $order->delivery_coast = $item->delivery_coast;
-                }
-            }
-            $order->created_at = Carbon::createFromFormat('Y-m-d H:i:s', $order->created_at)->addHours(3)->toDateTimeString();
-            $order->updated_at = Carbon::createFromFormat('Y-m-d H:i:s', $order->updated_at)->addHours(3)->toDateTimeString();
-        });
-
-        return $orders;
-    }
-
     public function index(Request $request)
     {
         $params = $data = $request->all();
@@ -133,7 +70,7 @@ class ShopOrderController extends Controller
         $data['orderStatuses'] = $this->orderStatuses;
         $data['colorStyles']  = $this->colorStyles;
         $data['statusEncode'] = json_encode($this->schedule, true);
-        $data['statusKv'] = array_map(function ($value, $key) {return ['title'=>$value, 'id'=>$key];}, $this->schedule, array_keys($this->schedule));
+        $data['statusKv'] = array_map(function ($value, $key) {return ['title'=>trans('business.table.header.shop_order.'.$value), 'id'=>$key];}, $this->schedule, array_keys($this->schedule));
         return view('backstage.business.shop_order.index', $data);
     }
 
@@ -308,7 +245,6 @@ class ShopOrderController extends Controller
         $data['orderStatuses'] = $this->orderStatuses;
         $data['colorStyles']  = $this->colorStyles;
         $data['statusEncode'] = json_encode($this->schedule, true);
-        $data['statusKv'] = array_map(function ($value, $key) {return ['title'=>$value, 'id'=>$key];}, $this->schedule, array_keys($this->schedule));
         $allMoney = DB::connection('lovbee')->table('orders')->select(DB::raw('sum(order_price) order_price, sum(discounted_price) discounted_price, sum(delivery_coast) delivery_coast, sum(brokerage) brokerage'))->where('status', 1)->first();
         $data['money'] = (array)$allMoney;
         return view('backstage.business.shop_order.browse', $data);
