@@ -62,6 +62,7 @@
                 <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
                 <th lay-data="{field:'comment', minWidth:160}">Comment</th>
                 <th lay-data="{field:'admin_username', minWidth:160}">Operator</th>
+                <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
                 <th lay-data="{field:'updated_at', minWidth:160}">EndTime</th>
             </tr>
             </thead>
@@ -72,13 +73,14 @@
                     <td>@if(!empty($order->shop->user_nick_name)){{$order->shop->user_nick_name}}@endif</td>
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->created_at}}</td>
-                    <td>{{$status[$order->status]}}</td>
+                    <td><span class="layui-bg-{{$colorStyles[$order->status]}} layui-btn layui-btn-sm ">{{$statuses[$order->status]}}</span></td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                     <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
                     <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
                     <td>@if(!empty($order->admin_username)){{$order->admin_username}}@endif</td>
+                    <td>@if(!empty($order->color)){{$order->color}}@endif</td>
                     <td>{{$order->updated_at}}</td>
                 </tr>
             @endforeach
@@ -107,9 +109,20 @@
         layui.config({
             base: "{{url('plugin/layui')}}/"
         }).use(['table'], function () {
-            const table = layui.table;
+            const table = layui.table,
+            $ = layui.jquery;
             table.init('table', {
-                page:false
+                page:false,
+                done: function(res, curr, count){
+                    console.log(res.data);
+                    $('th').css({'font-size': '15'});	//进行表头样式设置
+                    for(var i in res.data){		//遍历整个表格数据
+                        var item = res.data[i];		//获取当前行数据
+                        if(item.color==1){
+                            $("tr[data-index='" + i + "']").attr({"style":"background:#ff3333; color:#fff"});  //将当前行变成绿色
+                        }
+                    }
+                }
             });
 
             setTimeout(function() {

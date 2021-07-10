@@ -8,14 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Pagination\Paginator;
 use App\Models\Business\DiscoveryOrder;
-use Illuminate\Database\Concerns\BuildsQueries;
 
 
 class DiscoveryOrderController extends Controller
 {
-    use BuildsQueries;
     protected $statuses = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
     protected $colorStyles = ['1'=>'white', '2'=>'yellow', '3'=>'orange', '4'=>'pink', '5'=>'green', '6'=>'blue', '7'=>'orange', '8'=>'gray', '9'=>'gray', '10'=>'gray'];
 
@@ -152,11 +149,11 @@ class DiscoveryOrderController extends Controller
             $orders = $orders->where('status', $status);
         }
         $orders   = $orders->paginate(10)->appends($params);
-        $shopIds = $orders->pluck('shop_id')->unique()->toArray();
+        $shopIds = $orders->pluck('owner')->unique()->toArray();
         $shops = User::whereIn('user_id' , $shopIds)->get();
         $time = Carbon::now()->subHour(8)->toDateTimeString();
         $orders->each(function($order) use ($shops , $time){
-            $order->shop = $shops->where('user_id' , $order->shop_id)->first();
+            $order->shop = $shops->where('user_id' , $order->owner)->first();
             $duration = strtotime($time)-strtotime($order->created_at);
             if (($order->status==1 && $duration>300) || ($order->status==2 && $duration>600) || ($order->status==3 && $duration>780) || ($order->status==4 && $duration>3600)) {
                 $order->color = 1;
