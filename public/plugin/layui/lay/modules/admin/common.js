@@ -174,6 +174,27 @@ layui.define(['jquery'], function(exports){
             console.log(options);
             layer.open(options);
         },
+        open_page:function (content , area) {
+            if(area==undefined)
+            {
+                let clientWidth = document.body.clientWidth;
+                if(clientWidth<=600)
+                {
+                    area = ['90%','90%'];
+                }else if(clientWidth<=1200&&clientWidth>600){
+                    area = ['72%','90%'];
+                }else{
+                    area = ['50%','90%'];
+                }
+            }
+            this.open(content , {
+                shadeClose: false,
+                shade: 0.8,
+                area: area,
+                offset: 'auto',
+                scrollbar:true,
+            });
+        },
         //类型：Number，默认：-1（信息框）/0（加载层）
         // 信息框默认不显示图标。当你想显示图标时，默认皮肤可以传入0-6如果是加载层，可以传入0-2。如：
         confirm:function (message , success , params , cancel) {

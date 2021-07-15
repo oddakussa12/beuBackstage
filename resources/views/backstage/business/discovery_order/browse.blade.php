@@ -27,7 +27,7 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?status={{$status}}&admin_id=0" class="layui-btn @if(isset($admin_id)&&$admin_id==0) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">All</a>
+                        <a href="?status={{$status}}&admin_id=0" class="layui-btn @if(isset($admin_id)&&$admin_id==0) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
                         @foreach($admins as $admin)
                             <a href="?status={{$status}}&admin_id={{$admin->admin_id}}" class="layui-btn @if(isset($admin_id)&&$admin_id==$admin->admin_id) layui-btn-disabled @else layui-btn-warm @endif layui-btn-sm" target="_self">{{$admin->admin_username}}</a>
                         @endforeach
@@ -38,10 +38,10 @@
                 <div class="layui-inline">
 
                     <div class="layui-btn-group">
-                        <a href="?status=0&admin_id={{$admin_id}}" class="layui-btn @if(isset($status)&&$status=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
+                        <a href="?status=0&admin_id={{$admin_id}}" class="layui-btn @if(isset($status)&&$status=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
                         @foreach($statuses as $key=>$value)
                             @if($key>=5)
-                                <a href="?status={{$key}}&admin_id={{$admin_id}}" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                                <a href="?status={{$key}}&admin_id={{$admin_id}}" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.'.$value)}}</a>
                             @endif
                         @endforeach
                     </div>
@@ -51,19 +51,19 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', width:180 , fixed:'left'}">OrderId</th>
-                <th lay-data="{field:'shop_name', minWidth:180}">ShopName</th>
-                <th lay-data="{field:'user_name', minWidth:180}">UserName</th>
-                <th lay-data="{field:'order_created_at', minWidth:160}">StartTime</th>
-                <th lay-data="{field:'order_status', minWidth:180}">OrderStatus</th>
-                <th lay-data="{field:'order_menu', minWidth:200}">Menu</th>
-                <th lay-data="{field:'order_price', minWidth:120}">OrderPrice</th>
-                <th lay-data="{field:'order_shop_price', minWidth:120}">ShopPrice</th>
-                <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
-                <th lay-data="{field:'comment', minWidth:160}">Comment</th>
-                <th lay-data="{field:'admin_username', minWidth:160}">Operator</th>
+                <th lay-data="{field:'id', width:180 , fixed:'left'}">{{trans('business.table.header.order.order_id')}}</th>
+                <th lay-data="{field:'shop_name', minWidth:180}">{{trans('business.table.header.shop.user_name')}}</th>
+                <th lay-data="{field:'user_name', minWidth:180}">{{trans('business.table.header.order.user_name')}}</th>
+                <th lay-data="{field:'order_status', minWidth:180}">{{trans('business.table.header.order.schedule')}}</th>
+                <th lay-data="{field:'order_menu', minWidth:200}">{{trans('business.table.header.discovery_order.menu')}}</th>
+                <th lay-data="{field:'order_price', minWidth:120}">{{trans('business.table.header.order.order_price')}}</th>
+                <th lay-data="{field:'order_shop_price', minWidth:120}">{{trans('business.table.header.discovery_order.shop_price')}}</th>
+                <th lay-data="{field:'order_time', minWidth:180}">{{trans('business.table.header.order.order_time_consuming')}}</th>
+                <th lay-data="{field:'comment', minWidth:160}">{{trans('business.table.header.discovery_order.comment')}}</th>
+                <th lay-data="{field:'admin_username', minWidth:100}">Operator</th>
                 <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
-                <th lay-data="{field:'updated_at', minWidth:160}">EndTime</th>
+                <th lay-data="{field:'order_created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
+                <th lay-data="{field:'updated_at', minWidth:160}">{{trans('common.table.header.updated_at')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -72,15 +72,15 @@
                     <td>{{$order->order_id}}</td>
                     <td>@if(!empty($order->shop->user_nick_name)){{$order->shop->user_nick_name}}@endif</td>
                     <td>{{$order->user_name}}</td>
-                    <td>{{$order->created_at}}</td>
-                    <td><span class="layui-bg-{{$colorStyles[$order->status]}} layui-btn layui-btn-sm ">{{$statuses[$order->status]}}</span></td>
+                    <td><span class="layui-bg-{{$colorStyles[$order->status]}} layui-btn layui-btn-sm ">{{trans('business.table.header.shop_order.'.$statuses[$order->status])}}</span></td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                     <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
                     <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
-                    <td>@if(!empty($order->admin_username)){{$order->admin_username}}@endif</td>
+                    <td>@if(!empty($order->operator)){{$order->operator->admin_username}}@endif</td>
                     <td>@if(!empty($order->color)){{$order->color}}@endif</td>
+                    <td>{{$order->created_at}}</td>
                     <td>{{$order->updated_at}}</td>
                 </tr>
             @endforeach
@@ -92,14 +92,6 @@
         @else
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
         @endif
-        <table class="layui-table">
-            <tr>
-                <th lay-data="{field:'order_price', width:180 , fixed:'left'}">All the money received</th>
-                <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Money for the store</th>
-                <th lay-data="{field:'shop_price', width:180 , fixed:'left'}">Gross profit</th>
-            </tr>
-
-        </table>
     </div>
 @endsection
 @section('footerScripts')

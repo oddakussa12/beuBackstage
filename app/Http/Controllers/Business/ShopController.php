@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Business;
 
-use App\Models\Passport\User;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\Passport\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use GuzzleHttp\Exception\GuzzleException;
 
 class ShopController extends Controller
 {
@@ -43,7 +43,7 @@ class ShopController extends Controller
             $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->addHours(8)->toDateTimeString();
             $shop  = $shop->whereBetween('users.user_created_at', [$start, $end]);
         }
-        if (!empty($keyword)) {
+        if (!empty($userName)) {
             $shop = $shop->where(function ($query) use ($userName){
                 $query->where('users.user_name', 'like', "%{$userName}%")->orWhere('users.user_nick_name', 'like', "%{$userName}%");
             });
@@ -97,11 +97,13 @@ class ShopController extends Controller
 
         return $params;
     }
+
     /**
      * Display a listing of the resource.
      *
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @throws \Throwable
      */
     public function index(Request $request)
     {
@@ -114,7 +116,7 @@ class ShopController extends Controller
         return view('backstage.business.shop.index' , $params);
     }
 
-    public function virtual(Request $request)
+    public function offline(Request $request)
     {
         $request->offsetSet('virtual', 1);
         $params = $this->base($request);
@@ -139,6 +141,10 @@ class ShopController extends Controller
     {
         $user    = User::find($id);
         $phone   = DB::connection('lovbee')->table('users_phones')->where('user_id', $id)->first();
+        if(empty($phone))
+        {
+            abort(404);
+        }
         $country = DB::connection('lovbee')->table('users_countries')->where('user_id', $id)->first();
         return view('backstage.business.shop.edit', compact('user', 'phone', 'country'));
     }
@@ -168,7 +174,7 @@ class ShopController extends Controller
         return response()->json($data);
     }
 
-    public function audit(Request $request)
+    public function review(Request $request)
     {
         $params  = $request->all();
         $keyword = $params['keyword'] ?? '';
@@ -183,7 +189,7 @@ class ShopController extends Controller
         }
         $params['result'] = $result;
 
-        return view('backstage.business.shop.audit', $params);
+        return view('backstage.business.shop.review', $params);
     }
 
     public function update(Request $request, $id)
@@ -269,37 +275,41 @@ class ShopController extends Controller
     {
         $params  = $request->all();
         $keyword = $request->input('keyword');
-        $sort    = $request->input('sort', 'contentCount');
-        $result  = DB::connection('lovbee')->table('business_search_logs')->select(DB::raw('count(distinct user_id) userCount, count(content) contentCount, content, created_at'));
-        $result  = $this->dateTime($result, $params);
-        if (!empty($keyword)) {
-            $result = $result->where('content', 'like', "%{$keyword}%");
+        $searches  = DB::connection('lovbee')->table('business_search_logs')->select(DB::raw('count(distinct user_id) userCount, count(content) contentCount, content'));
+        if(isset($params['dateTime']))
+        {
+            $dateTime  = $this->parseTime($params['dateTime']);
+            $dateTime!==false&&$searches = $searches->whereBetween('created_at' , array($dateTime['start'] , $dateTime['end']));
         }
-
-        $params['result'] = $result->GroupBy('content')->orderByDesc($sort)->paginate(10);
+        if (!empty($keyword)) {
+            $searches = $searches->where('content', 'like', "%{$keyword}%");
+        }
+        $params['searches'] = $searches->groupBy('content')->orderByDesc('contentCount')->paginate(10)->appends($params);
+        $params['appends'] = $params;
         return view('backstage.business.shop.search' , $params);
     }
 
-    public function searchDetail(Request $request)
+    public function searchShow(Request $request , $content)
     {
         $params  = $request->all();
-        $keyword = $params['keyword'];
-        $result  = DB::connection('lovbee')->table('business_search_logs')->where('content', $keyword)->orderByDesc('created_at');
-        $result  = $this->dateTime($result, $params);
-        $result  = $result->paginate(10);
-        $userIds = $result->pluck('user_id')->unique()->toArray();
-        $users   = DB::connection('lovbee')->table('users')->whereIn('user_id', $userIds)->get();
-        foreach ($result as $item) {
-            foreach ($users as $user) {
-                if ($item->user_id==$user->user_id) {
-                    $item->user_name = $user->user_name;
-                    $item->user_nick_name = $user->user_nick_name;
-                    $item->user_avatar = $user->user_avatar;
-                }
-            }
+        $searches  = DB::connection('lovbee')->table('business_search_logs')->where('content', $content)->orderByDesc('created_at');
+        if(isset($params['dateTime']))
+        {
+            $dateTime  = $this->parseTime($params['dateTime']);
+            $dateTime!==false&&$searches = $searches->whereBetween('created_at' , array($dateTime['start'] , $dateTime['end']));
         }
-        $params['result'] = $result;
-        return view('backstage.business.shop.searchDetail', $params);
+        $searches  = $searches->paginate(10)->appends($params);
+        $userIds = $searches->pluck('user_id')->unique()->toArray();
+        $shopIds = $searches->pluck('owner')->unique()->toArray();
+        $userIds = array_merge($userIds , $shopIds);
+        $users   = User::whereIn('user_id', $userIds)->get();
+        $searches->each(function($search) use ($users){
+            $search->user = $users->where('user_id' , $search->user_id)->first();
+            $search->shop = $users->where('user_id' , $search->owner)->first();
+        });
+        $params['appends'] = $params;
+        $params['searches'] = $searches;
+        return view('backstage.business.shop.search_show', $params);
 
     }
 
@@ -325,95 +335,11 @@ class ShopController extends Controller
                         $item->shop_nick_name = $user->user_nick_name;
                     }
                 }
-
             }
         }
 
         $params['result'] = $result;
         return view('backstage.business.shop.view' , $params);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
-     * 审核员管理
-     * @throws \Throwable
-     */
-    public function manager()
-    {
-        $role    = DB::table('roles')->whereIn('name', ['administrator', 'Reviewer'])->get();
-        $roleIds = $role->pluck('id')->toArray();
-        $hasRole = DB::table('model_has_roles')->whereIn('role_id', $roleIds)->get();
-        $userIds = $hasRole->pluck('model_id')->toArray();
-        $admins  = DB::table('admins')->select('admin_id', 'admin_username', 'admin_realname', 'admin_status', 'admin_country')->whereIn('admin_id', $userIds)->paginate(10);
-        $claims  = DB::table('comments_claim')->select(DB::raw('count(1) num, admin_id'))->groupBy('admin_id')->get();
-
-        foreach ($admins as $admin) {
-            $where  = ['admin_id'=>$admin->admin_id, 'type'=>'comment'];
-            $tTime  = [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')];
-            $mTime  = [date('Y-m-01 00:00:00'), date('Y-m-d H:i:s')];
-            $today  = DB::table('business_audits')->where($where)->whereBetween('created_at', $tTime)->count(); // 今日已审核个数
-            $month  = DB::table('business_audits')->where($where)->whereBetween('created_at', $mTime)->count(); // 本月已审核个数
-            $total  = DB::table('business_audits')->where($where)->count(); // 总审核数
-            $refuse = DB::table('business_audits')->where($where)->where('status', 'refuse')->count(); // 拒绝总数
-            $recommend      = DB::table('business_audits')->where($where)->where('status', 'recommend')->count(); // 推荐总数
-            $refuseMonth    = DB::table('business_audits')->where($where)->where('status', 'refuse')->whereBetween('created_at', $mTime)->count(); // 本月拒绝数
-            $recommendMonth = DB::table('business_audits')->where($where)->where('status', 'recommend')->whereBetween('created_at', $mTime)->count(); // 本月推荐数
-            $lastTime       = DB::table('business_audits')->where($where)->orderByDesc('created_at')->first();
-
-            $admin->todayClaim = $today; // 今日领取数
-            $admin->monthClaim = $month; // 本月领取数
-            $admin->totalClaim = $total; // 总领取数
-            $admin->today      = $today; // 今日审核数
-            $admin->month      = $month; // 本月审核数
-            $admin->total      = $total; // 总审核数
-            $admin->pass       = $total - $refuse - $recommend; // 通过总数
-            $admin->passMonth  = $month - $refuseMonth - $recommendMonth; // 本月通过数
-            $admin->refuse     = $refuse; // 不通过总数
-            $admin->refuseMonth= $refuseMonth; // 本月不通过
-            $admin->recommend  = $recommend; // 总推荐数
-            $admin->recommendMonth = $recommendMonth; // 本月推荐数
-            $admin->lastTime   = !empty($lastTime->created_at) ? $lastTime->created_at : ''; // 最后审核时间
-            foreach ($claims as $claim) {
-                if ($claim->admin_id==$admin->admin_id) {
-                    $admin->todayClaim = $today+$claim->num; // 今日领取数
-                    $admin->monthClaim = $month+$claim->num; // 本月领取数
-                    $admin->totalClaim = $total+$claim->num; // 总领取数
-                }
-            }
-        }
-
-        return view('backstage.business.shop.manager' , compact('admins'));
-    }
-
-    /**
-     * @param Request $request
-     * 审核明细
-     */
-    public function managerDetail(Request $request, $id)
-    {
-        $params = $request->all();
-        $result = DB::table('business_audits')->where('admin_id', $id)->where('type', 'comment');
-
-        if (!empty($params['status'])) {
-            $result = $result->where('status', $params['status']);
-        }
-        $result = $this->dateTime($result, $params);
-        $result = $result->orderByDesc('created_at')->paginate(10);
-        if ($result->isNotEmpty()) {
-            $ids    = $result->pluck('audit_id')->toArray();
-            $list   = DB::connection('lovbee')->table('comments')->whereIn('comment_id', $ids)->get();
-            foreach ($result as $item) {
-                foreach ($list as $li) {
-                    $li->media = !empty($li->media) && !is_array($li->media) ? json_decode($li->media, true) : $li->media;
-                    if ($item->audit_id==$li->comment_id) {
-                        $item->comment = $li;
-                    }
-                }
-            }
-        }
-        $params['result'] = $result;
-        return view('backstage.business.shop.managerDetail', $params);
-
     }
 
     public function order(Request $request, $id)

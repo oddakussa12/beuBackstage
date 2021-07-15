@@ -61,6 +61,13 @@ return [
         ]
     ],
     'form'=>[
+        'select'=>[
+            'query'=>[
+                ''=>'All',
+                '1'=>'YES',
+                '0'=>'NO',
+            ]
+        ],
         'button'=>[
             'submit'=>'Submit',
             'export'=>'Export',

@@ -9,15 +9,9 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.form.label.shop.name')}}:</label>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" name="shop_name" placeholder="{{trans('business.form.placeholder.shop.name')}}" id="shop_name" @if(!empty($shopName)) value="{{$shopName}}" @endif/>
-                    </div>
-                </div>
-                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.goods.name')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="goods_name" placeholder="{{trans('business.form.placeholder.goods.name')}}" id="keyword" @if(!empty($keyword)) value="{{$keyword}}" @endif/>
+                        <input class="layui-input" name="goods_name" placeholder="{{trans('business.form.placeholder.goods.name')}}" id="goods_name" @if(!empty($goods_name)) value="{{$goods_name}}" @endif/>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -61,7 +55,7 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180}">{{trans('business.table.header.goods.id')}}</th>
+                <th lay-data="{field:'id', minWidth:300}">{{trans('business.table.header.goods.id')}}</th>
                 <th lay-data="{field:'shop_name', minWidth:160}">{{trans('business.table.header.shop.user_name')}}</th>
                 <th lay-data="{field:'shop_nick_name', minWidth:160}">{{trans('business.table.header.shop.user_nick_name')}}</th>
                 <th lay-data="{field:'name', minWidth:160}">{{trans('business.table.header.goods.name')}}</th>
@@ -75,17 +69,17 @@
                 <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.goods.status')}}</th>
                 <th lay-data="{field:'comment', minWidth:200}">{{trans('business.table.header.goods.comment')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
-                <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', width:150, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($result as $value)
+            @foreach($goods as $value)
                 <tr>
                     <td>{{$value->id}}</td>
-                    <td>{{$value->user_name}}</td>
-                    <td>{{$value->user_nick_name}}</td>
+                    <td>{{$value->shop->user_name}}</td>
+                    <td>{{$value->shop->user_nick_name}}</td>
                     <td>{{$value->name}}</td>
-                    <td>{{$value->category}}</td>
+                    <td>@if(!empty($value->category->name)) {{$value->category->name}} @endif</td>
                     <td>@if(!empty($value->image))
                             @foreach($value->image as $image)
                                 <img src="{{$image['url']}}">
@@ -93,8 +87,8 @@
                         @endif
                     </td>
                     <td>{{$value->like}}</td>
-                    <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
-                    <td>@if(!empty($value->format_point)){{$value->format_point}}@else 0 @endif</td>
+                    <td>@if(!empty($value->view->num)){{$value->view->num}}@else 0 @endif</td>
+                    <td>@if(!empty($value->average_point)){{$value->average_point}}@else 0 @endif</td>
                     <td>{{$value->price}} {{$value->currency}}</td>
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <td><span class="layui-btn layui-btn-xs @if(empty($value->status)) layui-btn-danger @else layui-btn-warm @endif">@if(empty($value->status)) NO @else YES @endif</span></td>
@@ -106,9 +100,9 @@
             </tbody>
         </table>
         @if(empty($appends))
-            {{ $result->links('vendor.pagination.default') }}
+            {{ $goods->links('vendor.pagination.default') }}
         @else
-            {{ $result->appends($appends)->links('vendor.pagination.default') }}
+            {{ $goods->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
 @endsection
@@ -174,14 +168,9 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'view'){
-                    common.open('/backstage/business/goods/'+data.id+'/view/' , {
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['90%','90%'],
-                        offset: 'auto',
-                        scrollbar:true,
-                        closeBtn:2
-                    } , 2);
+                    common.open_page('/backstage/business/goods/'+data.id+'/view/');
+                }else if(layEvent === 'comment'){
+                    window.open("/backstage/business/goods_comment?goods_id="+data.id);
                 }
             });
             $(function () {
@@ -194,6 +183,9 @@
         });
     </script>
     <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('business.table.header.view_history')}}</a>
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('business.table.button.goods.view_history')}}</a>
+            <a class="layui-btn layui-btn-xs" lay-event="comment">{{trans('business.table.button.goods.comment')}}</a>
+        </div>
     </script>
 @endsection

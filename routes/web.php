@@ -58,7 +58,6 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('operator/blacklist' , 'OperatorController@blackList')->name('operator.blacklist');
             Route::put('operator/black' , 'OperatorController@block')->name('operator.block');
             Route::get('operator/lastthree' , 'OperatorController@lastThree')->name('operator.lastthree');
-            Route::resource('virtual' , 'VirtualUserController');
         });
 
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){
@@ -93,6 +92,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('group/{groupId}', 'GroupController@member')->name('group.member'); // 群组列表管理
             Route::get('group/members', 'GroupController@members')->name('group.members'); // 群组列表管理
 
+
         });
 
         Route::group(['namespace'=>'Service','prefix'=>'service' , 'as' => 'service::'] , function (){
@@ -118,20 +118,19 @@ Route::group(['prefix'=>'backstage'] , function(){
         Route::group(['namespace'=>'Business','prefix'=>'business' , 'as' => 'business::'] , function (){
             Route::get('shop/follow/{id}' , 'ShopController@follow')->name('shop.follow');
             Route::patch('shop/owner' , 'ShopController@owner')->name('shop.owner');
-            Route::get('shop/view/{shopId}' , 'ShopController@view')->name('shop.view');
-            Route::get('shop/virtual' , 'ShopController@virtual')->name('shop.virtual');
+            Route::get('shop/{shop}/view' , 'ShopController@view')->name('shop.view');
+            Route::get('offline_shop' , 'ShopController@offline')->name('shop.offline');
             Route::get('shop/search' , 'ShopController@search')->name('shop.search');
-            Route::get('shop/audit' , 'ShopController@audit')->name('shop.audit');
-            Route::get('shop/manager' , 'ShopController@manager')->name('shop.manager');
-            Route::get('shop/manager/detail/{id}' , 'ShopController@managerDetail')->name('shop.manager.detail');
-            Route::get('shop/search/detail' , 'ShopController@searchDetail')->name('shop.searchDetail');
+            Route::get('shop/review' , 'ShopController@review')->name('shop.review');
+            Route::get('shop/search/{search}' , 'ShopController@searchShow')->name('shop.search.show');
+
             Route::resource('shop' , 'ShopController');
             Route::get('goods/{goods}/view' , 'GoodsController@view')->name('goods.view');
             Route::resource('goods' , 'GoodsController');
-            Route::get('review/claim' , 'ReviewController@claim')->name('review.claim');
-            Route::get('review/view/{commentId}' , 'ReviewController@view')->name('review.view');
-            Route::get('review/audit' , 'ReviewController@audit')->name('review.audit');
-            Route::resource('review' , 'ReviewController');
+            Route::get('goods_comment' , 'GoodsCommentController@index')->name('goods_comment.index');
+            Route::put('goods_comment/{goods_comment}' , 'GoodsCommentController@update')->name('goods_comment.update');
+            Route::get('goods_comment/statistics' , 'GoodsCommentController@statistics')->name('goods_comment.statistics');
+            Route::get('goods_comment/acquisition' , 'GoodsCommentController@acquisition')->name('goods_comment.acquisition');
             Route::get('deposits/create/{id}' , 'DepositController@create')->name('deposits.create');
             Route::get('deposits/order/detail' , 'DepositController@order')->name('deposits.order.detail');
             Route::get('deposits/money/{id}' , 'DepositController@money')->name('deposits.money');
@@ -152,6 +151,8 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('graph' , 'GraphController@index')->name('graph.index');
             Route::resource('promo_code' , 'PromoCodeController');
             Route::get('goods_category' , 'GoodsCategoryController@index')->name('goods_category.index');
+            Route::get('comment_manager' , 'CommentManagerController@index')->name('comment_manager.index');
+            Route::get('comment_manager/{comment_manager}' , 'CommentManagerController@show')->name('comment_manager.show');
 
         });
 

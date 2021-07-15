@@ -10,24 +10,15 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
-                    <div class="layui-input-inline">
-                        <select name="sort">
-                            <option value="contentCount">{{trans('common.form.label.num')}}</option>
-                            <option value="userCount" @if(isset($sort) && $sort=='userCount') selected @endif>{{trans('user.table.header.user_count')}}</option>
-                            <option value="created_at" @if(isset($sort) && $sort=='created_at') selected @endif>{{trans('common.table.header.created_at')}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline" style="width: 300px;">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                </div>
+
             </div>
         </form>
 
@@ -37,26 +28,24 @@
                 <th lay-data="{field:'content', minWidth:180}">{{trans('common.form.label.keyword')}}</th>
                 <th lay-data="{field:'contentCount', minWidth:180}">{{trans('common.form.label.num')}}</th>
                 <th lay-data="{field:'userCount', minWidth:180}">{{trans('user.table.header.user_count')}}</th>
-                <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th  lay-data="{field:'user_op', width:100 ,fixed: 'right', templet: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($result as $value)
+            @foreach($searches as $value)
                 <tr>
                     <td>{{$value->content}}</td>
                     <td>{{$value->contentCount}}</td>
                     <td>{{$value->userCount}}</td>
-                    <td>{{$value->created_at}}</td>
                     <td></td>
                 </tr>
             @endforeach
             </tbody>
         </table>
         @if(empty($appends))
-            {{ $result->links('vendor.pagination.default') }}
+            {{ $searches->links('vendor.pagination.default') }}
         @else
-            {{ $result->appends($appends)->links('vendor.pagination.default') }}
+            {{ $searches->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
 @endsection
@@ -71,6 +60,7 @@
             timePicker: 'lay/modules/admin/timePicker',
         }).use(['common' , 'table' , 'layer' , 'timePicker'], function () {
             const table = layui.table,
+                common = layui.common,
                 timePicker = layui.timePicker;
             table.init('table', { //转化静态表格
                 page:false,
@@ -87,15 +77,7 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'view'){
-                    layer.open({
-                        type: 2,
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['95%','95%'],
-                        offset: 'auto',
-                        scrollbar:true,
-                        content: '/backstage/business/shop/search/detail?keyword='+data.content,
-                    });
+                    common.open_page('/backstage/business/shop/search/'+data.content);
                 }
             });
         });

@@ -165,10 +165,15 @@
 
             }
             table.on('tool(table)', function (obj) {
-                var data = obj.data;
+                let  selector = obj.tr.selector,data = obj.data;
                 if (obj.event === 'detail') {
                     open('/backstage/business/shop_order/'+data.id);
                 }else if(obj.event ==='updateStatus') {
+                    @if(!Auth::user()->can('business::shop_order.update'))
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(".layui-table-box "+selector+" td[data-field=schedule]"));
+                    table.render();
+                    return true;
+                    @endif
                     dropdown.render({
                         elem: this
                         ,show: true

@@ -92,6 +92,35 @@ return [
                 'id'=>'ID',
                 'tag'=>'Tag',
             ],
+            'goods_comment'=>[
+                'id'=>"ID",
+                'level'=>"优质评论",
+                'status'=>"审核状态",
+                'verified'=>"审核",
+                'point'=>"评分",
+                'quality'=>"质量",
+                'service'=>"服务",
+                'comment_user'=>"评论人",
+                'media'=>"视频/图",
+                'content'=>"内容",
+                'to_user'=>"被评论人",
+                'child_comment'=>"回复数",
+                'verified_at'=>"审核时间",
+            ],
+            'comment_manager'=>[
+                'today_review'=>'今日审核',
+                'month_review'=>'当前月审核',
+                'review'=>'总审核审核',
+                'today_pass'=>'今日通过',
+                'month_pass'=>'当前月通过',
+                'pass'=>'总审核通过',
+                'refuse'=>'驳回',
+                'month_refuse'=>'当前月驳回',
+                'type'=>'类型',
+                'status'=>'状态',
+                'content'=>'状态',
+                'created_'=>'状态',
+            ],
             'goods_id'=>'商品编号',
             'goods_name'=>'商品名称',
             'shop_id'=>'店铺编号',
@@ -109,7 +138,6 @@ return [
             'recommend'=>'是否推荐',
             'take_out'=>'外卖',
             'address'=>'地址',
-
             'service'=>'服务级别',
             'quality'=>'质量级别',
             'media'=>'图/视频',
@@ -128,6 +156,10 @@ return [
         'button'=>[
             'shop_order'=>[
                 'goods'=>'商品'
+            ],
+            'goods'=>[
+                'view_history'=>'浏览历史',
+                'comment'=>'评论'
             ]
         ]
     ],
@@ -164,6 +196,15 @@ return [
                 'tag'=>'Tag',
                 'tag_content'=>'Tag名',
             ],
+            'goods_comment'=>[
+                'goods_id'=>"商品ID",
+                'order_by'=>"排序",
+                'level'=>"优质评论",
+                'verified'=>"审核",
+            ],
+            'comment_manager'=>[
+                'status'=>'状态',
+            ],
         ],
         'placeholder'=>[
             'goods'=>[
@@ -182,8 +223,6 @@ return [
             'goods_sort'=>[
                 'created_at'=>'时间',
                 'like'=>'点赞',
-                'price'=>'价格',
-                'view_num'=>'浏览量',
             ],
             'shopping_cart'=>[
                 'created_at'=>'时间',
@@ -198,6 +237,30 @@ return [
                 ''=>'',
                 '1'=>'YES',
                 '0'=>'NO'
+            ],
+            'goods_comment'=>[
+                "order_by"=>[
+                    'desc'=>'倒序',
+                    'asc'=>'正序'
+                ],
+                'level'=>[
+                    ''=>"全部",
+                    '0'=>"NO",
+                    '1'=>"YES",
+                ],
+                'verified'=>[
+                    ''=>"全部",
+                    '0'=>"驳回",
+                    '1'=>"通过",
+                    '-1'=>"待审核",
+                ]
+            ],
+            'comment_manager'=>[
+                'status'=>[
+                    ''=>"全部",
+                    'refuse'=>"驳回",
+                    'pass'=>"通过",
+                ]
             ]
         ],
     ]

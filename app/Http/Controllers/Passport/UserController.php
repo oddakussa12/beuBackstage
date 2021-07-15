@@ -1036,6 +1036,6 @@ class UserController extends Controller
 
         $params['result'] = $result;
         return view('backstage.passport.user.follow', $params);
-
     }
+
 }

@@ -40,9 +40,9 @@ class Controller extends BaseController
                 $response = $client->request($method, front_url($url), ['form_params'=>$data]);
             }
             $code     = intval($response->getStatusCode());
-            if ($code>=300) {
+            if ($code>=300||$code<200) {
                 Log::info('http_request_fail' , array('code'=>$code));
-                return false;
+                abort($code);
             }
             return \json_decode($response->getBody()->getContents() , true);
         } catch (GuzzleException $e) {

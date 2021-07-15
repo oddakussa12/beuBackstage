@@ -37,7 +37,9 @@ return [
             'history'=>'History',
             'friend_active'=>'Friend Active',
             'follow' =>'Follow',
+            'followed' =>'Followed',
             'friend_yesterday_active'=>'Friend Yesterday Active',
+            'goods'=>'Goods',
         ]
     ],
     'form'=>[

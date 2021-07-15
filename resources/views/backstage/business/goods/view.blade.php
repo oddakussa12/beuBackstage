@@ -8,9 +8,9 @@
                     <div class="layui-input-inline" style="width: 300px;">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
-                </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -20,14 +20,14 @@
             <tr>
                 <th lay-data="{field:'goods_name', minWidth:180}">{{trans('business.table.header.goods_name')}}</th>
                 <th lay-data="{field:'user_name', minWidth:180}">{{trans('user.table.header.user_name')}}</th>
-                <th lay-data="{field:'user_nick_name', minWidth:180}">{{trans('user.table.header.user_nick_name')}}</th>
+                <th lay-data="{field:'user_nick_name', minWidth:180 , hide:true}">{{trans('user.table.header.user_nick_name')}}</th>
                 <th lay-data="{field:'shop_name', minWidth:180}">{{trans('business.table.header.shop_name')}}</th>
-                <th lay-data="{field:'shop_nick_name', minWidth:180}">{{trans('business.table.header.shop_nick_name')}}</th>
+                <th lay-data="{field:'shop_nick_name', minWidth:180 , hide:true}">{{trans('business.table.header.shop_nick_name')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($result as $value)
+            @foreach($views as $value)
                 <tr>
                     <td>{{$value->goods_name}}</td>
                     <td>{{$value->user_name}}</td>
@@ -40,9 +40,9 @@
             </tbody>
         </table>
         @if(empty($appends))
-            {{ $result->links('vendor.pagination.default') }}
+            {{ $views->links('vendor.pagination.default') }}
         @else
-            {{ $result->appends($appends)->links('vendor.pagination.default') }}
+            {{ $views->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
 @section('footerScripts')

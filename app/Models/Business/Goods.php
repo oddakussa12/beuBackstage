@@ -19,10 +19,15 @@ class Goods extends Model
         'id' => 'string',
         'shop_id' => 'string',
         'user_id' => 'string',
-        'image'=>'array'
+        'image'=>'array',
+        'price'=>'float',
+        'quality'=>'float',
+        'service'=>'float',
     ];
 
     protected $fillable = ['user_id' , 'shop_id' , 'name' , 'image' , 'like' , 'price', 'recommend', 'recommended_at', 'description', 'status'];
+
+    protected $appends = ['format_price' , 'average_point'];
 
     public function setRecommendAttribute($value)
     {
@@ -35,15 +40,18 @@ class Goods extends Model
         }
     }
 
-    public function getImageAttribute($value)
+    public function getFormatPriceAttribute()
     {
-        $value = strval($value);
-        $value = \json_decode($value , true);
-        if(is_array($value))
+        return sprintf("%1\$.2f", $this->price).' '. $this->currency;
+    }
+
+    public function getAveragePointAttribute()
+    {
+        if(empty($this->comment))
         {
-            return $value;
+            return 0;
         }
-        return array();
+        return round($this->point/$this->comment , 1);
     }
 
 }

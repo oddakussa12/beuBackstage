@@ -5,14 +5,14 @@ return [
             'goods'=>[
                 'id'=>'GoodsId',
                 'name'=>'GoodsName',
-                'category'=>'GoodsCategory',
+                'category'=>'Category',
                 'image'=>'GoodsImage',
                 'like'=>'GoodsLike',
                 'view_num'=>'PageViews',
                 'number'=>'GoodsNumber',
                 'point'=>'GoodsPoint',
                 'price'=>'GoodsPrice',
-                'recommendation'=>'GoodsRecommendation',
+                'recommendation'=>'Recommendation',
                 'status'=>'In-stock',
                 'comment'=>'Mark',
             ],
@@ -31,6 +31,12 @@ return [
                 'InProcess'=>'InProcess',
                 'Completed'=>'Completed',
                 'Canceled'=>'Canceled',
+            ],
+            'discovery_order'=>[
+                'menu'=>'Menu',
+                'goods_name'=>'GoodsName',
+                'shop_price'=>'ShopBrokerage',
+                'comment'=>'Mark',
             ],
             'order'=>[
                 'order_id'=>'OrderId',
@@ -61,6 +67,8 @@ return [
                 'user_nick_name'=>'ShopNickName',
                 'user_address'=>'ShopAddress',
                 'user_contact'=>'ShopContact',
+                'user_status'=>'Status',
+                'user_verified'=>'Reviewed',
             ],
             'promo_code'=>[
                 'description'=>'Description',
@@ -80,6 +88,35 @@ return [
                 'goods_image'=>'GoodsImage',
                 'goods_number'=>'GoodsNumber',
             ],
+            'shop_tag'=>[
+                'id'=>'ID',
+                'tag'=>'Tag',
+            ],
+            'goods_comment'=>[
+                'id'=>"ID",
+                'level'=>"Level",
+                'status'=>"Status",
+                'verified'=>"Verified",
+                'point'=>"Point",
+                'quality'=>"Quality",
+                'service'=>"Service",
+                'comment_user'=>"CommentUser",
+                'media'=>"Media",
+                'content'=>"Content",
+                'to_user'=>"ToUser",
+                'child_comment'=>"childComment",
+                'verified_at'=>"VerifiedAt",
+            ],
+            'comment_manager'=>[
+                'today_review'=>'TodayReview',
+                'month_review'=>'MonthReview',
+                'review'=>'TotalReview',
+                'today_pass'=>'TodayPass',
+                'month_pass'=>'MonthPass',
+                'pass'=>'TotalPass',
+                'refuse'=>'Refuse',
+                'month_refuse'=>'MonthRefuse',
+            ],
             'goods_id'=>'GoodsId',
             'goods_name'=>'GoodsName',
             'shop_id'=>'ShopId',
@@ -89,33 +126,36 @@ return [
             'vip'=>'Vip',
             'price'=>'Price',
             'in-stock'=>'In-stock',
-            'view_num'=>'浏览量',
-            'order_num'=>'订单量',
-            'goods_num'=>'产品数量',
-            'view_history'=>'浏览历史',
-            'manager'=>'后台管理者',
-            'recommend'=>'是否推荐',
-            'take_out'=>'外卖',
-            'address'=>'地址',
-
-            'service'=>'服务级别',
-            'quality'=>'质量级别',
-            'media'=>'图/视频',
-            'verified'=>'审核状态',
-            'verified_at'=>'审核时间',
-            'content'=>'内容',
-            'shop_score'=>'评分',
-            'level'=>'评论级别',
-            'child_comment'=>'二级评论数',
-            'comment_user'=>'评论人',
-            'to_user'=>'被评论人',
-            'top_user'=>'顶级用户',
-            'new_order'=>'新订单',
-            'recommended_at'=>'推荐时间',
+            'view_num'=>'PageViews',
+            'order_num'=>'OrderNum',
+            'goods_num'=>'GoodsNum',
+            'view_history'=>'ViewHistory',
+            'manager'=>'Manager',
+            'recommend'=>'Recommend',
+            'take_out'=>'Delivery',
+            'address'=>'Address',
+            'service'=>'Service',
+            'quality'=>'Quality',
+            'media'=>'Media',
+            'verified'=>'Reviewed',
+            'verified_at'=>'VerifiedAt',
+            'content'=>'Content',
+            'shop_score'=>'Point',
+            'level'=>'Level',
+            'child_comment'=>'ChildComment',
+            'comment_user'=>'CommentUser',
+            'to_user'=>'ToUser',
+            'top_user'=>'TopUser',
+            'new_order'=>'NewOrder',
+            'recommended_at'=>'RecommendedAt',
         ],
         'button'=>[
             'shop_order'=>[
                 'goods'=>'Goods'
+            ],
+            'goods'=>[
+                'view_history'=>'ViewHistory',
+                'comment'=>'Comment'
             ]
         ]
     ],
@@ -125,37 +165,98 @@ return [
             'goods'=>[
                 'id'=>'GoodsId',
                 'name'=>'GoodsName',
-                'category'=>'GoodsCategory',
-                'recommendation'=>'GoodsRecommendation',
+                'category'=>'Category',
+                'recommendation'=>'Recommendation',
+            ],
+            'goods_category'=>[
+                'is_default'=>'Default',
             ],
             'shop'=>[
                 'name'=>'ShopName',
+                'user_id'=>'UserId',
+                'user_name'=>'UserName',
+                'user_nick_name'=>'UserNickName',
+                'user_address'=>'UserAddress',
+                'user_contact'=>'UserContact',
+                'user_phone'=>'UserPhone',
+                'user_country'=>'UserCountry',
+                'user_verified'=>'UserVerified',
+                'user_delivery'=>'UserDelivery',
             ],
             'shopping_cart'=>[
                 'shop_name'=>'ShopName',
                 'goods_name'=>'goodsName',
                 'user_name'=>'userName'
             ],
+            'shop_tag'=>[
+                'tag'=>'Tag',
+                'tag_content'=>'TagContent',
+            ],
+            'goods_comment'=>[
+                'goods_id'=>"GoodsId",
+                'order_by'=>"OrderBy",
+                'level'=>"Level",
+                'verified'=>"Verified",
+            ],
+            'comment_manager'=>[
+                'status'=>'Status',
+            ],
         ],
         'placeholder'=>[
             'goods'=>[
-                'id'=>'GoodsId',
-                'name'=>'GoodsName',
+                'id'=>'Goods Id',
+                'name'=>'Goods Name',
             ],
             'shop'=>[
-                'name'=>'ShopName',
-            ]
+                'name'=>'Shop Name',
+            ],
+            'shop_tag'=>[
+                'tag'=>'Tag',
+                'tag_content'=>'Tag Content',
+            ],
         ],
         'select'=>[
             'goods_sort'=>[
-                'created_at'=>'Time',
+                'created_at'=>'CreatedAt',
                 'like'=>'Like',
-                'price'=>'Price',
-                'view_num'=>'PageViews',
             ],
             'shopping_cart'=>[
-                'created_at'=>'Date',
+                'created_at'=>'CreatedAt',
                 'number'=>'Number',
+            ],
+            'shop_review'=>[
+                '1'=>'Reviewed',
+                '0'=>'rejected',
+                '-1'=>'Pending review',
+            ],
+            'user_delivery'=>[
+                ''=>'',
+                '1'=>'YES',
+                '0'=>'NO'
+            ],
+            'goods_comment'=>[
+                "order_by"=>[
+                    'desc'=>'DESC',
+                    'asc'=>'ASC'
+                ],
+                'level'=>[
+                    ''=>"ALL",
+                    '0'=>"NO",
+                    '1'=>"YES",
+                ],
+                'verified'=>[
+                    ''=>"ALL",
+                    '0'=>"Refuse",
+                    '1'=>"Passed",
+                    '-1'=>"PendingReview",
+                ],
+                'comment_manager'=>[
+                    'status'=>[
+                        ''=>"全部",
+                        'refuse'=>"驳回",
+                        'pass'=>"通过",
+                    ]
+                ]
             ]
         ],
     ]

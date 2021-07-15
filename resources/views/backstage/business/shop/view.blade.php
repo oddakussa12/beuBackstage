@@ -8,9 +8,9 @@
                     <div class="layui-input-inline" style="width: 300px;">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
-                </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -18,12 +18,12 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'referrer', minWidth:180}">{{trans('user.table.header.user_src')}}</th>
-                <th lay-data="{field:'user_name', minWidth:180}">{{trans('user.table.header.user_name')}}</th>
-                <th lay-data="{field:'user_nick_name', minWidth:180}">{{trans('user.table.header.user_nick_name')}}</th>
-                <th lay-data="{field:'shop_name', minWidth:180}">{{trans('business.table.header.shop_name')}}</th>
-                <th lay-data="{field:'shop_nick_name', minWidth:180}">{{trans('business.table.header.shop_nick_name')}}</th>
-                <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
+                <th lay-data="{field:'referrer', minWidth:80 , fixed:'left'}">{{trans('user.table.header.user_src')}}</th>
+                <th lay-data="{field:'user_name', minWidth:160}">{{trans('user.table.header.user_name')}}</th>
+                <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('user.table.header.user_nick_name')}}</th>
+                <th lay-data="{field:'shop_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
+                <th lay-data="{field:'shop_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
+                <th lay-data="{field:'created_at', width:160}">{{trans('common.table.header.created_at')}}</th>
             </tr>
             </thead>
             <tbody>

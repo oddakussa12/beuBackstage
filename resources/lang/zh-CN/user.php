@@ -39,6 +39,7 @@ return [
             'follow' =>'关注列表',
             'followed' =>'被关注列表',
             'friend_yesterday_active'=>'好友昨日活跃',
+            'goods'=>'商品列表',
         ]
     ],
     'form'=>[

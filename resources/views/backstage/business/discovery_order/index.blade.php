@@ -12,7 +12,7 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?status={{$status}}&user_id=0" class="layui-btn @if(isset($userId)&&$userId==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">All</a>
+                        <a href="?status={{$status}}&user_id=0" class="layui-btn @if(isset($userId)&&$userId==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
                         @foreach($shops as $shop)
                             <a href="?status={{$status}}&user_id={{$shop->user_id}}" class="layui-btn @if(isset($userId)&&$userId==$shop->user_id) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$shop->user_nick_name}}</a>
                         @endforeach
@@ -22,9 +22,9 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <div class="layui-btn-group">
-                        <a href="?status=0&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($status)&&$status=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">All</a>
+                        <a href="?status=0&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($status)&&$status=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
                         @foreach($statuses as $key=>$value)
-                            <a href="?status={{$key}}&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{$value}}</a>
+                            <a href="?status={{$key}}&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.'.$value)}}</a>
                         @endforeach
                     </div>
                 </div>
@@ -46,6 +46,7 @@
                 <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">{{trans('business.table.header.order.order_price')}}</th>
                 <th lay-data="{field:'order_shop_price', minWidth:120}">{{trans('business.table.header.discovery_order.shop_price')}}</th>
                 <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">{{trans('business.table.header.discovery_order.comment')}}</th>
+                <th lay-data="{field:'operator', minWidth:100}">Operator</th>
                 <th lay-data="{field:'order_time', minWidth:180}">{{trans('business.table.header.order.order_time_consuming')}}</th>
                 <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
                 <th lay-data="{field:'order_created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
@@ -63,12 +64,13 @@
                     <td>{{$order->user_name}}</td>
                     <td>{{$order->user_contact}}</td>
                     <td>{{$order->user_address}}</td>
-                    <td><span class="layui-bg-{{$colorStyles[$order->status]}} layui-btn layui-btn-sm ">{{$statuses[$order->status]}}</span></td>
+                    <td><span class="layui-bg-{{$colorStyles[$order->status]}} layui-btn layui-btn-sm ">{{trans('business.table.header.shop_order.'.$statuses[$order->status])}}</span></td>
                     <td>@if(!empty($order->menu)){{$order->menu}}@endif</td>
                     <td>@if(!empty($order->order_price)){{$order->order_price}}@endif</td>
                     <td>@if(!empty($order->shop_price)){{$order->shop_price}}@endif</td>
                     <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
-                    <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
+                    <td>@if(!empty($order->operator)){{$order->operator->admin_username}}@endif</td>
+                    <td>@if(!empty($order->order_time)){{$order->order_time}} @endif</td>
                     <td>@if(!empty($order->color)){{$order->color}}@endif</td>
                     <td>{{$order->created_at}}</td>
                     <td>{{$order->updated_at}}</td>
@@ -90,15 +92,13 @@
         layui.config({
             base: "{{url('plugin/layui')}}/"
         }).extend({
-            common: 'lay/modules/admin/common',
-            layuiTableColumnSelect: '/lay/modules/admin/table-select/js/layui-table-select'
-        }).use(['common', 'table', 'dropdown', 'layer', 'layuiTableColumnSelect'], function () {
+            common: 'lay/modules/admin/common'
+        }).use(['common', 'table', 'dropdown', 'layer'], function () {
             const form = layui.form,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
                 dropdown = layui.dropdown,
-                layuiTableColumnSelect = layui.layuiTableColumnSelect,
                 $ = layui.jquery;
             var order = table.init('table', { //转化静态表格
                 page:false,
@@ -113,25 +113,27 @@
                     }
                 }
             });
-            /*$('.select').on('change', function() {
-                var params = {'status':$(this).val(), 'id':$(this).attr('data')};
-                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
-                    location.reload();
-                }, 'patch');
-            });*/
-
             table.on('tool(table)', function (obj) {
-                var data = obj.data;
+                let  selector = obj.tr.selector,data = obj.data;
                 if (obj.event ==='updateStatus') {
+                    @if(!Auth::user()->can('business::discovery_order.update'))
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(".layui-table-box "+selector+" td[data-field=order_status]"));
+                    table.render();
+                    return true;
+                    @endif
                     dropdown.render({
                         elem: this
                         ,show: true
                         ,data: @json($statusKv)
                         ,click: function(obj){
-                            var params = {'status':obj.id, 'id':data.id};
-                            common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
-                                location.reload();
-                            }, 'patch');
+                            var params = {'status':obj.id};
+                            common.confirm("{{trans('common.confirm.update')}}" , function(){
+                                common.ajax("{{url('/backstage/business/discovery_order')}}/"+data.id, params, function(res){
+                                    location.reload();
+                                }, 'patch');
+                            } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                                table.render();
+                            });
                         }
                     });
                 }
@@ -145,7 +147,7 @@
                     ,original = $(this).prev().text(); //得到字段
                 var params = d = {};
                 d[field] = original;
-                @if(!Auth::user()->can('business::discovery.order.update'))
+                @if(!Auth::user()->can('business::discovery_order.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
                     obj.update(d);
                     $(this).val(original);
@@ -166,7 +168,7 @@
                     }
                 }
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/business/discovery/order')}}", params , function(res){
+                    common.ajax("{{url('/backstage/business/discovery_order')}}/"+data.id, params , function(res){
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                         table.render();
                         parent.location.reload();

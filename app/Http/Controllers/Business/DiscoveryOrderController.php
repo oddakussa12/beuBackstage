@@ -30,7 +30,7 @@ class DiscoveryOrderController extends Controller
         $data['shops']  = User::whereIn('user_id', $userIds)->get();
         $statuses = $this->statuses;
         $orders = new DiscoveryOrder();
-        if (isset($params['status'])) {
+        if (!empty($params['status'])) {
             $status = intval($params['status']);
             $orders = $orders->where('status', $status);
         }
@@ -38,14 +38,17 @@ class DiscoveryOrderController extends Controller
         $shopId!=0  && $orders = $orders->where('owner', $shopId);
         $orders   = $orders->paginate(10)->appends($params);
         $shopIds = $orders->pluck('owner')->unique()->toArray();
+        $operatorIds = $orders->pluck('operator')->unique()->toArray();
+        $operators = DB::table('admins')->whereIn('admin_id' , $operatorIds)->select('admin_id' , 'admin_username')->get();
         $shops = User::whereIn('user_id' , $shopIds)->get();
         $time = Carbon::now()->subHour(8)->toDateTimeString();
-        $orders->each(function($order) use ($shops , $time){
+        $orders->each(function($order) use ($shops , $time , $operators){
             $order->shop = $shops->where('user_id' , $order->owner)->first();
             $duration = strtotime($time)-strtotime($order->created_at);
             if (($order->status==1 && $duration>300) || ($order->status==2 && $duration>600) || ($order->status==3 && $duration>780) || ($order->status==4 && $duration>3600)) {
                 $order->color = 1;
             }
+            $order->operator = $operators->where('admin_id' , $order->operator)->first();
         });
         $data['statuses'] = $statuses;
         $data['type' ] = $params['type'] ?? 0;
@@ -55,11 +58,10 @@ class DiscoveryOrderController extends Controller
         return view('backstage.business.discovery_order.index', $data);
     }
 
-    public function update(Request $request)
+    public function update(Request $request , $id)
     {
         $params  = $request->all();
         $schedule= $request->input('status' , null);
-        $id      = $request->input('id' , '');
         $table   = !empty($params['version']) ? 'orders' : 'delivery_orders';
         $order   = DB::connection('lovbee')->table($table)->where('order_id', $id)->first();
         $time    = Carbon::now()->subHour(8)->toDateTimeString();
@@ -150,21 +152,22 @@ class DiscoveryOrderController extends Controller
         }
         $orders   = $orders->paginate(10)->appends($params);
         $shopIds = $orders->pluck('owner')->unique()->toArray();
+        $operatorIds = $orders->pluck('operator')->unique()->toArray();
+        $operators = DB::table('admins')->whereIn('admin_id' , $operatorIds)->select('admin_id' , 'admin_username')->get();
         $shops = User::whereIn('user_id' , $shopIds)->get();
         $time = Carbon::now()->subHour(8)->toDateTimeString();
-        $orders->each(function($order) use ($shops , $time){
+        $orders->each(function($order) use ($shops , $time , $operators){
             $order->shop = $shops->where('user_id' , $order->owner)->first();
             $duration = strtotime($time)-strtotime($order->created_at);
             if (($order->status==1 && $duration>300) || ($order->status==2 && $duration>600) || ($order->status==3 && $duration>780) || ($order->status==4 && $duration>3600)) {
                 $order->color = 1;
             }
+            $order->operator = $operators->where('admin_id' , $order->operator)->first();
         });
         $data['admins' ] = $admins;
         $data['orders'] = $orders;
         $data['statuses'] = $statuses;
         $data['colorStyles']  = $this->colorStyles;
-        $allMoney = DB::connection('lovbee')->table('orders')->select(DB::raw('sum(order_price) order_price, sum(discounted_price) discounted_price, sum(delivery_coast) delivery_coast, sum(brokerage) brokerage'))->where('status', 1)->first();
-        $data['money'] = (array)$allMoney;
         return view('backstage.business.discovery_order.browse', $data);
 
     }

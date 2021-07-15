@@ -6,13 +6,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline" style="width: 300px;">
-                        <input type="hidden" name="keyword" value="{{$keyword}}">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                </div>
+
             </div>
         </form>
 
@@ -20,28 +20,26 @@
             <thead>
             <tr>
                 <th lay-data="{field:'user_id', minWidth:180}">{{trans('user.table.header.user_id')}}</th>
-                <th lay-data="{field:'user_avatar', minWidth:180}">{{trans('user.table.header.user_avatar')}}</th>
                 <th lay-data="{field:'user_name', minWidth:180}">{{trans('user.table.header.user_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:180}">{{trans('user.table.header.user_nick_name')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($result as $value)
+            @foreach($searches as $value)
                 <tr>
-                    <td>{{$value->user_id}}</td>
-                    <td><img src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
-                    <td>{{$value->user_name}}</td>
-                    <td>{{$value->user_nick_name}}</td>
-                    <td>{{$value->created_at}}</td>
+                    <td>{{$value->user->user_id??''}}</td>
+                    <td>{{$value->user->user_name??''}}</td>
+                    <td>{{$value->user->user_nick_name??''}}</td>
+                    <td>{{$value->created_at??''}}</td>
                 </tr>
             @endforeach
             </tbody>
         </table>
         @if(empty($appends))
-            {{ $result->links('vendor.pagination.default') }}
+            {{ $searches->links('vendor.pagination.default') }}
         @else
-            {{ $result->appends($appends)->links('vendor.pagination.default') }}
+            {{ $searches->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
 @section('footerScripts')
