@@ -1,5 +1,4 @@
-@extends('layouts.dashboard')
-@section('layui-content')
+@extends('layouts.app')
     <style>
         .layui-table-select-dl { color: black}
         textarea.layui-textarea.layui-table-edit {min-width: 300px; min-height: 200px; z-index: 2;}
@@ -11,21 +10,25 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <div class="layui-btn-group">
-                        <a href="?status={{$status}}&user_id=0" class="layui-btn @if(isset($userId)&&$userId==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
-                        @foreach($shops as $shop)
-                            <a href="?status={{$status}}&user_id={{$shop->user_id}}" class="layui-btn @if(isset($userId)&&$userId==$shop->user_id) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$shop->user_nick_name}}</a>
-                        @endforeach
+                    <label class="layui-form-label">{{trans('business.form.label.shop_order.shop')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="user_id" lay-filter="change">
+                            <option value="0" @if(isset($user_id) && $user_id==0)  selected @endif>{{trans('business.table.header.shop_order.All')}}</option>
+                            @foreach($shops as $shop)
+                                <option value="{{$shop->user_id}}" @if(isset($user_id) && $user_id==$shop->user_id)  selected @endif>{{$shop->user_nick_name}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
                 <div class="layui-inline">
-                    <div class="layui-btn-group">
-                        <a href="?status=0&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($status)&&$status=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
-                        @foreach($statuses as $key=>$value)
-                            <a href="?status={{$key}}&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.'.$value)}}</a>
-                        @endforeach
+                    <label class="layui-form-label">{{trans('business.form.label.shop_order.schedule')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="status"  lay-filter="change">
+                            <option value="" @if(isset($status) && $status=='')  selected @endif>{{trans('business.table.header.shop_order.All')}}</option>
+                            @foreach($statuses as $key=>$value)
+                                <option value="{{$key}}" @if(isset($status) && $status==$key)  selected @endif>{{trans('business.table.header.shop_order.'.$value)}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -84,7 +87,6 @@
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
-@endsection
 @section('footerScripts')
     @parent
     <script>
@@ -102,6 +104,7 @@
                 $ = layui.jquery;
             var order = table.init('table', { //转化静态表格
                 page:false,
+                limit:15,
                 done: function(res, curr, count){
                     console.log(res.data);
                     $('th').css({'font-size': '15'});	//进行表头样式设置
@@ -188,9 +191,9 @@
                 });
             });
             form.render();
-            setTimeout(function() {
-                location.reload();
-            }, 300000);
+            form.on('select(change)', function(data){
+                window.location = '?status='+$("select[name=status]").val()+'&user_id='+$('select[name=user_id]').val();
+            });
         });
     </script>
 @endsection

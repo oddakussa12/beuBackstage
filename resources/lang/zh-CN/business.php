@@ -69,6 +69,8 @@ return [
                 'user_contact'=>'商家联系方式',
                 'user_status'=>'状态',
                 'user_verified'=>'审核',
+                'user_online'=>'线上',
+                'user_delivery'=>'外卖'
             ],
             'promo_code'=>[
                 'description'=>'描述',
@@ -118,8 +120,8 @@ return [
                 'month_refuse'=>'当前月驳回',
                 'type'=>'类型',
                 'status'=>'状态',
-                'content'=>'状态',
-                'created_'=>'状态',
+                'content'=>'内容',
+                'created_at'=>'时间',
             ],
             'goods_id'=>'商品编号',
             'goods_name'=>'商品名称',
@@ -186,6 +188,7 @@ return [
                 'user_country'=>'商家国家',
                 'user_verified'=>'审核',
                 'user_delivery'=>'外卖',
+                'user_online'=>'线上'
             ],
             'shopping_cart'=>[
                 'shop_name'=>'商家名',
@@ -205,6 +208,26 @@ return [
             'comment_manager'=>[
                 'status'=>'状态',
             ],
+            'promo_code'=>[
+                'description'=>'描述',
+                'promo_code'=>'优惠码',
+                'free_delivery'=>'运费',
+                'deadline'=>'截止日期',
+                'discount_type'=>'类型',
+                'reduction'=>'抵扣',
+                'limit'=>'限制',
+                'percentage'=>'折扣',
+            ],
+            'shop_order'=>[
+                'shop'=>'商家',
+                'status'=>'状态',
+                'schedule'=>'进程',
+            ],
+            'complex'=>[
+                'shop_order'=>'订单',
+                'delivery_order'=>'订单(老)',
+                'shopping_cart'=>'购物车'
+            ]
         ],
         'placeholder'=>[
             'goods'=>[
@@ -217,6 +240,16 @@ return [
             'shop_tag'=>[
                 'tag'=>'Tag',
                 'tag_content'=>'Tag名',
+            ],
+            'promo_code'=>[
+                'description'=>'描述',
+                'promo_code'=>'优惠码',
+                'free_delivery'=>'运费',
+                'deadline'=>'截止日期',
+                'discount_type'=>'类型',
+                'reduction'=>'抵扣',
+                'limit'=>'限制',
+                'percentage'=>'折扣',
             ],
         ],
         'select'=>[
@@ -234,6 +267,11 @@ return [
                 '-1'=>'待审核',
             ],
             'user_delivery'=>[
+                ''=>'',
+                '1'=>'YES',
+                '0'=>'NO'
+            ],
+            'user_online'=>[
                 ''=>'',
                 '1'=>'YES',
                 '0'=>'NO'
@@ -261,6 +299,10 @@ return [
                     'refuse'=>"驳回",
                     'pass'=>"通过",
                 ]
+            ],
+            'promo_code'=>[
+                'reduction'=>"抵扣",
+                'discount'=>"折扣"
             ]
         ],
     ]

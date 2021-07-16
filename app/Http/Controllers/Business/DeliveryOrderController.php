@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Business\DiscoveryOrder;
 
 
-class DiscoveryOrderController extends Controller
+class DeliveryOrderController extends Controller
 {
     protected $statuses = ['1'=>'Ordered', '2'=>'ConfirmOrder', '3'=>'CallDriver', '4'=>'ContactedShop', '5'=>'Delivered', '6'=>'NoResponse', '7'=>'JunkOrder', '8'=>'UserCancelOrder', '9'=>'ShopCancelOrder', '10'=>'Other'];
     protected $colorStyles = ['1'=>'white', '2'=>'yellow', '3'=>'orange', '4'=>'pink', '5'=>'green', '6'=>'blue', '7'=>'orange', '8'=>'gray', '9'=>'gray', '10'=>'gray'];
@@ -36,7 +36,7 @@ class DiscoveryOrderController extends Controller
         }
         $user->admin_id!=1 && $orders = $orders->where('operator', $user->admin_id);
         $shopId!=0  && $orders = $orders->where('owner', $shopId);
-        $orders   = $orders->paginate(10)->appends($params);
+        $orders   = $orders->paginate(15)->appends($params);
         $shopIds = $orders->pluck('owner')->unique()->toArray();
         $operatorIds = $orders->pluck('operator')->unique()->toArray();
         $operators = DB::table('admins')->whereIn('admin_id' , $operatorIds)->select('admin_id' , 'admin_username')->get();
@@ -55,7 +55,7 @@ class DiscoveryOrderController extends Controller
         $data['orders'] = $orders;
         $data['colorStyles']  = $this->colorStyles;
         $data['statusKv'] = array_map(function ($value, $key) {return ['title'=>trans('business.table.header.shop_order.'.$value), 'id'=>$key];}, $statuses, array_keys($statuses));
-        return view('backstage.business.discovery_order.index', $data);
+        return view('backstage.business.delivery_order.index', $data);
     }
 
     public function update(Request $request , $id)
@@ -168,7 +168,7 @@ class DiscoveryOrderController extends Controller
         $data['orders'] = $orders;
         $data['statuses'] = $statuses;
         $data['colorStyles']  = $this->colorStyles;
-        return view('backstage.business.discovery_order.browse', $data);
+        return view('backstage.business.delivery_order.browse', $data);
 
     }
 

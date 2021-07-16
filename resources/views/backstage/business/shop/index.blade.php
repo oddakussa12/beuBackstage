@@ -53,15 +53,28 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('business.form.label.shop.user_online')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="user_online">
+                            @foreach(trans('business.form.select.user_online') as $k=>$v)
+                                <option value="{{$k}}" @if(isset($user_online) && $user_online==$k) selected @endif>{{$v}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline" style="width: 300px;">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                </div>
+
             </div>
         </form>
 
@@ -76,25 +89,22 @@
                 <th lay-data="{field:'user_verified', minWidth:150 , templet: function(field){
                     if(field.user_verified==1)
                     {
-                        var str = '<div id='+field.user_id+'><input type=\'radio\' name='+field.user_id+' field=\'user_verified\' checked lay-filter=\'radio\' value=\'yes\' title=\'YES\'><input type=\'radio\' field=\'user_verified\' name='+field.user_id+' lay-filter=\'radio\' value=\'no\' title=\'NO\'></div>';
+                        var str = '<div id='+field.user_id+'><input type=\'radio\' disabled name='+field.user_id+' field=\'user_verified\' checked lay-filter=\'radio\' value=\'yes\' title=\'YES\'><input type=\'radio\' disabled field=\'user_verified\' name='+field.user_id+' lay-filter=\'radio\' value=\'no\' title=\'NO\'></div>';
                     }else if(field.user_verified==0)
                     {
-                        var str = '<div id='+field.user_id+'><input type=\'radio\' name='+field.user_id+' field=\'user_verified\' lay-filter=\'radio\' value=\'yes\' title=\'YES\'><input type=\'radio\' field=\'user_verified\' name='+field.user_id+' checked lay-filter=\'radio\' value=\'no\' title=\'NO\'></div>';
+                        var str = '<div id='+field.user_id+'><input type=\'radio\' disabled name='+field.user_id+' field=\'user_verified\' lay-filter=\'radio\' value=\'yes\' title=\'YES\'><input type=\'radio\' disabled field=\'user_verified\' name='+field.user_id+' checked lay-filter=\'radio\' value=\'no\' title=\'NO\'></div>';
                     }else{
                         var str = '<div id='+field.user_id+'><input type=\'radio\' name='+field.user_id+' field=\'user_verified\' lay-filter=\'radio\' value=\'yes\' title=\'YES\'><input type=\'radio\' field=\'user_verified\' name='+field.user_id+' lay-filter=\'radio\' value=\'no\' title=\'NO\'></div>';
                     }
                     return str; }}">{{trans('business.table.header.verified')}}</th>
-                <th lay-data="{field:'user_delivery', minWidth:150}">{{trans('business.table.header.take_out')}}</th>
-                <th lay-data="{field:'recommend', minWidth:120}">{{trans('business.table.header.recommend')}}</th>
-                <th lay-data="{field:'num', minWidth:120}">{{trans('business.table.header.goods_num')}}</th>
+                <th lay-data="{field:'user_delivery', minWidth:150}">{{trans('business.table.header.shop.user_delivery')}}</th>
+                <th lay-data="{field:'user_online', minWidth:150}">{{trans('business.table.header.shop.user_online')}}</th>
                 <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
                 <th lay-data="{field:'user_avatar', minWidth:80}">{{trans('user.table.header.user_avatar')}}</th>
-                <th lay-data="{field:'user_bg', minWidth:80}">{{trans('user.table.header.user_cover')}}</th>
                 <th lay-data="{field:'quality', minWidth:120}">{{trans('business.table.header.quality')}}</th>
                 <th lay-data="{field:'service', minWidth:120}">{{trans('business.table.header.service')}}</th>
-                <th lay-data="{field:'recommended_at', minWidth:160}">{{trans('business.table.header.recommended_at')}}</th>
                 <th lay-data="{field:'user_phone', minWidth:150}">{{trans('user.form.label.phone')}}</th>
                 <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.address')}}</th>
 
@@ -107,45 +117,40 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($result as $value)
+            @foreach($shops as $shop)
                 <tr>
-                    <td>{{$value->user_id}}</td>
-                    <td>{{$value->country}}</td>
-                    <td>{{$value->user_name}}</td>
-                    <td>{{$value->user_nick_name}}</td>
-                    <td><span class="layui-btn layui-btn-xs @if($value->user_verified==-1) layui-btn-danger @elseif($value->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">
-                            @if($value->user_verified==1) YES @elseif($value->user_verified==0) YES @else Unreviewed @endif
+                    <td>{{$shop->user_id}}</td>
+                    <td>{{$shop->country}}</td>
+                    <td>{{$shop->user_name}}</td>
+                    <td>{{$shop->user_nick_name}}</td>
+                    <td><span class="layui-btn layui-btn-xs @if($shop->user_verified==-1) layui-btn-danger @elseif($shop->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">
+                            @if($shop->user_verified==1) YES @elseif($shop->user_verified==0) YES @else Unreviewed @endif
                         </span>
                     </td>
-                    <td>{{$value->user_verified}}</td>
-                    <td><input type="checkbox" @if($value->user_delivery>0) checked @endif name="user_delivery" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td><input type="checkbox" @if($value->recommend>0) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td>@if(!empty($value->num)){{$value->num}}@else 0 @endif</td>
-                    <td>@if(!empty($value->view_num)){{$value->view_num}}@else 0 @endif</td>
-                    <td>{{$value->user_created_at}}</td>
-                    <td>@if(!empty($value->score)){{$value->score}}@else 0 @endif</td>
-                    <td><img src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
-                    <td>@if(!empty($value->user_bg))<img src="@if(stripos($value->user_bg, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_bg}}@else{{$value->user_bg}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" />@endif</td>
-
-                    <td>@if(!empty($value->quality)){{$value->quality}}@else 0 @endif</td>
-                    <td>@if(!empty($value->service)){{$value->service}}@else 0 @endif</td>
-
-                    <td>@if($value->recommended_at!='0000-00-00 00:00:00'){{$value->recommended_at}}@endif</td>
-                    <td>{{$value->user_phone}}</td>
-                    <td>{{$value->user_address}}</td>
-                    <td>{{$value->admin_username}}</td>
-                    <td>{{$value->user_about}}</td>
-                    <td>@if($value->user_verified_at!='0000-00-00 00:00:00'){{$value->user_verified_at}}@endif</td>
-                    <td>{{$value->user_created_at}}</td>
+                    <td>{{$shop->user_verified}}</td>
+                    <td><input type="checkbox" @if($shop->user_delivery>0) checked @endif name="user_delivery" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
+                    <td><input type="checkbox" @if($shop->user_online>0) checked @endif name="user_online" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO" disabled></td>
+                    <td>@if(!empty($shop->num)){{$shop->num}}@else 0 @endif</td>
+                    <td>{{$shop->user_created_at}}</td>
+                    <td>{{$shop->point}}</td>
+                    <td><img src="@if(stripos($shop->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$shop->user_avatar}}@else{{$shop->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                    <td>@if(!empty($shop->format_quality)){{$shop->format_quality}}@else 0 @endif</td>
+                    <td>@if(!empty($shop->format_service)){{$shop->format_service}}@else 0 @endif</td>
+                    <td>{{$shop->user_phone}}</td>
+                    <td>{{$shop->user_address}}</td>
+                    <td>{{empty($shop->admin)?'':$shop->admin->title}}</td>
+                    <td>{{$shop->user_about}}</td>
+                    <td>@if($shop->user_verified_at!='0000-00-00 00:00:00'){{$shop->user_verified_at}}@endif</td>
+                    <td>{{$shop->user_created_at}}</td>
                     <td></td>
                 </tr>
             @endforeach
             </tbody>
         </table>
         @if(empty($appends))
-            {{ $result->links('vendor.pagination.default') }}
+            {{ $shops->links('vendor.pagination.default') }}
         @else
-            {{ $result->appends($appends)->links('vendor.pagination.default') }}
+            {{ $shops->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
 @endsection
@@ -178,7 +183,7 @@
                 },
             });
             table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                let data = obj.data; //获得当前行数据
+                let  selector = obj.tr.selector,data = obj.data;
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'view'){
                     common.open_page('/backstage/business/shop/'+data.user_id+'/view');
@@ -190,6 +195,11 @@
                 }else if(layEvent ==='goods'){
                     window.open('/backstage/business/goods?user_id='+data.user_id);
                 }else if(obj.event ==='updateAmin') {
+                    @if(!Auth::user()->can('business::shop.update'))
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(".layui-table-box "+selector+" td[data-field=admin_username]"));
+                    table.render();
+                    return true;
+                    @endif
                     dropdown.render({
                         elem: this
                         ,show: true

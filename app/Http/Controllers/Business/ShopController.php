@@ -13,91 +13,6 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ShopController extends Controller
 {
-    public function base(Request $request, $flag=false)
-    {
-        $params = $request->all();
-        $userName = $params['user_name'] ?? '';
-        $userPhone  = $params['user_phone'] ?? '';
-        $country= config('country');
-        $shop   = User::select(DB::raw('t_users.*,t_users_phones.*,t_users_countries.country, count(t_goods.id) num, t_shops_views.num view_num, t_recommendation_users.user_id recommend, t_recommendation_users.created_at recommended_at'))
-            ->join('users_phones', 'users_phones.user_id', '=', 'users.user_id')
-            ->leftjoin('users_countries', 'users_countries.user_id', '=', 'users.user_id')
-            ->leftjoin('goods', 'goods.user_id', '=', 'users.user_id')
-            ->leftjoin('shops_views', 'shops_views.owner', '=', 'users.user_id')
-            ->leftjoin('recommendation_users', 'recommendation_users.user_id', '=', 'users.user_id');
-        if (!empty($params['recommend'])) {
-            $shop = $shop->whereNotNull('recommendation_users.user_id');
-        }
-        if (!empty($params['virtual'])) {
-            $shop = $shop->where('user_online', 0);
-        }
-        if (isset($params['user_delivery'])) {
-            $shop = $shop->where('users.user_delivery', $params['user_delivery']);
-        }
-        if (isset($params['level'])) {
-            $shop = $shop->where('users.user_level', $params['level']);
-        }
-        if (!empty($params['dateTime'])) {
-            $allDate = explode(' - ' , $params['dateTime']);
-            $start   = Carbon::createFromFormat('Y-m-d H:i:s' , array_shift($allDate))->addHours(8)->toDateTimeString();
-            $end     = Carbon::createFromFormat('Y-m-d H:i:s' , array_pop($allDate))->addHours(8)->toDateTimeString();
-            $shop  = $shop->whereBetween('users.user_created_at', [$start, $end]);
-        }
-        if (!empty($userName)) {
-            $shop = $shop->where(function ($query) use ($userName){
-                $query->where('users.user_name', 'like', "%{$userName}%")->orWhere('users.user_nick_name', 'like', "%{$userName}%");
-            });
-        }
-        if (isset($params['user_verified'])) {
-            $shop = $shop->where('users.user_verified', $params['user_verified']);
-        }
-        if (!empty($userPhone)) {
-            $shop = $shop->where('users_phones.user_phone', $userPhone);
-        }
-        if (!empty($params['country_code'])) {
-            $country_code = $params['country_code'];
-            if ($country_code !='other') {
-                $shop = $shop->where('users_countries.country', strtolower($country_code));
-            } else {
-                $country_code = collect($country)->pluck('code')->toArray();
-                $country_code = array_map('strtolower', $country_code);
-                $shop = $shop->whereNotIn('users_countries.country', $country_code);
-            }
-        }
-
-        $sort    = 'users.user_created_at';
-        $shops   = $shop->where('users.user_shop', 1)->groupBy('users.user_id')->orderByDesc($sort)->paginate(10);
-        $shopIds = $shops->pluck('user_id')->toArray();
-        $points  = DB::connection('lovbee')->table('shop_evaluation_points')->whereIn('user_id', $shopIds)->get();
-        foreach ($shops as $shop) {
-            foreach ($points as $point) {
-                if ($shop->user_id==$point->user_id) {
-                    $sum = $point->point_1+$point->point_2+$point->point_3+$point->point_4+$point->point_5;
-                    $shop->score   = $sum ? number_format((($point->point_1+$point->point_2*2+$point->point_3*3+$point->point_4*4+$point->point_5*5)/$sum), 2) : 0;
-                    $shop->quality = $sum ? number_format(($point->quality/$sum), 2) : 0;
-                    $shop->service = $sum ? number_format(($point->service/$sum), 2) : 0;
-                }
-            }
-        }
-        if ($flag) {
-            $manager = DB::table('admins_shops')->whereIn('user_id', $shopIds)->get();
-            foreach ($shops as $shop) {
-                foreach ($manager as $item) {
-                    if ($shop->user_id==$item->user_id) {
-                        $shop->admin_username = $item->admin_username;
-                        $shop->admin_id = $item->admin_id;
-                    }
-                }
-            }
-        }
-
-        $params['appends'] = $params;
-        $params['result']  = $shops;
-        $params['countries']  = $country;
-
-        return $params;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -107,20 +22,88 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-        $params = $this->base($request, 1);
-
+        $params = $request->all();
+        $shops = DB::connection('lovbee')->table('users')->join('users_phones' , function ($join) use ($params){
+            if(!empty($params['user_phone']))
+            {
+                $join->on('users_phones.user_id', '=', 'users.user_id')->where('users_phones.user_phone', '=', strval($params['user_phone']));
+            }else{
+                $join->on('users_phones.user_id', '=', 'users.user_id');
+            }
+        })->join('users_countries' , function ($join) use ($params){
+            if(!empty($params['country_code']))
+            {
+                $join->on('users_countries.user_id', '=', 'users.user_id')->where('users_countries.country', '=', strtolower(strval($params['country_code'])));
+            }else{
+                $join->on('users_countries.user_id', '=', 'users.user_id');
+            }
+        })->leftJoin('shops_views' , function ($join) use ($params){
+            $join->on('shops_views.owner', '=', 'users.user_id');
+        })->leftJoin('shop_evaluation_points' , function($join){
+            $join->on('shop_evaluation_points.user_id', '=', 'users.user_id');
+        });
+        if(isset($params['user_online'])&&$params['user_online']!==null)
+        {
+            $shops->where('users.user_online' , intval($params['user_online']));
+        }
+        if(isset($params['user_verified'])&&$params['user_verified']!==null)
+        {
+            $shops->where('users.user_verified' , intval($params['user_verified']));
+        }
+        if(isset($params['user_delivery'])&&$params['user_delivery']!==null)
+        {
+            $shops->where('users.user_delivery' , intval($params['user_delivery']));
+        }
+        if(isset($params['user_name'])&&$params['user_name']!==null)
+        {
+            $shops->where('users.user_name' , 'like' , "{$params['user_name']}%");
+        }
+        if(isset($params['dateTime']))
+        {
+            $dateTime = $this->parseTime($params['dateTime']);
+            $dateTime!==false&&$shops->whereBetween('users.user_created_at' , array($dateTime['start'] , $dateTime['end']));
+        }
+        $shops = $shops->select([
+            'users.user_id' , 'users.user_name' ,
+            'users.user_about' , 'users.user_verified' ,
+            'users.user_avatar' , 'users_phones.user_phone' ,
+            'users.user_address' , 'users_phones.user_phone_country' ,
+            'users.user_nick_name' , 'users_countries.country' , 'users.user_delivery' ,
+            'users.user_level' , 'shops_views.num' , 'users.user_online',
+            'shop_evaluation_points.point_1', 'users.user_created_at', 'users.user_verified_at',
+            'shop_evaluation_points.point_2' , 'shop_evaluation_points.point_3',
+            'shop_evaluation_points.point_4' , 'shop_evaluation_points.point_5',
+            'shop_evaluation_points.quality' , 'shop_evaluation_points.service',
+        ])->paginate(10)->appends($params);
         $admins = DB::table('admins')->select(DB::raw('admin_id id, admin_username title'))->get();
+        $shopIds = $shops->pluck('user_id')->unique()->toArray();
+        $managers = DB::table('admins_shops')->whereIn('user_id', $shopIds)->get();
+        $shops->each(function($shop) use ($managers , $admins){
+            $adminId = collect($managers->where('user_id' , $shop->user_id)->first())->get('admin_id' , 0);
+            if(!empty($adminId))
+            {
+                $shop->admin = $admins->where('id' , $adminId)->first();
+            }
+            $sum = $shop->point_1+$shop->point_2+$shop->point_3+$shop->point_4+$shop->point_5;
+            $shop->point = $sum ? number_format((($shop->point_1+$shop->point_2*2+$shop->point_3*3+$shop->point_4*4+$shop->point_5*5)/$sum), 2) : 0;
+            $shop->format_quality = $sum ? number_format((($shop->quality)/$sum), 2) : 0;
+            $shop->format_service = $sum ? number_format((($shop->service)/$sum), 2) : 0;
+        });
         $admins = collect($admins)->toArray();
         $admins = array_map(function ($arr) { return (array)$arr;}, $admins);
         $params['admins']  = $admins;
+        $params['shops']  = $shops;
+        $params['countries']  = config('country');;
         return view('backstage.business.shop.index' , $params);
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function offline(Request $request)
     {
-        $request->offsetSet('virtual', 1);
-        $params = $this->base($request);
-        return view('backstage.business.shop.virtual' , $params);
+        $request->offsetSet('user_online', 0);
+        return $this->index($request);
     }
 
 
@@ -151,27 +134,7 @@ class ShopController extends Controller
 
     public function store(Request $request)
     {
-        $register = $request->only('user_phone_country', 'user_phone', 'user_name', 'user_nick_name', 'registration_type', 'password');
-        $header   = ['HellooVersion' => '3.3.0', 'deviceId'=>$register['user_phone']];
-        $result   = $this->url('/api/user/signUp', $register, 'POST', $header);
-        $msg      = '';
-        if ($result===true) {
-            $user = DB::connection('lovbee')->table('users_phones')->where(['user_phone'=>$register['user_phone'], 'user_phone_country'=>trim($register['user_phone_country'], '+')])->first();
-            $info = $request->all();
-            $info['user_id'] = $user->user_id;
-            $info['user_id'] = $user->user_id;
-            $update = $this->url('api/backstage/shop', $info, 'PATCH', $header);
-            return [];
-        } else{
-            if ($result===false) {
-                $msg = 'Server exception';
-            }
-            if (is_array($result) && !empty($result['message'])) {
-                $msg = $result['message'];
-            }
-            $data = ['message'=>$msg];
-        }
-        return response()->json($data);
+
     }
 
     public function review(Request $request)
@@ -229,11 +192,7 @@ class ShopController extends Controller
                         'created_at'=> date('Y-m-d H:i:s'),
                     ]);
                 }
-                $patch  = $this->url('api/backstage/shop/'.$id, $fields, 'PATCH', $header);
-                if(!$patch)
-                {
-                    abort(500 , 'Front-end user information update error!');
-                }
+                $this->httpRequest('api/backstage/shop/'.$id, $fields, 'PATCH', $header);
                 $connect->commit();
             }catch (\Exception $e)
             {
@@ -245,7 +204,7 @@ class ShopController extends Controller
             }
         }else{
             $now = date('Y-m-d H:i:s');
-            $adminUser = DB::table('admins_shops')->where('user_id' , $id)->first();
+            $adminUser = DB::table('admins_shops')->where('admin_id' , $admin_id)->where('user_id' , $id)->first();
             $admin = DB::table('admins')->where('admin_id' , $admin_id)->first();
             if(empty($admin))
             {
@@ -256,7 +215,7 @@ class ShopController extends Controller
                 DB::table('admins_shops')->insert(array(
                     'admin_id'=>$admin_id,
                     'admin_username'=>$admin->admin_username,
-                    'user_id'=>$admin_id,
+                    'user_id'=>$id,
                     'created_at'=>$now,
                     'updated_at'=>$now,
                 ));
@@ -316,137 +275,23 @@ class ShopController extends Controller
     public function view(Request $request, $id)
     {
         $params = $request->all();
-        $result = DB::connection('lovbee')->table('shops_views_logs')->where('owner', $id);
-        $result = $this->dateTime($result, $params);
-        $result = $result->paginate(10);
-
-        if ($result->isNotEmpty()) {
-            $userIds = $result->pluck('user_id')->unique()->toArray();
-            $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', array_merge($userIds, [$id]))->get();
-
-            foreach ($result as $item) {
-                foreach ($users as $user) {
-                    if ($item->user_id==$user->user_id) {
-                        $item->user_name = $user->user_name;
-                        $item->user_nick_name = $user->user_nick_name;
-                    }
-                    if ($item->owner==$user->user_id) {
-                        $item->shop_name = $user->user_name;
-                        $item->shop_nick_name = $user->user_nick_name;
-                    }
-                }
-            }
+        $views = DB::connection('lovbee')->table('shops_views_logs')->where('owner', $id);
+        if(isset($params['dateTime']))
+        {
+            $dateTime = $this->parseTime($params['dateTime']);
+            $dateTime!==false&&$views->whereBetween('created_at' , array($dateTime['start'] , $dateTime['end']));
         }
+        $views = $views->paginate(10)->appends($params);
 
-        $params['result'] = $result;
+        if ($views->isNotEmpty()) {
+            $userIds = $views->pluck('user_id')->unique()->toArray();
+            $users   = User::select('user_id', 'user_name', 'user_nick_name')->whereIn('user_id', $userIds)->get();
+            $views->each(function($view) use ($users){
+                $view->user = $users->where('user_id' , $view->user_id)->first();
+            });
+        }
+        $params['views'] = $views;
         return view('backstage.business.shop.view' , $params);
     }
 
-    public function order(Request $request, $id)
-    {
-        $params = $request->all();
-        $result = DB::connection('lovbee')->table('delivery_orders')->where('owner', $id);
-        $result = $this->dateTime($result, $params);
-        $result = $result->paginate(10);
-
-        $params['result'] = $result;
-        return view('backstage.business.shop.order', $params);
-    }
-
-    public function owner(Request $request)
-    {
-        $userId  = $request->input('user_id');
-        $adminId = $request->input('admin_id');
-        $admin   = DB::table('admins')->where('admin_id', $adminId)->first();
-
-        $info = DB::table('admins_shops')->where('user_id',$userId)->first();
-        if (empty($info)) {
-            DB::table('admins_shops')->insert([
-                'user_id'=>$userId,
-                'admin_id'=>$adminId,
-                'admin_username'=> $admin->admin_username,
-                'created_at'=>date('Y-m-d H:i:s'),
-            ]);
-        } else {
-            DB::table('admins_shops')->where('user_id', $userId)->update([
-                    'admin_id'=> $admin->admin_id,
-                    'admin_username'=> $admin->admin_username,
-            ]);
-        }
-
-        return response()->json(['result'=>'success']);
-    }
-
-    public function follow(Request $request, $id)
-    {
-        $params = $request->all();
-        $result = DB::connection('lovbee')->table('users_follows')->where('user_id', $id);
-        if (!empty($params['keyword'])) {
-            $user    = User::where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_name', 'like', "%{$params['keyword']}%")->get();
-            $userIds = $user->pluck('user_id')->toArray();
-            $result  = $result->whereIn('followed_id', $userIds);
-        }
-        $result  = $this->dateTime($result, $params);
-        $result  = $result->paginate(10);
-        $userIds = $result->pluck('followed_id')->toArray();
-
-        if (!empty($userIds)) {
-            $users  = User::whereIn('user_id', $userIds)->get();
-            foreach ($result as $item) {
-                foreach ($users as $user) {
-                    if ($item->followed_id == $user->user_id) {
-                        $item->user_nick_name = $user->user_nick_name;
-                        $item->user_name = $user->user_name;
-                        $item->user_id = $user->user_id;
-                        $item->user_avatar = $user->user_avatar;
-                    }
-                }
-            }
-        }
-
-        $params['result'] = $result;
-        return view('backstage.business.shop.follow', $params);
-    }
-
-    /**
-     * @param string $url
-     * @param array $data
-     * @param string $method
-     * @param array $headers
-     * @param false $json
-     * @return bool|mixed|force(kmixed)
-     */
-    protected function url(string $url, array $data=[], string $method='POST', array $headers=[], bool $json=false)
-    {
-        try {
-            $client = new Client();
-            foreach ($data as &$datum) {
-                $datum = is_array($datum) ? json_encode($datum, JSON_UNESCAPED_UNICODE) : $datum;
-            }
-            $signature = common_signature($data);
-            $data['signature'] = $signature;
-            $data     = $json ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
-            if(strtolower($method)=='get')
-            {
-                $response = $client->request($method, front_url($url), array('query'=>$data));
-            }else{
-                $response = $client->request($method, front_url($url), ['form_params'=>$data, 'headers'=>$headers]);
-            }
-            $code     = intval($response->getStatusCode());
-            if ($code>=300) {
-                Log::info('http_request_fail' , array('code'=>$code));
-                return false;
-            }
-            $result = $response->getBody()->getContents();
-            return json_decode($result, true);
-        } catch (GuzzleException $e) {
-            if (stripos($e->getMessage(), 'review')) {
-                return true;
-            } else {
-                // dump('http_request_fail' , array('code'=>$e->getCode() , 'message'=>$e->getMessage()));
-                Log::info('http_request_fail' , array('code'=>$e->getCode() , 'message'=>$e->getMessage()));
-            }
-            return ['code'=>$e->getCode(), 'message'=>$e->getMessage()];
-        }
-    }
 }

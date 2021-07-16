@@ -1,5 +1,4 @@
-@extends('layouts.dashboard')
-@section('layui-content')
+@extends('layouts.app')
     <style>
          table td { height: 40px; line-height: 40px;}
         table td img { max-height: 30px; min-width: 40px; }
@@ -38,13 +37,14 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
-                    <div class="layui-input-inline" style="width: 300px;">
+                    <div class="layui-input-inline">
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                </div>
+
             </div>
         </form>
 
@@ -85,7 +85,6 @@
             {{ $shoppingCarts->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
-@endsection
 @section('footerScripts')
     @parent
     <script>
@@ -102,13 +101,15 @@
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
-                toolbar: '#toolbar'
+                toolbar: '#toolbar',
+                limit:15
             });
             timePicker.render({
                 elem: '#dateTime',
                 options:{
                     timeStamp:false,
                     format:'YYYY-MM-DD HH:ss:mm',
+                    locale:"{{locale()}}",
                 },
             });
             $(function () {

@@ -1,5 +1,4 @@
-@extends('layouts.dashboard')
-@section('layui-content')
+@extends('layouts.app')
     <style>
         textarea.layui-textarea.layui-table-edit {min-width: 300px; min-height: 200px; z-index: 9999999999 !important;}
         .layui-table-cell,.layui-table-edit{
@@ -12,31 +11,36 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <div class="layui-btn-group">
-                        <a href="?schedule={{$schedule}}&user_id=0&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($user_id)&&$user_id==0) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
-                        @foreach($shops as $shop)
-                            <a href="?schedule={{$schedule}}&user_id={{$shop->user_id}}&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($user_id)&&$user_id==$shop->user_id) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{$shop->user_nick_name}}</a>
-                        @endforeach
+                    <label class="layui-form-label">{{trans('business.form.label.shop_order.shop')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="user_id" lay-filter="change">
+                            <option value="0" @if(isset($user_id) && $user_id==0)  selected @endif>{{trans('business.table.header.shop_order.All')}}</option>
+                            @foreach($shops as $shop)
+                            <option value="{{$shop->user_id}}" @if(isset($user_id) && $user_id==$shop->user_id)  selected @endif>{{$shop->user_nick_name}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
                 <div class="layui-inline">
-                    <div class="layui-btn-group">
-                        <a href="?schedule={{$schedule}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status=" class="layui-btn @if(!isset($status)) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
-                        @foreach($orderStatuses as $key=>$value)
-                            <a href="?schedule={{$schedule}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status={{$key}}" class="layui-btn @if(isset($status)&&$status==$key) layui-btn-disabled @else layui-btn-warm @endif  layui-btn-sm" target="_self">{{trans('business.table.header.shop_order.'.$value)}}</a>
-                        @endforeach
+                    <label class="layui-form-label">{{trans('business.form.label.shop_order.status')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="status"  lay-filter="change">
+                            <option value="" @if(isset($status) && $status=='')  selected @endif>{{trans('business.table.header.shop_order.All')}}</option>
+                            @foreach($orderStatuses as $key=>$value)
+                                <option value="{{$key}}" @if(isset($status) && $status==$key)  selected @endif>{{trans('business.table.header.shop_order.'.$value)}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
                 <div class="layui-inline">
-                    <div class="layui-btn-group">
-                        <a href="?schedule=0&user_id=@if(isset($user_id)){{$user_id}}@endif" class="layui-btn @if(isset($schedule)&&$schedule=='0') layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.All')}}</a>
-                        @foreach($schedules as $key=>$value)
-                            <a href="?schedule={{$key}}&user_id=@if(isset($user_id)){{$user_id}}@endif&status=@if(isset($status)){{$status}}@endif" class="layui-btn @if(isset($schedule)&&$schedule==$key) layui-btn-disabled @else layui-btn-normal @endif" target="_self">{{trans('business.table.header.shop_order.'.$value)}}</a>
-                        @endforeach
+                    <label class="layui-form-label">{{trans('business.form.label.shop_order.schedule')}}:</label>
+                    <div class="layui-input-inline">
+                        <select  name="schedule"  lay-filter="change">
+                            <option value="" @if(isset($schedule) && $schedule=='')  selected @endif>{{trans('business.table.header.shop_order.All')}}</option>
+                            @foreach($schedules as $key=>$value)
+                                <option value="{{$key}}" @if(isset($schedule) && $schedule==$key)  selected @endif>{{trans('business.table.header.shop_order.'.$value)}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -117,7 +121,6 @@
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
-@endsection
 @section('footerScripts')
     @parent
     <script>
@@ -134,6 +137,7 @@
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
+                limit:15,
                 done: function(res, curr, count){
                     $('th').css({'font-size': '15'});	//进行表头样式设置
                     for(var i in res.data){		//遍历整个表格数据
@@ -261,6 +265,12 @@
                         },100);
                     });
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
+            });
+            form.on('select(change)', function(data){
+                console.log(data.elem); //得到select原始DOM对象
+                console.log(data.value); //得到被选中的值
+                console.log(data.othis); //得到美化后的DOM对象
+                window.location = '?schedule='+$("select[name=schedule]").val()+'&user_id='+$('select[name=user_id]').val()+'&status='+$('select[name=status]').val();
             });
         });
     </script>

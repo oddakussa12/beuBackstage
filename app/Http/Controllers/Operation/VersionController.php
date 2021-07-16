@@ -1,15 +1,12 @@
 <?php
-namespace App\Http\Controllers\Operator;
+namespace App\Http\Controllers\Operation;
 
-use App\Exports\MessageExport;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Exports\MessageExport;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\Controller;
 
 class VersionController extends Controller
 {
@@ -22,18 +19,17 @@ class VersionController extends Controller
         $month  = $end ? date('Ym', strtotime($end)) : date('Ym');
         $table  = 'visit_logs_'.$month;
 
-        $list   = DB::connection('lovbee')->table($table)->select(DB::raw('version, count(DISTINCT(user_id)) num, created_at date'));
-        $list   = $list->where('version', '>', 0)->whereBetween('created_at', [$start, $end])->groupBy(DB::raw('created_at,version'))->get();
+        $versions   = DB::connection('lovbee')->table($table)->select(DB::raw('version, count(DISTINCT(user_id)) num, created_at date'));
+        $versions   = $versions->where('version', '>', 0)->whereBetween('created_at', [$start, $end])->groupBy(DB::raw('created_at,version'))->get();
 
-        $version = collect($list)->pluck('version')->unique()->values()->toArray();
-        $dates   = collect($list)->pluck('date')->unique()->values()->sort()->toArray();
+        $version = collect($versions)->pluck('version')->unique()->values()->toArray();
+        $dates   = collect($versions)->pluck('date')->unique()->values()->sort()->toArray();
         $forList = array();
 
         foreach ($dates as $date) {
             $total  = 0;
             foreach ($version as $item) {
-                $num = collect($list)->where('date', $date)->where('version', $item)->pluck('num')->toArray();
-                $num = !empty($num) ? current($num) : 0;
+                $num = collect(collect($versions)->where('date', $date)->where('version', $item)->first())->get('num' , 0);
                 $forList[$item][] = $num;
                 $total = !empty($total) ? $total + $num : $num;
             }
@@ -45,7 +41,6 @@ class VersionController extends Controller
                 "type" => "line",
                 "data" => $value,
                 'markPoint' => ['data' =>[['type'=>'max', 'name'=>'MAX'], ['type'=>'min', 'name'=>'MIN']]],
-                //'markLine'  => ['data' =>[['type'=>'average']]],
                 'itemStyle' => ['normal'=>['label'=>['show'=>true]]]
             ];
         }
@@ -59,7 +54,7 @@ class VersionController extends Controller
         ];
 
         $params['dateTime'] = $start. ' - '.$end;
-        return view('backstage.operator.version.index', compact('params','list', 'version', 'dates','line'));
+        return view('backstage.operation.version.index', compact('params','versions', 'version', 'dates','line'));
     }
 
     /**
@@ -99,7 +94,7 @@ class VersionController extends Controller
             $version['Text'] = array('value'=>$app->upgrade_point , 'field'=>'upgrade_point');
             $id = $app->id;
         }
-        return view('backstage.operator.version.upgrade', compact('version' , 'id'));
+        return view('backstage.operation.version.upgrade', compact('version' , 'id'));
     }
 
     public function update(Request $request , $id)
@@ -108,7 +103,6 @@ class VersionController extends Controller
         $version = strval($request->input('version' , ''));
         $last = strval($request->input('last' , ''));
         $upgrade_point = strval($request->input('upgrade_point' , ''));
-//        $app = DB::connection('lovbee')->table('app_versions')->where('status' , 1)->first();
         !blank($version)&&$data['version'] = $version;
         !blank($last)&&$data['last'] = $last;
         !blank($upgrade_point)&&$data['upgrade_point'] = $upgrade_point;
@@ -117,22 +111,6 @@ class VersionController extends Controller
         return response()->json([
             'result' => 'success',
         ]);
-
-    }
-
-
-    public function get_color_by_scale( ) {
-        $str='0123456789ABCDEF';
-        $est='';
-        $len=strlen($str);
-        for($i=1;$i<=6;$i++) {
-            $num=rand(0,$len-1);
-            $est=$est.$str[$num];
-        }
-        if($est < 0 || hexdec($est) > hexdec('ffffff')) {
-            $est = 'b4e0e1';
-        }
-        return  "#".$est;
     }
 
 }

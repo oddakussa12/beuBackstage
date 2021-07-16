@@ -7,21 +7,21 @@
             <br>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Description：</label>
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.description')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="description" lay-verify="required" required placeholder="Description">
+                        <input class="layui-input" type="text" name="description" lay-verify="required" required placeholder="{{trans('business.form.placeholder.promo_code.description')}}">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">PromoCode：</label>
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.promo_code')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="promo_code" lay-verify="required" required placeholder="PromoCode">
+                        <input class="layui-input" type="text" name="promo_code" lay-verify="required" required placeholder="{{trans('business.form.placeholder.promo_code.promo_code')}}">
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">FreeDelivery：</label>
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.free_delivery')}}：</label>
                     <div class="layui-input-inline">
                         <select name="free_delivery" >
                             <option value="1">YES</option>
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">DeadLine：</label>
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.deadline')}}：</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" type="text" readonly lay-verify="date" required placeholder="{{trans('common.form.label.date')}}" id="deadline" name="deadline">
                     </div>
@@ -38,32 +38,33 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">DiscountType：</label>
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.discount_type')}}：</label>
                     <div class="layui-input-inline">
                         <select lay-filter="select" id="discount_type" name="discount_type">
-                            <option value="reduction">Reduction</option>
-                            <option value="discount">Discount</option>
+                            @foreach(trans('business.form.select.promo_code') as $k=>$v)
+                                <option value="{{$k}}">{{$v}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Reduction：</label>
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.reduction')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="number" min="0" placeholder="Reduction" id="reduction" name="reduction">
+                        <input class="layui-input" type="number" min="0" placeholder="{{trans('business.form.placeholder.promo_code.reduction')}}" id="reduction" name="reduction">
                     </div>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">Percentage：</label>
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.percentage')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="number" min="0" max="100"  placeholder="Percentage" id="percentage" name="percentage">
+                        <input class="layui-input" type="number" min="0" max="100"  placeholder="{{trans('business.form.placeholder.promo_code.percentage')}}" id="percentage" name="percentage">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">Limit：</label>
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.limit')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="number" min="0" placeholder="Limit" name="limit">
+                        <input class="layui-input" type="number" min="0" placeholder="{{trans('business.form.placeholder.promo_code.limit')}}" name="limit">
                     </div>
                 </div>
             </div>

@@ -54,7 +54,7 @@ class ShopOrderController extends Controller
         }
         $user->admin_id!=1 && $orders = $orders->where('operator', $user->admin_id);
         $shopId!=0  && $orders = $orders->where('shop_id', $shopId);
-        $orders   = $orders->paginate(10)->appends($params);
+        $orders   = $orders->paginate(15)->appends($params);
         $shopIds = $orders->pluck('shop_id')->unique()->toArray();
         $shops = User::whereIn('user_id' , $shopIds)->get();
         $time = Carbon::now()->subHour(8)->toDateTimeString();

@@ -69,6 +69,8 @@ return [
                 'user_contact'=>'ShopContact',
                 'user_status'=>'Status',
                 'user_verified'=>'Reviewed',
+                'user_online'=>'Online',
+                'user_delivery'=>'Delivery'
             ],
             'promo_code'=>[
                 'description'=>'Description',
@@ -116,6 +118,10 @@ return [
                 'pass'=>'TotalPass',
                 'refuse'=>'Refuse',
                 'month_refuse'=>'MonthRefuse',
+                'type'=>'Type',
+                'status'=>'Status',
+                'content'=>'Content',
+                'created_at'=>'Time',
             ],
             'goods_id'=>'GoodsId',
             'goods_name'=>'GoodsName',
@@ -182,6 +188,7 @@ return [
                 'user_country'=>'UserCountry',
                 'user_verified'=>'UserVerified',
                 'user_delivery'=>'UserDelivery',
+                'user_online'=>'Online'
             ],
             'shopping_cart'=>[
                 'shop_name'=>'ShopName',
@@ -201,6 +208,26 @@ return [
             'comment_manager'=>[
                 'status'=>'Status',
             ],
+            'promo_code'=>[
+                'description'=>'Description',
+                'promo_code'=>'PromoCode',
+                'free_delivery'=>'FreeDelivery',
+                'deadline'=>'Deadline',
+                'discount_type'=>'DiscountType',
+                'reduction'=>'Reduction',
+                'limit'=>'Limit',
+                'percentage'=>'Percentage',
+            ],
+            'shop_order'=>[
+                'shop'=>'Shop',
+                'status'=>'Status',
+                'schedule'=>'Schedule',
+            ],
+            'complex'=>[
+                'shop_order'=>'Order',
+                'delivery_order'=>'Order(old)',
+                'shopping_cart'=>'ShoppingCart'
+            ]
         ],
         'placeholder'=>[
             'goods'=>[
@@ -214,6 +241,16 @@ return [
                 'tag'=>'Tag',
                 'tag_content'=>'Tag Content',
             ],
+            'promo_code'=>[
+                'description'=>'Description',
+                'promo_code'=>'PromoCode',
+                'free_delivery'=>'FreeDelivery',
+                'deadline'=>'Deadline',
+                'discount_type'=>'DiscountType',
+                'reduction'=>'Reduction',
+                'limit'=>'Limit',
+                'percentage'=>'Percentage',
+            ]
         ],
         'select'=>[
             'goods_sort'=>[
@@ -234,6 +271,11 @@ return [
                 '1'=>'YES',
                 '0'=>'NO'
             ],
+            'user_online'=>[
+                ''=>'',
+                '1'=>'YES',
+                '0'=>'NO'
+            ],
             'goods_comment'=>[
                 "order_by"=>[
                     'desc'=>'DESC',
@@ -249,14 +291,18 @@ return [
                     '0'=>"Refuse",
                     '1'=>"Passed",
                     '-1'=>"PendingReview",
-                ],
-                'comment_manager'=>[
-                    'status'=>[
-                        ''=>"全部",
-                        'refuse'=>"驳回",
-                        'pass'=>"通过",
-                    ]
                 ]
+            ],
+            'comment_manager'=>[
+                'status'=>[
+                    ''=>"All",
+                    'refuse'=>"Refuse",
+                    'pass'=>"Pass",
+                ]
+            ],
+            'promo_code'=>[
+                'reduction'=>"Reduction",
+                'discount'=>"Discount"
             ]
         ],
     ]

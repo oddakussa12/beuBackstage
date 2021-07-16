@@ -21,28 +21,24 @@
                 <th lay-data="{field:'referrer', minWidth:80 , fixed:'left'}">{{trans('user.table.header.user_src')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('user.table.header.user_name')}}</th>
                 <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('user.table.header.user_nick_name')}}</th>
-                <th lay-data="{field:'shop_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
-                <th lay-data="{field:'shop_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
                 <th lay-data="{field:'created_at', width:160}">{{trans('common.table.header.created_at')}}</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($result as $value)
+            @foreach($views as $value)
                 <tr>
                     <td>{{$value->referrer}}</td>
-                    <td>{{$value->user_name}}</td>
-                    <td>{{$value->user_nick_name}}</td>
-                    <td>{{$value->shop_name}}</td>
-                    <td>{{$value->shop_nick_name}}</td>
+                    <td>{{$value->user->user_name}}</td>
+                    <td>{{$value->user->user_nick_name}}</td>
                     <td>{{$value->created_at}}</td>
                 </tr>
             @endforeach
             </tbody>
         </table>
         @if(empty($appends))
-            {{ $result->links('vendor.pagination.default') }}
+            {{ $views->links('vendor.pagination.default') }}
         @else
-            {{ $result->appends($appends)->links('vendor.pagination.default') }}
+            {{ $views->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
 @section('footerScripts')

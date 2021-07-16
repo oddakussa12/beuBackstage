@@ -56,6 +56,7 @@ return [
           'export'=>'Export'
         ],
         'label'=>[
+            'user_id'=>'ID',
             'user_name'=>'Username',
             'user_email'=>'Email',
             'user_ip_address'=>'Register IP',

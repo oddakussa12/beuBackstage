@@ -67,7 +67,7 @@
 .timePicker .time-div .time-down {
     padding: 0 10px;
 }
-.timePicker .time-div .time-down .sure {
+.timePicker .time-div .time-down .sure,.no {
     float: right;
     padding: 5px 20px;
     border: 1px solid #ccc;

@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Operator;
+namespace App\Http\Controllers\Operation;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -136,6 +136,7 @@ class OperatorController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      * 照片墙
+     * @throws \Throwable
      */
     public function media(Request $request)
     {

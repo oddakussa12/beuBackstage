@@ -24,9 +24,188 @@ layui.extend({
         var elem = $(opt.elem);
 
         //默认设置
+        var locale = opt.options.locale || 'zh-CN';
         var timeStamp = opt.options.timeStamp || false;
         var format = opt.options.format || 'YYYY-MM-DD HH:mm:ss';
+        if(locale=='zh-CN')
+        {
+            var languages = {
+                'list': [
+                    {
+                        'class':'time-day',
+                        'column':'天',
+                        'first':{
+                            'value':'1',
+                            'txt':'今天',
+                        },
+                        'second':{
+                            'value':'2',
+                            'txt':'昨天',
+                        },
+                        'third':{
+                            'value':'3',
+                            'txt':'前天',
+                        },
+                    },
+                    {
+                        'class':'time-week',
+                        'column':'周',
+                        'first':{
+                            'value':'4',
+                            'txt':'本周',
+                        },
+                        'second':{
+                            'value':'5',
+                            'txt':'上周',
+                        },
+                        'third':{
+                            'value':'6',
+                            'txt':'下周',
+                        },
+                    },
+                    {
+                        'class':'time-month',
+                        'column':'月',
+                        'first':{
+                            'value':'7',
+                            'txt':'本月',
+                        },
+                        'second':{
+                            'value':'8',
+                            'txt':'上月',
+                        },
+                        'third':{
+                            'value':'9',
+                            'txt':'下月',
+                        },
+                    },
+                    {
+                        'class':'time-quarter',
+                        'column':'季',
+                        'first':{
+                            'value':'10',
+                            'txt':'本季度',
+                        },
+                        'second':{
+                            'value':'11',
+                            'txt':'上季度',
+                        },
+                        'third':{
+                            'value':'12',
+                            'txt':'下季度',
+                        },
+                    },
+                    {
+                        'class':'time-year',
+                        'column':'年',
+                        'first':{
+                            'value':'13',
+                            'txt':'本年度',
+                        },
+                        'second':{
+                            'value':'14',
+                            'txt':'上年度',
+                        },
+                        'third':{
+                            'value':'15',
+                            'txt':'下年度',
+                        },
+                    }
+                ],
+                'customize':'自定义',
+                'yes':'确定',
+                'no':'清除'
+            }
+        }else{
+            var languages = {
+                'list':[
+                    {
+                        'class':'time-day',
+                        'column':'Day',
+                        'first':{
+                            'value':'1',
+                            'txt':'Today',
+                        },
+                        'second':{
+                            'value':'2',
+                            'txt':'Yesterday',
+                        },
+                        'third':{
+                            'value':'3',
+                            'txt':'Two days ago',
+                        },
+                    },
+                    {
+                        'class':'time-week',
+                        'column':'Week',
+                        'first':{
+                            'value':'4',
+                            'txt':'This week',
+                        },
+                        'second':{
+                            'value':'5',
+                            'txt':'Last week',
+                        },
+                        'third':{
+                            'value':'6',
+                            'txt':'Next week',
+                        },
+                    },
+                    {
+                        'class':'time-month',
+                        'column':'Month',
+                        'first':{
+                            'value':'7',
+                            'txt':'This month',
+                        },
+                        'second':{
+                            'value':'8',
+                            'txt':'Last month',
+                        },
+                        'third':{
+                            'value':'9',
+                            'txt':'Next month',
+                        },
+                    },
+                    {
+                        'class':'time-quarter',
+                        'column':'Quarter',
+                        'first':{
+                            'value':'10',
+                            'txt':'This quarter',
+                        },
+                        'second':{
+                            'value':'11',
+                            'txt':'Last quarter',
+                        },
+                        'third':{
+                            'value':'12',
+                            'txt':'Next quarter',
+                        },
+                    },
+                    {
+                        'class':'time-year',
+                        'column':'Year',
+                        'first':{
+                            'value':'13',
+                            'txt':'This quarter',
+                        },
+                        'second':{
+                            'value':'14',
+                            'txt':'Last quarter',
+                        },
+                        'third':{
+                            'value':'15',
+                            'txt':'Next quarter',
+                        },
+                    }
+                ],
+                'customize':'Customize',
+                'yes':'Yes',
+                'no':'clear'
+            }
 
+        }
         elem.on('click',function (e) {
             e.stopPropagation();
 
@@ -39,16 +218,17 @@ layui.extend({
 
             var timeDiv = '<div class="timePicker layui-anim layui-anim-upbit" style="left:'+l+';top:'+t+';">';
                 timeDiv +='<div class="time-div">' +
-                    '<div class="time-info">' +
-                    '<ul class="time-day"><span>天</span><li><input type="radio" name="day" value="1">今天</li><li><input type="radio" name="day" value="2">昨天</li><li><input type="radio" name="day" value="3">前天</li></ul> ' +
-                    '<ul class="time-week"><span>周</span><li><input type="radio" name="day" value="4">本周</li><li><input type="radio" name="day" value="5">上周</li><li><input type="radio" name="day" value="6">下周</li></ul> ' +
-                    '<ul class="time-month"><span>月</span><li><input type="radio" name="day" value="7">本月</li><li><input type="radio" name="day" value="8">上月</li><li><input type="radio" name="day" value="9">下月</li></ul> ' +
-                    '<ul class="time-quarter"><span>季度</span><li><input type="radio" name="day" value="10">本季度</li><li><input type="radio" name="day" value="11">上一季度</li><li><input type="radio" name="day" value="12">下一季度</li></ul> ' +
-                    '<ul class="time-year"><span>年度</span><li><input type="radio" name="day"  value="13">本年度</li><li><input type="radio" name="day"  value="14">上一年度</li><li><input type="radio" name="day"  value="15">下一年度</li></ul>' +
-                    '</div>' +
+                    '<div class="time-info">';
+                var str = '';
+                for(var l in languages.list){//遍历json数组时，这么写p为索引，0,1
+                    console.log(l);
+                    str += '<ul class="'+languages.list[l].class+'"><span>'+languages.list[l].column+'</span><li><input type="radio" name="day" value="'+languages.list[l].first.value+'">'+languages.list[l].first.txt+'</li><li><input type="radio" name="day" value="'+languages.list[l].second.value+'">'+languages.list[l].second.txt+'</li><li><input type="radio" name="day" value="'+languages.list[l].third.value+'">'+languages.list[l].third.txt+'</li></ul> ';
+                }
+                timeDiv += str;
+                timeDiv += '</div>' +
                     '<div class="time-custom">' +
                     '<div class="layui-timepicker-custom"  data-role="display">' +
-                    '<span>自定义</span>' +
+                    '<span>'+languages.customize+'</span>' +
                     '<i class="layui-icon layui-icon-down" ></i>' +
                     '</div> ' +
                     '<div class="time-select">' +
@@ -56,7 +236,8 @@ layui.extend({
                     '<input type="text" class="layui-input" id="eTime">' +
                     '</div></div>' +
                     '<div class="time-down">' +
-                    '<div class="sure" data-role="sure">确定</div>' +
+                    '<div class="sure" data-role="sure">'+languages.yes+'</div>' +
+                    '<div class="no" data-role="no">'+languages.no+'</div>' +
                     '</div>' +
                     '</div>';
                 timeDiv = $(timeDiv);
@@ -104,6 +285,10 @@ layui.extend({
 
             });
             //确定后生成时间区间 如：2018-9-14 - 2018-9-15
+            $('[data-role="no"]').on('click',function () {
+                elem.val('');
+                $('.timePicker').remove();
+            });
             $('[data-role="sure"]').on('click',function () {
                 var inputVal=$('.time-info').children().find('input:checked').val();
                 var sTime='';

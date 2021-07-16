@@ -36,28 +36,22 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::patch('music/{music}' , 'MusicController@update')->name('music.update');
             Route::delete('music/{music}' , 'MusicController@destroy')->name('music.destroy');
             Route::post('music' , 'MusicController@store')->name('music.store');
-            Route::resource('post' , 'PostController');
-            Route::get('audit/jian' , 'PostAuditController@jianHuangShi')->name('audit.jian');
-            Route::get('audit/claim' , 'PostAuditController@claim')->name('audit.claim');
-            Route::resource('audit' , 'PostAuditController');
-            Route::get('post/{postId}/comment' , 'PostController@comment')->name('post.comment');
-            Route::delete('post/comment/{postId}' , 'PostController@destroyComment')->name('post.destroyComment');
         });
 
-        Route::group(['namespace'=>'Operator','prefix'=>'operator' , 'as' => 'operator::'] , function (){
+        Route::group(['namespace'=>'Operation','prefix'=>'operation' , 'as' => 'operation::'] , function (){
             Route::get('version' , 'VersionController@index')->name('version.index');
+
             Route::patch('version/{version}' , 'VersionController@update')->name('version.update');
+
             Route::get('version/upgrade' , 'VersionController@upgrade')->name('version.upgrade');
-            Route::get('chat' , 'ChatController@index')->name('chat.index');
-            Route::get('operator/network' , 'OperatorController@network')->name('operator.network');
-            Route::get('operator/feedback' , 'OperatorController@feedback')->name('operator.feedback');
-            Route::get('operator/media' , 'OperatorController@media')->name('operator.media');
-            Route::post('operator/media/destroy' , 'OperatorController@destroyMedia')->name('operator.media.destroy');
-            Route::get('operator/score' , 'OperatorController@score')->name('operator.score');
-            Route::get('operator/score/detail/{user}' , 'OperatorController@scoreDetail')->name('operator.score.detail');
-            Route::get('operator/blacklist' , 'OperatorController@blackList')->name('operator.blacklist');
-            Route::put('operator/black' , 'OperatorController@block')->name('operator.block');
-            Route::get('operator/lastthree' , 'OperatorController@lastThree')->name('operator.lastthree');
+
+            Route::get('message_layer' , 'MessageLayerController@index')->name('message_layer.index');
+
+            Route::get('network_log' , 'NetworkLogController@index')->name('network_log.index');
+
+            Route::get('feedback' , 'FeedbackController@index')->name('feedback.index');
+
+            Route::get('active_user' , 'ActiveUserController@index')->name('active_user.index');
         });
 
         Route::group(['namespace'=>'Passport','prefix'=>'passport' , 'as' => 'passport::'] , function (){
@@ -116,7 +110,6 @@ Route::group(['prefix'=>'backstage'] , function(){
         });
 
         Route::group(['namespace'=>'Business','prefix'=>'business' , 'as' => 'business::'] , function (){
-            Route::get('shop/follow/{id}' , 'ShopController@follow')->name('shop.follow');
             Route::patch('shop/owner' , 'ShopController@owner')->name('shop.owner');
             Route::get('shop/{shop}/view' , 'ShopController@view')->name('shop.view');
             Route::get('offline_shop' , 'ShopController@offline')->name('shop.offline');
@@ -137,9 +130,9 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('deposits' , 'DepositController@index')->name('deposits.index');
             Route::post('deposits' , 'DepositController@store')->name('deposits.store');
             Route::patch('deposits' , 'DepositController@update')->name('deposits.update');
-            Route::get('discovery_order' , 'DiscoveryOrderController@index')->name('discovery_order.index');
-            Route::patch('discovery_order/{discovery_order}' , 'DiscoveryOrderController@update')->name('discovery_order.update');
-            Route::get('discovery_order/browse' , 'DiscoveryOrderController@browse')->name('discovery_order.browse');
+            Route::get('delivery_order' , 'DeliveryOrderController@index')->name('delivery_order.index');
+            Route::patch('delivery_order/{delivery_order}' , 'DeliveryOrderController@update')->name('delivery_order.update');
+            Route::get('delivery_order/browse' , 'DeliveryOrderController@browse')->name('delivery_order.browse');
             Route::get('shop_order' , 'ShopOrderController@index')->name('shop_order.index');
             Route::get('shop_order/browse' , 'ShopOrderController@browse')->name('shop_order.browse');
             Route::get('shopping_cart' , 'ShoppingCartController@index')->name('shopping_cart.index');
@@ -153,6 +146,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('goods_category' , 'GoodsCategoryController@index')->name('goods_category.index');
             Route::get('comment_manager' , 'CommentManagerController@index')->name('comment_manager.index');
             Route::get('comment_manager/{comment_manager}' , 'CommentManagerController@show')->name('comment_manager.show');
+            Route::get('complex' , 'ComplexController@index')->name('complex.index');
 
         });
 

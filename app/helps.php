@@ -444,4 +444,16 @@ if (! function_exists('hashDbIndex')) {
     }
 }
 
+if (!function_exists('splitJointQnImageUrl')) {
+    function splitJointQnImageUrl($value='') {
+        if (empty($value)) {
+            return $value;
+        }
+        if (preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$value)) {
+            return $value;
+        }
+        return config('common.qnUploadDomain.avatar_domain').$value.'?imageView2/0/w/250/h/250/interlace/1|imageslim';
+    }
+}
+
 

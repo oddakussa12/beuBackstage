@@ -1,20 +1,19 @@
 <?php
-namespace App\Http\Controllers\Operator;
+namespace App\Http\Controllers\Operation;
 
-use App\Exports\MessageExport;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Exports\MessageExport;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 
-class ChatController extends Controller
+class MessageLayerController extends Controller
 {
     public function index(Request $request)
     {
         $params = $request->all();
         $params['appends'] = $params;
-
         $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
         $start  = !empty($time) ? array_shift($time) : date('Y-m-d', time()-86400*7);
         $end    = !empty($time) ? array_shift($time) : date('Y-m-d', time());

@@ -44,6 +44,7 @@ return [
     ],
     'form'=>[
         'label'=>[
+            'user_id'=>'ID',
             'user_name'=>'用户名',
             'user_email'=>'邮箱',
             'user_ip_address'=>'注册IP',
