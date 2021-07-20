@@ -23,6 +23,7 @@ class BackstageController extends BaseController
      * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function index()
     {

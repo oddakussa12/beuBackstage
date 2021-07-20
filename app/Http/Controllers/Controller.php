@@ -64,9 +64,22 @@ class Controller extends BaseController
         return $result;
     }
 
-    public function parseTime($dateTime)
+    public function parseTime($dateTime, $function='addHours' , $hour = 0)
     {
-
+        $allDate = explode(' - ' , $dateTime);
+        $startTime = array_shift($allDate);
+        $endTime = array_pop($allDate);
+        $format = 'Y-m-d H:i:s';
+        if(date($format , strtotime($startTime))!=$startTime||date($format , strtotime($endTime))!=$endTime)
+        {
+            return false;
+        }
+        $start   = Carbon::createFromFormat($format , $startTime)->$function($hour)->toDateTimeString();
+        $end     = Carbon::createFromFormat($format , $endTime)->$function($hour)->toDateTimeString();
+        return array(
+            'start'=>$start,
+            'end'=>$end,
+        );
     }
 
 
