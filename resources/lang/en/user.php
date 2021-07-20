@@ -77,6 +77,7 @@ return [
 
         ],
         'placeholder'=>[
+            'user_id'=>'please enter account id',
             'user_name'=>'please enter account',
             'user_nick_name'=>'Please enter nickname',
             'user_country'=>'Please select a country',

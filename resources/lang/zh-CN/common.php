@@ -41,6 +41,7 @@ return [
             'upload'=>'上传',
         ],
         'header'=>[
+            'id'=>'ID',
             'name'=>'名称',
             'category'=>'分类',
             'remark'=>'备注',
@@ -75,6 +76,7 @@ return [
             'update'=>'修改',
             'reset'=>'重置',
             'clear'=>'刷新',
+            'delete'=>'删除',
         ],
         'placeholder'=>[
             'select_first'=>'请选择',

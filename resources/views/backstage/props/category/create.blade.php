@@ -39,7 +39,7 @@
             <a href="javascript:;" id="addCol" name="addCol" class="layui-btn layui-btn-xs">Add</a>
             <a href="javascript:;" id="delCol" name="delCol" class="layui-btn layui-btn-xs" >Delete</a>
         </table>
-        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="admin_form" id="btn">Submit</button>
+        <button class="layui-btn" lay-submit lay-filter="admin_form" id="btn">Submit</button>
 
     </form>
 

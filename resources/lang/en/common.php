@@ -42,6 +42,7 @@ return [
             'upload'=>'upload'
         ],
         'header'=>[
+            'id'=>'ID',
             'status'=>'Status',
             'name'=>'Name',
             'remark'=>'Remark',
@@ -71,9 +72,12 @@ return [
         'button'=>[
             'submit'=>'Submit',
             'export'=>'Export',
+            'detail'=>'Detail',
             'add'=>'Add',
             'update'=>'Update',
             'reset'=>'Reset',
+            'clear'=>'Clear',
+            'delete'=>'Delete',
         ],
         'placeholder'=>[
             'select_first'=>'please choose',

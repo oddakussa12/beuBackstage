@@ -15,11 +15,12 @@ class ComplexController extends Controller
      */
     public function index(Request $request)
     {
+        $locale = locale();
         $type = $request->input('type' , 'shop_order');
         $iframes = array(
-            'shop_order'=>"/backstage/business/shop_order",
-            'delivery_order'=>"/backstage/business/delivery_order",
-            'shopping_cart'=>"/backstage/business/shopping_cart",
+            'shop_order'=>"/{$locale}/backstage/business/shop_order",
+            'delivery_order'=>"/{$locale}/backstage/business/delivery_order",
+            'shopping_cart'=>"/{$locale}/backstage/business/shopping_cart",
         );
         $type = isset($iframes[$type])?$type:'shop_order';
         $iframe = $iframes[$type];

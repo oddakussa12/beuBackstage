@@ -4,11 +4,11 @@
     <table class="layui-table"  lay-filter="table">
         <thead>
         <tr>
-            <th  lay-data="{field:'user_id', width:110 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
-            <th  lay-data="{field:'user_avatar', width:80}">{{trans('user.table.header.user_avatar')}}</th>
+            <th  lay-data="{field:'user_id', width:110 ,fixed: 'left'}">{{trans('group.table.header.user_id')}}</th>
+            <th  lay-data="{field:'user_avatar', width:80}">{{trans('group.table.header.group_id')}}</th>
             <th  lay-data="{field:'user_nick_name', minWidth:150}">{{trans('user.table.header.user_nick_name')}}</th>
             <th  lay-data="{field:'user_name', minWidth:190}">{{trans('user.table.header.user_name')}}</th>
-            <th  lay-data="{field:'role', minWidth:150}">Type</th>
+            <th  lay-data="{field:'role', minWidth:150}">{{trans('group.table.header.type')}}</th>
             <th  lay-data="{field:'created_at', minWidth:160}">{{trans('user.table.header.user_registered')}}</th>
         </tr>
         </thead>

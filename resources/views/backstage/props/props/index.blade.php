@@ -10,7 +10,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('common.table.header.category')}}:</label>
+                    <label class="layui-form-label">{{trans('common.form.label.category')}}:</label>
                     <div class="layui-input-inline">
                         <select  name="category">
                             <option value="">All</option>

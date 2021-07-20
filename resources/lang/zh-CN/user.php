@@ -64,6 +64,7 @@ return [
             'phone'=>'手机号',
         ],
         'placeholder'=>[
+            'user_id'=>'请输入账号ID',
             'user_name'=>'请输入账号',
             'user_nick_name'=>'请输入昵称',
             'user_country'=>'请选择国家',

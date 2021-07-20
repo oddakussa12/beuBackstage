@@ -43,12 +43,21 @@
                         </select>
                     </div>
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >{{trans('common.form.label.date')}}:</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
+                    </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
+                </div>
             </div>
         </form>
         <table class="layui-table" lay-filter="table" id="table">
         <thead>
         <tr>
-            <th lay-data="{field:'id', width:180}">{{trans('business.table.header.order.order_id')}}</th>
+            <th lay-data="{fixed: 'left', field:'id', width:180}">{{trans('business.table.header.order.order_id')}}</th>
             <th lay-data="{field:'status', minWidth:120}">{{trans('business.table.header.order.status')}}</th>
             <th lay-data="{field:'shop_name', minWidth:180}">{{trans('business.table.header.shop.user_name')}}</th>
             <th lay-data="{field:'shop_contact', minWidth:180}">{{trans('business.table.header.shop.user_contact')}}</th>
@@ -73,7 +82,7 @@
             <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
             <th lay-data="{field:'order_created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
             <th lay-data="{field:'order_updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
-            <th lay-data="{fixed: 'right', minWidth:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+            <th lay-data="{fixed: 'right', minWidth:80, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
         </tr>
         </thead>
         <tbody>
@@ -128,12 +137,14 @@
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-        }).use(['common', 'table' , 'dropdown', 'layer'], function () {
+            timePicker: 'lay/modules/admin/timePicker'
+        }).use(['common', 'table' , 'dropdown', 'layer' , 'timePicker'], function () {
             const form = layui.form,
                 dropdown = layui.dropdown,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
+                timePicker = layui.timePicker,
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
@@ -148,30 +159,19 @@
                     }
                 }
             });
+            timePicker.render({
+                elem: '#dateTime',
+                options:{
+                    timeStamp:false,
+                    format:'YYYY-MM-DD HH:ss:mm',
+                    locale:"{{locale()}}"
+                },
+            });
 
-            function open(content , type=2) {
-                var clientWidth = document.body.clientWidth;
-                if(clientWidth<=600)
-                {
-                    var area = ['90%','90%'];
-                }else if(clientWidth<=1200&&clientWidth>600){
-                    var area = ['72%','90%'];
-                }else{
-                    var area = ['80%','90%'];
-                }
-                common.open(content , {
-                    shadeClose: false,
-                    shade: 0.8,
-                    area: area,
-                    offset: 'auto',
-                    scrollbar:true,
-                } , type);
-
-            }
             table.on('tool(table)', function (obj) {
                 let  selector = obj.tr.selector,data = obj.data;
                 if (obj.event === 'detail') {
-                    open('/backstage/business/shop_order/'+data.id);
+                    common.open_page('/backstage/business/shop_order/'+data.id);
                 }else if(obj.event ==='updateStatus') {
                     @if(!Auth::user()->can('business::shop_order.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(".layui-table-box "+selector+" td[data-field=schedule]"));
@@ -270,11 +270,13 @@
                 console.log(data.elem); //得到select原始DOM对象
                 console.log(data.value); //得到被选中的值
                 console.log(data.othis); //得到美化后的DOM对象
-                window.location = '?schedule='+$("select[name=schedule]").val()+'&user_id='+$('select[name=user_id]').val()+'&status='+$('select[name=status]').val();
+                window.location = '?schedule='+$("select[name=schedule]").val()+'&user_id='+$('select[name=user_id]').val()+'&status='+$('select[name=status]').val()+"&dateTime="+$("#dateTime").val();
             });
         });
     </script>
     <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-xs" lay-event="detail">{{trans('common.table.button.detail')}}</a>
+        </div>
     </script>
 @endsection

@@ -132,7 +132,7 @@ layui.extend({
                         },
                         'third':{
                             'value':'3',
-                            'txt':'Two days ago',
+                            'txt':'Dby',
                         },
                     },
                     {
@@ -140,15 +140,15 @@ layui.extend({
                         'column':'Week',
                         'first':{
                             'value':'4',
-                            'txt':'This week',
+                            'txt':'This',
                         },
                         'second':{
                             'value':'5',
-                            'txt':'Last week',
+                            'txt':'Last',
                         },
                         'third':{
                             'value':'6',
-                            'txt':'Next week',
+                            'txt':'Next',
                         },
                     },
                     {
@@ -156,15 +156,15 @@ layui.extend({
                         'column':'Month',
                         'first':{
                             'value':'7',
-                            'txt':'This month',
+                            'txt':'This',
                         },
                         'second':{
                             'value':'8',
-                            'txt':'Last month',
+                            'txt':'Last',
                         },
                         'third':{
                             'value':'9',
-                            'txt':'Next month',
+                            'txt':'Next',
                         },
                     },
                     {
@@ -172,15 +172,15 @@ layui.extend({
                         'column':'Quarter',
                         'first':{
                             'value':'10',
-                            'txt':'This quarter',
+                            'txt':'This',
                         },
                         'second':{
                             'value':'11',
-                            'txt':'Last quarter',
+                            'txt':'Last',
                         },
                         'third':{
                             'value':'12',
-                            'txt':'Next quarter',
+                            'txt':'Next',
                         },
                     },
                     {
@@ -188,15 +188,15 @@ layui.extend({
                         'column':'Year',
                         'first':{
                             'value':'13',
-                            'txt':'This quarter',
+                            'txt':'This',
                         },
                         'second':{
                             'value':'14',
-                            'txt':'Last quarter',
+                            'txt':'Last',
                         },
                         'third':{
                             'value':'15',
-                            'txt':'Next quarter',
+                            'txt':'Next',
                         },
                     }
                 ],
@@ -266,8 +266,8 @@ layui.extend({
                 // var sTime = $('#sTime').val();
             });
             //自定义时间选择器
-            laydate.render({elem: '#sTime' , type: 'datetime'});
-            laydate.render({elem: '#eTime' , type: 'datetime'});
+            laydate.render({elem: '#sTime' , type: 'datetime' , lang: locale});
+            laydate.render({elem: '#eTime' , type: 'datetime' , lang: locale});
 
             //选择固定日期
             var $li=$('.time-info').children().find('li');

@@ -932,7 +932,7 @@ class UserController extends Controller
             $userId = blank($user)?0:$user->user_id;
         }
         $userId = intval($userId);
-        $page = $request->input('page' , 1);
+        $page = intval($request->input('page' , 1));
         if($userId>=0)
         {
             $result = $this->httpRequest('api/backstage/last/online' , array('user_id'=>join(',' , (array)$userId)) , "GET");
@@ -960,7 +960,7 @@ class UserController extends Controller
             'path' => Paginator::resolveCurrentPath(),
             'pageName' => 'page',
         ])->appends($appends);
-        return view('backstage.passport.user.online' , ['users' => $users]);
+        return view('backstage.passport.user.online' , compact('users' , 'appends'));
     }
 
     public function friendStatus(Request $request , $id)
@@ -975,67 +975,39 @@ class UserController extends Controller
 
     public function kol()
     {
-        $kol = DB::connection('lovbee')->table('kol_users')->paginate(10);
-        $userIds = $kol->pluck('user_id')->toArray();
+        $kols = DB::connection('lovbee')->table('kol_users')->paginate(10);
+        $userIds = $kols->pluck('user_id')->unique()->toArray();
         $users = DB::connection('lovbee')->table('users')->whereIn('user_id' , $userIds)->get();
-        $kol->each(function($k , $i) use ($users){
+        $kols->each(function($k , $i) use ($users){
             $k->user = $users->where('user_id' , $k->user_id)->first();
         });
-        return view('backstage.passport.user.kol.index' , compact('kol'));
+        return view('backstage.passport.user.kol.index' , compact('kols'));
     }
     public function storeKol(Request $request)
     {
         $userId = $request->input('user_id' , '');
-        if(!empty($userId))
+        if(empty($userId))
         {
-            $user = DB::connection('lovbee')->table('kol_users')->where('user_id' , $userId)->first();
-            $info = DB::connection('lovbee')->table('users')->where('user_id' , $userId)->first();
-            if (empty($info)) {
-                abort('400', 'The account does not exist');
-            }
-            if(empty($user)) {
-                DB::connection('lovbee')->table('kol_users')->insert(array(
-                    'user_id'=>$userId,
-                    'created_at'=>date('Y-m-d H:i:s'),
-                ));
-            }
+            abort(422 , 'User ID cannot be empty');
+        }
+        $user = DB::connection('lovbee')->table('users')->where('user_id' , $userId)->first();
+        if (empty($user)) {
+            abort(404, 'The account does not exist');
+        }
+        $kolUser = DB::connection('lovbee')->table('kol_users')->where('user_id' , $userId)->first();
+        if(empty($kolUser)) {
+            DB::connection('lovbee')->table('kol_users')->insert(array(
+                'user_id'=>$userId,
+                'created_at'=>date('Y-m-d H:i:s'),
+            ));
+        }else{
+            abort(422, 'Kol already exists!');
         }
         return response()->json(['result'=>'success']);
     }
     public function createKol(Request $request)
     {
         return view('backstage.passport.user.kol.create');
-    }
-
-    public function follow(Request $request, $id)
-    {
-        $params = $request->all();
-        $result = DB::connection('lovbee')->table('users_follows')->where('user_id', $id);
-        if (!empty($params['keyword'])) {
-            $user    = User::where('user_name', 'like', "%{$params['keyword']}%")->orWhere('user_name', 'like', "%{$params['keyword']}%")->get();
-            $userIds = $user->pluck('user_id')->toArray();
-            $result  = $result->whereIn('followed_id', $userIds);
-        }
-        $result  = $this->dateTime($result, $params);
-        $result  = $result->paginate(10);
-        $userIds = $result->pluck('followed_id')->toArray();
-
-        if (!empty($userIds)) {
-            $users  = User::whereIn('user_id', $userIds)->get();
-            foreach ($result as $item) {
-                foreach ($users as $user) {
-                    if ($item->followed_id == $user->user_id) {
-                        $item->user_nick_name = $user->user_nick_name;
-                        $item->user_name = $user->user_name;
-                        $item->user_id = $user->user_id;
-                        $item->user_avatar = $user->user_avatar;
-                    }
-                }
-            }
-        }
-
-        $params['result'] = $result;
-        return view('backstage.passport.user.follow', $params);
     }
 
 }

@@ -17,7 +17,7 @@ return [
                 'comment'=>'Mark',
             ],
             'shop_order'=>[
-                'All'=>'所有',
+                'All'=>'全部',
                 'Ordered'=>'已下单',
                 'ConfirmOrder'=>'已确认订单',
                 'CallDriver'=>'已呼叫骑手',

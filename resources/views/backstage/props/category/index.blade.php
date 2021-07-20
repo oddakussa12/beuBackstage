@@ -3,7 +3,7 @@
     <div  class="layui-fluid">
         <form class="layui-form">
             <div class="layui-inline">
-                <button id="add" type="button" class="layui-btn layui-btn-normal">Add</button>
+                <button id="add" type="button" class="layui-btn layui-btn-normal">{{trans('common.form.button.add')}}</button>
             </div>
         </form>
         <table class="layui-table"   lay-filter="table" id="table" >
@@ -57,17 +57,9 @@
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
-               if(layEvent === 'edit'){ //编辑
+                if(layEvent === 'edit'){ //编辑
                     var id = data.id;
-                    layer.open({
-                        type: 2,
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['80%','80%'],
-                        offset: 'auto',
-                        scrollbar:true,
-                        content: '/backstage/props/category/'+id+'/edit',
-                    });
+                    common.open_page('/backstage/props/category/'+id+'/edit');
                 }
             });
 
@@ -139,15 +131,7 @@
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
             });
             $(document).on('click','#add',function(){
-                layer.open({
-                    type: 2,
-                    title: 'Category',
-                    shadeClose: true,
-                    shade: 0.8,
-                    area: ['80%','80%'],
-                    offset: 'auto',
-                    content: '/backstage/props/category/create',
-                });
+                common.open_page('/backstage/props/category/create');
             });
             table.init('table', { //转化静态表格
                 page:false,

@@ -20,6 +20,7 @@ class DeliveryOrderController extends Controller
     {
         $params = $data = $request->all();
         $user   = auth()->user();
+        $dateTime = strval($request->input('dateTime' , ' - '));
         $status = intval($request->input('status' , 0));
         $data['status'] = $status;
         $shopId = intval($request->input('user_id' , 0));
@@ -36,7 +37,13 @@ class DeliveryOrderController extends Controller
         }
         $user->admin_id!=1 && $orders = $orders->where('operator', $user->admin_id);
         $shopId!=0  && $orders = $orders->where('owner', $shopId);
-        $orders   = $orders->paginate(15)->appends($params);
+        $date_time = $this->parseTime($dateTime);
+        if($date_time!==false)
+        {
+            $orders = $orders->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
+            $data['dateTime'] = $dateTime;
+        }
+        $orders   = $orders->orderByDesc('created_at')->paginate(15)->appends($params);
         $shopIds = $orders->pluck('owner')->unique()->toArray();
         $operatorIds = $orders->pluck('operator')->unique()->toArray();
         $operators = DB::table('admins')->whereIn('admin_id' , $operatorIds)->select('admin_id' , 'admin_username')->get();
@@ -77,7 +84,7 @@ class DeliveryOrderController extends Controller
         if (in_array($schedule, $list)) { // 订单状态
             $duration = intval((strtotime($time)- strtotime($order->created_at))/60);
             $schedule==5 && $orderState = 1;
-            $schedule>6  && $orderState = 2;
+            $schedule>=6  && $orderState = 2;
             if (!empty($params['version'])) {
                 $shopPrice = ($order->order_price - 30)*0.95;
                 $update  = ['status'=>$orderState ?? 0, 'shop_price'=>$shopPrice, 'schedule'=>$schedule, 'order_time'=>$duration, 'operator'=>auth()->user()->admin_id];

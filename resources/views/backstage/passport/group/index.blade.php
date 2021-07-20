@@ -7,51 +7,53 @@
                     <label class="layui-form-label">{{trans('common.form.label.sort')}}：</label>
                     <div class="layui-input-inline">
                         <select name="order">
-                            <option value=""  @if(empty($order))  selected @endif>CreateAt</option>
-                            <option value="1" @if(!empty($order)) selected @endif>MemberCount</option>
+                            @foreach(trans('group.form.select.sort') as $k=>$v)
+                            <option value="{{$k}}"  @if(!empty($order)&&$order==$k)  selected @endif>{{$v}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('chat.table.header.owner')}}:</label>
+                    <label class="layui-form-label">{{trans('group.form.label.administrator')}}:</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" name="owner_id" id="owner_id"  @if(!empty($owner_id)) value="{{$owner_id}}" @endif />
+                        <input class="layui-input" name="administrator" id="administrator"  @if(!empty($administrator)) value="{{$administrator}}" @endif />
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('chat.table.header.group_name')}}:</label>
+                    <label class="layui-form-label">{{trans('group.form.label.name')}}:</label>
                     <div class="layui-input-inline" >
                         <input class="layui-input" name="name" id="name"  @if(!empty($name)) value="{{$name}}" @endif />
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('chat.table.header.group_id')}}:</label>
+                    <label class="layui-form-label">{{trans('group.form.label.group_id')}}:</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="id" id="id"  @if(!empty($id)) value="{{$id}}" @endif />
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label" >{{trans('common.form.label.date')}}:</label>
-                    <div class="layui-input-inline" style="width: 300px;">
+                    <div class="layui-input-inline" >
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                </div>
+
             </div>
         </form>
         <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
-                <th  lay-data="{field:'id', minWidth:180}">{{trans('chat.table.header.group_id')}}</th>
-                <th  lay-data="{field:'avatar', minWidth:200}">{{trans('user.table.header.user_avatar')}}</th>
-                <th  lay-data="{field:'name', minWidth:200}">{{trans('chat.table.header.group_name')}}</th>
-                <th  lay-data="{field:'is_delete', minWidth:100}">{{trans('chat.table.header.dissolution')}}</th>
-                <th  lay-data="{field:'member', minWidth:120}">{{trans('chat.table.header.member_count')}}</th>
-                <th  lay-data="{field:'administrator', minWidth:150}">{{trans('chat.table.header.owner')}}</th>
+                <th  lay-data="{field:'id', minWidth:180}">{{trans('group.table.header.group_id')}}</th>
+                <th  lay-data="{field:'avatar', minWidth:200}">{{trans('group.table.header.avatar')}}</th>
+                <th  lay-data="{field:'name', minWidth:200}">{{trans('group.table.header.name')}}</th>
+                <th  lay-data="{field:'is_deleted', minWidth:100}">{{trans('group.table.header.is_deleted')}}</th>
+                <th  lay-data="{field:'member', minWidth:120}">{{trans('group.table.header.member')}}</th>
+                <th  lay-data="{field:'administrator', minWidth:150}">{{trans('group.table.header.administrator')}}</th>
                 <th  lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
-                <th  lay-data="{field:'user_id', minWidth:100}">{{trans('chat.table.header.create_user')}}</th>
+                <th  lay-data="{field:'user_id', minWidth:100}">{{trans('group.table.header.user_id')}}</th>
                 <th  lay-data="{field:'user_op', minWidth:100 ,fixed: 'right', templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
@@ -61,7 +63,9 @@
                     <td>{{ $group->id }}</td>
                     <td>@if(is_array($group->avatar))
                             @foreach($group->avatar as $avatar)
-                                <img width="35px" src="{{$avatar}}" />
+                                @if(!empty($avatar))
+                                <img width="35px" src="{{splitJointQnImageUrl($avatar)}}" />
+                                @endif
                             @endforeach
                         @endif
                     </td>
@@ -112,15 +116,7 @@
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 let tr = obj.tr; //获得当前行 tr 的DOM对象
                 if(layEvent === 'detail'){
-                    layer.open({
-                        type: 2,
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['90%','90%'],
-                        offset: 'auto',
-                        'scrollbar':true,
-                        content: '/backstage/passport/group/'+data.id,
-                    });
+                    common.open_page('/backstage/passport/group/'+data.id);
                 }
             });
             table.init('table', { //转化静态表格
@@ -132,6 +128,7 @@
                 options:{      //可选参数timeStamp，format
                     timeStamp:false,//true开启时间戳 开启后format就不需要配置，false关闭时间戳 //默认false
                     format:'YYYY-MM-DD HH:ss:mm',//格式化时间具体可以参考moment.js官网 默认是YYYY-MM-DD HH:ss:mm
+                    locale:"{{locale()}}"
                 },
             });
         })

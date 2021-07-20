@@ -76,7 +76,10 @@
 
 
             table.init('table', { //转化静态表格
-                page:true
+                page:{
+                    layout: ['prev', 'page', 'next'],
+                    limit:100
+                }
             });
 
             table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"

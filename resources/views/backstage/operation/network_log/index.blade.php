@@ -67,25 +67,25 @@
     <table class="layui-table"   lay-filter="table">
         <thead>
         <tr>
-            <th  lay-data="{field:'user_id', width:110 ,fixed: 'left'}">ID</th>
-            <th  lay-data="{field:'id', width:80}">LogID</th>
+            <th  lay-data="{field:'user_id', width:110 ,fixed: 'left'}">{{trans('user.table.header.user_id')}}</th>
+            <th  lay-data="{field:'id', width:80}">{{trans('common.table.header.id')}}</th>
             <th  lay-data="{field:'user_name', width:150}">{{trans('user.table.header.user_name')}}</th>
             <th  lay-data="{field:'user_nickname', width:190}">{{trans('user.table.header.user_nick_name')}}</th>
-            <th  lay-data="{field:'app_version', width:100}">{{trans('feedback.form.label.app_version')}}</th>
-            <th  lay-data="{field:'system_type', minWidth:160}">{{trans('feedback.form.label.system_type')}}</th>
-            <th  lay-data="{field:'system_version', width:100}">{{trans('feedback.form.label.system_version')}}</th>
-            <th  lay-data="{field:'carriname', width:100}">{{trans('feedback.form.label.carriname')}}</th>
-            <th  lay-data="{field:'remote_domain', minWidth:200}">{{trans('feedback.form.label.domain')}}</th>
-            <th  lay-data="{field:'networking',width:100}">{{trans('feedback.form.label.networking')}}</th>
-            <th  lay-data="{field:'network_type',width:120}">{{trans('feedback.form.label.network_type')}}</th>
-            <th  lay-data="{field:'real_ip',width:130}">{{trans('user.table.header.user_ip_address')}}</th>
-            <th  lay-data="{field:'local_ip',width:130}">{{trans('feedback.form.label.local_ip')}}</th>
-            <th  lay-data="{field:'local_gateway',width:130}">{{trans('feedback.form.label.local_gateway')}}</th>
-            <th  lay-data="{field:'local_dns',width:130}">{{trans('feedback.form.label.local_dns')}}</th>
-            <th  lay-data="{field:'dns_result',width:180}">{{trans('feedback.form.label.dns_result')}}</th>
-            <th  lay-data="{field:'tcp_connect_test', width:200}">{{trans('feedback.form.label.tcp_connect_test')}}</th>
-            <th  lay-data="{field:'ping', minWidth:200}">{{trans('feedback.form.label.ping')}}</th>
-            <th  lay-data="{field:'created_at', width:160}">{{trans('user.table.header.user_time')}}</th>
+            <th  lay-data="{field:'app_version', width:100}">{{trans('operation.table.header.network_log.app_version')}}</th>
+            <th  lay-data="{field:'system_type', minWidth:160}">{{trans('operation.table.header.network_log.system_type')}}</th>
+            <th  lay-data="{field:'system_version', width:100}">{{trans('operation.table.header.network_log.system_version')}}</th>
+            <th  lay-data="{field:'carriname', width:100}">{{trans('operation.table.header.network_log.carriname')}}</th>
+            <th  lay-data="{field:'remote_domain', minWidth:200}">{{trans('operation.table.header.network_log.domain')}}</th>
+            <th  lay-data="{field:'networking',width:100}">{{trans('operation.table.header.network_log.networking')}}</th>
+            <th  lay-data="{field:'network_type',width:120}">{{trans('operation.table.header.network_log.network_type')}}</th>
+            <th  lay-data="{field:'real_ip',width:130}">{{trans('operation.table.header.network_log.real_ip')}}</th>
+            <th  lay-data="{field:'local_ip',width:130}">{{trans('operation.table.header.network_log.local_ip')}}</th>
+            <th  lay-data="{field:'local_gateway',width:130}">{{trans('operation.table.header.network_log.local_gateway')}}</th>
+            <th  lay-data="{field:'local_dns',width:130}">{{trans('operation.table.header.network_log.local_dns')}}</th>
+            <th  lay-data="{field:'dns_result',width:180}">{{trans('operation.table.header.network_log.dns_result')}}</th>
+            <th  lay-data="{field:'tcp_connect_test', width:200}">{{trans('operation.table.header.network_log.tcp_connect_test')}}</th>
+            <th  lay-data="{field:'ping', minWidth:200}">{{trans('operation.table.header.network_log.ping')}}</th>
+            <th  lay-data="{field:'created_at', width:160}">{{trans('common.table.header.created_at')}}</th>
         </tr>
         </thead>
         <tbody>

@@ -5,9 +5,11 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Mcamara\LaravelLocalization\Traits\LoadsTranslatedCachedRoutes;
 
 class RouteServiceProvider extends ServiceProvider
 {
+    use LoadsTranslatedCachedRoutes;
     /**
      * This namespace is applied to your controller routes.
      *

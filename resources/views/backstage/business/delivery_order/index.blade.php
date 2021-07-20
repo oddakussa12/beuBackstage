@@ -31,6 +31,15 @@
                         </select>
                     </div>
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" >{{trans('common.form.label.date')}}:</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
+                    </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
+                </div>
             </div>
         </form>
         <table class="layui-table" lay-filter="table" id="table">
@@ -94,13 +103,15 @@
         layui.config({
             base: "{{url('plugin/layui')}}/"
         }).extend({
-            common: 'lay/modules/admin/common'
-        }).use(['common', 'table', 'dropdown', 'layer'], function () {
+            common: 'lay/modules/admin/common',
+            timePicker: 'lay/modules/admin/timePicker'
+        }).use(['common', 'table', 'dropdown', 'layer' , 'timePicker'], function () {
             const form = layui.form,
                 layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
                 dropdown = layui.dropdown,
+                timePicker = layui.timePicker,
                 $ = layui.jquery;
             var order = table.init('table', { //转化静态表格
                 page:false,
@@ -115,6 +126,14 @@
                         }
                     }
                 }
+            });
+            timePicker.render({
+                elem: '#dateTime',
+                options:{
+                    timeStamp:false,
+                    format:'YYYY-MM-DD HH:ss:mm',
+                    locale:"{{locale()}}"
+                },
             });
             table.on('tool(table)', function (obj) {
                 let  selector = obj.tr.selector,data = obj.data;
@@ -192,7 +211,7 @@
             });
             form.render();
             form.on('select(change)', function(data){
-                window.location = '?status='+$("select[name=status]").val()+'&user_id='+$('select[name=user_id]').val();
+                window.location = '?status='+$("select[name=status]").val()+'&user_id='+$('select[name=user_id]').val()+"&dateTime="+$("#dateTime").val();
             });
         });
     </script>

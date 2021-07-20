@@ -11,47 +11,68 @@
         .layui-table td, .layui-table th {padding: 5px;}
         .layui-layout-body {max-height: 600px; overflow-y: scroll;}
     </style>
-    <form class="layui-form layui-tab-content">
+    <form class="layui-form">
         {{ csrf_field() }}
         <input type="hidden" id="id" name="id" value="{{$data->id}}">
-        <table class="layui-table">
-            <thred>
-                <tr>
-                    <th>Name</th>
-                    <th><input type="text" placeholder="English only" id="name" name="name" value="{{$data->name}}" /></th>
-                </tr>
-            </thred>
-        </table>
-        <table id="layui-table" class="layui-table" border="1" align="center">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Language</th>
-                <th>Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            @if(!empty($data->language))
-                @foreach($data->language as $key=>$value)
-                    <tr @if($key=='en') id="clo" @endif>
-                        <td class="td"></td>
-                        <td> <input id="language[]" name="language[]" value="{{$key}}" /></td>
-                        <td> <input id="category[]" name="category[]" value="{{$value}}" /></td>
+        <div class="layui-form-item">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                        <th><input type="text" placeholder="English only" id="name" name="name" value="{{$data->name}}" /></th>
                     </tr>
-                @endforeach
-            @else
-                <tr id="clo">
-                    <td class="td"></td>
-                    <td> <input id="language[]" name="language[]" value="en" /></td>
-                    <td> <input id="category[]" name="category[]" value="{{$data->name}}" /></td>
-                </tr>
-            @endif
-            </tbody>
-            <a href="javascript:;" id="addCol" name="addCol" class="layui-btn layui-btn-xs">Add</a>
-            <a href="javascript:;" id="delCol" name="delCol" class="layui-btn layui-btn-xs" >Delete</a>
-        </table>
-        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="admin_form" id="btn">Submit</button>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                            <div class="layui-btn-group">
+                                <a href="javascript:;" id="addCol" name="addCol" class="layui-btn layui-btn-normal layui-btn-fluid">{{trans('common.form.button.add')}}</a>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="layui-btn-group">
+                                <button class="layui-btn  layui-btn-fluid" lay-submit lay-filter="admin_form" id="btn">{{trans('common.form.button.update')}}</button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="layui-btn-group">
+                                <a href="javascript:;" id="delCol" name="delCol" class="layui-btn layui-btn-fluid layui-btn-danger" >{{trans('common.form.button.delete')}}</a>
+                            </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
 
+            <table id="layui-table" class="layui-table" border="1" align="center">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Language</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @if(!empty($data->language))
+                    @foreach($data->language as $key=>$value)
+                        <tr @if($key=='en') id="clo" @endif>
+                            <td class="td"></td>
+                            <td> <input id="language[]" name="language[]" value="{{$key}}" /></td>
+                            <td> <input id="category[]" name="category[]" value="{{$value}}" /></td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr id="clo">
+                        <td class="td"></td>
+                        <td> <input id="language[]" name="language[]" value="en" /></td>
+                        <td> <input id="category[]" name="category[]" value="{{$data->name}}" /></td>
+                    </tr>
+                @endif
+
+                </tbody>
+
+            </table>
+        </div>
     </form>
 
 @endsection

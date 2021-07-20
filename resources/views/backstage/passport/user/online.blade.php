@@ -3,9 +3,9 @@
     <form class="layui-form">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Name:</label>
+                <label class="layui-form-label">{{trans('user.form.label.user_name')}}:</label>
                 <div class="layui-input-inline">
-                    <input class="layui-input" placeholder="" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
+                    <input class="layui-input" placeholder="" name="keyword" id="keyword"  @if(!empty($appends['keyword'])) value="{{$appends['keyword']}}" @endif />
                 </div>
             </div>
             <div class="layui-inline">
@@ -36,9 +36,9 @@
                 <td>{{$user->user_nick_name}}</td>
                 <td>{{$user->user_name}}</td>
                 <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1){{trans('common.cast.sex.other')}}@elseif($user->user_gender==0){{trans('common.cast.sex.female')}}@else{{trans('common.cast.sex.male')}}@endif</span></td>
-                <td>{{ $user->country }}</td>
+                <td>{{ $user->user_country }}</td>
                 <td>{{$user->activeTime}}</td>
-                <td><span class="layui-btn layui-btn-xs">@if($user->activation==1) YES @else NO @endif</span></td>
+                <td><span class="layui-btn layui-btn-xs">@if($user->user_activation==1) YES @else NO @endif</span></td>
             </tr>
         @endforeach
         </tbody>
@@ -65,14 +65,9 @@
             common: 'lay/modules/admin/common',
             timePicker: 'lay/modules/admin/timePicker',
             echarts: 'lay/modules/echarts',
-        }).use(['element', 'common' , 'table' , 'layer' , 'flow' , 'laydate' , 'timePicker', 'echarts'], function () {
+        }).use(['element' , 'table' , 'timePicker'], function () {
             let $ = layui.jquery,
-                element = layui.element,
                 table = layui.table,
-                common = layui.common,
-                echarts = layui.echarts,
-                laydate = layui.laydate,
-                flow = layui.flow,
                 timePicker = layui.timePicker;
 
             timePicker.render({

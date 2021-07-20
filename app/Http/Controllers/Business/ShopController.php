@@ -192,7 +192,7 @@ class ShopController extends Controller
                         'created_at'=> date('Y-m-d H:i:s'),
                     ]);
                 }
-                $this->httpRequest('api/backstage/shop/'.$id, $fields, 'PATCH', $header);
+                $this->httpRequest('api/backstage/shop/'.$id, $fields, 'PATCH');
                 $connect->commit();
             }catch (\Exception $e)
             {

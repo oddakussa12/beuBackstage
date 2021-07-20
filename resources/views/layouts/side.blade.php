@@ -10,7 +10,7 @@
                             @include('layouts.child_side' , ['all_menu' => $sub_menu->child])
                         @else
                             @if(Auth::user()->can($sub_menu->menu_auth))
-                                <a  href="{{url($sub_menu->menu_url)}}" >{{$sub_menu->menu_format_name}}</a>
+                                <a  href="{{ LaravelLocalization::localizeUrl($sub_menu->menu_url) }}" >{{$sub_menu->menu_format_name}}</a>
                             @endif
                         @endif
                     </dd>
@@ -21,7 +21,7 @@
                 @if(blank($menu->menu_url))
                     <a  href="javascript:;" >{{$menu->menu_format_name}}</a>
                 @else
-                    <a  href="{{ url($menu->menu_url)}}" >{{$menu->menu_format_name}}</a>
+                    <a  href="{{ LaravelLocalization::localizeUrl($menu->menu_url) }}" >{{$menu->menu_format_name}}</a>
                 @endif
             @endif
         @endif

@@ -5,15 +5,14 @@
             {{ csrf_field() }}
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">ID：</label>
+                    <label class="layui-form-label">{{trans('user.form.label.user_id')}}：</label>
                     <div class="layui-input-block">
-                        <input type="text" id="user_id" name="user_id" placeholder="User ID (Numbers only)"  required="required" autocomplete="off" class="layui-input" value="">
+                        <input type="text" id="user_id" name="user_id" placeholder="{{trans('user.form.placeholder.user_id')}}"  required="required" autocomplete="off" class="layui-input" value="">
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label"></label>
-                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="common_form" id="btn">Submit</button>
+                <div class="layui-inline">
+                    <button class="layui-btn" lay-submit lay-filter="common_form" id="btn">{{trans('common.form.button.add')}}</button>
+                </div>
             </div>
         </form>
     </div>

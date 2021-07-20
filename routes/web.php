@@ -75,7 +75,6 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('user', 'UserController@index')->name('user.index');
             Route::post('user/block', 'UserController@block')->name('user.block');
             Route::get('user/device/{id}', 'UserController@device')->name('user.device');
-            Route::get('user/deviceInfo', 'UserController@deviceInfo')->name('user.deviceInfo');
             Route::post('user/device/block', 'UserController@deviceBlock')->name('user.device.block');
 
             Route::get('follow' , 'FollowController@index')->name('follow.index');
@@ -124,12 +123,6 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::put('goods_comment/{goods_comment}' , 'GoodsCommentController@update')->name('goods_comment.update');
             Route::get('goods_comment/statistics' , 'GoodsCommentController@statistics')->name('goods_comment.statistics');
             Route::get('goods_comment/acquisition' , 'GoodsCommentController@acquisition')->name('goods_comment.acquisition');
-            Route::get('deposits/create/{id}' , 'DepositController@create')->name('deposits.create');
-            Route::get('deposits/order/detail' , 'DepositController@order')->name('deposits.order.detail');
-            Route::get('deposits/money/{id}' , 'DepositController@money')->name('deposits.money');
-            Route::get('deposits' , 'DepositController@index')->name('deposits.index');
-            Route::post('deposits' , 'DepositController@store')->name('deposits.store');
-            Route::patch('deposits' , 'DepositController@update')->name('deposits.update');
             Route::get('delivery_order' , 'DeliveryOrderController@index')->name('delivery_order.index');
             Route::patch('delivery_order/{delivery_order}' , 'DeliveryOrderController@update')->name('delivery_order.update');
             Route::get('delivery_order/browse' , 'DeliveryOrderController@browse')->name('delivery_order.browse');
@@ -165,8 +158,6 @@ Route::group(['prefix'=>'backstage'] , function(){
     Route::get('operator/operator/goal202104' , 'Operator\OperatorController@goal202104')->name('operator.operator.goal202104');
     Route::get('operator/operator/goal202105' , 'Operator\OperatorController@goal202105')->name('operator.operator.goal202105');
 });
-Route::any('/' , function(){
-    return redirect('/backstage');
-});
+Route::any('/' , 'BackstageController@redirect')->name('backstage.redirect');
 
 

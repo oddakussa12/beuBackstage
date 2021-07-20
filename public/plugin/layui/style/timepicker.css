@@ -20,10 +20,12 @@
 }
 .timePicker .time-div .time-info ul span {
     color: #ccc;
+    width: 36px;
 }
 .timePicker .time-div .time-info ul li {
     padding: 2px 7px;
     cursor: pointer;
+    width: 50px;
 }
 .timePicker .time-div .time-info ul li input {
     display: none;

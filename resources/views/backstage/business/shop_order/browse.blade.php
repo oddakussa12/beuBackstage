@@ -51,7 +51,7 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', width:180}">{{trans('business.table.header.order.order_id')}}</th>
+                <th lay-data="{fixed: 'left', field:'id', width:180}">{{trans('business.table.header.order.order_id')}}</th>
                 <th lay-data="{field:'status', minWidth:120}">{{trans('business.table.header.order.status')}}</th>
                 <th lay-data="{field:'shop_name', minWidth:180}">{{trans('business.table.header.shop.user_name')}}</th>
                 <th lay-data="{field:'shop_contact', minWidth:180}">{{trans('business.table.header.shop.user_contact')}}</th>
@@ -76,7 +76,7 @@
                 <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
                 <th lay-data="{field:'order_created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'order_updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
-                <th lay-data="{fixed: 'right', minWidth:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', minWidth:80, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -165,30 +165,14 @@
             table.on('tool(table)', function (obj) {
                 var data = obj.data;
                 if (obj.event === 'goods') {
-                    open('/backstage/business/shop_order/'+data.id);
+                    common.open_page('/backstage/business/shop_order/'+data.id);
                 }
             });
-            function open(content , type=2) {
-                var clientWidth = document.body.clientWidth;
-                if(clientWidth<=600)
-                {
-                    var area = ['90%','90%'];
-                }else if(clientWidth<=1200&&clientWidth>600){
-                    var area = ['72%','90%'];
-                }else{
-                    var area = ['80%','90%'];
-                }
-                common.open(content , {
-                    shadeClose: false,
-                    shade: 0.8,
-                    area: area,
-                    offset: 'auto',
-                    scrollbar:true,
-                } , type);
-            }
         });
     </script>
     <script type="text/html" id="op">
-        <a class="layui-btn layui-btn-xs" lay-event="goods">{{trans('common.table.button.detail')}}</a>
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-xs" lay-event="goods">{{trans('common.table.button.detail')}}</a>
+        </div>
     </script>
 @endsection

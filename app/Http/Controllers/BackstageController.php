@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller as BaseController;
 use App\Repositories\Contracts\ConfigRepository;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class BackstageController extends BaseController
 {
@@ -38,6 +39,11 @@ class BackstageController extends BaseController
 
         //echo '<h1 style="color: red;">已登录</h1>';
         return view('backstage.index');
+    }
+
+    public function redirect()
+    {
+        return redirect(LaravelLocalization::localizeUrl('/backstage'));
     }
 
     /**

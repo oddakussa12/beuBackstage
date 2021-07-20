@@ -31,6 +31,7 @@ class ShopOrderController extends Controller
         $params = $data = $request->all();
         $user   = auth()->user();
         $schedule = intval($request->input('schedule' , 0));
+        $dateTime = strval($request->input('dateTime' , ' - '));
         $data['schedule'] = $schedule;
         $shopId = intval($request->input('user_id' , 0));
         $adminsShops = DB::table('admins_shops');
@@ -54,7 +55,13 @@ class ShopOrderController extends Controller
         }
         $user->admin_id!=1 && $orders = $orders->where('operator', $user->admin_id);
         $shopId!=0  && $orders = $orders->where('shop_id', $shopId);
-        $orders   = $orders->paginate(15)->appends($params);
+        $date_time = $this->parseTime($dateTime);
+        if($date_time!==false)
+        {
+            $data['dateTime'] = $dateTime;
+            $orders = $orders->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
+        }
+        $orders   = $orders->orderByDesc('created_at')->paginate(15)->appends($params);
         $shopIds = $orders->pluck('shop_id')->unique()->toArray();
         $shops = User::whereIn('user_id' , $shopIds)->get();
         $time = Carbon::now()->subHour(8)->toDateTimeString();
@@ -91,7 +98,7 @@ class ShopOrderController extends Controller
         if (in_array($schedule, $schedules)) { // 订单状态
             $duration = intval((strtotime($time)- strtotime($order->created_at))/60);
             $schedule==5 && $orderState = 1;
-            $schedule>6  && $orderState = 2;
+            $schedule>=6  && $orderState = 2;
             $brokerage = $shopPrice = round($order->order_price*$order->brokerage_percentage/100 , 2);
             $data  = ['status'=>$orderState ?? 0, 'shop_price'=>$shopPrice, 'brokerage'=>$brokerage , 'schedule'=>$schedule, 'order_time'=>$duration, 'operator'=>auth()->user()->admin_id];
         }elseif ($free_delivery!==null)
