@@ -142,6 +142,7 @@ class OrderController extends Controller
     /**
      * @param Request $request
      * 购物车管理
+     * @throws \Throwable
      */
     public function shopCart(Request $request)
     {
@@ -203,5 +204,17 @@ class OrderController extends Controller
 
         $params['result'] = $result;
         return view('backstage.business.order.shopCart', $params);
+    }
+
+    public function count(Request $request)
+    {
+        $dateTime = $request->input('dateTime' , Carbon::now()->startOfWeek()->toDateTimeString() , ' - ' , Carbon::now()->endOfWeek()->toDateTimeString());
+        $order = DB::connection('lovbee')->table('orders')->where('status' , 1);
+        $dateTime = $this->parseTime($dateTime);
+        $dateTime!==false&&$order = $order->whereBetween('created_at' , array($dateTime['start'] , $dateTime['end']));
+        $count = $order->count();
+        return response()->json(array(
+            'count'=> $count
+        ));
     }
 }

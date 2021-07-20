@@ -64,5 +64,10 @@ class Controller extends BaseController
         return $result;
     }
 
+    public function parseTime($dateTime)
+    {
+
+    }
+
 
 }

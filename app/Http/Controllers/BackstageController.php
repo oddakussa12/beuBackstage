@@ -26,23 +26,13 @@ class BackstageController extends BaseController
      */
     public function index()
     {
-//        dd(auth()->user()->getAllPermissions()->toArray());
-
-//        echo 1;die;
-//        $t = Translation::first();
-//
-//    // Solution 2 : Mass assignement if you have multiple fields to be saved.
-//    //$category->translate('en')->fill(array());
-//
-//        dd($t->value);
-
-        //echo '<h1 style="color: red;">已登录</h1>';
         return view('backstage.index');
     }
 
     /**
      * @return \Psr\Http\Message\ResponseInterface
      * 获取热门话题
+     * @throws \Throwable
      */
     public function getHotTopic()
     {
@@ -60,17 +50,6 @@ class BackstageController extends BaseController
 
 
         return view('backstage.topic.index' , compact('topics'));
-
-
-        $query = [
-            'referer'   => 'backstage',
-            'time_stamp'=> time(),
-        ];
-        $signature          = common_signature($query);
-        $query['signature'] = $signature;
-        $client  = new Client();
-        $client->request('GET', 'http://tsm.api.mmantou.cn/api/bk/get/topic/hot' , array('query'=>$query));
-        dump($client);
     }
 
 

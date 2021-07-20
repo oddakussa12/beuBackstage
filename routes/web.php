@@ -155,6 +155,7 @@ Route::group(['prefix'=>'backstage'] , function(){
             Route::get('bundle/token' , 'QiNiuController@bundleToken')->name('bundle.token'); // bundle token
         });
     });
+    Route::get('business/order/count' , 'Business\OrderController@count')->name('business.order.count');
     Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
     Route::get('operator/operator/goal' , 'Operator\OperatorController@goal')->name('operator.operator.goal');
     Route::post('operator/operator/goal/data' , 'Operator\OperatorController@goalData')->name('operator.operator.goal.data');
