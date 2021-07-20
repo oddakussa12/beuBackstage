@@ -208,7 +208,7 @@ class OrderController extends Controller
 
     public function count(Request $request)
     {
-        $dateTime = $request->input('dateTime' , Carbon::now()->startOfWeek()->toDateTimeString() , ' - ' , Carbon::now()->endOfWeek()->toDateTimeString());
+        $dateTime = $request->input('dateTime' , Carbon::now()->startOfWeek()->toDateTimeString() . ' - ' . Carbon::now()->endOfWeek()->toDateTimeString());
         $order = DB::connection('lovbee')->table('orders')->where('status' , 1);
         $dateTime = $this->parseTime($dateTime , 'subHours' , 3);
         $dateTime!==false&&$order = $order->whereBetween('created_at' , array($dateTime['start'] , $dateTime['end']));
