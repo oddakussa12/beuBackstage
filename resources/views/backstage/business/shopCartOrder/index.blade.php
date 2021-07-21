@@ -56,6 +56,7 @@
             <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">Comment</th>
             <th lay-data="{field:'order_time', minWidth:180}">OrderTimeConsuming</th>
             <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
+            <th lay-data="{field:'user_created_at', minWidth:170}">UserCreatedAt</th>
             <th lay-data="{field:'order_created_at', minWidth:170}">CreatedAt</th>
             <th lay-data="{field:'order_updated_at', minWidth:170}">UpdatedAt</th>
             <th lay-data="{fixed: 'right', minWidth:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -82,6 +83,7 @@
                 <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
                 <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
                 <td>@if(!empty($order->color)){{$order->color}}@endif</td>
+                <td>{{$order->user->user_created_at}}</td>
                 <td>{{$order->created_at}}</td>
                 <td>{{$order->updated_at}}</td>
                 <td></td>
