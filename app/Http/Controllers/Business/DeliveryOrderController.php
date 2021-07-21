@@ -43,7 +43,7 @@ class DeliveryOrderController extends Controller
             $orders = $orders->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
             $data['dateTime'] = $dateTime;
         }
-        $orders   = $orders->orderByDesc('created_at')->paginate(15)->appends($params);
+        $orders   = $orders->orderByDesc('created_at')->paginate(20)->appends($params);
         $shopIds = $orders->pluck('owner')->unique()->toArray();
         $operatorIds = $orders->pluck('operator')->unique()->toArray();
         $operators = DB::table('admins')->whereIn('admin_id' , $operatorIds)->select('admin_id' , 'admin_username')->get();

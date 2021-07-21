@@ -49,7 +49,7 @@ class ShoppingCartController extends Controller
             $shoppingCarts = $shoppingCarts->orderByDesc($sort);
         }
 
-        $shoppingCarts  = $shoppingCarts->paginate(15)->appends($params);
+        $shoppingCarts  = $shoppingCarts->paginate(20)->appends($params);
         $shopIds = $shoppingCarts->pluck('shop_id')->toArray();
         $userIds = $shoppingCarts->pluck('user_id')->toArray();
         $goodsIds= $shoppingCarts->pluck('goods_id')->toArray();
