@@ -48,7 +48,7 @@ class OrderController extends Controller
         $userIds  = $orders->pluck('user_id')->toArray();
         $shopIds  = $orders->pluck('shop_id')->toArray();
         $userIds  = array_diff(array_unique(array_merge($userIds, $shopIds)), ['', null]);
-        $users    = DB::connection('lovbee')->table('users')->select('user_id', 'user_nick_name', 'user_contact', 'user_address')->whereIn('user_id', $userIds)->get();
+        $users    = DB::connection('lovbee')->table('users')->select('user_id', 'user_nick_name', 'user_contact', 'user_address' , 'user_created_at')->whereIn('user_id', $userIds)->get();
 
         $orders->shops = $shops ?? [];
         $time = Carbon::now()->subHour(8)->toDateTimeString();
