@@ -6,10 +6,12 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Models\Passport\User;
+use App\Models\Business\ShopTag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\GuzzleException;
+use App\Models\Business\ShopTagTranslation;
 
 class ShopController extends Controller
 {
@@ -64,7 +66,7 @@ class ShopController extends Controller
             $dateTime!==false&&$shops->whereBetween('users.user_created_at' , array($dateTime['start'] , $dateTime['end']));
         }
         $shops = $shops->select([
-            'users.user_id' , 'users.user_name' ,
+            'users.user_id' , 'users.user_name' , 'users.user_tag',
             'users.user_about' , 'users.user_verified' ,
             'users.user_avatar' , 'users_phones.user_phone' ,
             'users.user_address' , 'users_phones.user_phone_country' ,
@@ -93,7 +95,26 @@ class ShopController extends Controller
         $admins = array_map(function ($arr) { return (array)$arr;}, $admins);
         $params['admins']  = $admins;
         $params['shops']  = $shops;
-        $params['countries']  = config('country');;
+        $params['countries']  = config('country');
+        $shopTags = ShopTag::orderByDesc('created_at')->get();
+        $shopTagIds = $shopTags->pluck('id')->toArray();
+        $shopTagTranslations = ShopTagTranslation::whereIn('tag_id' , $shopTagIds)->get();
+        $locale = locale();
+        $shopTags->each(function ($shopTag) use ($shopTagTranslations , $locale){
+            $shopTagTranslation = $shopTagTranslations->where('tag_id' , $shopTag->id)->where('locale' , $locale)->first();
+            if(empty($shopTagTranslation))
+            {
+                $shopTagTranslation = $shopTagTranslations->where('tag_id' , $shopTag->id)->where('locale' , 'en')->first();
+            }
+            $shopTag->translation = collect($shopTagTranslation)->get('tag_content' , '') ;
+        });
+        $shopTags = $shopTags->map(function($shopTags){
+            return array(
+                'id'=>$shopTags->tag,
+                'title'=>$shopTags->translation
+            );
+        })->toArray();
+        $params['shopTags'] = $shopTags;
         return view('backstage.business.shop.index' , $params);
     }
 
@@ -162,6 +183,7 @@ class ShopController extends Controller
         $fields  = array();
         $user_verified   = $request->input('user_verified');
         $user_delivery   = $request->input('user_delivery');
+        $user_tag   = $request->input('user_tag');
         $admin_id   = $request->input('admin_id');
         if($admin_id===null)
         {
@@ -172,6 +194,10 @@ class ShopController extends Controller
             if($user_delivery!==null)
             {
                 $fields['user_delivery'] = $user_delivery=='on'?1:0;
+            }
+            if($user_tag!==null)
+            {
+                $fields['user_tag'] = strval($user_tag);
             }
             if(empty($fields))
             {

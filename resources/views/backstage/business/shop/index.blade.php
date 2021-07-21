@@ -107,6 +107,7 @@
                 <th lay-data="{field:'service', minWidth:120}">{{trans('business.table.header.service')}}</th>
                 <th lay-data="{field:'user_phone', minWidth:150}">{{trans('user.form.label.phone')}}</th>
                 <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.address')}}</th>
+                <th lay-data="{field:'user_tag', minWidth:100, event:'updateTag'}">{{trans('business.table.header.shop.user_tag')}}</th>
 
                 <th lay-data="{field:'admin_username', maxWidth:180, minWidth:150, @if(auth()->user()->admin_id!=1) hide:'true' @endif templet: function(field){
                     return field.admin_username; },event:'updateAmin'}">{{trans('business.table.header.manager')}}</th>
@@ -138,6 +139,7 @@
                     <td>@if(!empty($shop->format_service)){{$shop->format_service}}@else 0 @endif</td>
                     <td>{{$shop->user_phone}}</td>
                     <td>{{$shop->user_address}}</td>
+                    <td>{{$shop->user_tag}}</td>
                     <td>{{empty($shop->admin)?'':$shop->admin->title}}</td>
                     <td>{{$shop->user_about}}</td>
                     <td>@if($shop->user_verified_at!='0000-00-00 00:00:00'){{$shop->user_verified_at}}@endif</td>
@@ -206,6 +208,27 @@
                         ,data: @json($admins)
                         ,click: function(obj){
                             let params = {'admin_id':obj.id};
+                            common.confirm("{{trans('common.confirm.update')}}" , function(){
+                                common.ajax("{{url('/backstage/business/shop')}}/"+data.user_id, params, function(res){
+                                    location.reload();
+                                }, 'patch');
+                            } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                                table.render();
+                            });
+                        }
+                    });
+                }else if(obj.event ==='updateTag') {
+                    @if(!Auth::user()->can('business::shop.update'))
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(".layui-table-box "+selector+" td[data-field=admin_username]"));
+                    table.render();
+                    return true;
+                    @endif
+                    dropdown.render({
+                        elem: this
+                        ,show: true
+                        ,data: @json($shopTags)
+                        ,click: function(obj){
+                            let params = {'user_tag':obj.id};
                             common.confirm("{{trans('common.confirm.update')}}" , function(){
                                 common.ajax("{{url('/backstage/business/shop')}}/"+data.user_id, params, function(res){
                                     location.reload();

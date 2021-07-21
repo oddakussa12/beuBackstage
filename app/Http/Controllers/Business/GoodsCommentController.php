@@ -121,7 +121,7 @@ class GoodsCommentController extends Controller
                 'result'=>'success'
             ));
         }else{
-            return redirect(route('business::goods_comment.statistics'));
+            return redirect(url()->previous());
         }
     }
 
@@ -181,7 +181,7 @@ class GoodsCommentController extends Controller
             }
             DB::table('claim_comments')->insert($data);
         }
-        return redirect(route('business::goods_comment.statistics'));
+        return $this->statistics();
     }
 
 }

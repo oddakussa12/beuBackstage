@@ -62,7 +62,7 @@ class LocalizationMiddleware extends LocaleSessionRedirect
             $locale &&
             app('laravellocalization')->checkLocaleInSupportedLocales($locale) &&
             !(app('laravellocalization')->isHiddenDefault($locale))
-        &&!$request->ajax()) {
+        &&$request->method()=='GET') {
             app('session')->reflash();
             $redirection = app('laravellocalization')->getLocalizedURL($locale);
 

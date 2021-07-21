@@ -64,7 +64,7 @@ class Controller extends BaseController
         return $result;
     }
 
-    public function parseTime($dateTime, $function='addHours')
+    public function parseTime($dateTime, $function='subHours' , $hour = 8)
     {
         $allDate = explode(' - ' , $dateTime);
         $startTime = array_shift($allDate);
@@ -74,8 +74,8 @@ class Controller extends BaseController
         {
             return false;
         }
-        $start   = Carbon::createFromFormat($format , $startTime)->$function(8)->toDateTimeString();
-        $end     = Carbon::createFromFormat($format , $endTime)->$function(8)->toDateTimeString();
+        $start   = Carbon::createFromFormat($format , $startTime)->$function($hour)->toDateTimeString();
+        $end     = Carbon::createFromFormat($format , $endTime)->$function($hour)->toDateTimeString();
         return array(
             'start'=>$start,
             'end'=>$end,

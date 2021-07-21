@@ -70,7 +70,8 @@ return [
                 'user_status'=>'状态',
                 'user_verified'=>'审核',
                 'user_online'=>'线上',
-                'user_delivery'=>'外卖'
+                'user_delivery'=>'外卖',
+                'user_tag'=>'标签'
             ],
             'promo_code'=>[
                 'description'=>'描述',

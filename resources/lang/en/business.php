@@ -70,7 +70,8 @@ return [
                 'user_status'=>'Status',
                 'user_verified'=>'Reviewed',
                 'user_online'=>'Online',
-                'user_delivery'=>'Delivery'
+                'user_delivery'=>'Delivery',
+                'user_tag'=>'Tag'
             ],
             'promo_code'=>[
                 'description'=>'Description',

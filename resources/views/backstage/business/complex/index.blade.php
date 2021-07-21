@@ -9,7 +9,7 @@
         <div class="layui-row" style="padding: 10px;">
             <div class="layui-btn-group">
                 @foreach($iframes as $k=>$v)
-                    <a class="layui-btn layui-btn-normal @if($type==$k) layui-btn-disabled @endif" href="?type={{$k}}" >{{trans('business.form.label.complex.'.$k)}}</a>
+                    <a class="layui-btn layui-btn-normal layui-btn-xs @if($type==$k) layui-btn-disabled @endif" href="?type={{$k}}" >{{trans('business.form.label.complex.'.$k)}}</a>
                 @endforeach
             </div>
         </div>

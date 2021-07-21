@@ -71,7 +71,7 @@
             <div class="layui-form-item">
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" type="submit"  lay-submit lay-filter="prop_form" >{{trans('common.form.button.update')}}</button>
+                        <button class="layui-btn" type="submit"  lay-submit lay-filter="prop_form" >{{trans('common.form.button.add')}}</button>
                     </div>
                 </div>
             </div>

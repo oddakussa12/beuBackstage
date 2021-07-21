@@ -40,9 +40,9 @@ class ShopOrderController extends Controller
         $data['shops']  = User::whereIn('user_id', $userIds)->get();
         $schedules = $this->schedule;
         if (isset($params['status'])) {
-            $data['status'] == 0 && $schedules = collect($schedules)->only('1','2','3','4','6');
+            $data['status'] == 0 && $schedules = collect($schedules)->only('1','2','3','4');
             $data['status'] == 1 && $schedules = collect($schedules)->only('5');
-            $data['status'] == 2 && $schedules = collect($schedules)->only('7', '8', '9', '10');
+            $data['status'] == 2 && $schedules = collect($schedules)->only('6' , '7', '8', '9', '10');
         }
         $data['schedules'] = $schedules;
         $orders = new Order();
