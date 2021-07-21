@@ -61,7 +61,8 @@ class ShopOrderController extends Controller
             $data['dateTime'] = $dateTime;
             $orders = $orders->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
         }
-        $orders   = $orders->orderByDesc('created_at')->paginate(20)->appends($params);
+        $data['perPage'] = $perPage = 20;
+        $orders   = $orders->orderByDesc('created_at')->paginate($perPage)->appends($params);
         $shopIds = $orders->pluck('shop_id')->unique()->toArray();
         $shops = User::whereIn('user_id' , $shopIds)->get();
         $time = Carbon::now()->subHour(8)->toDateTimeString();

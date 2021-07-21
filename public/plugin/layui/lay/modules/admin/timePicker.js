@@ -221,7 +221,6 @@ layui.extend({
                     '<div class="time-info">';
                 var str = '';
                 for(var l in languages.list){//遍历json数组时，这么写p为索引，0,1
-                    console.log(l);
                     str += '<ul class="'+languages.list[l].class+'"><span>'+languages.list[l].column+'</span><li><input type="radio" name="day" value="'+languages.list[l].first.value+'">'+languages.list[l].first.txt+'</li><li><input type="radio" name="day" value="'+languages.list[l].second.value+'">'+languages.list[l].second.txt+'</li><li><input type="radio" name="day" value="'+languages.list[l].third.value+'">'+languages.list[l].third.txt+'</li></ul> ';
                 }
                 timeDiv += str;

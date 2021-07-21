@@ -48,8 +48,8 @@ class ShoppingCartController extends Controller
             $sort = strval($params['sort']);
             $shoppingCarts = $shoppingCarts->orderByDesc($sort);
         }
-
-        $shoppingCarts  = $shoppingCarts->paginate(20)->appends($params);
+        $params['perPage'] = $perPage = 20;
+        $shoppingCarts  = $shoppingCarts->paginate($perPage)->appends($params);
         $shopIds = $shoppingCarts->pluck('shop_id')->toArray();
         $userIds = $shoppingCarts->pluck('user_id')->toArray();
         $goodsIds= $shoppingCarts->pluck('goods_id')->toArray();

@@ -102,7 +102,7 @@
             table.init('table', { //转化静态表格
                 page:false,
                 toolbar: '#toolbar',
-                limit:15
+                limit:{{$perPage}}
             });
             timePicker.render({
                 elem: '#dateTime',

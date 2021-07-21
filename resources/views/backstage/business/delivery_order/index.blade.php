@@ -115,7 +115,7 @@
                 $ = layui.jquery;
             var order = table.init('table', { //转化静态表格
                 page:false,
-                limit:15,
+                limit:{{$perPage}},
                 done: function(res, curr, count){
                     console.log(res.data);
                     $('th').css({'font-size': '15'});	//进行表头样式设置

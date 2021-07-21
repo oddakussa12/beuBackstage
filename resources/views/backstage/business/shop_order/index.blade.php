@@ -148,7 +148,7 @@
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
-                limit:15,
+                limit:{{$perPage}},
                 done: function(res, curr, count){
                     $('th').css({'font-size': '15'});	//进行表头样式设置
                     for(var i in res.data){		//遍历整个表格数据
