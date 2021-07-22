@@ -22,10 +22,10 @@ class AdminController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function index()
     {
-        //
         $role = new Role();
         $roles = $role->all();
         $permission = resolve(PermissionRepository::class);
@@ -46,42 +46,6 @@ class AdminController extends Controller
 
     }
 
-    public function userInfo()
-    {
-        $user = auth()->user();
-        return view('backstage.admin.user.index' , compact('user'));
-    }
-
-    /**
-     * @param Request $request
-     * @return array
-     */
-    public function userInfoUpdate(Request $request)
-    {
-        $user   = auth()->user();
-        $fields = $request->except(['admin_id' , 'admin_email' , 'layuiTreeCheck']);
-        if (!empty($fields['password']) && !empty($fields['new_password']) && !empty($fields['new_password'])) {
-            if (!password_verify($fields['password'], $user['admin_password'])) {
-                return ['code'=>1, 'result'=>'Old Password Error'];
-            }
-            if (strlen($fields['new_password'])<6 || $fields['new_password'] !== $fields['confirm_password']) {
-                return ['code'=>1, 'result'=>trans('passwords.password')];
-            }
-            $newPass = password_hash($fields['new_password'] , PASSWORD_DEFAULT);
-        }
-        $arr = collect($user)->except('permissions')->toArray();
-        $diff= array_diff($fields, $arr);
-        if ($diff) {
-            if (!empty($newPass)) {
-                $fields['admin_password'] = $newPass;
-                unset($fields['password'], $fields['new_password'], $fields['confirm_password']);
-                $code=2;
-            }
-            $this->admin->update($user, $fields);
-            return ['code'=>$code ?? 0, 'result'=>trans('common.ajax.result.prompt.operate')];
-        }
-        return response()->json(['result' => 'success']);
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -109,48 +73,74 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function edit($id)
     {
-        //
+        $user = auth()->user();
+        if($id!=$user->admin_id)
+        {
+            abort(404);
+        }
+        return view('backstage.admin.edit' , compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param Admin $admin
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function update(Admin $admin , Request $request)
     {
-        $fields = $request->except(['admin_id' , 'admin_email' , 'layuiTreeCheck']);
+        $fields = $request->except(['admin_id' , 'admin_email']);
         return $this->admin->update($admin, $fields)->syncRoles(explode(',' , $request->input('admin_roles')))->syncPermissions($request->input('admin_auth'));
-//        $admin->(['edit articles', 'delete articles']);
+    }
+
+    public function updateSelf(Request $request)
+    {
+        $user   = auth()->user();
+        $fields = $request->except(['admin_id' , 'admin_email']);
+        if (!empty($fields['password']) && !empty($fields['new_password']) && !empty($fields['new_password'])) {
+            if (!password_verify($fields['password'], $user['admin_password'])) {
+                abort(422 , 'The original password is incorrect!');
+            }
+            if (strlen($fields['new_password'])<6 || $fields['new_password'] !== $fields['confirm_password']) {
+                abort(422 , 'The two passwords are different!');
+            }
+            $newPass = password_hash($fields['new_password'] , PASSWORD_DEFAULT);
+        }
+        if (!empty($newPass)) {
+            $fields['admin_password'] = $newPass;
+            unset($fields['password'], $fields['new_password'], $fields['confirm_password']);
+        }
+        $this->admin->update($user, $fields);
+        return response()->json(['result' => 'success']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Admin $admin
      * @return \Illuminate\Http\Response
      */
     public function destroy(Admin $admin)
     {
-        //
         $this->admin->destroy($admin);
         return response()->json([
             'result' => 'success',

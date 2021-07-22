@@ -99,20 +99,10 @@
         base: "{{url('plugin/layui')}}/"
         }).extend({
         common: 'lay/modules/admin/common',
-        formSelects: 'lay/modules/formSelects-v4',
-        }).use(['common' , 'tree' , 'table' , 'layer' , 'formSelects'], function () {
+        }).use(['common' , 'form'], function () {
             var $ = layui.jquery,
-            table = layui.table,
             form = layui.form,
-            tree = layui.tree,
-            common = layui.common,
-            layer = layui.layer;
-            formSelects = layui.formSelects;
-            formSelects.render('admin_roles');
-            table.init('admin_table', { //转化静态表格
-                page:false
-            });
-
+            common = layui.common;
             form.on('submit(form_submit_update)', function(data){
                 var params = {};
                 $.each(data.field , function (k ,v) {
@@ -121,20 +111,9 @@
                     }
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/admin/user/update')}}", params , function(res){
-                    console.log(res);
+                common.ajax("{{url('/backstage/admin/self')}}", params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't' ,function () {
-                        if (res.code!== undefined) {
-                            layer.open({
-                                title: 'Result'
-                                ,content: res.result
-                            });
-                        }
-                        if (res.code===2){
-                            common.ajax("{{url('/backstage/logout')}}",'',function (){},'get');
-                        } else {
-                            location.reload();
-                        }
+                        location.reload();
                     });
                 } , 'patch');
             });
