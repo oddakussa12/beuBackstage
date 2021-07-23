@@ -140,7 +140,7 @@
                     elem: '#dateTime',
                     options:{
                         timeStamp:false,
-                        format:'YYYY-MM-DD HH:ss:mm',
+                        format:'YYYY-MM-DD',
                         locale:"{{locale()}}"
                     },
                 });

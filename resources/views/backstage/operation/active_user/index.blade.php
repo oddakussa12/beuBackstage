@@ -25,10 +25,11 @@
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input" id="dateTime" readonly name="dateTime" placeholder="yyyy-MM-dd" value="@if(!empty($dateTime)){{$dateTime}}@endif">
                     </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
                 </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
-                </div>
+
             </div>
         </form>
         <table class="layui-table"  lay-filter="table">
@@ -94,7 +95,8 @@
                 table = layui.table,
                 laydate = layui.laydate;
             laydate.render({
-                elem: '#dateTime'
+                elem: '#dateTime',
+                lang: "{{locale()}}"
             });
             table.init('table', { //转化静态表格
                 page:false

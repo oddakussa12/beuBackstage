@@ -4,14 +4,15 @@
     <form class="layui-form" action="">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">{{trans('user.form.label.user_name')}}:</label>
-                <div class="layui-input-inline">
-                    <input class="layui-input" placeholder="{{trans('user.form.placeholder.user_name')}}" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
-                </div>
+                    <label class="layui-form-label">{{trans('user.form.label.user_name')}}:</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" placeholder="{{trans('user.form.placeholder.user_name')}}" name="keyword" id="keyword"  @if(!empty($keyword)) value="{{$keyword}}" @endif />
+                    </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                    </div>
             </div>
-            <div class="layui-inline">
-                <button class="layui-btn" type="submit" lay-submit >{{trans('common.form.button.submit')}}</button>
-            </div>
+
         </div>
     </form>
     <table class="layui-table"   lay-filter="table">

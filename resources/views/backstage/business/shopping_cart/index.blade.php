@@ -38,7 +38,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
+                        <input type="text" class="layui-input" name="dateTime" readonly id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
                     <div class="layui-input-inline">
                         <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
@@ -101,6 +101,7 @@
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
+                height: 'full-200',
                 toolbar: '#toolbar',
                 limit:{{$perPage}}
             });

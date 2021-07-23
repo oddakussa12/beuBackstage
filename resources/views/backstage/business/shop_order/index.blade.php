@@ -1,11 +1,11 @@
 @extends('layouts.app')
     <style>
         textarea.layui-textarea.layui-table-edit {min-width: 300px; min-height: 200px; z-index: 9999999999 !important;}
-        .layui-table-cell,.layui-table-edit{
-            overflow:visible !important;
-        }
         table tr td select {border: none; height: 29px;}
         table tr td select option{ color: #000000; background: #FFFFFF;}
+        .layui-table-box .layui-table-header .layui-table thead tr th[data-field="total_price"] div span {
+            text-decoration:line-through
+        }
     </style>
     <div  class="layui-fluid">
         <form class="layui-form">
@@ -46,7 +46,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label" >{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline" >
-                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
+                        <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
                     <div class="layui-input-inline">
                         <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
@@ -75,11 +75,15 @@
             <th lay-data="{field:'brokerage', minWidth:120}">{{trans('business.table.header.order.brokerage')}}
             <th lay-data="{field:'free_delivery', minWidth:100}">{{trans('business.table.header.order.free_delivery')}}</th>
             <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">{{trans('business.table.header.order.comment')}}</th>
+            <th lay-data="{field:'goods', minWidth:200}">{{trans('business.table.header.order.goods')}}</th>
             <th lay-data="{field:'order_price', minWidth:150}">{{trans('business.table.header.order.order_price')}}</th>
+            <th lay-data="{field:'promo_price', minWidth:150}">{{trans('business.table.header.order.promo_price')}}</th>
+            <th lay-data="{field:'total_price', minWidth:150}" >{{trans('business.table.header.order.total_price')}}</th>
             <th lay-data="{field:'discounted_price', minWidth:150}">{{trans('business.table.header.order.discounted_price')}}</th>
             <th lay-data="{field:'profit', minWidth:150}">{{trans('business.table.header.order.profit')}}</th>
             <th lay-data="{field:'order_time', minWidth:180}">{{trans('business.table.header.order.order_time_consuming')}}</th>
             <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
+            <th lay-data="{field:'delivered_at', minWidth:170}">{{trans('business.table.header.order.delivered_at')}}</th>
             <th lay-data="{field:'order_created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
             <th lay-data="{field:'order_updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
             <th lay-data="{fixed: 'right', minWidth:80, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -112,11 +116,19 @@
                 <td>@if(!empty($order->brokerage)){{$order->brokerage}}@endif</td>
                 <td><input type="checkbox" @if($order->free_delivery==true) checked @endif name="free_delivery" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                 <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
+                <td>
+                    @foreach($order->detail as $goods)
+                        {{$goods['name']}}*{{$goods['goodsNumber']}}*{{$goods['price']}} /
+                    @endforeach
+                </td>
                 <td>{{$order->order_price}}</td>
+                <td>{{$order->promo_price}}</td>
+                <td>{{$order->total_price}}</td>
                 <td>{{$order->discounted_price}}</td>
                 <td>{{$order->profit}}</td>
                 <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
                 <td>@if(!empty($order->color)){{$order->color}}@endif</td>
+                <td>{{$order->delivered_at}}</td>
                 <td>{{$order->created_at}}</td>
                 <td>{{$order->updated_at}}</td>
                 <td></td>
@@ -148,7 +160,19 @@
                 $ = layui.jquery;
             table.init('table', { //转化静态表格
                 page:false,
+                height: 'full-200',
                 limit:{{$perPage}},
+                totalRow: {
+                    "order_id": 'Total',
+                    "delivery_coast": {{$deliveryCoast}},
+                    "order_price": {{$orderPrice}},
+                    "promo_price": {{$promoPrice}},
+                    "total_price": {{$totalPrice}},
+                    "discounted_price": {{$discountedPrice}},
+                    "reduction": {{$reductionCoast}},
+                    "brokerage": {{$brokerageCoast}},
+                    "profit": {{$profit}}
+                },
                 done: function(res, curr, count){
                     $('th').css({'font-size': '15'});	//进行表头样式设置
                     for(var i in res.data){		//遍历整个表格数据

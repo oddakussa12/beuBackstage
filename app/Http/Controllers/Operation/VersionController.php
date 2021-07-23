@@ -13,9 +13,11 @@ class VersionController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
+        $today = date('Y-m-d', time());
         $time   = !empty($params['dateTime']) ? explode(' - ', $params['dateTime']) : '';
         $start  = !empty($time) ? array_shift($time) : date('Y-m-d', time()-86400*7);
-        $end    = !empty($time) ? array_shift($time) : date('Y-m-d', time());
+        $end    = !empty($time) ? array_shift($time) : $today;
+        $end    = $end>$today?$today:$end;
         $month  = $end ? date('Ym', strtotime($end)) : date('Ym');
         $table  = 'visit_logs_'.$month;
 

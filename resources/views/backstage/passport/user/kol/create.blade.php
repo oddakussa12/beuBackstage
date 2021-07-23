@@ -6,13 +6,14 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('user.form.label.user_id')}}：</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <input type="text" id="user_id" name="user_id" placeholder="{{trans('user.form.placeholder.user_id')}}"  required="required" autocomplete="off" class="layui-input" value="">
                     </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" lay-submit lay-filter="common_form" id="btn">{{trans('common.form.button.add')}}</button>
+                    </div>
                 </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" lay-submit lay-filter="common_form" id="btn">{{trans('common.form.button.add')}}</button>
-                </div>
+
             </div>
         </form>
     </div>

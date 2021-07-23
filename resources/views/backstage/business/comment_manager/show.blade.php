@@ -21,8 +21,8 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
-                    <div class="layui-input-inline" style="width: 300px;">
-                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
                     <div class="layui-input-inline">
                         <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
@@ -70,7 +70,7 @@
         }).extend({
             common: 'lay/modules/admin/common',
             timePicker: 'lay/modules/admin/timePicker',
-        }).use(['table' , 'layer', 'timePicker'], function () {
+        }).use(['table' , 'timePicker'], function () {
             const layer = layui.layer,
                 timePicker = layui.timePicker,
                 table = layui.table;
@@ -83,19 +83,8 @@
                 options:{
                     timeStamp:false,
                     format:'YYYY-MM-DD HH:ss:mm',
+                    locale:"{{locale()}}"
                 },
-            });
-            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                let data = obj.data; //获得当前行数据
-                layer.open({
-                    type: 2,
-                    shadeClose: true,
-                    shade: 0.8,
-                    area: ['95%','95%'],
-                    offset: 'auto',
-                    scrollbar:true,
-                    content: '/backstage/business/shop/manager/detail/'+data.admin_id,
-                });
             });
         });
     </script>

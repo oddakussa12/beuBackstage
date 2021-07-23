@@ -14,7 +14,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                                 <div class="layui-input-inline">
-                                    <select name="country_code" lay-verify="" lay-search>
+                                    <select name="country_code" lay-verify="">
                                         <option value="">{{trans('user.form.placeholder.user_country')}}</option>
                                         <option value="all" @if($country_code=='all') selected @endif>All</option>
                                         @foreach($countries  as $country)
@@ -26,7 +26,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" class="layui-input" name="period" id="period" readonly="" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$period}}">
+                                    <input type="text" class="layui-input" name="period" id="period" readonly placeholder=" - " value="{{$period}}">
                                 </div>
                                 <div class="layui-input-inline">
                                     <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
@@ -106,20 +106,21 @@
         layui.config({
             base: "{{url('plugin/layui')}}/"
         }).extend({
-            common: 'lay/modules/admin/common',
             echarts: 'lay/modules/echarts',
-        }).use(['element','common' , 'table', 'laydate' , 'echarts'], function () {
+            timePicker: 'lay/modules/admin/timePicker'
+        }).use(['element' , 'table', 'timePicker' , 'echarts'], function () {
             var $ = layui.jquery,
                 element = layui.element,
                 table = layui.table,
-                common = layui.common,
                 echarts = layui.echarts,
-                laydate = layui.laydate;
-            laydate.render({
-                elem: '#period'
-                ,range: true
-                ,max : 'today'
-                ,lang: 'en'
+                timePicker = layui.timePicker;
+            timePicker.render({
+                elem: '#period',
+                options:{
+                    timeStamp:false,
+                    format:'YYYY-MM-DD',
+                    locale:"{{locale()}}"
+                },
             });
 
 

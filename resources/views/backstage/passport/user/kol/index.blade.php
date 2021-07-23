@@ -4,9 +4,7 @@
         <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <div class="layui-input-inline">
-                        <button class="layui-btn" type="button" id="add" lay-submit >{{trans('common.form.button.add')}}</button>
-                    </div>
+                    <button class="layui-btn" type="button" id="add" lay-submit >{{trans('common.form.button.add')}}</button>
                 </div>
             </div>
         </form>

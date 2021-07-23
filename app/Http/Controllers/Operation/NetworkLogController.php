@@ -15,7 +15,7 @@ class NetworkLogController extends Controller
         $logs   = DB::connection('lovbee')->table($table)->select(DB::raw("t_network_logs.*"), 'users.user_name','users.user_nick_name')->leftJoin('users', 'users.user_id', '=', "$table.user_id");
         if(isset($params['dateTime']))
         {
-            $dateTime = $this->parseTime($params['dateTime']);
+            $dateTime = $this->parseTime($params['dateTime'] , 'subHours' , 8 , 'Y-m-d');
             $dateTime!==false&&$logs = $logs->whereBetween('time', [$dateTime['start'], $dateTime['end']]);
         }
         $fields = ['app_version', 'system_version', 'networking', 'network_type'];

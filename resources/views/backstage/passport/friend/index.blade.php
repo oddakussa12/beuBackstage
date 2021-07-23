@@ -13,7 +13,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                                 <div class="layui-input-inline">
-                                    <select  name="country_code" lay-verify="" lay-search  >
+                                    <select  name="country_code" lay-verify=""   readonly>
                                         <option value="">{{trans('user.form.placeholder.user_country')}}</option>
                                         @foreach($countries  as $country)
                                             <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
@@ -24,7 +24,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('user.table.header.friend_count')}}:</label>
                                 <div class="layui-input-inline">
-                                    <select  name="num" lay-verify="">
+                                    <select  name="num" lay-verify="" readonly>
                                         <option value="0">All</option>
                                         @for($i=1;$i<=10;$i++)
                                             <option value="{{$i}}" @if(isset($num)&&$num==$i) selected @endif>{{$i}}</option>
@@ -35,7 +35,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label">{{trans('common.form.label.sort')}}:</label>
                                 <div class="layui-input-inline">
-                                    <select  name="sort">
+                                    <select  name="sort" readonly>
                                         <option value="">Default</option>
                                         <option value="friend" @if(!empty($sort)&&$sort=='friend') selected @endif>Friend</option>
                                     </select>
@@ -97,26 +97,15 @@
         }).extend({
             common: 'lay/modules/admin/common',
             echarts: 'lay/modules/echarts',
-            timePicker: 'lay/modules/admin/timePicker',
-        }).use(['common' , 'table' , 'layer' , 'element' , 'element', 'flow' , 'laydate' , 'timePicker', 'echarts'], function () {
+        }).use(['common' , 'table' , 'layer' , 'element' , 'element', 'flow' , 'echarts'], function () {
             let $ = layui.jquery,
                 table = layui.table,
                 flow = layui.flow,
                 echarts = layui.echarts,
-                element = layui.element,
-                timePicker = layui.timePicker;
+                element = layui.element;
             table.init('table', { //转化静态表格
                 page:false
             });
-
-            timePicker.render({
-                elem: '#dateTime', //定义输入框input对象
-                options:{      //可选参数timeStamp，format
-                    timeStamp:false,//true开启时间戳 开启后format就不需要配置，false关闭时间戳 //默认false
-                    format:'YYYY-MM-DD HH:ss:mm',//格式化时间具体可以参考moment.js官网 默认是YYYY-MM-DD HH:ss:mm
-                },
-            });
-
             table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）

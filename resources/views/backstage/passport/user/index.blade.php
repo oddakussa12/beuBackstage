@@ -26,7 +26,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                             <div class="layui-input-inline">
-                                <select  name="country_code" lay-verify="" lay-search  >
+                                <select  name="country_code" lay-verify="" >
                                     <option value="">{{trans('user.form.placeholder.user_country')}}</option>
                                     @foreach($countries  as $country)
                                         <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
@@ -37,7 +37,7 @@
 
                         <div class="layui-inline">
                             <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
-                            <div class="layui-input-inline" style="width: 300px;">
+                            <div class="layui-input-inline" >
                                 <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                             </div>
                             <div class="layui-input-inline">
@@ -134,6 +134,7 @@
                 options:{      //可选参数timeStamp，format
                     timeStamp:false,//true开启时间戳 开启后format就不需要配置，false关闭时间戳 //默认false
                     format:'YYYY-MM-DD HH:ss:mm',//格式化时间具体可以参考moment.js官网 默认是YYYY-MM-DD HH:ss:mm
+                    locale:"{{locale()}}"
                 },
             });
             form.on('switch(switchAll)', function(data){

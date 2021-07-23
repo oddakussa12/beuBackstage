@@ -16,6 +16,8 @@ layui.extend({
         this.v = '0.0.1';
     };
 
+    var t = 0;
+
     /**
      * 初始化时间选择器
      */
@@ -114,7 +116,8 @@ layui.extend({
                 ],
                 'customize':'自定义',
                 'yes':'确定',
-                'no':'清除'
+                'no':'取消',
+                'clear':'清空',
             }
         }else{
             var languages = {
@@ -202,7 +205,8 @@ layui.extend({
                 ],
                 'customize':'Customize',
                 'yes':'Yes',
-                'no':'clear'
+                'no':'No',
+                'clear':'Clear',
             }
 
         }
@@ -213,10 +217,14 @@ layui.extend({
                 $('.timePicker').remove();
                 return false;
             }
-            var t = elem.offset().top + elem.outerHeight()+"px";
-            var l = elem.offset().left +"px";
-
-            var timeDiv = '<div class="timePicker layui-anim layui-anim-upbit" style="left:'+l+';top:'+t+';">';
+            t = elem.offset().top + elem.outerHeight()+"px";
+            let sUserAgent = navigator.userAgent;
+            if (document.body.clientWidth<500 || sUserAgent.indexOf('Android') > -1 || sUserAgent.indexOf('iPhone') > -1 || sUserAgent.indexOf('iPad') > -1 || sUserAgent.indexOf('iPod') > -1 || sUserAgent.indexOf('Symbian') > -1) {
+                var timeDiv = '<div class="timePicker layui-anim layui-anim-upbit" style="right:'+0+';top:'+t+';">';
+            }else{
+                var l = elem.offset().left +"px";
+                var timeDiv = '<div class="timePicker layui-anim layui-anim-upbit" style="left:'+l+';top:'+t+';">';
+            }
                 timeDiv +='<div class="time-div">' +
                     '<div class="time-info">';
                 var str = '';
@@ -231,12 +239,13 @@ layui.extend({
                     '<i class="layui-icon layui-icon-down" ></i>' +
                     '</div> ' +
                     '<div class="time-select">' +
-                    '<input type="text" class="layui-input" id="sTime">' +
-                    '<input type="text" class="layui-input" id="eTime">' +
+                    '<input type="text" class="layui-input" readonly id="sTime">' +
+                    '<input type="text" class="layui-input" readonly id="eTime">' +
                     '</div></div>' +
                     '<div class="time-down">' +
                     '<div class="sure" data-role="sure">'+languages.yes+'</div>' +
                     '<div class="no" data-role="no">'+languages.no+'</div>' +
+                    '<div class="clear" data-role="clear">'+languages.clear+'</div>' +
                     '</div>' +
                     '</div>';
                 timeDiv = $(timeDiv);
@@ -265,9 +274,15 @@ layui.extend({
                 // var sTime = $('#sTime').val();
             });
             //自定义时间选择器
-            laydate.render({elem: '#sTime' , type: 'datetime' , lang: locale});
-            laydate.render({elem: '#eTime' , type: 'datetime' , lang: locale});
-
+            console.log(format)
+            if(format=='YYYY-MM-DD')
+            {
+                laydate.render({elem: '#sTime' , type: 'date' , lang: locale});
+                laydate.render({elem: '#eTime' , type: 'date' , lang: locale});
+            }else{
+                laydate.render({elem: '#sTime' , type: 'datetime' , lang: locale});
+                laydate.render({elem: '#eTime' , type: 'datetime' , lang: locale});
+            }
             //选择固定日期
             var $li=$('.time-info').children().find('li');
             $li.on('click',function () {
@@ -284,8 +299,11 @@ layui.extend({
 
             });
             //确定后生成时间区间 如：2018-9-14 - 2018-9-15
-            $('[data-role="no"]').on('click',function () {
+            $('[data-role="clear"]').on('click',function () {
                 elem.val('');
+                $('.timePicker').remove();
+            });
+            $('[data-role="no"]').on('click',function () {
                 $('.timePicker').remove();
             });
             $('[data-role="sure"]').on('click',function () {
@@ -448,6 +466,7 @@ layui.extend({
      */
     timePicker.prototype.hide = function (opt) {
         $('.timePicker').remove();
+        $('.layui-laydate').remove();
     };
 
     //自动完成渲染
@@ -455,6 +474,29 @@ layui.extend({
 
     //FIX 滚动时错位
     $(window).scroll(function () {
+        console.log(1);
+        var e = $('.timePicker');
+        if(e.length>0)
+        {
+            var el = $('#dateTime');
+            e.css({'top':el.offset().top + el.outerHeight()});
+        }
+    });
+    $(".layui-body").scroll(function () {
+        console.log(2);
+        var e = $('.timePicker');
+        if(e.length>0)
+        {
+            var el = $('#dateTime');
+            e.css({'top':el.offset().top + el.outerHeight()});
+            if($('.layui-laydate').length>0)
+            {
+                $('.layui-laydate').css({'top':$('.time-select').offset().top + $('.time-select').outerHeight()});
+            }
+        }
+    });
+
+    $(window).resize( function  () {
         timePicker.hide();
     });
 

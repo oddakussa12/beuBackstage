@@ -6,7 +6,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                     <div class="layui-input-inline">
-                        <select name="country_code" lay-verify="" lay-search>
+                        <select name="country_code" lay-verify="">
                             <option value="">{{trans('user.form.placeholder.user_country')}}</option>
                             @if($v==0))
                             <option value="all" @if($country_code=='all')) selected @endif>ALL</option>
@@ -22,7 +22,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" name="period" id="period" readonly="" placeholder="yyyy-MM-dd - yyyy-MM-dd" value="{{$period}}">
+                        <input type="text" class="layui-input" name="period" id="period" readonly placeholder=" - " value="{{$period}}">
                     </div>
                     <div class="layui-input-inline">
                         <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
@@ -101,15 +101,18 @@
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-        }).use(['common' , 'table' , 'laydate'], function () {
+            timePicker: 'lay/modules/admin/timePicker',
+        }).use(['common' , 'table' , 'timePicker'], function () {
             var $ = layui.jquery,
                 table = layui.table,
-                laydate = layui.laydate;
-            laydate.render({
-                elem: '#period'
-                ,range: true
-                ,max : 'today'
-                ,lang: 'en'
+                timePicker = layui.timePicker;
+            timePicker.render({
+                elem: '#period',
+                options:{
+                    timeStamp:false,
+                    format:'YYYY-MM-DD',
+                    locale:"{{locale()}}"
+                },
             });
             table.init('table', {
                 page:false,

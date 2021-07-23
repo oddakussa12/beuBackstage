@@ -102,6 +102,7 @@
                 options:{      //可选参数timeStamp，format
                     timeStamp:false,//true开启时间戳 开启后format就不需要配置，false关闭时间戳 //默认false
                     format:'YYYY-MM-DD HH:ss:mm',//格式化时间具体可以参考moment.js官网 默认是YYYY-MM-DD HH:ss:mm
+                    locale:"{{locale()}}"
                 },
             });
 

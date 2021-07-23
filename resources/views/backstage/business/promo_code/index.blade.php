@@ -19,7 +19,7 @@
                 <th lay-data="{field:'limit', minWidth:100}">{{trans('business.table.header.promo_code.limit')}}</th>
                 <th lay-data="{field:'created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
-                <th lay-data="{fixed: 'right', width:100, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -73,6 +73,7 @@
                 options:{
                     timeStamp:false,
                     format:'YYYY-MM-DD HH:ss:mm',
+                    locale:"{{locale()}}"
                 },
             });
             table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"

@@ -8,7 +8,7 @@
         <table class="layui-table treeTable" lay-filter="tree_menu">
             <thead>
             <tr>
-                <th lay-data="{field:'menu_id', width:50}">{{trans('menu.table.header.menu_id')}}</th>
+                <th lay-data="{field:'menu_id', width:80}">{{trans('menu.table.header.menu_id')}}</th>
                 <th lay-data="{field:'menu_p_id', hide:true}">{{trans('menu.table.header.menu_p_id')}}</th>
                 <th lay-data="{field:'menu_p_name', minWidth:200 , event:'menu_toggle'}">{{trans('menu.table.header.menu_name')}}</th>
                 @if(count($supportedLocales)>=1)
@@ -18,7 +18,7 @@
                 @endif
                 <th lay-data="{field:'menu_auth', minWidth:200}">{{trans('menu.table.header.menu_auth')}}</th>
                 <th lay-data="{field:'menu_url', width:250}">{{trans('menu.table.header.menu_url')}}</th>
-                <th lay-data="{field:'menu_op', minWidth:150 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{field:'menu_op', minWidth:120 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -159,7 +159,7 @@
 @section('footerScripts')
     @parent
     <script type="text/html" id="operateTpl">
-        <div class="layui-table-cell laytable-cell-1-6">
+        <div class="layui-btn-group">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
         </div>

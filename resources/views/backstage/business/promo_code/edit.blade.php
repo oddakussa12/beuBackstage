@@ -94,7 +94,7 @@
                 elem: '#deadline'
                 ,min : 'today'
                 ,type: 'date'
-                ,lang: 'en'
+                ,lang: "{{locale()}}"
             });
 
             form.on('submit(prop_form)', function(data){

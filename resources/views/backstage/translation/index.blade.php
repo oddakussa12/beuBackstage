@@ -8,7 +8,7 @@
                 <?php foreach (config('laravellocalization.supportedLocales') as $locale => $language): ?>
                 <th  lay-data="{field:'{{ $locale }}', width:300 , edit: 'text'}">{{ $locale }}</th>
                 <?php endforeach; ?>
-                <th  lay-data="{field:'translation_op', minWidth:120 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                <th  lay-data="{field:'translation_op', minWidth:80 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -24,11 +24,7 @@
             </tbody>
         </table>
         <div class="layui-hide" id="confirmTpl">
-        <form  class="layui-form" lay-filter="translation_form"  />
-
-
-
-
+        <form  class="layui-form" lay-filter="translation_form" >
             <input type="hidden" name="key" />
             <input type="hidden" name="lang" />
             <div class="layui-input-block">
@@ -37,15 +33,6 @@
                     <input type="text" name="translation_value" autocomplete="off" class="layui-input">
                 </div>
             </div>
-
-
-            {{--<div class="layui-form-item">--}}
-            {{--<div class="layui-input-block">--}}
-            {{--<button class="layui-btn" lay-submit lay-filter="form_submit_add">{{trans('common.form.button.add')}}</button>--}}
-            {{--<button class="layui-btn" lay-submit lay-filter="form_submit_update">{{trans('common.form.button.update')}}</button>--}}
-            {{--<button type="reset" class="layui-btn layui-btn-primary">{{trans('common.form.button.reset')}}</button>--}}
-            {{--</div>--}}
-            {{--</div>--}}
         </form>
         </div>
     </div>
@@ -54,10 +41,9 @@
 @section('footerScripts')
     @parent
     <script type="text/html" id="operateTpl">
-        <div class="layui-table-cell laytable-cell-1-6">
-            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
-        </div>
+            <div class="layui-btn-group">
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
+            </div>
     </script>
 
     <script>

@@ -5,11 +5,11 @@
             <thead>
             <tr>
                 <th  lay-data="{field:'id', width:100}">{{trans('permission.table.header.id')}}</th>
-                <th  lay-data="{field:'name', width:200}">{{trans('permission.table.header.name')}}</th>
+                <th  lay-data="{field:'name', width:300}">{{trans('permission.table.header.name')}}</th>
                 <th  lay-data="{field:'guard_name', width:200}">{{trans('permission.table.header.guard_name')}}</th>
                 <th  lay-data="{field:'created_at', width:200}">{{trans('permission.table.header.created_at')}}</th>
                 <th  lay-data="{field:'updated_at', width:200}">{{trans('permission.table.header.updated_at')}}</th>
-                <th  lay-data="{field:'permission_op', minWidth:150 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                <th  lay-data="{field:'permission_op', minWidth:120 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -59,7 +59,7 @@
 @section('footerScripts')
     @parent
     <script type="text/html" id="operateTpl">
-        <div class="layui-table-cell laytable-cell-1-6">
+        <div class="layui-btn-group">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
         </div>

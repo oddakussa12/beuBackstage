@@ -39,7 +39,7 @@
                 } , width:200}">{{trans('admin.table.header.admin_role')}}</th>
                 <th  lay-data="{field:'admin_realname', width:100}">{{trans('admin.table.header.admin_name')}}</th>
 {{--                <th  lay-data="{field:'admin_created_at', width:180}">{{trans('admin.table.header.admin_created_at')}}</th>--}}
-                <th  lay-data="{field:'admin_op', minWidth:150 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                <th  lay-data="{field:'admin_op', minWidth:120 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -179,7 +179,7 @@
 @section('footerScripts')
     @parent
     <script type="text/html" id="operateTpl">
-        <div class="layui-table-cell laytable-cell-1-6">
+        <div class="layui-btn-group">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
         </div>

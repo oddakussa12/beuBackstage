@@ -45,24 +45,32 @@ class ShopOrderController extends Controller
             $data['status'] == 2 && $schedules = collect($schedules)->only('6' , '7', '8', '9', '10');
         }
         $data['schedules'] = $schedules;
-        $orders = new Order();
+        $ordersWhere = new Order();
         if (isset($params['status'])) {
             $status = intval($params['status']);
-            $orders = $orders->where('status', $status);
+            $ordersWhere = $ordersWhere->where('status', $status);
         }
         if (!empty($schedule)) {
-            $orders = $orders->where('schedule', $schedule);
+            $ordersWhere = $ordersWhere->where('schedule', $schedule);
         }
-        $user->admin_id!=1 && $orders = $orders->where('operator', $user->admin_id);
-        $shopId!=0  && $orders = $orders->where('shop_id', $shopId);
+        $user->admin_id!=1 && $ordersWhere = $ordersWhere->where('operator', $user->admin_id);
+        $shopId!=0  && $ordersWhere = $ordersWhere->where('shop_id', $shopId);
         $date_time = $this->parseTime($dateTime);
         if($date_time!==false)
         {
             $data['dateTime'] = $dateTime;
-            $orders = $orders->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
+            $ordersWhere = $ordersWhere->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
         }
+        $data['deliveryCoast'] = $ordersWhere->sum('delivery_coast');
+        $data['orderPrice'] = $ordersWhere->sum('order_price');
+        $data['promoPrice'] = $ordersWhere->sum('promo_price');
+        $data['totalPrice'] = $ordersWhere->sum('total_price');
+        $data['discountedPrice'] = $ordersWhere->sum('discounted_price');
+        $data['reductionCoast'] = $ordersWhere->sum('reduction');
+        $data['brokerageCoast'] = $ordersWhere->sum('brokerage');
+        $data['profit'] = $ordersWhere->sum('profit');
         $data['perPage'] = $perPage = 20;
-        $orders   = $orders->orderByDesc('created_at')->paginate($perPage)->appends($params);
+        $orders   = $ordersWhere->orderByDesc('created_at')->paginate($perPage)->appends($params);
         $shopIds = $orders->pluck('shop_id')->unique()->toArray();
         $shops = User::whereIn('user_id' , $shopIds)->get();
         $time = Carbon::now()->subHour(8)->toDateTimeString();
@@ -102,6 +110,10 @@ class ShopOrderController extends Controller
             $schedule>=6  && $orderState = 2;
             $brokerage = $shopPrice = round($order->order_price*$order->brokerage_percentage/100 , 2);
             $data  = ['status'=>$orderState ?? 0, 'shop_price'=>$shopPrice, 'brokerage'=>$brokerage , 'schedule'=>$schedule, 'order_time'=>$duration, 'operator'=>auth()->user()->admin_id];
+            if($schedule==5)
+            {
+                $data['delivered_at'] = $time;
+            }
         }elseif ($free_delivery!==null)
         {
             if($free_delivery=='off')
@@ -130,9 +142,11 @@ class ShopOrderController extends Controller
             {
                 abort(422 , 'Wrong discount value!');
             }
-            $discountedPrice = round($order->order_price*$discount/100+$order->delivery_coast , 2);
+            $discountedPrice = round($order->promo_price*$discount/100+$order->delivery_coast , 2);
+            $totalPrice = round($order->promo_price*$discount/100, 2);
             $data = array(
                 'discounted_price'=>$discountedPrice,
+                'total_price'=>$totalPrice,
                 'discount'=>$discount,
                 'profit'=>$discountedPrice-$order->brokerage,
                 'operator'=>auth()->user()->admin_id
@@ -146,8 +160,10 @@ class ShopOrderController extends Controller
             }
 
             $discountedPrice = round($order->discounted_price+$order->reduction-$reduction , 2);
+            $totalPrice = round($order->promo_price+$order->reduction-$reduction , 2);
             $data = array(
                 'discounted_price'=>$discountedPrice,
+                'total_price'=>$totalPrice,
                 'reduction'=>$reduction,
                 'profit'=>$discountedPrice-$order->brokerage,
                 'operator'=>auth()->user()->admin_id

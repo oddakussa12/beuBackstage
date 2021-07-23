@@ -14,7 +14,7 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
-                    <div class="layui-input-inline" style="width: 300px;">
+                    <div class="layui-input-inline" >
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
                     </div>
                 </div>

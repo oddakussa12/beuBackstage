@@ -18,7 +18,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('user.form.label.user_country')}}:</label>
                     <div class="layui-input-inline">
-                        <select  name="country_code" lay-verify="" lay-search  >
+                        <select  name="country_code" lay-verify="" >
                             <option value="">{{trans('user.form.placeholder.user_country')}}</option>
                             @foreach($countries  as $country)
                                 <option value="{{$country['code']}}" @if(!empty($country_code)&&$country_code==$country['code']) selected @endif>{{$country['name']}}</option>
@@ -37,8 +37,8 @@
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('user.form.label.date')}}:</label>
-                    <div class="layui-input-inline" style="width: 300px;">
-                        <input type="text" class="layui-input" name="dateTime" id="dateTime" placeholder=" - " @if(isset($dateTime)) value="{{$dateTime}}" @endif >
+                    <div class="layui-input-inline" >
+                        <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder=" - " @if(isset($dateTime)) value="{{$dateTime}}" @endif >
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -120,6 +120,7 @@
                 options:{
                     timeStamp:false,
                     format:'YYYY-MM-DD HH:ss:mm',
+                    locale:"{{locale()}}"
                 },
             });
             table.init('table', {
