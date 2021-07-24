@@ -179,7 +179,6 @@ class ShopController extends Controller
     public function update(Request $request, $id)
     {
         $adminUser = auth()->user();
-        $header    = ['HellooVersion' => '3.3.0', 'deviceId'=>$id];
         $fields  = array();
         $user_verified   = $request->input('user_verified');
         $user_delivery   = $request->input('user_delivery');
