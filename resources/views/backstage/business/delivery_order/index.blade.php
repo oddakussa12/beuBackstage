@@ -113,6 +113,7 @@
                 dropdown = layui.dropdown,
                 timePicker = layui.timePicker,
                 $ = layui.jquery;
+
             var order = table.init('table', { //转化静态表格
                 page:false,
                 height: 'full-200',
