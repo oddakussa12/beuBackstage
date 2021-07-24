@@ -55,17 +55,6 @@
                 </div>
 
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{trans('business.form.label.shop.user_online')}}:</label>
-                    <div class="layui-input-inline">
-                        <select  name="user_online">
-                            @foreach(trans('business.form.select.user_online') as $k=>$v)
-                                <option value="{{$k}}" @if(isset($user_online) && $user_online==$k) selected @endif>{{$v}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="layui-inline">
                     <label class="layui-form-label">{{trans('common.form.label.date')}}:</label>
                     <div class="layui-input-inline" >
                         <input type="text" class="layui-input" name="dateTime" id="dateTime" readonly placeholder=" - " @if(!empty($dateTime)) value="{{$dateTime}}" @endif>
@@ -98,7 +87,6 @@
                     }
                     return str; }}">{{trans('business.table.header.verified')}}</th>
                 <th lay-data="{field:'user_delivery', minWidth:150}">{{trans('business.table.header.shop.user_delivery')}}</th>
-                <th lay-data="{field:'user_online', minWidth:150}">{{trans('business.table.header.shop.user_online')}}</th>
                 <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.view_num')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'score', minWidth:120}">{{trans('business.table.header.shop_score')}}</th>
@@ -130,7 +118,6 @@
                     </td>
                     <td>{{$shop->user_verified}}</td>
                     <td><input type="checkbox" @if($shop->user_delivery>0) checked @endif name="user_delivery" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
-                    <td><input type="checkbox" @if($shop->user_online>0) checked @endif name="user_online" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO" disabled></td>
                     <td>@if(!empty($shop->num)){{$shop->num}}@else 0 @endif</td>
                     <td>{{$shop->user_created_at}}</td>
                     <td>{{$shop->point}}</td>

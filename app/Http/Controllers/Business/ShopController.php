@@ -44,10 +44,10 @@ class ShopController extends Controller
         })->leftJoin('shop_evaluation_points' , function($join){
             $join->on('shop_evaluation_points.user_id', '=', 'users.user_id');
         });
-        if(isset($params['user_online'])&&$params['user_online']!==null)
-        {
-            $shops->where('users.user_online' , intval($params['user_online']));
-        }
+//        if(isset($params['user_online'])&&$params['user_online']!==null)
+//        {
+//            $shops->where('users.user_online' , intval($params['user_online']));
+//        }
         if(isset($params['user_verified'])&&$params['user_verified']!==null)
         {
             $shops->where('users.user_verified' , intval($params['user_verified']));
@@ -71,7 +71,7 @@ class ShopController extends Controller
             'users.user_avatar' , 'users_phones.user_phone' ,
             'users.user_address' , 'users_phones.user_phone_country' ,
             'users.user_nick_name' , 'users_countries.country' , 'users.user_delivery' ,
-            'users.user_level' , 'shops_views.num' , 'users.user_online',
+            'users.user_level' , 'shops_views.num' , //'users.user_online',
             'shop_evaluation_points.point_1', 'users.user_created_at', 'users.user_verified_at',
             'shop_evaluation_points.point_2' , 'shop_evaluation_points.point_3',
             'shop_evaluation_points.point_4' , 'shop_evaluation_points.point_5',

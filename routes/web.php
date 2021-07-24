@@ -69,7 +69,7 @@ Route::group(['prefix'=>'backstage'] , function(){
                 Route::get('user/message' , 'UserController@message')->name('user.message');
                 Route::get('user/chat' , 'UserController@chat')->name('user.chat');
                 Route::get('user/msgExport' , 'UserController@msgExport')->name('user.msgExport');
-                Route::get('user/online', 'UserController@online')->name('user.online');
+//                Route::get('user/online', 'UserController@online')->name('user.online');
                 Route::get('user/{user}/friend/status', 'UserController@friendStatus')->name('user.friend.status');
                 Route::get('user/{user}/friend/yesterday/status', 'UserController@friendYesterdayStatus')->name('user.friend.yesterday.status');
                 Route::get('user', 'UserController@index')->name('user.index');
