@@ -7,13 +7,14 @@
         <table class="layui-table"  lay-filter="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:100}">{{trans('business.table.header.shop_tag.id')}}</th>
+                <th lay-data="{field:'id', minWidth:300}">{{trans('business.table.header.shop_tag.id')}}</th>
                 <th  lay-data="{field:'tag', width:120}">{{trans('business.table.header.shop_tag.tag')}}</th>
-                <th  lay-data="{field:'image', width:120,hide:true}">Image</th>
+                <th  lay-data="{field:'image', width:120,hide:true}">{{trans('business.table.header.shop_tag.image')}}</th>
+                <th  lay-data="{field:'status', width:100}">{{trans('business.table.header.shop_tag.status')}}</th>
                 <?php foreach (config('laravellocalization.supportedLocales') as $locale => $language): ?>
-                <th  lay-data="{field:'{{ $locale }}_tag_content', width:300}">{{ $locale }}</th>
+                <th  lay-data="{field:'{{ $locale }}_tag_content', width:200}">{{ $locale }}</th>
                 <?php endforeach; ?>
-                <th  lay-data="{field:'translation_op', minWidth:120 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                <th  lay-data="{field:'translation_op', maxWidth:80 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -22,6 +23,7 @@
                     <td>{{ $shopTag->id }}</td>
                     <td>{{ $shopTag->tag }}</td>
                     <td>{{ $shopTag->image }}</td>
+                    <td><input type="checkbox" @if($shopTag->status==1) checked @endif name="status" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
                     <?php foreach (config('laravellocalization.supportedLocales') as $locale => $language): ?>
                     <td>{{ is_array(array_get($shopTag, $locale, null)) ?: array_get($shopTag, $locale, '') }}</td>
                     <?php endforeach; ?>
@@ -103,7 +105,7 @@
 @section('footerScripts')
     @parent
     <script type="text/html" id="operateTpl">
-        <div class="layui-table-cell laytable-cell-1-6">
+        <div class="layui-btn-group">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
         </div>
     </script>
@@ -120,8 +122,7 @@
                 table = layui.table,
                 form = layui.form,
                 common = layui.common,
-                layer = layui.layer,
-                $=layui.jquery;
+                layer = layui.layer;
 
 
 
@@ -257,6 +258,38 @@
                         })
                     } , 'get' , undefined , undefined , false);
                 }
+            });
+            form.on('switch(switchAll)', function(data){
+                let checked = data.elem.checked;
+                data.elem.checked = !checked;
+                const name = $(data.elem).attr('name');
+                let id = data.othis.parents('tr').find("td :first").text();
+                const url = "{{url('/backstage/business/shop_tag')}}/"+id;
+                var params = {};
+                if(checked) {
+                    params[name] = "on";
+                }else {
+                    params[name] = "off";
+                }
+                @if(!Auth::user()->can('business::shop_tag.update'))
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
+                form.render();
+                return false;
+                @endif
+                form.render();
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax(url , params , function(res){
+                        data.elem.checked = checked;
+                        form.render();
+                        common.prompt(res.result , 1 , 300 , 6 , 't');
+                    } , 'patch' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            data.elem.checked = !checked;
+                            form.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
             });
 
         })

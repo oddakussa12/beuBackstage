@@ -118,7 +118,7 @@
                 <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
                 <td>
                     @foreach($order->detail as $goods)
-                        {{$goods['name']}}*{{$goods['goodsNumber']}}*{{$goods['price']}} /
+                        {{$goods['name']??''}}*{{$goods['goodsNumber']??0}}*{{$goods['price']??0}} /
                     @endforeach
                 </td>
                 <td>{{$order->order_price}}</td>

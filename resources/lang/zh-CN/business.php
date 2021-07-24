@@ -98,6 +98,8 @@ return [
             'shop_tag'=>[
                 'id'=>'ID',
                 'tag'=>'Tag',
+                'image'=>'图片',
+                'status'=>'状态',
             ],
             'goods_comment'=>[
                 'id'=>"ID",

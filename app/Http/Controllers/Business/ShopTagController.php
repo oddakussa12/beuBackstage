@@ -16,7 +16,7 @@ class ShopTagController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
-        $shopTags = ShopTag::orderByDesc('created_at')->paginate(10);
+        $shopTags = ShopTag::orderByDesc('created_at')->get();
         $shopTagIds = $shopTags->pluck('id')->toArray();
         $shopTagTranslations = ShopTagTranslation::whereIn('tag_id' , $shopTagIds)->get();
         $shopTags->each(function ($shopTag) use ($shopTagTranslations){
@@ -108,39 +108,43 @@ class ShopTagController extends Controller
                 $fields[$localeCode] = $params[$localeCode.'_tag_content'];
             }
         }
-        if(empty($fields))
-        {
-            abort(422 , 'Parameter error!');
-        }
         $this->validate($request, [
-            'tag'=> 'required|string|max:32|regex:/^[a-zA-Z0-9]{2,16}$/',
-            'image'=> 'required|string|url',
+            'tag'=> 'filled|string|max:32|regex:/^[a-zA-Z0-9]{2,16}$/',
+            'image'=> 'filled|string|url',
         ]);
         $tag = strval($request->input('tag'));
         $image = strval($request->input('image'));
+        $status = strval($request->input('status'));
         $shopTag = ShopTag::where('id' , $id)->firstOrFail();
         $shopTag->tag = $tag;
         $shopTag->image = $image;
-        $shopTag->save();
-        $shopTagTranslations = ShopTagTranslation::where('tag_id' , $id)->whereIn('locale' , array_keys($fields))->get()->pluck('locale')->toArray();
-        foreach ($fields as $locale=>$field)
+        if(in_array($status , array('on' , 'off')))
         {
-            if(in_array($locale , $shopTagTranslations))
+            $shopTag->status = $status=='on'?1:0;
+        }
+        $shopTag->save();
+        if(!empty($fields))
+        {
+            $shopTagTranslations = ShopTagTranslation::where('tag_id' , $id)->whereIn('locale' , array_keys($fields))->get()->pluck('locale')->toArray();
+            foreach ($fields as $locale=>$field)
             {
-                ShopTagTranslation::where('tag_id' , $id)->where('locale' , $locale)->update(
-                    array(
+                if(in_array($locale , $shopTagTranslations))
+                {
+                    ShopTagTranslation::where('tag_id' , $id)->where('locale' , $locale)->update(
+                        array(
+                            'tag_content'=>$field,
+                        )
+                    );
+                }else{
+                    !empty($field)&&DB::connection('lovbee')->table('shops_tags_translations')->insert(array(
+                        'id'=>Uuid::uuid1()->toString(),
+                        'tag_id'=>$id,
+                        'locale'=>$locale,
                         'tag_content'=>$field,
-                    )
-                );
-            }else{
-                !empty($field)&&DB::connection('lovbee')->table('shops_tags_translations')->insert(array(
-                    'id'=>Uuid::uuid1()->toString(),
-                    'tag_id'=>$id,
-                    'locale'=>$locale,
-                    'tag_content'=>$field,
-                ));
-            }
+                    ));
+                }
 
+            }
         }
         $this->clear();
         return response()->json(['result'=>'success']);
