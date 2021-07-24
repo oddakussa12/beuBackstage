@@ -269,8 +269,7 @@ class ShopOrderController extends Controller
         $data['orderStatuses'] = $this->orderStatuses;
         $data['colorStyles']  = $this->colorStyles;
         $data['statusEncode'] = json_encode($this->schedule, true);
-        $allMoney = DB::connection('lovbee')->table('orders')->select(DB::raw('sum(order_price) order_price, sum(discounted_price) discounted_price, sum(delivery_coast) delivery_coast, sum(brokerage) brokerage'))->where('status', 1)->first();
-        $data['money'] = (array)$allMoney;
+        $data['statusKv'] = array_map(function ($value, $key) {return ['title'=>trans('business.table.header.shop_order.'.$value), 'id'=>$key];}, $this->schedule, array_keys($this->schedule));
         return view('backstage.business.shop_order.browse', $data);
     }
 

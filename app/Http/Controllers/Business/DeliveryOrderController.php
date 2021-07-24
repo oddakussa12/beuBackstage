@@ -176,6 +176,7 @@ class DeliveryOrderController extends Controller
         $data['orders'] = $orders;
         $data['statuses'] = $statuses;
         $data['colorStyles']  = $this->colorStyles;
+        $data['statusKv'] = array_map(function ($value, $key) {return ['title'=>trans('business.table.header.shop_order.'.$value), 'id'=>$key];}, $statuses, array_keys($statuses));
         return view('backstage.business.delivery_order.browse', $data);
 
     }

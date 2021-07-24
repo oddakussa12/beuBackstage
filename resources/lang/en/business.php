@@ -32,7 +32,7 @@ return [
                 'Completed'=>'Completed',
                 'Canceled'=>'Canceled',
             ],
-            'discovery_order'=>[
+            'delivery_order'=>[
                 'menu'=>'Menu',
                 'goods_name'=>'GoodsName',
                 'shop_price'=>'ShopBrokerage',

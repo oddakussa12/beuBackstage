@@ -32,7 +32,7 @@ return [
                 'Completed'=>'已完成',
                 'Canceled'=>'已取消',
             ],
-            'discovery_order'=>[
+            'delivery_order'=>[
                 'menu'=>'菜单',
                 'goods_name'=>'商品名',
                 'shop_price'=>'商家佣金',

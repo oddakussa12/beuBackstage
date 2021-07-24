@@ -49,15 +49,15 @@
                 <th lay-data="{field:'shop', minWidth:180}">{{trans('business.table.header.shop.user_name')}}</th>
                 <th lay-data="{field:'shop_contact', minWidth:180}">{{trans('business.table.header.shop.user_contact')}}</th>
                 <th lay-data="{field:'shop_address', minWidth:180}">{{trans('business.table.header.shop.user_address')}}</th>
-                <th lay-data="{field:'goods_name', minWidth:180}">{{trans('business.table.header.discovery_order.goods_name')}}</th>
+                <th lay-data="{field:'goods_name', minWidth:180}">{{trans('business.table.header.delivery_order.goods_name')}}</th>
                 <th lay-data="{field:'order_user_name', maxWidth:180, minWidth:180}">{{trans('business.table.header.order.user_name')}}</th>
                 <th lay-data="{field:'order_user_contact', minWidth:180}">{{trans('business.table.header.order.user_contact')}}</th>
                 <th lay-data="{field:'order_user_address', minWidth:180}">{{trans('business.table.header.order.user_address')}}</th>
                 <th lay-data="{field:'order_status', minWidth:170, event:'updateStatus'}">{{trans('business.table.header.order.schedule')}}</th>
-                <th lay-data="{field:'order_menu', minWidth:200, edit: 'textarea'}">{{trans('business.table.header.discovery_order.menu')}}</th>
+                <th lay-data="{field:'order_menu', minWidth:200, edit: 'textarea'}">{{trans('business.table.header.delivery_order.menu')}}</th>
                 <th lay-data="{field:'order_price', minWidth:120, edit:'text'}">{{trans('business.table.header.order.order_price')}}</th>
-                <th lay-data="{field:'order_shop_price', minWidth:120}">{{trans('business.table.header.discovery_order.shop_price')}}</th>
-                <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">{{trans('business.table.header.discovery_order.comment')}}</th>
+                <th lay-data="{field:'order_shop_price', minWidth:120}">{{trans('business.table.header.delivery_order.shop_price')}}</th>
+                <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">{{trans('business.table.header.delivery_order.comment')}}</th>
                 <th lay-data="{field:'operator', minWidth:100}">Operator</th>
                 <th lay-data="{field:'order_time', minWidth:180}">{{trans('business.table.header.order.order_time_consuming')}}</th>
                 <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
@@ -139,7 +139,7 @@
             table.on('tool(table)', function (obj) {
                 let  selector = obj.tr.selector,data = obj.data;
                 if (obj.event ==='updateStatus') {
-                    @if(!Auth::user()->can('business::discovery_order.update'))
+                    @if(!Auth::user()->can('business::delivery_order.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(".layui-table-box "+selector+" td[data-field=order_status]"));
                     table.render();
                     return true;
@@ -151,7 +151,7 @@
                         ,click: function(obj){
                             var params = {'status':obj.id};
                             common.confirm("{{trans('common.confirm.update')}}" , function(){
-                                common.ajax("{{url('/backstage/business/discovery_order')}}/"+data.id, params, function(res){
+                                common.ajax("{{url('/backstage/business/delivery_order')}}/"+data.id, params, function(res){
                                     location.reload();
                                 }, 'patch');
                             } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
@@ -170,7 +170,7 @@
                     ,original = $(this).prev().text(); //得到字段
                 var params = d = {};
                 d[field] = original;
-                @if(!Auth::user()->can('business::discovery_order.update'))
+                @if(!Auth::user()->can('business::delivery_order.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
                     obj.update(d);
                     $(this).val(original);
@@ -191,7 +191,7 @@
                     }
                 }
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/business/discovery_order')}}/"+data.id, params , function(res){
+                    common.ajax("{{url('/backstage/business/delivery_order')}}/"+data.id, params , function(res){
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                         table.render();
                         parent.location.reload();

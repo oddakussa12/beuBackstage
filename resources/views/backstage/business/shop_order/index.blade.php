@@ -153,7 +153,6 @@
         }).use(['common', 'table' , 'dropdown', 'layer' , 'timePicker'], function () {
             const form = layui.form,
                 dropdown = layui.dropdown,
-                layer = layui.layer,
                 table = layui.table,
                 common = layui.common,
                 timePicker = layui.timePicker,
@@ -229,7 +228,7 @@
                     ,original = $(this).prev().text(); //得到字段
                 var params = d = {};
                 d[field] = original;
-                @if(!Auth::user()->can('business::discovery.order.update'))
+                @if(!Auth::user()->can('business::shop_order.update'))
                 common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
                 obj.update(d);
                 $(this).val(original);

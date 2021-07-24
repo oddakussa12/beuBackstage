@@ -65,15 +65,13 @@
                 <th lay-data="{field:'discount_type', minWidth:120}">{{trans('business.table.header.order.discount_type')}}</th>
                 <th lay-data="{field:'reduction', minWidth:120}">{{trans('business.table.header.order.reduction')}}</th>
                 <th lay-data="{field:'discount', minWidth:120}">{{trans('business.table.header.order.discount')}}</th>
-                <th lay-data="{field:'brokerage_percentage', minWidth:120}">{{trans('business.table.header.order.brokerage_percentage')}}</th>
-                <th lay-data="{field:'brokerage', minWidth:120}">{{trans('business.table.header.order.brokerage')}}
                 <th lay-data="{field:'free_delivery', minWidth:100}">{{trans('business.table.header.order.free_delivery')}}</th>
-                <th lay-data="{field:'comment', minWidth:160}">{{trans('business.table.header.order.comment')}}</th>
+                <th lay-data="{field:'comment', minWidth:160, edit:'textarea'}">{{trans('business.table.header.order.comment')}}</th>
                 <th lay-data="{field:'order_price', minWidth:150}">{{trans('business.table.header.order.order_price')}}</th>
                 <th lay-data="{field:'discounted_price', minWidth:150}">{{trans('business.table.header.order.discounted_price')}}</th>
-                <th lay-data="{field:'profit', minWidth:150}">{{trans('business.table.header.order.profit')}}</th>
                 <th lay-data="{field:'order_time', minWidth:180}">{{trans('business.table.header.order.order_time_consuming')}}</th>
                 <th lay-data="{field:'color', maxWidth:1, hide:'true'}"></th>
+                <th lay-data="{field:'delivered_at', minWidth:170}">{{trans('business.table.header.order.delivered_at')}}</th>
                 <th lay-data="{field:'order_created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'order_updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
                 <th lay-data="{fixed: 'right', minWidth:80, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -102,15 +100,13 @@
                     <td>{{$order->discount_type}}</td>
                     <td>{{$order->reduction}}</td>
                     <td>{{$order->discount}}</td>
-                    <td>{{$order->brokerage_percentage}}</td>
-                    <td>@if(!empty($order->brokerage)){{$order->brokerage}}@endif</td>
                     <td><input type="checkbox" @if($order->free_delivery==true) checked @endif name="free_delivery" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO" disabled></td>
                     <td>@if(!empty($order->comment)){{$order->comment}}@endif</td>
                     <td>{{$order->order_price}}</td>
                     <td>{{$order->discounted_price}}</td>
-                    <td>{{$order->profit}}</td>
                     <td>@if(!empty($order->order_time)){{$order->order_time}}mins @endif</td>
                     <td>@if(!empty($order->color)){{$order->color}}@endif</td>
+                    <td>{{$order->delivered_at}}</td>
                     <td>{{$order->created_at}}</td>
                     <td>{{$order->updated_at}}</td>
                     <td></td>
@@ -124,26 +120,6 @@
         @else
             {{ $orders->appends($appends)->links('vendor.pagination.default') }}
         @endif
-
-
-        <table class="layui-table" lay-filter="statistics">
-            <thead>
-                <tr style="background-color: #f2f2f2;">
-                    <th lay-data="{field:'discounted_price', minWidth:180}">All the money received</th>
-                    <th lay-data="{field:'shop_price', minWidth:180}">Money for the store</th>
-                    <th lay-data="{field:'delivery_coast', minWidth:180}">Delivery coast</th>
-                    <th lay-data="{field:'shop_price', minWidth:180}">Gross profit</th>
-                <tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@if(!empty($money['discounted_price'])){{$money['discounted_price']}}@else 0 @endif</td>
-                    <td>@if(!empty($money['delivery_coast'])){{$money['delivery_coast']}}@else 0 @endif</td>
-                    <td>@if(!empty($money['brokerage'])){{$money['brokerage']}}@else 0 @endif</td>
-                    <td>{{$money['discounted_price']-$money['brokerage']}}</td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 @endsection
 @section('footerScripts')
@@ -153,20 +129,77 @@
             base: "{{url('plugin/layui')}}/"
         }).extend({
             common: 'lay/modules/admin/common',
-        }).use(['common', 'table'], function () {
+        }).use(['common', 'table' , 'dropdown'], function () {
             const table = layui.table,
-            common = layui.common;
+            dropdown = layui.dropdown,
+            common = layui.common,
+            $ = layui.jquery;
             table.init('table', {
                 page:false
             });
-            table.init('statistics', {
-                page:false
-            });
             table.on('tool(table)', function (obj) {
-                var data = obj.data;
+                let  selector = obj.tr.selector,data = obj.data;
                 if (obj.event === 'goods') {
                     common.open_page('/backstage/business/shop_order/'+data.id);
+                }else if(obj.event ==='updateStatus') {
+                    @if(!Auth::user()->can('business::shop_order.update'))
+                    common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(".layui-table-box "+selector+" td[data-field=schedule]"));
+                    table.render();
+                    return true;
+                    @endif
+                    dropdown.render({
+                        elem: this
+                        ,show: true
+                        ,data: @json($statusKv)
+                        ,click: function(obj){
+                            var params = {'schedule':obj.id};
+                            common.confirm("{{trans('common.confirm.update')}}" , function(){
+                                common.ajax("{{url('/backstage/business/shop_order')}}/"+data.id, params, function(res){
+                                    location.reload();
+                                }, 'patch');
+                            } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                                table.render();
+                            });
+                        }
+                    });
                 }
+            });
+            //监听单元格编辑
+            table.on('edit(table)', function(obj){
+                var that = this;
+                var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field //得到字段
+                    ,original = $(this).prev().text(); //得到字段
+                var params = d = {};
+                d[field] = original;
+                @if(!Auth::user()->can('business::shop_order.update'))
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
+                obj.update(d);
+                $(this).val(original);
+                table.render();
+                return true;
+                @endif
+                    params[field] = value;
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax("{{url('/backstage/business/shop_order')}}/"+data.id, params , function(res){
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                        table.render();
+                        parent.location.reload();
+                    } , 'PATCH' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            obj.update(d);
+                            $(that).val(original);
+                            table.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                    d[field] = original;
+                    obj.update(d);
+                    $(that).val(original);
+                    table.render();
+                });
             });
         });
     </script>
