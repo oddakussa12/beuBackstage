@@ -44,10 +44,7 @@ class ShopController extends Controller
         })->leftJoin('shop_evaluation_points' , function($join){
             $join->on('shop_evaluation_points.user_id', '=', 'users.user_id');
         });
-//        if(isset($params['user_online'])&&$params['user_online']!==null)
-//        {
-//            $shops->where('users.user_online' , intval($params['user_online']));
-//        }
+        $shops->where('users.user_shop' , 1);
         if(isset($params['user_verified'])&&$params['user_verified']!==null)
         {
             $shops->where('users.user_verified' , intval($params['user_verified']));
