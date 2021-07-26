@@ -35,7 +35,10 @@ class ShopOrderController extends Controller
         $data['schedule'] = $schedule;
         $shopId = intval($request->input('user_id' , 0));
         $adminsShops = DB::table('admins_shops');
-        $user->admin_id!=1 && $adminsShops = $adminsShops->where('admin_id', $user->admin_id);
+        if(!$user->hasRole(array('administrator' , 'DeliveryManager' , 'CountryManager')))
+        {
+            $adminsShops = $adminsShops->where('admin_id', $user->admin_id);
+        }
         $userIds= $adminsShops->get()->pluck('user_id')->unique()->toArray();
         $data['shops']  = User::whereIn('user_id', $userIds)->get();
         $schedules = $this->schedule;
@@ -53,7 +56,7 @@ class ShopOrderController extends Controller
         if (!empty($schedule)) {
             $ordersWhere = $ordersWhere->where('schedule', $schedule);
         }
-        $user->admin_id!=1 && $ordersWhere = $ordersWhere->where('operator', $user->admin_id);
+//        $user->admin_id!=1 && $ordersWhere = $ordersWhere->where('operator', $user->admin_id);
         $shopId!=0  && $ordersWhere = $ordersWhere->where('shop_id', $shopId);
         $date_time = $this->parseTime($dateTime);
         if($date_time!==false)

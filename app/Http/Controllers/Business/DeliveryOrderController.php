@@ -35,7 +35,7 @@ class DeliveryOrderController extends Controller
             $status = intval($params['status']);
             $orders = $orders->where('status', $status);
         }
-        $user->admin_id!=1 && $orders = $orders->where('operator', $user->admin_id);
+//        $user->admin_id!=1 && $orders = $orders->where('operator', $user->admin_id);
         $shopId!=0  && $orders = $orders->where('owner', $shopId);
         $date_time = $this->parseTime($dateTime);
         if($date_time!==false)
