@@ -44,8 +44,8 @@
                 <td>
                     @if(!empty($result->user_id))
                         <input type="hidden" id="id" name="id" value="{{$result->user_id}}">
-                        <button class="layui-btn layui-btn-normal submit   @if($result->user_verified==1) layui-btn-disabled @endif" value="pass">Pass</button>
-                        <button class="layui-btn layui-btn-warm submit @if($result->user_verified==0) layui-btn-disabled @endif" value="refuse">Refuse</button>
+                        <button class="layui-btn layui-btn-normal submit   @if($result->user_verified==1) layui-btn-disabled @endif" value="yes">Pass</button>
+                        <button class="layui-btn layui-btn-warm submit @if($result->user_verified==0) layui-btn-disabled @endif" value="no">Refuse</button>
                     @endif
                 </td>
             </tr>
@@ -80,7 +80,7 @@
                 return false;
                 @endif;
                 let val    = this.value;
-                let params = '{"audit":"'+val+'"}';
+                let params = '{"user_verified":"'+val+'"}';
                 let id = $("#id").val();
                 common.ajax("{{url('/backstage/business/shop')}}/"+id, JSON.parse(params) , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
