@@ -156,10 +156,10 @@ Route::group(['prefix'=>'backstage'] , function(){
     });
     Route::get('business/shop_order/count' , 'Business\OrderController@count')->name('business.order.count');
     Route::get('passport/user/yesterday/view' , 'Passport\UserController@yesterdayView')->name('passport.user.yesterday.view');
-    Route::get('operator/operator/goal' , 'Operator\OperatorController@goal')->name('operator.operator.goal');
-    Route::post('operator/operator/goal/data' , 'Operator\OperatorController@goalData')->name('operator.operator.goal.data');
-    Route::get('operator/operator/goal202104' , 'Operator\OperatorController@goal202104')->name('operator.operator.goal202104');
-    Route::get('operator/operator/goal202105' , 'Operator\OperatorController@goal202105')->name('operator.operator.goal202105');
+//    Route::get('operator/operator/goal' , 'Operator\OperatorController@goal')->name('operator.operator.goal');
+//    Route::post('operator/operator/goal/data' , 'Operator\OperatorController@goalData')->name('operator.operator.goal.data');
+//    Route::get('operator/operator/goal202104' , 'Operator\OperatorController@goal202104')->name('operator.operator.goal202104');
+//    Route::get('operator/operator/goal202105' , 'Operator\OperatorController@goal202105')->name('operator.operator.goal202105');
 });
 Route::any('/' , 'BackstageController@redirect')->name('backstage.redirect');
 
