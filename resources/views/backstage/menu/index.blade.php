@@ -178,41 +178,23 @@
             var treetable = layui.treetable;
             var common = layui.common;
             var supportedLocales = @json($supportedLocales);
-            table.init('tree_menu', { //转化静态表格
+            table.init('tree_menu', {
                 page:false,
                 limit:100000
             });
             treetable.init_load();
-            table.on('tool(tree_menu)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-
-                if(layEvent === 'detail'){ //查看
-                    //do somehing
-                } else if(layEvent === 'del'){ //删除
-                    layer.confirm("{{trans('common.confirm.delete')}}", function(index){
+            table.on('tool(tree_menu)', function(obj){
+                var data = obj.data;
+                var layEvent = obj.event;
+                if(layEvent === 'del'){
+                    common.confirm("{{trans('common.confirm.delete')}}", function(index){
                         common.ajax("{{url('/backstage/menu')}}/"+data.menu_id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
-                                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                // layer.close(index);
                                 location.reload();
                             });
                         } , 'delete');
-
-
-                        //向服务端发送删除指令
-                    });
+                    } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
                 } else if(layEvent === 'edit'){ //编辑
-                    //do something
-                    // alert(1);
-                    // layer.alert('编辑行：<br>'+ JSON.stringify(data));
-                    // //同步更新缓存对应的值
-                    // obj.update({
-                    //     username: '123'
-                    //     ,title: 'xxx'
-                    // });
-
                     form.val("menu_form", {
                         "menu_id": data.menu_id // "name": "value"
                         ,"menu_name": data.menu_name
@@ -225,9 +207,6 @@
                         ,"menu_url": data.menu_url
                         ,"menu_p_id": data.menu_p_id
                     });
-
-                    console.log(form);
-
                 }else if(layEvent === 'menu_toggle')
                 {
                     treetable.toggleRows($(this).find('.treeTable-icon'), false);
@@ -241,30 +220,20 @@
                     }
                 },
                 menu_auth:function(value, item){
-                    {{--if(value==''||value==undefined)--}}
-                    {{--{--}}
-                    {{--    return "{{trans('menu.prompt.menu_name_required')}}";--}}
-                    {{--}--}}
                 },
                 menu_url:function(value, item){
-
                 }
             });
             form.on('submit(form_submit_add)', function(data){
                 var params = common.fieldToArr(data.field , supportedLocales);
                 common.ajax("{{url('/backstage/menu')}}" , params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.add')}}"  , 1 , 1500 , 6 , 't' ,function () {
-                        // location.reload();
                     });
                 });
                 return false;
-                console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
-                console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
-                console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
             });
             form.on('submit(form_submit_update)', function(data){
                 var current_menu_id = data.field.menu_id;
-                // console.log(current_menu_id); return  false;
                 if(current_menu_id==''||current_menu_id==undefined||current_menu_id==0)
                 {
                     common.prompt("{{trans('menu.prompt.menu_id_required')}}" , 5 , 1000 , 1 , 't');return false;
@@ -285,16 +254,11 @@
                         location.reload();
                     });
                 } , 'put');
-                console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
-                console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
-                console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
-                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                return false;
             });
             form.on('submit(menu_form)', function(){
                 return false;
             });
-
-
         });
     </script>
 @endsection

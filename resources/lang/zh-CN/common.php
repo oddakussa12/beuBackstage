@@ -39,6 +39,7 @@ return [
             'detail'=>'查看',
             'check'=>'审核',
             'upload'=>'上传',
+            'reset'=>'重置',
         ],
         'header'=>[
             'id'=>'ID',

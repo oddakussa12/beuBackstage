@@ -39,7 +39,8 @@ return [
             'detail'=>'detail',
             'check'=>'check',
             'unpopular'=>'unpopular',
-            'upload'=>'upload'
+            'upload'=>'upload',
+            'reset'=>'Reset',
         ],
         'header'=>[
             'id'=>'ID',

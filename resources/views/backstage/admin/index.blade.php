@@ -39,7 +39,7 @@
                 } , width:200}">{{trans('admin.table.header.admin_role')}}</th>
                 <th  lay-data="{field:'admin_realname', width:100}">{{trans('admin.table.header.admin_name')}}</th>
 {{--                <th  lay-data="{field:'admin_created_at', width:180}">{{trans('admin.table.header.admin_created_at')}}</th>--}}
-                <th  lay-data="{field:'admin_op', minWidth:120 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
+                <th  lay-data="{field:'admin_op', minWidth:150 , templet: '#operateTpl'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -145,7 +145,7 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('admin.form.label.admin_role')}}</label>
-                    <div class="layui-input-block"  style="width: 400px;">
+                    <div class="layui-input-block">
                         <select name="admin_roles"   xm-select="admin_roles" xm-select-search="">
                             <option value="">-{{trans('common.form.placeholder.select_first')}}-</option>
                             @foreach($roles as $k=>$role)
@@ -182,6 +182,9 @@
         <div class="layui-btn-group">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">{{trans('common.table.button.edit')}}</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">{{trans('common.table.button.delete')}}</a>
+            @if(Auth::user()->hasRole('administrator'))
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="reset">{{trans('common.table.button.reset')}}</a>
+            @endif
         </div>
     </script>
 
@@ -191,19 +194,14 @@
         }).extend({
         common: 'lay/modules/admin/common',
         formSelects: 'lay/modules/formSelects-v4',
-        }).use(['common' , 'tree' , 'table' , 'layer' , 'formSelects'], function () {
+        }).use(['common' , 'tree' , 'table' , 'formSelects'], function () {
             var $ = layui.jquery,
             table = layui.table,
             form = layui.form,
             tree = layui.tree,
             common = layui.common,
-            layer = layui.layer;
-            formSelects = layui.formSelects;
+            formSelects = layui.formSelects
             formSelects.render('admin_roles');
-
-
-
-
             var permission_data = [
             @foreach($sortPermissions as $k=>$permission)
                 {
@@ -221,51 +219,29 @@
                 },
             @endforeach
             ];
-
-            // tree.render({
-            //     elem: '#permission_tree' //默认是点击节点可进行收缩
-            //     ,data: permission_data
-            // });
             tree.render({
                 elem: '#permission_tree'
                 ,data: permission_data
-                ,showCheckbox: true  //是否显示复选框
-                ,key: 'id'  //定义索引名称
-                ,accordion: true //是否开启手风琴模式
+                ,showCheckbox: true
+                ,key: 'id'
+                ,accordion: true
                 ,id:'permission_tree'
             });
-            table.init('table', { //转化静态表格
+            table.init('table', {
                 page:false
             });
-            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-
-                if(layEvent === 'detail'){ //查看
-                    //do somehing
-                } else if(layEvent === 'del'){ //删除
-                    layer.confirm("{{trans('common.confirm.delete')}}", function(index){
+            table.on('tool(table)', function(obj){
+                var data = obj.data;
+                var layEvent = obj.event;
+                if(layEvent === 'del'){
+                    common.confirm("{{trans('common.confirm.delete')}}", function(index){
                         common.ajax("{{url('/backstage/admin')}}/"+data.admin_id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
-                                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                // layer.close(index);
                                 location.reload();
                             });
                         } , 'delete');
-
-
-                        //向服务端发送删除指令
-                    });
+                    } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
                 } else if(layEvent === 'edit'){ //编辑
-                    //do something
-                    // alert(1);
-                    // layer.alert('编辑行：<br>'+ JSON.stringify(data));
-                    // //同步更新缓存对应的值
-                    // obj.update({
-                    //     username: '123'
-                    //     ,title: 'xxx'
-                    // });
                     form.val("admin_form", {
                         "admin_id": data.admin_id // "name": "value"
                         ,"admin_username": data.admin_username
@@ -277,18 +253,15 @@
                     });
                     tree.reload('permission_tree');
                     tree.setChecked('permission_tree', JSON.parse(data.admin_auth));
-                    // formSelects.value('admin_roles', [2, 4]);
-                    // admin_roles = data.admin_roles.split('；');
                     formSelects.value('admin_roles', JSON.parse(data.admin_roles));
-                    // console.log(data.admin_roles);return false;
-                    // var checkedData = tree.getChecked('permission_tree');
-                    // var select_id = new Array();
-                    // layui.each(checkedData.children , function(k ,v){
-                    //     select_id.push(v.id);
-                    // });
-                    // tree.setChecked('permission_tree' , select_id);
-                    // layer.alert(JSON.stringify(checkedData), {shade:0});
-
+                } else if(layEvent === 'reset'){ //编辑
+                    common.confirm("{{trans('common.confirm.update')}}", function(index){
+                        common.ajax("{{url('/backstage/admin')}}/"+data.admin_id+"/reset" , {} , function(res){
+                            common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 500 , 6 , 't' ,function () {
+                                location.reload();
+                            });
+                        } , 'patch');
+                    } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
                 }else if(layEvent === 'menu_toggle')
                 {
                     treetable.toggleRows($(this).find('.treeTable-icon'), false);
@@ -352,7 +325,6 @@
                             return true;
                         }
                         var auth = v.label;
-                        var id = parseInt(v.id);
                         if(params.hasOwnProperty('admin_auth'))
                         {
                             params['admin_auth'][i] = auth;
@@ -363,13 +335,12 @@
                         i++;
                     });
                 });
-                //console.log(params);return false;
                 common.ajax("{{url('/backstage/admin/')}}/"+params.admin_id , params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't' ,function () {
                         location.reload();
                     });
                 } , 'put');
-                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                return false;
             });
             form.on('submit(admin_form)', function(){
                 return false;

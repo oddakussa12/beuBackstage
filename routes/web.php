@@ -22,8 +22,9 @@ Route::group(['prefix'=>'backstage'] , function(){
     Route::get('logout', 'Auth\LoginController@logout')->name('admin.logout');
     Route::group(['middleware' => ['auth']] , function (){
         Route::get('/', 'BackstageController@index');
-        Route::get('admin/{admin}/edit', 'AdminController@edit')->name('admin.edit');
-        Route::patch('admin/self', 'AdminController@updateSelf')->name('admin.update.self');
+        Route::get('admin/{admin}/edit', 'Auth\AdminController@edit')->name('admin.edit');
+        Route::patch('admin/self', 'Auth\AdminController@updateSelf')->name('admin.update.self');
+        Route::patch('admin/{admin}/reset', 'Auth\AdminController@resetPwd')->name('admin.reset.pwd');
         Route::group(['middleware' => ['auth.check']] , function (){
             Route::group(['namespace'=>'Auth'] , function (){
                 Route::resource('admin', 'AdminController');

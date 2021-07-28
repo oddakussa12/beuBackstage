@@ -74,38 +74,23 @@
             var $ = layui.jquery,
                 table = layui.table,
                 form = layui.form,
-                common = layui.common,
-                layer = layui.layer;
-
-
-
-
-            table.init('table', { //转化静态表格
+                common = layui.common;
+            table.init('table', {
                 page:false
             });
 
-            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-
-                if(layEvent === 'detail'){ //查看
-                    //do somehing
-                } else if(layEvent === 'del'){ //删除
-                    layer.confirm("{{trans('common.confirm.delete')}}", function(index){
+            table.on('tool(table)', function(obj){
+                var data = obj.data;
+                var layEvent = obj.event;
+                if(layEvent === 'del'){
+                    common.confirm("{{trans('common.confirm.delete')}}", function(index){
                         common.ajax("{{url('/backstage/permission')}}/"+data.id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
-                                // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                                // layer.close(index);
                                 location.reload();
                             });
                         } , 'delete');
-
-
-                        //向服务端发送删除指令
-                    });
-                } else if(layEvent === 'edit'){ //编辑
-
+                    } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
+                } else if(layEvent === 'edit'){
                     form.val("permission_form", {
                         "id": data.id
                         ,"name": data.name
@@ -148,7 +133,7 @@
                         location.reload();
                     });
                 } , 'put');
-                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                return false;
             });
             form.on('submit(role_form)', function(){
                 return false;

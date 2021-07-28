@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Role;
 use App\Models\Admin;
+use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAdminRequest;
+use App\Custom\Uuid\RandomStringGenerator;
 use App\Repositories\Contracts\AdminRepository;
 use App\Repositories\Contracts\PermissionRepository;
 
@@ -131,6 +134,24 @@ class AdminController extends Controller
         }
         $this->admin->update($user, $fields);
         return response()->json(['result' => 'success']);
+    }
+
+    public function resetPwd($admin_id)
+    {
+        if(!auth()->user()->hasRole('administrator'))
+        {
+            abort(403);
+        }
+        $random = new RandomStringGenerator();
+        $pwd = $random->generate(8);
+        $admin = Admin::where('admin_id' , $admin_id)->firstOrFail();
+        Mail::to($admin->admin_email)->send(new ResetPassword($pwd));
+        $newPass = password_hash($pwd , PASSWORD_DEFAULT);
+        $fields['admin_password'] = $newPass;
+        $this->admin->update($admin, $fields);
+        return response()->json(array(
+            'result' => 'success',
+        ));
     }
 
     /**
