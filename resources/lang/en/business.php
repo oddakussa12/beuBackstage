@@ -130,6 +130,12 @@ return [
                 'content'=>'Content',
                 'created_at'=>'Time',
             ],
+            'special_goods'=>[
+                'special_price'=>'SpecialPrice',
+                'free_delivery'=>'FreeDelivery',
+                'packaging_cost'=>'PackagingCost',
+                'deadline'=>'Deadline',
+            ],
             'goods_id'=>'GoodsId',
             'goods_name'=>'GoodsName',
             'shop_id'=>'ShopId',
@@ -234,6 +240,12 @@ return [
                 'shop_order'=>'Order',
                 'delivery_order'=>'Order(old)',
                 'shopping_cart'=>'ShoppingCart'
+            ],
+            'special_goods'=>[
+                'special_price'=>'SpecialPrice',
+                'free_delivery'=>'FreeDelivery',
+                'packaging_cost'=>'PackagingCost',
+                'deadline'=>'Deadline',
             ]
         ],
         'placeholder'=>[
@@ -257,6 +269,12 @@ return [
                 'reduction'=>'Reduction',
                 'limit'=>'Limit',
                 'percentage'=>'Percentage',
+            ],
+            'special_goods'=>[
+                'special_price'=>'SpecialPrice',
+                'free_delivery'=>'FreeDelivery',
+                'packaging_cost'=>'PackagingCost',
+                'deadline'=>'Deadline',
             ]
         ],
         'select'=>[
