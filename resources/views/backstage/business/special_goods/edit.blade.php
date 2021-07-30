@@ -15,14 +15,14 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.special_goods.special_price')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="special_price" lay-verify="required" required placeholder="{{trans('business.form.placeholder.special_goods.special_price')}}" value="{{$specialGoods->special_price}}">
+                        <input class="layui-input" type="text" name="special_price" lay-verify="number" required placeholder="{{trans('business.form.placeholder.special_goods.special_price')}}" value="{{$specialGoods->special_price}}">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.special_goods.packaging_cost')}}：</label>
                     <div class="layui-input-inline">
                         <input type="hidden" id="id" name="id" value="{{$specialGoods->id}}">
-                        <input class="layui-input" type="text" name="packaging_cost" lay-verify="required" required placeholder="{{trans('business.form.placeholder.special_goods.packaging_cost')}}" value="{{$specialGoods->packaging_cost}}">
+                        <input class="layui-input" type="text" name="packaging_cost" lay-verify="number" required placeholder="{{trans('business.form.placeholder.special_goods.packaging_cost')}}" value="{{$specialGoods->packaging_cost}}">
                     </div>
                 </div>
             </div>
@@ -32,14 +32,14 @@
                     <div class="layui-input-inline">
                         <select name="free_delivery" >
                             <option value="1"  @if(!empty($specialGoods->free_delivery)) selected @endif>YES</option>
-                            <option value="0"  @if(empty($specialGoods->free_delivery)) selected @endif>>NO</option>
+                            <option value="0"  @if(empty($specialGoods->free_delivery)) selected @endif>NO</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.special_goods.deadline')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" readonly lay-verify="date" required id="deadline" name="deadline" value="{{$specialGoods->special_goods}}">
+                        <input class="layui-input" type="text" readonly lay-verify="datetime" required id="deadline" name="deadline" value="{{$specialGoods->deadline}}">
                     </div>
                 </div>
             </div>
@@ -66,8 +66,9 @@
             laydate.render({
                 elem: '#deadline'
                 ,min : 'today'
-                ,type: 'date'
+                ,type: 'datetime'
                 ,lang: "{{locale()}}"
+                ,value: "{{$specialGoods->deadline}}"
             });
 
             form.on('submit(common_form)', function(data){

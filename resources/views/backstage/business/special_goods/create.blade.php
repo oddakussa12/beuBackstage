@@ -14,13 +14,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.special_goods.special_price')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="special_price" lay-verify="required" required placeholder="{{trans('business.form.placeholder.special_goods.special_price')}}">
+                        <input class="layui-input" type="text" name="special_price" lay-verify="number" required placeholder="{{trans('business.form.placeholder.special_goods.special_price')}}">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.special_goods.packaging_cost')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="packaging_cost" lay-verify="required" required placeholder="{{trans('business.form.placeholder.special_goods.packaging_cost')}}">
+                        <input class="layui-input" type="text" name="packaging_cost" lay-verify="number" required placeholder="{{trans('business.form.placeholder.special_goods.packaging_cost')}}">
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.special_goods.deadline')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" readonly lay-verify="date" required placeholder="{{trans('common.form.label.date')}}" id="deadline" name="deadline">
+                        <input class="layui-input" type="text" readonly lay-verify="datetime" required placeholder="{{trans('common.form.label.date')}}" id="deadline" name="deadline">
                     </div>
                 </div>
             </div>
@@ -73,6 +73,7 @@
                 ,min : 'today'
                 ,type: 'datetime'
                 ,lang: "{{locale()}}"
+                ,value: "{{$today}}"
             });
             form.on('submit(common_form)', function(data){
                 let params = {};

@@ -7,17 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\Business\Goods;
 use Illuminate\Support\Facades\DB;
 use App\Models\Business\SpecialGoods;
-use App\Http\Controllers\V1\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Business\SpecialGoodsRequest;
 
-class SpecialGoodsController extends BaseController
+class SpecialGoodsController extends Controller
 {
     public function index(Request $request)
     {
         $perPage = 10;
         $specialGoods = SpecialGoods::orderByDesc('created_at')->paginate($perPage);
         $goodsIds = $specialGoods->pluck('goods_id')->toArray();
-        $goods = Goods::where('id' , $goodsIds)->get();
+        $goods = Goods::whereIn('id' , $goodsIds)->get();
         $specialGoods->each(function($specialG) use ($goods){
             $specialG->g = $goods->where('id' , $specialG->goods_id)->first();
         });
@@ -26,13 +26,14 @@ class SpecialGoodsController extends BaseController
 
     public function create()
     {
-        return view('backstage.business.special_goods.create');
+        $today = date("Y-m-d 23:59:59");
+        return view('backstage.business.special_goods.create' , compact('today'));
     }
 
     public function edit($id)
     {
         $specialGoods = SpecialGoods::where('id' , $id)->firstOrFail();
-        $specialGoods->g = Goods::where('id' , $specialGoods->goods_id)->fisrt();
+        $specialGoods->g = Goods::where('id' , $specialGoods->goods_id)->first();
         return view('backstage.business.special_goods.edit' , compact('specialGoods'));
     }
 
@@ -49,8 +50,9 @@ class SpecialGoodsController extends BaseController
         }
         $goods = Goods::where('id' , $goodsIds)->firstOrFail();
         $now = date('Y-m-d H:i:s');
-        DB::connection('lovbee')->table('special_goods')->insert(array(
+        $id = DB::connection('lovbee')->table('special_goods')->insertGetId(array(
             'shop_id'=>$goods->user_id,
+            'goods_id'=>$goods->id,
             'special_price'=>$specialPrice,
             'free_delivery'=>$freeDelivery,
             'packaging_cost'=>$packagingCost,
@@ -58,6 +60,9 @@ class SpecialGoodsController extends BaseController
             'created_at'=>$now,
             'updated_at'=>$now
         ));
+        $this->httpRequest('api/backstage/special_goods' , array(
+            'id'=>$id
+        ) , 'patch');
         return response()->json(array(
             'result'=>'success'
         ));
@@ -74,6 +79,7 @@ class SpecialGoodsController extends BaseController
             abort(422 , 'deadline format error!');
         }
         $now = date('Y-m-d H:i:s');
+        $goods = SpecialGoods::where('id' , $id)->firstOrFail();
         DB::connection('lovbee')->table('special_goods')->where('id' , $id)->update(array(
             'special_price'=>$specialPrice,
             'free_delivery'=>$freeDelivery,
@@ -81,6 +87,30 @@ class SpecialGoodsController extends BaseController
             'deadline'=>$deadline,
             'updated_at'=>$now
         ));
+        $this->httpRequest('api/backstage/special_goods' , array(
+            'id'=>$id
+        ) , 'patch');
+        $data = $goods->toArray();
+        $data['admin_id'] = auth()->user()->admin_id;
+        $data['log_updated_at'] = date('Y-m-d H:i:s');
+        DB::connection('lovbee')->table('special_goods_log')->insert($data);
+        return response()->json(array(
+            'result'=>'success'
+        ));
+    }
+
+    public function destroy($id)
+    {
+        $goods = SpecialGoods::where('id' , $id)->firstOrFail();
+        DB::connection('lovbee')->table('special_goods')->where('id' , $id)->delete();
+        $this->httpRequest('api/backstage/special_goods' , array(
+            'id'=>$id,
+            'type'=>'destroy'
+        ) , 'patch');
+        $data = $goods->toArray();
+        $data['admin_id'] = auth()->user()->admin_id;
+        $data['log_updated_at'] = date('Y-m-d H:i:s');
+        DB::connection('lovbee')->table('special_goods_log')->insert($data);
         return response()->json(array(
             'result'=>'success'
         ));
