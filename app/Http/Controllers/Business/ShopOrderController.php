@@ -35,7 +35,7 @@ class ShopOrderController extends Controller
         $data['schedule'] = $schedule;
         $shopId = intval($request->input('user_id' , 0));
         $adminsShops = DB::table('admins_shops');
-        if(!$user->hasRole(array('administrator' , 'DeliveryManager' , 'CountryManager')))
+        if(!$user->hasRole(array('administrator' , 'DeliveryManager' , 'CountryManager' , 'CallingCenter')))
         {
             $adminsShops = $adminsShops->where('admin_id', $user->admin_id);
         }
