@@ -108,11 +108,11 @@ class SpecialGoodsController extends Controller
     public function destroy($id)
     {
         $goods = SpecialGoods::where('id' , $id)->firstOrFail();
-        DB::connection('lovbee')->table('special_goods')->where('id' , $id)->delete();
         $this->httpRequest('api/backstage/special_goods' , array(
             'id'=>$id,
             'type'=>'destroy'
         ) , 'patch');
+        DB::connection('lovbee')->table('special_goods')->where('id' , $id)->delete();
         $data = $goods->toArray();
         $data['admin_id'] = auth()->user()->admin_id;
         $data['log_updated_at'] = date('Y-m-d H:i:s');
