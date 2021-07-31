@@ -170,7 +170,7 @@
                     params[k] = v;
                 });
 
-                common.ajax("{{url('/backstage/business/shop_tag')}}" , params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/shop_tag')}}" , params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.add')}}"  , 1 , 1500 , 6 , 't' ,function () {
                         location.reload();
                     });
@@ -187,7 +187,7 @@
                     params[k] = v;
                 });
 
-                common.ajax("{{url('/backstage/business/shop_tag')}}/"+params.id , params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/shop_tag')}}/"+params.id , params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't' ,function () {
                         location.reload();
                     });
@@ -264,7 +264,7 @@
                 data.elem.checked = !checked;
                 const name = $(data.elem).attr('name');
                 let id = data.othis.parents('tr').find("td :first").text();
-                const url = "{{url('/backstage/business/shop_tag')}}/"+id;
+                const url = "{{LaravelLocalization::localizeUrl('/backstage/business/shop_tag')}}/"+id;
                 var params = {};
                 if(checked) {
                     params[name] = "on";

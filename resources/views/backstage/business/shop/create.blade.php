@@ -151,7 +151,7 @@
                     if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/business/shop')}}", params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/shop')}}", params , function(res){
                     if (res.message!==undefined) {
                         common.tips(res.message);
                         layer.closeAll();

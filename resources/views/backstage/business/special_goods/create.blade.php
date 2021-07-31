@@ -8,7 +8,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.goods.id')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="goods_id" lay-verify="required" required placeholder="{{trans('business.form.placeholder.goods.id')}}">
+                        <input class="layui-input" type="text" name="goods_id" lay-verify="required" @if(!empty($goodsId)) value="{{$goodsId}}" @endif required placeholder="{{trans('business.form.placeholder.goods.id')}}">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -82,7 +82,7 @@
                     if(v===''||v===undefined) {return true;}
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/business/special_goods')}}/", params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods')}}/", params , function(res){
                     parent.location.reload();
                 } , 'post');
                 return false;

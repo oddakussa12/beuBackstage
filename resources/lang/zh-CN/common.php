@@ -2,11 +2,11 @@
 
 
 return [
-    'company_name'=>'Lovbee project',
+    'company_name'=>'Beu project',
     'backend_home'=>'后台',
     'header' =>[
-        'title'=>'Lovbee project',
-        'head'=>'Lovbee project',
+        'title'=>'Beu project',
+        'head'=>'Beu project',
     ],
     'button'=>[
         'sign_out'=>'退出',

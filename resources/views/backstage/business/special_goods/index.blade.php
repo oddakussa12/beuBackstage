@@ -13,6 +13,7 @@
                 <th lay-data="{field:'special_price', minWidth:130}">{{trans('business.table.header.special_goods.special_price')}}</th>
                 <th lay-data="{field:'free_delivery', minWidth:110}">{{trans('business.table.header.special_goods.free_delivery')}}</th>
                 <th lay-data="{field:'packaging_cost', minWidth:130}">{{trans('business.table.header.special_goods.packaging_cost')}}</th>
+                <th lay-data="{field:'status', minWidth:110}">{{trans('business.table.header.special_goods.status')}}</th>
                 <th lay-data="{field:'deadline', minWidth:110}">{{trans('business.table.header.special_goods.deadline')}}</th>
                 <th lay-data="{field:'created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
@@ -27,6 +28,7 @@
                     <td>{{$value->special_price}}</td>
                     <td><span class="layui-btn layui-btn-xs @if(!empty($value->free_delivery)) layui-btn-normal @else layui-btn-warm @endif">@if(!empty($value->free_delivery)) YES @else NO @endif</span></td>
                     <td>{{$value->packaging_cost}}</td>
+                    <td><span class="layui-btn layui-btn-xs @if(!empty($value->status)) layui-btn-normal @else layui-btn-warm @endif">@if(!empty($value->status)) YES @else NO @endif</span></td>
                     <td>{{$value->deadline}}</td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>
@@ -67,7 +69,7 @@
                 }
                 if(layEvent === 'delete'){
                     common.confirm("{{trans('common.confirm.delete')}}" , function(){
-                        common.ajax("{{url('/backstage/business/special_goods')}}/"+data.id , {} , function(res){
+                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods')}}/"+data.id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
                                 location.reload();
                             });

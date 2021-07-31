@@ -122,7 +122,7 @@
                     if(v==''||v==undefined) {return true;}
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/props/category')}}/"+params.id, params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/props/category')}}/"+params.id, params , function(res){
                     if (res.code!== undefined) {
                         layer.open({
                             title: 'Result'

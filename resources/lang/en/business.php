@@ -135,6 +135,7 @@ return [
                 'free_delivery'=>'FreeDelivery',
                 'packaging_cost'=>'PackagingCost',
                 'deadline'=>'Deadline',
+                'status'=>'Status',
             ],
             'goods_id'=>'GoodsId',
             'goods_name'=>'GoodsName',
@@ -174,7 +175,8 @@ return [
             ],
             'goods'=>[
                 'view_history'=>'ViewHistory',
-                'comment'=>'Comment'
+                'comment'=>'Comment',
+                 'special'=>'Special',
             ]
         ]
     ],

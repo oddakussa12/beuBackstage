@@ -86,7 +86,7 @@
                 }
                 if(layEvent === 'delete'){
                     common.confirm("{{trans('common.confirm.delete')}}" , function(){
-                        common.ajax("{{url('/backstage/business/promocode')}}/"+data.id , {} , function(res){
+                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/promocode')}}/"+data.id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
                                 location.reload();
                             });

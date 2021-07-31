@@ -197,7 +197,7 @@
                         ,click: function(obj){
                             let params = {'admin_id':obj.id};
                             common.confirm("{{trans('common.confirm.update')}}" , function(){
-                                common.ajax("{{url('/backstage/business/shop')}}/"+data.user_id, params, function(res){
+                                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/shop')}}/"+data.user_id, params, function(res){
                                     location.reload();
                                 }, 'patch');
                             } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
@@ -218,7 +218,7 @@
                         ,click: function(obj){
                             let params = {'user_tag':obj.id};
                             common.confirm("{{trans('common.confirm.update')}}" , function(){
-                                common.ajax("{{url('/backstage/business/shop')}}/"+data.user_id, params, function(res){
+                                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/shop')}}/"+data.user_id, params, function(res){
                                     location.reload();
                                 }, 'patch');
                             } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
@@ -262,7 +262,7 @@
                 let params = {};
                 params[field] = value;
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/business/shop')}}/"+id, params , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/shop')}}/"+id, params , function(res){
                         $(that).prop("checked",true);
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
@@ -306,7 +306,7 @@
                 @endif;
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/business/shop')}}/"+data.id, JSON.parse(params) , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/shop')}}/"+data.id, JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         name==='audit' && location.reload();

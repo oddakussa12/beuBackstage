@@ -756,7 +756,7 @@
                 return false;
                 @endif
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                        common.ajax("{{url('/backstage/config/')}}" , data.field , function(res){
+                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/config/')}}" , data.field , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                         } , 'post');
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
@@ -780,7 +780,7 @@
                 }
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/config/')}}" , JSON.parse(params) , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/config/')}}" , JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');

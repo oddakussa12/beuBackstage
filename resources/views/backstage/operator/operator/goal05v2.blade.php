@@ -202,7 +202,7 @@
                     checked.push($(this).val());
                 });
 
-                common.ajax("{{url('/backstage/operator/operator/goal/data')}}", {'name': cName, 'value': checked}, function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/operator/operator/goal/data')}}", {'name': cName, 'value': checked}, function(res){
                     let total = res.divName==='product' ? {{$productData['goal']}} : {{$devData['goal']}};
                     let top = ((total-res.current)/total)*480+'px';
                     $("#"+res.divName+"-num").text(res.current);

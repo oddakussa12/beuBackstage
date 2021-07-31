@@ -69,7 +69,7 @@
                 <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.goods.status')}}</th>
                 <th lay-data="{field:'comment', minWidth:200}">{{trans('business.table.header.goods.comment')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
-                <th lay-data="{fixed: 'right', width:150, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', width:180, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -152,7 +152,7 @@
                 }
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/business/goods')}}/"+id , JSON.parse(params) , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/goods')}}/"+id , JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
@@ -172,6 +172,8 @@
                     common.open_page('/backstage/business/goods/'+data.id+'/view/');
                 }else if(layEvent === 'comment'){
                     window.open("/backstage/business/goods_comment?goods_id="+data.id);
+                }else if(layEvent === 'special'){
+                    common.open_page("/backstage/business/special_goods/create?goods_id="+data.id);
                 }
             });
             $(function () {
@@ -187,6 +189,7 @@
         <div class="layui-btn-group">
             <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('business.table.button.goods.view_history')}}</a>
             <a class="layui-btn layui-btn-xs" lay-event="comment">{{trans('business.table.button.goods.comment')}}</a>
+            <a class="layui-btn layui-btn-xs" lay-event="special">{{trans('business.table.button.goods.special')}}</a>
         </div>
     </script>
 @endsection

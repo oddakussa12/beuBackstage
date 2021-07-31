@@ -79,7 +79,7 @@
                 });
                 let id = params.id;
                 delete params.id;
-                common.ajax("{{url('/backstage/business/special_goods')}}/"+id, params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods')}}/"+id, params , function(res){
                     parent.location.reload();
                 } , 'PATCH');
                 return false;

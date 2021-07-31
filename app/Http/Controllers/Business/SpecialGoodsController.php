@@ -27,7 +27,8 @@ class SpecialGoodsController extends Controller
     public function create()
     {
         $today = date("Y-m-d 23:59:59");
-        return view('backstage.business.special_goods.create' , compact('today'));
+        $goodsId = request()->input('goods_id' , '');
+        return view('backstage.business.special_goods.create' , compact('today' , 'goodsId'));
     }
 
     public function edit($id)
@@ -98,7 +99,7 @@ class SpecialGoodsController extends Controller
         $data = $goods->toArray();
         $data['admin_id'] = auth()->user()->admin_id;
         $data['log_updated_at'] = date('Y-m-d H:i:s');
-        DB::connection('lovbee')->table('special_goods_log')->insert($data);
+        DB::connection('lovbee')->table('special_goods_logs')->insert($data);
         return response()->json(array(
             'result'=>'success'
         ));
@@ -115,7 +116,7 @@ class SpecialGoodsController extends Controller
         $data = $goods->toArray();
         $data['admin_id'] = auth()->user()->admin_id;
         $data['log_updated_at'] = date('Y-m-d H:i:s');
-        DB::connection('lovbee')->table('special_goods_log')->insert($data);
+        DB::connection('lovbee')->table('special_goods_logs')->insert($data);
         return response()->json(array(
             'result'=>'success'
         ));

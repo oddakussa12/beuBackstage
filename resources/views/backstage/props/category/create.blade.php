@@ -90,7 +90,7 @@
                     if(v==''||v==undefined) {return true;}
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/props/category')}}/", params, function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/props/category')}}/", params, function(res){
                     console.log(res);
                     console.log(res.code);
                     if (res.code!== undefined) {
