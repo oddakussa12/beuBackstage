@@ -105,7 +105,7 @@
                 });
 
                 let id = params.id;
-                common.ajax("{{url('/backstage/business/promo_code')}}/"+id, params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/promo_code')}}/"+id, params , function(res){
                     parent.location.reload();
                 } , 'PATCH');
                 return false;

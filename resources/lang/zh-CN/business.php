@@ -130,6 +130,13 @@ return [
                 'content'=>'内容',
                 'created_at'=>'时间',
             ],
+            'special_goods'=>[
+                'special_price'=>'特价',
+                'free_delivery'=>'配送费',
+                'packaging_cost'=>'包装费',
+                'deadline'=>'截止日期',
+                'status'=>'状态',
+            ],
             'goods_id'=>'商品编号',
             'goods_name'=>'商品名称',
             'shop_id'=>'店铺编号',
@@ -168,7 +175,8 @@ return [
             ],
             'goods'=>[
                 'view_history'=>'浏览历史',
-                'comment'=>'评论'
+                'comment'=>'评论',
+                'special'=>'特价',
             ]
         ]
     ],
@@ -234,6 +242,12 @@ return [
                 'shop_order'=>'订单',
                 'delivery_order'=>'订单(老)',
                 'shopping_cart'=>'购物车'
+            ],
+            'special_goods'=>[
+                'special_price'=>'特价',
+                'free_delivery'=>'配送费',
+                'packaging_cost'=>'包装费',
+                'deadline'=>'截止日期',
             ]
         ],
         'placeholder'=>[
@@ -258,6 +272,12 @@ return [
                 'limit'=>'限制',
                 'percentage'=>'折扣',
             ],
+            'special_goods'=>[
+                'special_price'=>'特价',
+                'free_delivery'=>'配送费',
+                'packaging_cost'=>'包装费',
+                'deadline'=>'截止日期',
+            ]
         ],
         'select'=>[
             'goods_sort'=>[

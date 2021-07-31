@@ -152,7 +152,7 @@
                         ,click: function(obj){
                             var params = {'status':obj.id};
                             common.confirm("{{trans('common.confirm.update')}}" , function(){
-                                common.ajax("{{url('/backstage/business/delivery_order')}}/"+data.id, params, function(res){
+                                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/delivery_order')}}/"+data.id, params, function(res){
                                     location.reload();
                                 }, 'patch');
                             } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
@@ -192,7 +192,7 @@
                     }
                 }
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/business/delivery_order')}}/"+data.id, params , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/delivery_order')}}/"+data.id, params , function(res){
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                         table.render();
                         parent.location.reload();

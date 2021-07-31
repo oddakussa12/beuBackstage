@@ -187,7 +187,7 @@
                 @endif;
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/business/shop')}}/"+data.id, JSON.parse(params) , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/shop')}}/"+data.id, JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         name==='audit' && location.reload();

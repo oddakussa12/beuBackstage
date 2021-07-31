@@ -2,11 +2,11 @@
 
 
 return [
-    'company_name'=>'ManTou Technology',
+    'company_name'=>'Beu Technology',
     'backend_home'=>'Background Home',
     'header' =>[
-        'title'=>'ManTou Technology',
-        'head'=>'ManTou Technology',
+        'title'=>'Beu project',
+        'head'=>'Beu project',
     ],
     'button'=>[
         'sign_out'=>'sign out',

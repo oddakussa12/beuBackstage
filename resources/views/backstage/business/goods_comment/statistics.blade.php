@@ -76,7 +76,7 @@
                     </td></tr>
                 <tr><td colspan="2">
                         <div>
-                            <form method="post" action="{{url('backstage/business/goods_comment')}}/{{$comment->comment_id}}">
+                            <form method="post" action="{{LaravelLocalization::localizeUrl('backstage/business/goods_comment')}}/{{$comment->comment_id}}">
                                 {{ csrf_field() }}
                                 {{ method_field('PUT')}}
                                 <input name="verified" hidden value="no">
@@ -84,7 +84,7 @@
                             </form>
                         </div>
                         <div>
-                            <form method="post" action="{{url('backstage/business/goods_comment')}}/{{$comment->comment_id}}">
+                            <form method="post" action="{{LaravelLocalization::localizeUrl('backstage/business/goods_comment')}}/{{$comment->comment_id}}">
                                 {{ csrf_field() }}
                                 {{ method_field('PUT')}}
                                 <input name="verified" hidden value="yes">
@@ -92,7 +92,7 @@
                             </form>
                         </div>
                         <div>
-                            <form method="post" action="{{url('backstage/business/goods_comment')}}/{{$comment->comment_id}}">
+                            <form method="post" action="{{LaravelLocalization::localizeUrl('backstage/business/goods_comment')}}/{{$comment->comment_id}}">
                                 {{ csrf_field() }}
                                 {{ method_field('PUT')}}
                                 <input name="level" hidden value="on">

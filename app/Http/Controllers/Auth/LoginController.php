@@ -49,10 +49,9 @@ class LoginController extends Controller
     {
         ActionLog::createActionLog('sign out' , 'sign out success');
         $this->guard()->logout();
-
-//        $request->session()->invalidate();
-
-        return redirect($this->redirectTo);
+        return redirect(route('admin.login_form' , array(
+            'origin'=>url()->previous()
+        )));
     }
 
     public function showLoginForm(Request $request)

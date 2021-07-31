@@ -143,7 +143,7 @@
 
                 const name = $(data.elem).attr('name');
                 let id = data.othis.parents('tr').find("td :first").text();
-                const url = "{{url('/backstage/passport/user')}}/"+id;
+                const url = "{{LaravelLocalization::localizeUrl('/backstage/passport/user')}}/"+id;
 
                 const params = {name: name, 'value': checked ? 1 : 0, 'user_id': id};
 

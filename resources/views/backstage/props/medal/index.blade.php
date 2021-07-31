@@ -102,7 +102,7 @@
                 @endif
                     params[field] = value;
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/props/medal')}}/"+data.id , params , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/props/medal')}}/"+data.id , params , function(res){
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                         table.render();
                     } , 'PATCH' , function (event,xhr,options,exc) {
@@ -138,7 +138,7 @@
                 @endif
                     params[field] = value;
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/props/medal')}}/"+data.id , params , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/props/medal')}}/"+data.id , params , function(res){
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                         table.render();
                     } , 'PATCH' , function (event,xhr,options,exc) {

@@ -25,6 +25,7 @@ class Controller extends BaseController
      */
     protected function httpRequest($url, array $data=array(), string $method='POST', bool $json=false)
     {
+
         try {
             $client = new Client();
             foreach ($data as &$datum) {

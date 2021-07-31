@@ -235,7 +235,7 @@
                 var layEvent = obj.event;
                 if(layEvent === 'del'){
                     common.confirm("{{trans('common.confirm.delete')}}", function(index){
-                        common.ajax("{{url('/backstage/admin')}}/"+data.admin_id , {} , function(res){
+                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/admin')}}/"+data.admin_id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
                                 location.reload();
                             });
@@ -256,7 +256,7 @@
                     formSelects.value('admin_roles', JSON.parse(data.admin_roles));
                 } else if(layEvent === 'reset'){ //编辑
                     common.confirm("{{trans('common.confirm.update')}}", function(index){
-                        common.ajax("{{url('/backstage/admin')}}/"+data.admin_id+"/reset" , {} , function(res){
+                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/admin')}}/"+data.admin_id+"/reset" , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 500 , 6 , 't' ,function () {
                                 location.reload();
                             });
@@ -300,7 +300,7 @@
                     admin_roles = admin_roles.split(',');
                     params.admin_roles = admin_roles;
                 }
-                common.ajax("{{url('/backstage/admin')}}" , params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/admin')}}" , params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.add')}}"  , 1 , 1500 , 6 , 't' ,function () {
                         location.reload();
                     });
@@ -335,7 +335,7 @@
                         i++;
                     });
                 });
-                common.ajax("{{url('/backstage/admin/')}}/"+params.admin_id , params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/admin/')}}/"+params.admin_id , params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't' ,function () {
                         location.reload();
                     });

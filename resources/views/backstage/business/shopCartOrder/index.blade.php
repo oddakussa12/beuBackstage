@@ -132,7 +132,7 @@
 
             $('.select').on('change', function() {
                 var params = {'status':$(this).val(), 'id':$(this).attr('data'), 'version':1};
-                common.ajax("{{url('/backstage/business/discovery/order')}}", params, function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/discovery/order')}}", params, function(res){
                     location.reload();
                 }, 'patch');
             });

@@ -82,7 +82,7 @@
                     //do somehing
                 } else if(layEvent === 'del'){ //删除
                     layer.confirm("{{trans('common.confirm.delete')}}", function(index){
-                        common.ajax("{{url('/backstage/permission')}}/"+data.id , {} , function(res){
+                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/permission')}}/"+data.id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
                                 // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                                 // layer.close(index);
@@ -131,7 +131,7 @@
                             var key = $('#translation input[name=key]').val();
                             var str = '{"'+lang+'":"'+translation_value+'"}';
                             var params = {value:translation_value , locale:lang};
-                            common.ajax("{{url('/backstage/translation/')}}/"+key, params , function(res){
+                            common.ajax("{{LaravelLocalization::localizeUrl('/backstage/translation/')}}/"+key, params , function(res){
                                 common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't' ,function () {
                                     location.reload();
                                 });
@@ -168,7 +168,7 @@
                     ,field = obj.field; //得到字段
                 // var str = '{"'+field+'":"'+translation_value+'"}';
                 var params = {translation_value:value , locale:field};
-                common.ajax("{{url('/backstage/translation/')}}/"+data.translation_key , params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/translation/')}}/"+data.translation_key , params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                 } , 'put');
                 //layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
@@ -184,7 +184,7 @@
                     params[k] = v;
                 });
 
-                common.ajax("{{url('/backstage/permission')}}" , params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/permission')}}" , params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.add')}}"  , 1 , 1500 , 6 , 't' ,function () {
                         location.reload();
                     });
@@ -201,7 +201,7 @@
                     params[k] = v;
                 });
 
-                common.ajax("{{url('/backstage/permission/')}}/"+params.id , params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/permission/')}}/"+params.id , params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't' ,function () {
                         location.reload();
                     });

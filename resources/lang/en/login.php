@@ -4,7 +4,7 @@
 return [
     'title'=>'Sign In',
     'header' =>[
-        'head'=>'Lovbee',
+        'head'=>'Beu',
     ],
     'button'=>[
         'login'=>'Sign In'

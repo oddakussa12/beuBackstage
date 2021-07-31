@@ -111,7 +111,7 @@
                     }
                     params[k] = v;
                 });
-                common.ajax("{{url('/backstage/admin/self')}}", params , function(res){
+                common.ajax("{{LaravelLocalization::localizeUrl('/backstage/admin/self')}}", params , function(res){
                     common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't' ,function () {
                         location.reload();
                     });

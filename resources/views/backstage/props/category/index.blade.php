@@ -81,7 +81,7 @@
                 @endif
                     params[field] = value;
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/props/category')}}/"+data.id , params , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/props/category')}}/"+data.id , params , function(res){
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
                         table.render();
                     } , 'PATCH' , function (event,xhr,options,exc) {
@@ -117,7 +117,7 @@
                 }
                 form.render();
                 common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{url('/backstage/props/category')}}/"+categoryId , JSON.parse(params) , function(res){
+                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/props/category')}}/"+categoryId , JSON.parse(params) , function(res){
                         data.elem.checked = checked;
                         form.render();
                         common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
