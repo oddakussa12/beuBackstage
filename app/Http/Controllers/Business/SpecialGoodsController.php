@@ -39,7 +39,7 @@ class SpecialGoodsController extends Controller
 
     public function store(SpecialGoodsRequest $request)
     {
-        $goodsIds = strval($request->input('goods_id' , ''));
+        $goodsId = strval($request->input('goods_id' , ''));
         $specialPrice = round(floatval($request->input('special_price' , 0)) , 2);
         $freeDelivery = intval($request->input('free_delivery' , 0));
         $packagingCost = round(floatval($request->input('packaging_cost' , 0)) , 2);
@@ -48,7 +48,12 @@ class SpecialGoodsController extends Controller
         {
             abort(422 , 'deadline format error!');
         }
-        $goods = Goods::where('id' , $goodsIds)->firstOrFail();
+        $goods = Goods::where('id' , $goodsId)->firstOrFail();
+        $specialGoods = DB::connection('lovbee')->table('special_goods')->where('goods_id' , $goodsId)->first();
+        if(!empty($specialGoods))
+        {
+            abort(422 , 'Product already exists!');
+        }
         $now = date('Y-m-d H:i:s');
         $id = DB::connection('lovbee')->table('special_goods')->insertGetId(array(
             'shop_id'=>$goods->user_id,
