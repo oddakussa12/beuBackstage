@@ -52,7 +52,7 @@
                 toolbar: '#toolbar'
             });
             $(document).on('click','#add',function(){
-                common.open_page('/backstage/passport/user/kol/create');
+                common.open_page("{{LaravelLocalization::localizeUrl('/backstage/passport/user/kol/create')}}");
             });
         })
     </script>

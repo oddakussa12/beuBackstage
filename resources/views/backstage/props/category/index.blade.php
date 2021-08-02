@@ -59,7 +59,7 @@
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
                 if(layEvent === 'edit'){ //编辑
                     var id = data.id;
-                    common.open_page('/backstage/props/category/'+id+'/edit');
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/props/category')}}/"+id+'/edit');
                 }
             });
 
@@ -131,7 +131,7 @@
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
             });
             $(document).on('click','#add',function(){
-                common.open_page('/backstage/props/category/create');
+                common.open_page("{{LaravelLocalization::localizeUrl('/backstage/props/category/create')}}");
             });
             table.init('table', { //转化静态表格
                 page:false,

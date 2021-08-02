@@ -64,7 +64,7 @@
             });
             table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 let data = obj.data; //获得当前行数据
-                common.open_page('/backstage/business/comment_manager/'+data.admin_id)
+                common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/comment_manager')}}/"+data.admin_id)
             });
         });
 

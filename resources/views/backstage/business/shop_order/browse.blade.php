@@ -158,7 +158,7 @@
             table.on('tool(table)', function (obj) {
                 let  selector = obj.tr.selector,data = obj.data;
                 if (obj.event === 'goods') {
-                    common.open_page('/backstage/business/shop_order/'+data.id);
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/shop_order')}}/"+data.id);
                 }else if(obj.event ==='updateStatus') {
                     @if(!Auth::user()->can('business::shop_order.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(".layui-table-box "+selector+" td[data-field=schedule]"));

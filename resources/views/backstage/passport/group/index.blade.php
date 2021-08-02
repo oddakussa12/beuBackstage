@@ -116,7 +116,7 @@
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 let tr = obj.tr; //获得当前行 tr 的DOM对象
                 if(layEvent === 'detail'){
-                    common.open_page('/backstage/passport/group/'+data.id);
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/passport/group')}}/"+data.id);
                 }
             });
             table.init('table', { //转化静态表格

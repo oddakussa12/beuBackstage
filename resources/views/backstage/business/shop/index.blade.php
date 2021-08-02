@@ -176,14 +176,14 @@
                 let  selector = obj.tr.selector,data = obj.data;
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'view'){
-                    common.open_page('/backstage/business/shop/'+data.user_id+'/view');
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/shop')}}/"+data.user_id+'/view');
                 }
                 if(layEvent === 'follow'){
-                    window.open("/backstage/passport/follow?follow_id="+data.user_id)
+                    window.open("{{LaravelLocalization::localizeUrl('/backstage/passport/follow')}}"+"?follow_id="+data.user_id)
                 }else if(layEvent === 'followed'){
-                    window.open('/backstage/passport/follow?followed_id='+data.user_id);
+                    window.open("{{LaravelLocalization::localizeUrl('/backstage/passport/follow')}}"+'?followed_id='+data.user_id);
                 }else if(layEvent ==='goods'){
-                    window.open('/backstage/business/goods?user_id='+data.user_id);
+                    window.open("{{LaravelLocalization::localizeUrl('/backstage/business/goods')}}"+'?user_id='+data.user_id);
                 }else if(obj.event ==='updateAmin') {
                     @if(!Auth::user()->can('business::shop.update'))
                     common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(".layui-table-box "+selector+" td[data-field=admin_username]"));

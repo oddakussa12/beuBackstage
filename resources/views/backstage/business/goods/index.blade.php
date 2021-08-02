@@ -169,11 +169,11 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'view'){
-                    common.open_page('/backstage/business/goods/'+data.id+'/view/');
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/goods')}}/"+data.id+'/view/');
                 }else if(layEvent === 'comment'){
                     window.open("/backstage/business/goods_comment?goods_id="+data.id);
                 }else if(layEvent === 'special'){
-                    common.open_page("/backstage/business/special_goods/create?goods_id="+data.id);
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods/create')}}"+"?goods_id="+data.id);
                 }
             });
             $(function () {
