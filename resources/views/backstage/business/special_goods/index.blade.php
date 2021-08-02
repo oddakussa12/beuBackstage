@@ -71,7 +71,7 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'edit'){
-                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods/')}}"+data.id+'/'+layEvent);
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods/')}}/"+data.id+'/'+layEvent);
                 }
                 if(layEvent === 'delete'){
                     common.confirm("{{trans('common.confirm.delete')}}" , function(){
