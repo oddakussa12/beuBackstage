@@ -57,22 +57,18 @@ class SpecialGoodsController extends Controller
         $specialGoods = DB::connection('lovbee')->table('special_goods')->where('goods_id' , $goodsId)->first();
         if(!empty($specialGoods))
         {
-            abort(422 , 'Product already exists!');
+            abort(422 , 'Goods already exists!');
         }
-        $now = date('Y-m-d H:i:s');
-        $id = DB::connection('lovbee')->table('special_goods')->insertGetId(array(
-            'shop_id'=>$goods->user_id,
+        $data = array(
             'goods_id'=>$goods->id,
             'special_price'=>$specialPrice,
             'free_delivery'=>$freeDelivery,
             'packaging_cost'=>$packagingCost,
             'deadline'=>$deadline,
-            'created_at'=>$now,
-            'updated_at'=>$now
-        ));
-        $this->httpRequest('api/backstage/special_goods' , array(
-            'id'=>$id
-        ) , 'patch');
+            'admin_id'=>auth()->user()->admin_id,
+            'type'=>'store',
+        );
+        $this->httpRequest('api/backstage/special_goods' , $data , 'patch');
         return response()->json(array(
             'result'=>'success'
         ));
@@ -88,22 +84,17 @@ class SpecialGoodsController extends Controller
         {
             abort(422 , 'deadline format error!');
         }
-        $now = date('Y-m-d H:i:s');
-        $goods = SpecialGoods::where('id' , $id)->firstOrFail();
-        DB::connection('lovbee')->table('special_goods')->where('id' , $id)->update(array(
+        SpecialGoods::where('id' , $id)->firstOrFail();
+        $data = array(
+            'id'=>$id,
             'special_price'=>$specialPrice,
             'free_delivery'=>$freeDelivery,
             'packaging_cost'=>$packagingCost,
             'deadline'=>$deadline,
-            'updated_at'=>$now
-        ));
-        $this->httpRequest('api/backstage/special_goods' , array(
-            'id'=>$id
-        ) , 'patch');
-        $data = $goods->toArray();
-        $data['admin_id'] = auth()->user()->admin_id;
-        $data['log_updated_at'] = date('Y-m-d H:i:s');
-        DB::connection('lovbee')->table('special_goods_logs')->insert($data);
+            'admin_id'=>auth()->user()->admin_id,
+            'type'=>'update',
+        );
+        $this->httpRequest('api/backstage/special_goods' , $data , 'patch');
         return response()->json(array(
             'result'=>'success'
         ));
@@ -111,16 +102,12 @@ class SpecialGoodsController extends Controller
 
     public function destroy($id)
     {
-        $goods = SpecialGoods::where('id' , $id)->firstOrFail();
+        SpecialGoods::where('id' , $id)->firstOrFail();
         $this->httpRequest('api/backstage/special_goods' , array(
             'id'=>$id,
+            'admin_id'=>auth()->user()->admin_id,
             'type'=>'destroy'
         ) , 'patch');
-        DB::connection('lovbee')->table('special_goods')->where('id' , $id)->delete();
-        $data = $goods->toArray();
-        $data['admin_id'] = auth()->user()->admin_id;
-        $data['log_updated_at'] = date('Y-m-d H:i:s');
-        DB::connection('lovbee')->table('special_goods_logs')->insert($data);
         return response()->json(array(
             'result'=>'success'
         ));
