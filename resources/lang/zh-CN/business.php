@@ -131,6 +131,8 @@ return [
                 'created_at'=>'时间',
             ],
             'special_goods'=>[
+                'user_name'=>'商家',
+                'user_nick_name'=>'商家昵称',
                 'special_price'=>'特价',
                 'free_delivery'=>'配送费',
                 'packaging_cost'=>'包装费',

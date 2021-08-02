@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\Business;
 
+use App\Repositories\Contracts\UserRepository;
 use Illuminate\Http\Request;
 use App\Models\Business\Goods;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +18,12 @@ class SpecialGoodsController extends Controller
         $perPage = 10;
         $specialGoods = SpecialGoods::orderByDesc('created_at')->paginate($perPage);
         $goodsIds = $specialGoods->pluck('goods_id')->toArray();
+        $shopIds = $specialGoods->pluck('shop_id')->unique()->toArray();
         $goods = Goods::whereIn('id' , $goodsIds)->get();
-        $specialGoods->each(function($specialG) use ($goods){
+        $shops = app(UserRepository::class)->findByMany($shopIds)->get();
+        $specialGoods->each(function($specialG) use ($goods , $shops){
             $specialG->g = $goods->where('id' , $specialG->goods_id)->first();
+            $specialG->shop = $shops->where('user_id' , $specialG->shop_id)->first();
         });
         return view('backstage.business.special_goods.index' , compact('specialGoods'));
     }

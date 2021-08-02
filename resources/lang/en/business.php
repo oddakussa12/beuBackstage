@@ -131,6 +131,8 @@ return [
                 'created_at'=>'Time',
             ],
             'special_goods'=>[
+                'user_name'=>'ShopName',
+                'user_nick_name'=>'ShopNickName',
                 'special_price'=>'SpecialPrice',
                 'free_delivery'=>'FreeDelivery',
                 'packaging_cost'=>'PackagingCost',

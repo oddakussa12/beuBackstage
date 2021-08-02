@@ -8,7 +8,10 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{field:'id', minWidth:180, hide:'true'}"></th>
+                <th lay-data="{field:'id', minWidth:180, hide:'true'}">ID</th>
+                <th lay-data="{field:'goods_id', minWidth:180, hide:'true'}">{{trans('business.table.header.goods.id')}}</th>
+                <th lay-data="{field:'user_name', minWidth:180}">{{trans('business.table.header.special_goods.user_name')}}</th>
+                <th lay-data="{field:'user_nick_name', minWidth:180}">{{trans('business.table.header.special_goods.user_nick_name')}}</th>
                 <th lay-data="{field:'goods_name', minWidth:180}">{{trans('business.table.header.goods.name')}}</th>
                 <th lay-data="{field:'special_price', minWidth:130}">{{trans('business.table.header.special_goods.special_price')}}</th>
                 <th lay-data="{field:'free_delivery', minWidth:110}">{{trans('business.table.header.special_goods.free_delivery')}}</th>
@@ -24,6 +27,9 @@
             @foreach($specialGoods as $value)
                 <tr>
                     <td>{{$value->id}}</td>
+                    <td>{{$value->g->id}}</td>
+                    <td>{{$value->shop->user_name}}</td>
+                    <td>{{$value->shop->user_nick_name}}</td>
                     <td>{{$value->g->name}}</td>
                     <td>{{$value->special_price}}</td>
                     <td><span class="layui-btn layui-btn-xs @if(!empty($value->free_delivery)) layui-btn-normal @else layui-btn-warm @endif">@if(!empty($value->free_delivery)) YES @else NO @endif</span></td>
