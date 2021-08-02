@@ -20,7 +20,7 @@ class SpecialGoodsController extends Controller
         $goodsIds = $specialGoods->pluck('goods_id')->toArray();
         $shopIds = $specialGoods->pluck('shop_id')->unique()->toArray();
         $goods = Goods::whereIn('id' , $goodsIds)->get();
-        $shops = app(UserRepository::class)->findByMany($shopIds)->get();
+        $shops = app(UserRepository::class)->findByMany($shopIds);
         $specialGoods->each(function($specialG) use ($goods , $shops){
             $specialG->g = $goods->where('id' , $specialG->goods_id)->first();
             $specialG->shop = $shops->where('user_id' , $specialG->shop_id)->first();
