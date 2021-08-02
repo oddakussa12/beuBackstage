@@ -69,7 +69,7 @@
                 <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.goods.status')}}</th>
                 <th lay-data="{field:'comment', minWidth:200}">{{trans('business.table.header.goods.comment')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
-                <th lay-data="{fixed: 'right', width:180, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', width:200, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
