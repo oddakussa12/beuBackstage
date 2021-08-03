@@ -90,8 +90,8 @@
             @foreach($result as $value)
                 <tr>
                     <td>{{$value->user_id}}</td>
-                    <td><img src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
-                    <td>@if(!empty($value->user_bg))<img src="@if(stripos($value->user_bg, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_bg}}@else{{$value->user_bg}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" />@endif</td>
+                    <td><img src="{{splitJointQnImageUrl($value->user_avatar)}}" /></td>
+                    <td>@if(!empty($value->user_bg))<img src="{{splitJointQnImageUrl($value->user_bg)}}" />@endif</td>
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
                     <td><span class="layui-btn layui-btn-xs @if($value->user_verified==-1) layui-btn-danger @elseif($value->user_verified==0) layui-btn-warm @else layui-btn-normal @endif">

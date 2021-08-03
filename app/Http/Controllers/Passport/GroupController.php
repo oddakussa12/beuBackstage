@@ -41,7 +41,7 @@ class GroupController extends Controller
             $name   = json_decode($group->name, true);
             $avatar = json_decode($group->avatar, true);
             $groups[$index]->name = is_array($name) ? implode(',', array_values($name)) : $group->name;
-            $groups[$index]->avatar = is_array($name) ? $avatar : [$group->avatar];
+            $groups[$index]->avatar = is_array($avatar) ? $avatar : [$group->avatar];
         }
 
         $params['appends'] = $params;

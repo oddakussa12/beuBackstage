@@ -31,11 +31,11 @@
         @foreach($follows as $follow)
             <tr>
                 <td>{{$follow->follower->user_id}}</td>
-                <td><img width="32px;" src="@if(stripos($follow->follower->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$follow->follower->user_avatar}}@else{{$follow->follower->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                <td><img width="32px;" src="{{splitJointQnImageUrl($follow->follower->user_avatar)}}" /></td>
                 <td>{{$follow->follower->user_nick_name}}</td>
                 <td>{{$follow->follower->user_name}}</td>
                 <td>{{$follow->followeder->user_id}}</td>
-                <td><img width="32px;" src="@if(stripos($follow->followeder->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$follow->followeder->user_avatar}}@else{{$follow->followeder->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                <td><img width="32px;" src="{{splitJointQnImageUrl($follow->followeder->user_avatar)}}" /></td>
                 <td>{{$follow->followeder->user_nick_name}}</td>
                 <td>{{$follow->followeder->user_name}}</td>
             </tr>

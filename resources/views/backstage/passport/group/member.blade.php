@@ -16,7 +16,7 @@
         @foreach($users as $user)
             <tr>
                 <td>{{$user->user_id}}</td>
-                <td><img width="32px;" src="@if(stripos($user->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$user->user_avatar}}@else{{$user->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                <td><img width="32px;" src="{{splitJointQnImageUrl($user->user_avatar)}}" /></td>
                 <td>{{$user->user_nick_name}}</td>
                 <td>{{$user->user_name}}</td>
                 <td>@if($user->role==1) manager @else normal @endif</td>

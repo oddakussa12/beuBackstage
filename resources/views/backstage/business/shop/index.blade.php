@@ -121,7 +121,7 @@
                     <td>@if(!empty($shop->num)){{$shop->num}}@else 0 @endif</td>
                     <td>{{$shop->user_created_at}}</td>
                     <td>{{$shop->point}}</td>
-                    <td><img src="@if(stripos($shop->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$shop->user_avatar}}@else{{$shop->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                    <td><img src="{{splitJointQnImageUrl($shop->user_avatar)}}" /></td>
                     <td>@if(!empty($shop->format_quality)){{$shop->format_quality}}@else 0 @endif</td>
                     <td>@if(!empty($shop->format_service)){{$shop->format_service}}@else 0 @endif</td>
                     <td>{{$shop->user_phone}}</td>

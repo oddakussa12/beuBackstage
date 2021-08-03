@@ -41,7 +41,7 @@
             @foreach($result as $value)
                 <tr>
                     <td>{{$value->user_id}}</td>
-                    <td><img width="32px;" src="@if(stripos($value->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$value->user_avatar}}@else{{$value->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                    <td><img width="32px;" src="{{splitJointQnImageUrl($value->user_avatar)}}" /></td>
                     <td>{{$value->user_name}}</td>
                     <td>{{$value->user_nick_name}}</td>
 {{--                    <td>{{$value->flag}}</td>--}}

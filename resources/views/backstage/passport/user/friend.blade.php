@@ -16,7 +16,7 @@
         @foreach($users as $user)
             <tr>
                 <td>{{$user->user_id}}</td>
-                <td><img width="32px;" src="@if(stripos($user->user_avatar, 'mantou')===false)https://qnwebothersia.mmantou.cn/{{$user->user_avatar}}@else{{$user->user_avatar}}@endif?imageView2/0/w/32/h/32/interlace/1|imageslim" /></td>
+                <td><img width="32px;" src="{{splitJointQnImageUrl($user->user_avatar)}}" /></td>
                 <td>{{$user->user_nick_name}}</td>
                 <td>{{$user->user_name}}</td>
                 <td><span class="layui-btn layui-btn-xs @if($user->user_gender==0) layui-btn-danger @elseif($user->user_gender==1) layui-btn-warm @endif">@if($user->user_gender==-1){{trans('common.cast.sex.other')}}@elseif($user->user_gender==0){{trans('common.cast.sex.female')}}@else{{trans('common.cast.sex.male')}}@endif</span></td>

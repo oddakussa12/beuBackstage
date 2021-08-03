@@ -270,7 +270,7 @@
             form.on('submit(form_submit_add)', function(data){
                 var params = {};
                 $.each(data.field , function (k ,v) {
-                    if(v==''||v==undefined)
+                    if(v==''||v==undefined||k.startsWith('layuiTreeCheck'))
                     {
                         return true;
                     }
@@ -310,7 +310,7 @@
             form.on('submit(form_submit_update)', function(data){
                 var params = {};
                 $.each(data.field , function (k ,v) {
-                    if(v==''||v==undefined)
+                    if(v==''||v==undefined||k.startsWith('layuiTreeCheck'))
                     {
                         return true;
                     }

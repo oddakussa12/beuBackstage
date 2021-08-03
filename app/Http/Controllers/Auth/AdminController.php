@@ -69,8 +69,14 @@ class AdminController extends Controller
     public function store(StoreAdminRequest $request)
     {
         $admin_fields = $request->all();
-        $admin_fields[$this->admin->getDefaultPasswordField()] = password_hash(config('common.default_password') , PASSWORD_DEFAULT);
-        return $this->admin->store($admin_fields)->syncRoles($request->input('admin_roles'))->syncPermissions($request->input('admin_auth'));
+        $random = new RandomStringGenerator();
+        $pwd = $random->generate(8);
+        $admin_fields[$this->admin->getDefaultPasswordField()] = password_hash($pwd , PASSWORD_DEFAULT);
+        $admin = $this->admin->store($admin_fields)->syncRoles($request->input('admin_roles'))->syncPermissions($request->input('admin_auth'));
+        Mail::to($admin->admin_email)->send(new ResetPassword($pwd));
+        return response()->json(array(
+            'result'=>'success'
+        ));
     }
 
     /**
