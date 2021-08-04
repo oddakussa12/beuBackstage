@@ -7,6 +7,7 @@ return [
         ],
         'title'=>[
             'special_goods'=>'特价商品',
+            'discounted_price'=>'促销开关',
         ]
     ],
     'common'=>[

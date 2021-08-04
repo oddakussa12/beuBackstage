@@ -7,6 +7,7 @@ return [
         ],
         'title'=>[
             'special_goods'=>'Special Goods',
+            'discounted_price'=>'Promo Switch',
         ]
     ],
     'common'=>[

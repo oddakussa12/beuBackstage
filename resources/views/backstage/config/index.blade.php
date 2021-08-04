@@ -25,7 +25,7 @@
                                                             <div class="layui-upload" style="margin-left: 110px;">
                                                                 <button type="button" class="layui-btn" id="image"><i class="layui-icon"></i></button>
                                                                 <input type="hidden" id="hide_image" name="set[general][special_goods][banner_image]" />
-                                                                <input type="hidden"  name="remote" value='{"url":"/api/backstage/special_goods/image","method":"patch","params":{"image":"{{config('set.general.special_goods.banner_image')}}"}}' />
+                                                                <input type="hidden"  name="remote" value='{"url":"api/backstage/special_goods/image","method":"patch","params":{"image":"{{config('set.general.special_goods.banner_image')}}"}}' />
                                                                 <div class="layui-upload-list">
                                                                     <img class="layui-upload-img" id="show_image" width="90px" height="90px" src="{{config('set.general.special_goods.banner_image')}}">
                                                                 </div>
@@ -34,6 +34,30 @@
                                                                         <div class="layui-progress-bar" lay-percent=""></div>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="layui-form-item">
+                                                        <div class="layui-input-block">
+                                                            <button class="layui-btn layui-btn-sm" lay-submit lay-filter="config_submit_btn">{{trans('config.common.button.save')}}</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">{{trans('config.tab.title.discounted_price')}}</div>
+                                            <div class="layui-card-body">
+                                                <form class="layui-form"  lay-filter="config_form">
+                                                    <div class="layui-form-item">
+                                                        <div class="layui-inline">
+                                                            <label class="layui-form-label">{{trans('config.tab.title.discounted_price')}}</label>
+                                                            <input type="hidden" name="set[general][promo_official_price]" value="0">
+                                                            <input type="hidden"  name="remote" value='{"url":"api/backstage/goods_discounted/switch","method":"patch","params":{"switch":"{{config('set.general.promo_official_price')}}"}}' />
+                                                            <div class="layui-input-block">
+                                                                <input type="checkbox" name="set[general][promo_official_price]" value="1" lay-skin="switch" @if(config('set.general.promo_official_price')==1) checked @endif  lay-filter="switchAll"  />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -91,39 +115,11 @@
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
             });
 
-            //监听指定开关
             form.on('switch(switchAll)', function(data){
-                var checked = data.elem.checked;
-                data.elem.checked = !checked;
-                @if(!Auth::user()->can('config.store'))
-                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}", data.othis);
-                form.render();
-                return false;
-                @endif
-                var name = $(data.elem).attr('name');
-                if(checked)
-                {
-                    var params = '{"'+name+'":"on"}';
-                }else{
-                    var params = '{"'+name+'":"off"}';
-                }
-                form.render();
-                common.confirm("{{trans('common.confirm.update')}}" , function(){
-                    common.ajax("{{LaravelLocalization::localizeUrl('/backstage/config/')}}" , JSON.parse(params) , function(res){
-                        data.elem.checked = checked;
-                        form.render();
-                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
-                    } , 'post' , function (event,xhr,options,exc) {
-                        setTimeout(function(){
-                            common.init_error(event,xhr,options,exc);
-                            data.elem.checked = !checked;
-                            form.render();
-                        },100);
-                    });
-                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
-
+                var val = $.parseJSON($(data.elem).parent().siblings('input[name=remote]').val());
+                val.params.switch = data.elem.checked?1:0;
+                $(data.elem).parent().siblings('input[name=remote]').attr('value' , JSON.stringify(val));
             });
-
             var jqureAjaxXhrOnProgress = function(fun) {
                 jqureAjaxXhrOnProgress.onprogress = fun; //绑定监听
                 //使用闭包实现监听绑
@@ -172,9 +168,10 @@
                                 element.progress('image_progress', '0%');
                             },
                             success:function(data){
-                                var val = $.parseJSON($('input[name=remote]').val());
+                                var ob = $('#image').siblings('input[name=remote]');
+                                var val = $.parseJSON(ob.val());
                                 val.params.image = res.domain+res.form.key;
-                                $('input[name=remote]').attr('value' , JSON.stringify(val));
+                                ob.attr('value' , JSON.stringify(val));
                                 $('#hide_image').attr('value' , res.domain+res.form.key);
                                 $('#show_image').attr('src', res.domain+res.form.key); //图片链接（base64）
                             },

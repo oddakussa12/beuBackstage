@@ -42,7 +42,7 @@ class ConfigController extends Controller
         })->toArray();
         $fields = array_dot($fields);
         $fields = collect($fields)->reject(function ($field , $key){
-            return empty($field)||empty($key);
+            return blank($field)||empty($key);
         })->toArray();
         !empty($fields)&&$this->config->createOrUpdate($fields);
         if(isset($params['remote']))
