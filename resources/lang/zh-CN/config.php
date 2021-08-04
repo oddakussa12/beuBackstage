@@ -2,7 +2,12 @@
 
 return [
     'tab'=>[
-
+        'header'=>[
+            'general'=>'通用'
+        ],
+        'title'=>[
+            'special_goods'=>'特价商品',
+        ]
     ],
     'common'=>[
         'button'=>[

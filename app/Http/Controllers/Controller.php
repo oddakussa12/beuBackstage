@@ -33,12 +33,17 @@ class Controller extends BaseController
             }
             $signature = common_signature($data);
             $data['signature'] = $signature;
-            $data     = $json ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
             if(strtolower($method)=='get')
             {
                 $response = $client->request($method, front_url($url), array('query'=>$data));
             }else{
-                $response = $client->request($method, front_url($url), ['form_params'=>$data]);
+                if($json)
+                {
+                    $data = json_encode($data, JSON_UNESCAPED_UNICODE);
+                    $response = $client->request($method, front_url($url), ['json'=>$data]);
+                }else{
+                    $response = $client->request($method, front_url($url), ['form_params'=>$data]);
+                }
             }
             $code     = intval($response->getStatusCode());
             if ($code>=300||$code<200) {
