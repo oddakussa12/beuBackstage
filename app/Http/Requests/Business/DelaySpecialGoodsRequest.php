@@ -5,7 +5,7 @@ namespace App\Http\Requests\Business;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\BaseFormRequest;
 
-class SpecialGoodsRequest extends BaseFormRequest
+class DelaySpecialGoodsRequest extends BaseFormRequest
 {
 
     public function rules()
@@ -19,11 +19,16 @@ class SpecialGoodsRequest extends BaseFormRequest
                 Rule::in(array(0,1))
             ],
             'packaging_cost' => 'bail|required|numeric',
-            'deadline' => [
+            'start_time' => [
                 'bail',
                 'required',
                 'date_format:Y-m-d H:i:s'
             ],
+            'deadline' => [
+                'bail',
+                'required',
+                'date_format:Y-m-d H:i:s'
+            ]
         ];
     }
 

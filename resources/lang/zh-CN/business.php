@@ -249,7 +249,8 @@ return [
                 'special_price'=>'特价',
                 'free_delivery'=>'配送费',
                 'packaging_cost'=>'包装费',
-                'deadline'=>'截止日期',
+                'start_time'=>'开始时间',
+                'deadline'=>'截止时间',
             ]
         ],
         'placeholder'=>[
@@ -278,7 +279,8 @@ return [
                 'special_price'=>'特价',
                 'free_delivery'=>'配送费',
                 'packaging_cost'=>'包装费',
-                'deadline'=>'截止日期',
+                'start_time'=>'开始时间',
+                'deadline'=>'截止时间',
             ]
         ],
         'select'=>[

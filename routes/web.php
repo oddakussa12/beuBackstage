@@ -119,6 +119,7 @@ Route::group(['prefix'=>'backstage'] , function(){
 
                 Route::resource('shop' , 'ShopController');
                 Route::resource('special_goods' , 'SpecialGoodsController');
+                Route::resource('delay_special_goods' , 'DelaySpecialGoodsController');
                 Route::get('goods/{goods}/view' , 'GoodsController@view')->name('goods.view');
                 Route::resource('goods' , 'GoodsController');
                 Route::get('goods_comment' , 'GoodsCommentController@index')->name('goods_comment.index');

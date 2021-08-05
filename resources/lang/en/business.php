@@ -136,6 +136,7 @@ return [
                 'special_price'=>'SpecialPrice',
                 'free_delivery'=>'FreeDelivery',
                 'packaging_cost'=>'PackagingCost',
+                'start_time'=>'StartTime',
                 'deadline'=>'Deadline',
                 'status'=>'Status',
             ],
@@ -249,6 +250,7 @@ return [
                 'special_price'=>'SpecialPrice',
                 'free_delivery'=>'FreeDelivery',
                 'packaging_cost'=>'PackagingCost',
+                'start_time'=>'StartTime',
                 'deadline'=>'Deadline',
             ]
         ],
