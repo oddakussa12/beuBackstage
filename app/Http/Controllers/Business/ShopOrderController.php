@@ -145,7 +145,7 @@ class ShopOrderController extends Controller
             {
                 abort(422 , 'Wrong discount value!');
             }
-            $discountedPrice = round($order->promo_price*$discount/100+$order->delivery_coast , 2);
+            $discountedPrice = round($order->promo_price*$discount/100+$order->delivery_coast+$order->packaging_cost , 2);
             $totalPrice = round($order->promo_price*$discount/100, 2);
             $data = array(
                 'discounted_price'=>$discountedPrice,
