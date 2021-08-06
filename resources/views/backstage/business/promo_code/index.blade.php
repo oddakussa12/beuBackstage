@@ -5,6 +5,7 @@
     </style>
     <div class="layui-fluid">
         <button class="layui-btn" id="add">{{trans('common.form.button.add')}}</button>
+        <button class="layui-btn" id="rank">{{trans('business.form.button.promo_code.rank')}}</button>
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
@@ -81,12 +82,11 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'edit'){
-                    open('/backstage/business/promo_code/'+data.id);
-
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/promo_code')}}/"+data.id);
                 }
                 if(layEvent === 'delete'){
                     common.confirm("{{trans('common.confirm.delete')}}" , function(){
-                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/promocode')}}/"+data.id , {} , function(res){
+                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/promo_code')}}/"+data.id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
                                 location.reload();
                             });
@@ -95,27 +95,11 @@
                 }
             });
             $(document).on('click','#add',function(){
-                open('/backstage/business/promo_code/create');
+                common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/promo_code/create')}}");
             });
-            function open(content , type=2) {
-                var clientWidth = document.body.clientWidth;
-                if(clientWidth<=600)
-                {
-                    var area = ['90%','90%'];
-                }else if(clientWidth<=1200&&clientWidth>600){
-                    var area = ['72%','90%'];
-                }else{
-                    var area = ['40%','90%'];
-                }
-                common.open(content , {
-                    shadeClose: false,
-                    shade: 0.8,
-                    area: area,
-                    offset: 'auto',
-                    scrollbar:true,
-                } , type);
-
-            }
+            $(document).on('click','#rank',function(){
+                common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/promo_code/rank')}}");
+            });
         });
     </script>
     <script type="text/html" id="op">

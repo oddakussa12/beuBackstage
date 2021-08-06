@@ -136,6 +136,7 @@ layui.define(['jquery'], function(exports){
         // 3（加载层）
         // 4（tips层）。 若你采用layer.open({type: 1})方式调用，则type为必填项（信息框除外）
         open:function (content , other , type) {
+            console.log(other)
             type = type==undefined?2:type;
             content = content==undefined?'':content;
             other = other==undefined?{}:other;
@@ -150,7 +151,6 @@ layui.define(['jquery'], function(exports){
             options.shadeClose = other.hasOwnProperty('shadeClose')?other.shadeClose:true;
             options.shade = other.hasOwnProperty('shade')?other.shade:0.8;
             options.area = other.hasOwnProperty('area')?other.area:'auto';
-            options.maxmin = other.hasOwnProperty('maxmin')?other.maxmin:false;
             if(other.hasOwnProperty('title'))
             {
                 options.title = other.title;
@@ -158,6 +158,10 @@ layui.define(['jquery'], function(exports){
             if(other.hasOwnProperty('closeBtn'))
             {
                 options.closeBtn = other.closeBtn;
+            }
+            if(other.hasOwnProperty('maxmin'))
+            {
+                options.maxmin = other.maxmin;
             }
             switch (type) {
                 case 0:
@@ -194,7 +198,8 @@ layui.define(['jquery'], function(exports){
                 shade: 0.8,
                 area: area,
                 offset: 'auto',
-                scrollbar:true,
+                maxmin: true,
+                scrollbar:true
             });
         },
         //类型：Number，默认：-1（信息框）/0（加载层）

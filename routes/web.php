@@ -138,6 +138,7 @@ Route::group(['prefix'=>'backstage'] , function(){
                 Route::get('shop_order/{id}' , 'ShopOrderController@show')->name('shop_order.show');
                 Route::patch('shop_order/{shop_order}' , 'ShopOrderController@update')->name('shop_order.update');
                 Route::get('graph' , 'GraphController@index')->name('graph.index');
+                Route::get('promo_code/rank' , 'PromoCodeController@rank')->name('promo_code.rank');
                 Route::resource('promo_code' , 'PromoCodeController');
                 Route::get('goods_category' , 'GoodsCategoryController@index')->name('goods_category.index');
                 Route::get('comment_manager' , 'CommentManagerController@index')->name('comment_manager.index');

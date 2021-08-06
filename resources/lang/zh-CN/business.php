@@ -84,6 +84,7 @@ return [
                 'deadline'=>'截止日期',
                 'discount_type'=>'类型',
                 'reduction'=>'抵扣',
+                'count'=>'数量',
                 'limit'=>'限制',
                 'percentage'=>'折扣',
             ],
@@ -338,6 +339,11 @@ return [
                 'discount'=>"折扣"
             ]
         ],
+        'button'=>[
+            'promo_code'=>[
+                'rank'=>'排行'
+            ]
+        ]
     ]
 
 ];

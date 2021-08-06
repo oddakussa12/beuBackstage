@@ -84,6 +84,7 @@ return [
                 'deadline'=>'Deadline',
                 'discount_type'=>'DiscountType',
                 'reduction'=>'Reduction',
+                'count'=>'Count',
                 'limit'=>'Limit',
                 'percentage'=>'Percentage',
             ],
@@ -337,6 +338,11 @@ return [
                 'discount'=>"Discount"
             ]
         ],
+        'button'=>[
+            'promo_code'=>[
+                'rank'=>'Rank'
+            ]
+        ]
     ]
 
 ];

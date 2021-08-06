@@ -19,6 +19,15 @@ class PromoCodeController extends Controller
 
     }
 
+    public function rank()
+    {
+        $ranks = DB::connection('lovbee')->select(DB::raw('SELECT promo_code,count(*) as num from t_orders where status=1 GROUP BY promo_code ORDER BY num desc;'));
+        $ranks = collect($ranks)->reject(function($rank , $k){
+            return empty($rank->promo_code);
+        });
+        return view('backstage.business.promo_code.rank' , compact('ranks'));
+    }
+
     public function create()
     {
         return view('backstage.business.promo_code.create');

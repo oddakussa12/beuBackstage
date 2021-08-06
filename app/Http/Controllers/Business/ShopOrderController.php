@@ -30,6 +30,7 @@ class ShopOrderController extends Controller
     {
         $params = $data = $request->all();
         $user   = auth()->user();
+        $promoCode = strval($request->input('promo_code' , ''));
         $schedule = intval($request->input('schedule' , 0));
         $dateTime = strval($request->input('dateTime' , ' - '));
         $data['schedule'] = $schedule;
@@ -49,20 +50,25 @@ class ShopOrderController extends Controller
         }
         $data['schedules'] = $schedules;
         $ordersWhere = new Order();
-        if (isset($params['status'])) {
-            $status = intval($params['status']);
-            $ordersWhere = $ordersWhere->where('status', $status);
-        }
-        if (!empty($schedule)) {
-            $ordersWhere = $ordersWhere->where('schedule', $schedule);
-        }
-//        $user->admin_id!=1 && $ordersWhere = $ordersWhere->where('operator', $user->admin_id);
-        $shopId!=0  && $ordersWhere = $ordersWhere->where('shop_id', $shopId);
-        $date_time = $this->parseTime($dateTime);
-        if($date_time!==false)
+        if(empty($promoCode))
         {
-            $data['dateTime'] = $dateTime;
-            $ordersWhere = $ordersWhere->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
+            if (isset($params['status'])) {
+                $status = intval($params['status']);
+                $ordersWhere = $ordersWhere->where('status', $status);
+            }
+            if (!empty($schedule)) {
+                $ordersWhere = $ordersWhere->where('schedule', $schedule);
+            }
+            //        $user->admin_id!=1 && $ordersWhere = $ordersWhere->where('operator', $user->admin_id);
+            $shopId!=0  && $ordersWhere = $ordersWhere->where('shop_id', $shopId);
+            $date_time = $this->parseTime($dateTime);
+            if($date_time!==false)
+            {
+                $data['dateTime'] = $dateTime;
+                $ordersWhere = $ordersWhere->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
+            }
+        }else{
+            $ordersWhere = $ordersWhere->where('status', 1)->where('promo_code', $promoCode);
         }
         $data['deliveryCoast'] = $ordersWhere->sum('delivery_coast');
         $data['orderPrice'] = $ordersWhere->sum('order_price');

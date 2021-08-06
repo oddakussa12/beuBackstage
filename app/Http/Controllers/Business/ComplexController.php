@@ -17,14 +17,15 @@ class ComplexController extends Controller
     {
         $locale = locale();
         $type = $request->input('type' , 'shop_order');
+        $promo_code = $request->input('promo_code' , '');
         $iframes = array(
-            'shop_order'=>"/{$locale}/backstage/business/shop_order",
+            'shop_order'=>"/{$locale}/backstage/business/shop_order?promo_code={$promo_code}",
             'delivery_order'=>"/{$locale}/backstage/business/delivery_order",
             'shopping_cart'=>"/{$locale}/backstage/business/shopping_cart",
         );
         $type = isset($iframes[$type])?$type:'shop_order';
         $iframe = $iframes[$type];
-        return view('backstage.business.complex.index'  , compact('type' , 'iframe' , 'iframes'));
+        return view('backstage.business.complex.index'  , compact('type' , 'iframe' , 'iframes' , 'promo_code'));
     }
 
 }
