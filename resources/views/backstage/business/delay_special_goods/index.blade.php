@@ -17,8 +17,8 @@
                 <th lay-data="{field:'free_delivery', minWidth:110}">{{trans('business.table.header.special_goods.free_delivery')}}</th>
                 <th lay-data="{field:'packaging_cost', minWidth:130}">{{trans('business.table.header.special_goods.packaging_cost')}}</th>
                 <th lay-data="{field:'status', minWidth:110}">{{trans('business.table.header.special_goods.status')}}</th>
-                <th lay-data="{field:'deadline', minWidth:110}">{{trans('business.table.header.special_goods.deadline')}}</th>
-                <th lay-data="{field:'start_time', minWidth:110}">{{trans('business.table.header.special_goods.start_time')}}</th>
+                <th lay-data="{field:'start_time', minWidth:170}">{{trans('business.table.header.special_goods.start_time')}}</th>
+                <th lay-data="{field:'deadline', minWidth:170}">{{trans('business.table.header.special_goods.deadline')}}</th>
                 <th lay-data="{field:'created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -36,8 +36,8 @@
                     <td><span class="layui-btn layui-btn-xs @if(!empty($value->free_delivery)) layui-btn-normal @else layui-btn-warm @endif">@if(!empty($value->free_delivery)) YES @else NO @endif</span></td>
                     <td>{{$value->packaging_cost}}</td>
                     <td><span class="layui-btn layui-btn-xs @if(!empty($value->status)) layui-btn-normal @else layui-btn-warm @endif">@if(!empty($value->status)) YES @else NO @endif</span></td>
-                    <td>{{$value->deadline}}</td>
                     <td>{{$value->start_time}}</td>
+                    <td>{{$value->deadline}}</td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>
                     <td></td>
@@ -64,20 +64,19 @@
             const table = layui.table,
                 common = layui.common,
                 $ = layui.jquery;
-            table.init('table', { //转化静态表格
+            table.init('table', {
                 page:false,
                 toolbar: '#toolbar'
             });
-            table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-
-                let data = obj.data; //获得当前行数据
-                let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            table.on('tool(table)', function(obj){
+                let data = obj.data;
+                let layEvent = obj.event;
                 if(layEvent === 'edit'){
-                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/delay_special_goods/')}}/"+data.id+'/'+layEvent);
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/delay_special_goods/')}}/"+data.id+'/'+layEvent+"?timezone="+Intl.DateTimeFormat().resolvedOptions().timeZone);
                 }
                 if(layEvent === 'delete'){
                     common.confirm("{{trans('common.confirm.delete')}}" , function(){
-                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods')}}/"+data.id , {} , function(res){
+                        common.ajax("{{LaravelLocalization::localizeUrl('/backstage/business/delay_special_goods')}}/"+data.id , {} , function(res){
                             common.prompt("{{trans('common.ajax.result.prompt.delete')}}" , 1 , 500 , 6 , 't' ,function () {
                                 location.reload();
                             });
@@ -86,7 +85,7 @@
                 }
             });
             $(document).on('click','#add',function(){
-                common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/delay_special_goods/create')}}");
+                common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/delay_special_goods/create')}}"+"?timezone="+Intl.DateTimeFormat().resolvedOptions().timeZone);
             });
         });
     </script>

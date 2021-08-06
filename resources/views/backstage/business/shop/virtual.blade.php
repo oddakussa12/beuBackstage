@@ -152,7 +152,6 @@
                 },
             });
             form.on('radio(radio)', function(data){
-                debugger
                 let level  = data.value;
                 let t = data.type;
                 let elem   = data.elem;
@@ -167,7 +166,6 @@
             });
             form.on('switch(switchAll)', function(data){
                 let params;
-                debugger
                 const checked = data.elem.checked;
                 data.elem.checked = !checked;
                 data.id = data.othis.parents('tr').find("td :first").text();

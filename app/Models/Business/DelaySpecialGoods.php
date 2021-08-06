@@ -24,5 +24,5 @@ class DelaySpecialGoods extends Model
         'packaging_cost'=>'float'
     ];
 
-    protected $fillable = ['delay_id' , 'shop_id' , 'goods_id' , 'special_price' , 'packaging_cost' , 'start_time' , 'deadline'];
+    protected $fillable = ['shop_id' , 'goods_id' , 'special_price' , 'packaging_cost' , 'start_time' , 'deadline'];
 }

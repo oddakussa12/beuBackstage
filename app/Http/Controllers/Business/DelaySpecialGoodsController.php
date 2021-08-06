@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Business\DelaySpecialGoods;
 use App\Repositories\Contracts\UserRepository;
 use App\Http\Requests\Business\DelaySpecialGoodsRequest;
+use Illuminate\Support\Facades\Log;
 
 class DelaySpecialGoodsController extends Controller
 {
@@ -32,16 +33,18 @@ class DelaySpecialGoodsController extends Controller
         $today = date("Y-m-d 23:59:59");
         $now = date("Y-m-d 00:00:00");
         $max = date("Y-m-d 23:59:59" , strtotime("+15 day"));
+        $timezone = request()->input('timezone' , 'UTC');
         $goodsId = request()->input('goods_id' , '');
-        return view('backstage.business.delay_special_goods.create' , compact('today' , 'goodsId' , 'now' , 'max'));
+        return view('backstage.business.delay_special_goods.create' , compact('today' , 'goodsId' , 'now' , 'max' , 'timezone'));
     }
 
     public function edit($id)
     {
+        $timezone = request()->input('timezone' , 'UTC');
         $max = date("Y-m-d 23:59:59" , strtotime("+15 day"));
         $delaySpecialGoods = DelaySpecialGoods::where('id' , $id)->firstOrFail();
         $delaySpecialGoods->g = Goods::where('id' , $delaySpecialGoods->goods_id)->first();
-        return view('backstage.business.delay_special_goods.edit' , compact('delaySpecialGoods' , 'max'));
+        return view('backstage.business.delay_special_goods.edit' , compact('delaySpecialGoods' , 'max' , 'timezone'));
     }
 
     public function store(DelaySpecialGoodsRequest $request)
@@ -59,6 +62,10 @@ class DelaySpecialGoodsController extends Controller
         if(date('Y-m-d H:i:s' , strtotime($startTime))!=$startTime)
         {
             abort(422 , 'start time format error!');
+        }
+        if(strtotime($deadline)<=strtotime($startTime)||strtotime($startTime)<=time()||strtotime($deadline)<=time())
+        {
+            abort(422 , 'time format error!');
         }
         $goods = Goods::where('id' , $goodsId)->firstOrFail();
         $delaySpecialGoods = DelaySpecialGoods::where('goods_id' , $goodsId)->first();

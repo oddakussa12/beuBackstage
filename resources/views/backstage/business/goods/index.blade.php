@@ -69,7 +69,7 @@
                 <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.goods.status')}}</th>
                 <th lay-data="{field:'comment', minWidth:200}">{{trans('business.table.header.goods.comment')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
-                <th lay-data="{fixed: 'right', minWidth:240, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{fixed: 'right', minWidth:280, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -173,7 +173,9 @@
                 }else if(layEvent === 'comment'){
                     window.open("/backstage/business/goods_comment?goods_id="+data.id);
                 }else if(layEvent === 'special'){
-                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods/create')}}"+"?goods_id="+data.id);
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods/create')}}"+"?goods_id="+data.id+"&timezone="+Intl.DateTimeFormat().resolvedOptions().timeZone);
+                }else if(layEvent === 'delay'){
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/delay_special_goods/create')}}"+"?goods_id="+data.id+"&timezone="+Intl.DateTimeFormat().resolvedOptions().timeZone);
                 }
             });
             $(function () {
@@ -190,6 +192,7 @@
             <a class="layui-btn layui-btn-xs" lay-event="view">{{trans('business.table.button.goods.view_history')}}</a>
             <a class="layui-btn layui-btn-xs" lay-event="comment">{{trans('business.table.button.goods.comment')}}</a>
             <a class="layui-btn layui-btn-xs" lay-event="special">{{trans('business.table.button.goods.special')}}</a>
+            <a class="layui-btn layui-btn-xs" lay-event="delay">{{trans('business.table.button.goods.delay')}}</a>
         </div>
     </script>
 @endsection

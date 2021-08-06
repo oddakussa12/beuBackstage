@@ -136,7 +136,8 @@ return [
                 'special_price'=>'特价',
                 'free_delivery'=>'配送费',
                 'packaging_cost'=>'包装费',
-                'deadline'=>'截止日期',
+                'start_time'=>'开始时间',
+                'deadline'=>'截止时间',
                 'status'=>'状态',
             ],
             'goods_id'=>'商品编号',
@@ -179,6 +180,7 @@ return [
                 'view_history'=>'浏览历史',
                 'comment'=>'评论',
                 'special'=>'特价',
+                'delay'=>'延时',
             ]
         ]
     ],

@@ -74,6 +74,7 @@ layui.define(['jquery'], function(exports){
                         obj.prompt(message , 5  ,2000 , 1 , 't');
                         break;
                     default:
+                        layer.closeAll();
                         alert("Error Message:"+event.responseJSON.message+"\nError Code:"+event.status+"\nError Result:"+xhr+"\nError Reason:"+options);
                         break;
                 }
@@ -99,6 +100,7 @@ layui.define(['jquery'], function(exports){
                         break;
                 }
                 console.error(msg);
+                layer.closeAll();
                 alert("Error readyState:"+event.readyState+"\nError Code:"+event.status+"\nError Result:"+xhr+"\nError Reason:"+event.responseText);
             }
         },

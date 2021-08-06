@@ -180,6 +180,7 @@ return [
                 'view_history'=>'ViewHistory',
                 'comment'=>'Comment',
                  'special'=>'Special',
+                 'delay'=>'Delay',
             ]
         ]
     ],

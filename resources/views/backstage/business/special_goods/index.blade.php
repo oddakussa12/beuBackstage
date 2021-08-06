@@ -17,7 +17,7 @@
                 <th lay-data="{field:'free_delivery', minWidth:110}">{{trans('business.table.header.special_goods.free_delivery')}}</th>
                 <th lay-data="{field:'packaging_cost', minWidth:130}">{{trans('business.table.header.special_goods.packaging_cost')}}</th>
                 <th lay-data="{field:'status', minWidth:110}">{{trans('business.table.header.special_goods.status')}}</th>
-                <th lay-data="{field:'deadline', minWidth:110}">{{trans('business.table.header.special_goods.deadline')}}</th>
+                <th lay-data="{field:'deadline', minWidth:170}">{{trans('business.table.header.special_goods.deadline')}}</th>
                 <th lay-data="{field:'created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
@@ -71,7 +71,7 @@
                 let data = obj.data; //获得当前行数据
                 let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 if(layEvent === 'edit'){
-                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods/')}}/"+data.id+'/'+layEvent);
+                    common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods/')}}/"+data.id+'/'+layEvent+"?timezone="+Intl.DateTimeFormat().resolvedOptions().timeZone);
                 }
                 if(layEvent === 'delete'){
                     common.confirm("{{trans('common.confirm.delete')}}" , function(){
@@ -84,7 +84,7 @@
                 }
             });
             $(document).on('click','#add',function(){
-                common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods/create')}}");
+                common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/special_goods/create')}}"+"?timezone="+Intl.DateTimeFormat().resolvedOptions().timeZone);
             });
         });
     </script>

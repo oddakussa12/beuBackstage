@@ -103,7 +103,6 @@
             });
             form.on('submit(prop_form)', function(data){
                 let params = {};
-                debugger
                 $.each(data.field, function (k ,v) {
                     if(v===''||v===undefined) {return true;}
                     params[k] = v;
