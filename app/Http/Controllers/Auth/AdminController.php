@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Role;
 use App\Models\Admin;
+use App\Mail\NewPassword;
 use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -73,7 +74,7 @@ class AdminController extends Controller
         $pwd = $random->generate(8);
         $admin_fields[$this->admin->getDefaultPasswordField()] = password_hash($pwd , PASSWORD_DEFAULT);
         $admin = $this->admin->store($admin_fields)->syncRoles($request->input('admin_roles'))->syncPermissions($request->input('admin_auth'));
-        Mail::to($admin->admin_email)->send(new ResetPassword($pwd));
+        Mail::to($admin->admin_email)->send(new NewPassword($pwd));
         return response()->json(array(
             'result'=>'success'
         ));
