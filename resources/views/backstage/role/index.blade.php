@@ -27,6 +27,7 @@
             @endforeach
             </tbody>
         </table>
+        {{ $roles->links('vendor.pagination.default') }}
 
         <form class="layui-form layui-tab-content"  lay-filter="role_form">
             <div class="layui-form-item">
