@@ -28,7 +28,7 @@ class RoleController extends Controller
     public function index()
     {
         //
-        $roles = $this->role->paginate();
+        $roles = $this->role->all();
         $permission = resolve(PermissionRepository::class);
         $sortPermissions = $permission->getSortPermissions();
         return view('backstage.role.index' ,compact('roles' , 'sortPermissions'));
