@@ -85,11 +85,7 @@ class GoodsCommentController extends Controller
                 {
                     abort(500 , 'Audit insert failed!');
                 }
-                $claim_comments = DB::table('claim_comments')->where('comment_id' , $id)->delete();
-                if($claim_comments<=0)
-                {
-                    abort(500 , 'Claim comment delete failed!');
-                }
+                DB::table('claim_comments')->where('comment_id' , $id)->delete();
                 if($params['verified']=='yes')
                 {
                     $this->httpRequest('/api/backstage/review/comment', ['id'=>$id, 'level'=>$comment->level, 'reviewer'=>$admin->admin_id]);
