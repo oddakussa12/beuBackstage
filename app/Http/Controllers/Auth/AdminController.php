@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Mail\NewPassword;
 use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAdminRequest;
@@ -152,6 +153,7 @@ class AdminController extends Controller
         $random = new RandomStringGenerator();
         $pwd = $random->generate(8);
         $admin = Admin::where('admin_id' , $admin_id)->firstOrFail();
+        Log::info('$pwd' , array($pwd));
         Mail::to($admin->admin_email)->send(new ResetPassword($pwd));
         $newPass = password_hash($pwd , PASSWORD_DEFAULT);
         $fields['admin_password'] = $newPass;
