@@ -73,7 +73,7 @@
                 <th lay-data="{fixed: 'left',field:'user_id', minWidth:130}">{{trans('business.table.header.shop.user_id')}}</th>
                 <th lay-data="{field:'country', minWidth:80}">{{trans('user.table.header.user_country')}}</th>
                 <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop.user_name')}}</th>
-                <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop.shop_nick_name')}}</th>
+                <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop.user_nick_name')}}</th>
                 <th lay-data="{field:'user_status', minWidth:150}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_verified', minWidth:150 , templet: function(field){
                     if(field.user_verified==1)
