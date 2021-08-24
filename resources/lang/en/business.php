@@ -75,7 +75,14 @@ return [
                 'user_verified'=>'Reviewed',
                 'user_online'=>'Online',
                 'user_delivery'=>'Delivery',
-                'user_tag'=>'Tag'
+                'user_tag'=>'Tag',
+                'longitude'=>'Longitude',
+                'latitude'=>'Latitude',
+                'view_num'=>'ViewNum',
+                'shop_point'=>'Point',
+                'quality'=>'Quality',
+                'service'=>'Service',
+                'manager'=>'Manager',
             ],
             'promo_code'=>[
                 'description'=>'Description',

@@ -70,10 +70,10 @@
         <table class="layui-table" lay-filter="table" id="table">
             <thead>
             <tr>
-                <th lay-data="{fixed: 'left',field:'user_id', minWidth:130}">{{trans('business.table.header.shop_id')}}</th>
-                <th lay-data="{field:'country', minWidth:80}">{{trans('user.form.label.user_country')}}</th>
-                <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop_name')}}</th>
-                <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop_nick_name')}}</th>
+                <th lay-data="{fixed: 'left',field:'user_id', minWidth:130}">{{trans('business.table.header.shop.user_id')}}</th>
+                <th lay-data="{field:'country', minWidth:80}">{{trans('user.table.header.user_country')}}</th>
+                <th lay-data="{field:'user_name', minWidth:160}">{{trans('business.table.header.shop.user_name')}}</th>
+                <th lay-data="{field:'user_nick_name', minWidth:160}">{{trans('business.table.header.shop.shop_nick_name')}}</th>
                 <th lay-data="{field:'user_status', minWidth:150}">{{trans('common.table.header.status')}}</th>
                 <th lay-data="{field:'user_verified', minWidth:150 , templet: function(field){
                     if(field.user_verified==1)
@@ -93,12 +93,14 @@
                 <th lay-data="{field:'user_avatar', minWidth:80}">{{trans('user.table.header.user_avatar')}}</th>
                 <th lay-data="{field:'quality', minWidth:120}">{{trans('business.table.header.quality')}}</th>
                 <th lay-data="{field:'service', minWidth:120}">{{trans('business.table.header.service')}}</th>
-                <th lay-data="{field:'user_phone', minWidth:150}">{{trans('user.form.label.phone')}}</th>
-                <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.address')}}</th>
+                <th lay-data="{field:'user_phone', minWidth:150}">{{trans('user.table.header.phone')}}</th>
+                <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.shop.user_address')}}</th>
+                <th lay-data="{field:'longitude', minWidth:120, edit:'text'}">{{trans('business.table.header.shop.longitude')}}</th>
+                <th lay-data="{field:'latitude', minWidth:120, edit:'text'}">{{trans('business.table.header.shop.latitude')}}</th>
                 <th lay-data="{field:'user_tag', minWidth:100, event:'updateTag'}">{{trans('business.table.header.shop.user_tag')}}</th>
 
                 <th lay-data="{field:'admin_username', maxWidth:180, minWidth:150, @if(auth()->user()->admin_id!=1) hide:'true' @endif templet: function(field){
-                    return field.admin_username; },event:'updateAmin'}">{{trans('business.table.header.manager')}}</th>
+                    return field.admin_username; },event:'updateAmin'}">{{trans('business.table.header.shop.manager')}}</th>
 
                 <th lay-data="{field:'user_about', minWidth:200}">{{trans('user.table.header.user_about')}}</th>
                 <th lay-data="{field:'user_verified_at', minWidth:160}">{{trans('user.table.header.user_audit_time')}}</th>
@@ -283,6 +285,45 @@
                         },100);
                     });
                 } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]});
+            });
+
+            //监听单元格编辑
+            table.on('edit(table)', function(obj){
+                var that = this;
+                var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field //得到字段
+                    ,original = $(this).prev().text(); //得到字段
+                var params = d = {};
+                d[field] = original;
+                @if(!Auth::user()->can('business::shop_address.update'))
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
+                obj.update(d);
+                $(this).val(original);
+                table.render();
+                return true;
+                @endif
+                params[field] = value;
+                console.log(params);
+                {{--common.confirm("{{trans('common.confirm.update')}}" , function(){--}}
+                {{--    common.ajax("{{url('/backstage/business/shop_address')}}/"+data.id, params , function(res){--}}
+                {{--        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');--}}
+                {{--        table.render();--}}
+                {{--        parent.location.reload();--}}
+                {{--    } , 'PATCH' , function (event,xhr,options,exc) {--}}
+                {{--        setTimeout(function(){--}}
+                {{--            common.init_error(event,xhr,options,exc);--}}
+                {{--            obj.update(d);--}}
+                {{--            $(that).val(original);--}}
+                {{--            table.render();--}}
+                {{--        },100);--}}
+                {{--    });--}}
+                {{--} , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){--}}
+                {{--    d[field] = original;--}}
+                {{--    obj.update(d);--}}
+                {{--    $(that).val(original);--}}
+                {{--    table.render();--}}
+                {{--});--}}
             });
             form.on('switch(switchAll)', function(data){
                 console.log(data);

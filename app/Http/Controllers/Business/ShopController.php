@@ -77,8 +77,10 @@ class ShopController extends Controller
         $admins = DB::table('admins')->select(DB::raw('admin_id id, admin_username title'))->get();
         $shopIds = $shops->pluck('user_id')->unique()->toArray();
         $managers = DB::table('admins_shops')->whereIn('user_id', $shopIds)->get();
-        $shops->each(function($shop) use ($managers , $admins){
+        $shopAddresses = DB::connection('lovbee')->table('shops_addresses')->whereIn('shop_id', $shopIds)->get();
+        $shops->each(function($shop) use ($managers , $admins , $shopAddresses){
             $adminId = collect($managers->where('user_id' , $shop->user_id)->first())->get('admin_id' , 0);
+            $shopAddress = $shopAddresses->where('shop_id' , $shop->user_id)->first();
             if(!empty($adminId))
             {
                 $shop->admin = $admins->where('id' , $adminId)->first();
@@ -87,6 +89,8 @@ class ShopController extends Controller
             $shop->point = $sum ? number_format((($shop->point_1+$shop->point_2*2+$shop->point_3*3+$shop->point_4*4+$shop->point_5*5)/$sum), 2) : 0;
             $shop->format_quality = $sum ? number_format((($shop->quality)/$sum), 2) : 0;
             $shop->format_service = $sum ? number_format((($shop->service)/$sum), 2) : 0;
+            $shop->longitude = $shopAddress->longitude ?? '';
+            $shop->latitude = $shopAddress->latitude ?? '';
         });
         $admins = collect($admins)->toArray();
         $admins = array_map(function ($arr) { return (array)$arr;}, $admins);

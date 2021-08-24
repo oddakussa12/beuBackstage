@@ -75,7 +75,13 @@ return [
                 'user_verified'=>'审核',
                 'user_online'=>'线上',
                 'user_delivery'=>'外卖',
-                'user_tag'=>'标签'
+                'longitude'=>'精度',
+                'latitude'=>'纬度',
+                'view_num'=>'浏览量',
+                'shop_point'=>'评分',
+                'quality'=>'质量',
+                'service'=>'服务',
+                'manager'=>'管理员',
             ],
             'promo_code'=>[
                 'description'=>'描述',
