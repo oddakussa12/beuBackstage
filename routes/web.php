@@ -117,7 +117,7 @@ Route::group(['prefix'=>'backstage'] , function(){
                 Route::get('shop/review' , 'ShopController@review')->name('shop.review');
                 Route::get('shop/search/{search}' , 'ShopController@searchShow')->name('shop.search.show');
 
-                Route::post('shop_address' , 'ShopAddressController@update')->name('shop_address.update');
+                Route::patch('shop_address' , 'ShopAddressController@update')->name('shop_address.update');
                 Route::resource('shop' , 'ShopController');
                 Route::resource('special_goods' , 'SpecialGoodsController');
                 Route::resource('delay_special_goods' , 'DelaySpecialGoodsController');

@@ -95,8 +95,8 @@
                 <th lay-data="{field:'service', minWidth:120}">{{trans('business.table.header.service')}}</th>
                 <th lay-data="{field:'user_phone', minWidth:150}">{{trans('user.table.header.phone')}}</th>
                 <th lay-data="{field:'user_address', minWidth:200}">{{trans('business.table.header.shop.user_address')}}</th>
-                <th lay-data="{field:'longitude', minWidth:120, edit:'text'}">{{trans('business.table.header.shop.longitude')}}</th>
-                <th lay-data="{field:'latitude', minWidth:120, edit:'text'}">{{trans('business.table.header.shop.latitude')}}</th>
+                <th lay-data="{field:'longitude', minWidth:180, edit:'text'}">{{trans('business.table.header.shop.longitude')}}</th>
+                <th lay-data="{field:'latitude', minWidth:180, edit:'text'}">{{trans('business.table.header.shop.latitude')}}</th>
                 <th lay-data="{field:'user_tag', minWidth:100, event:'updateTag'}">{{trans('business.table.header.shop.user_tag')}}</th>
 
                 <th lay-data="{field:'admin_username', maxWidth:180, minWidth:150, @if(auth()->user()->admin_id!=1) hide:'true' @endif templet: function(field){
@@ -128,6 +128,8 @@
                     <td>@if(!empty($shop->format_service)){{$shop->format_service}}@else 0 @endif</td>
                     <td>{{$shop->user_phone}}</td>
                     <td>{{$shop->user_address}}</td>
+                    <td>{{$shop->longitude}}</td>
+                    <td>{{$shop->latitude}}</td>
                     <td>{{$shop->user_tag}}</td>
                     <td>{{empty($shop->admin)?'':$shop->admin->title}}</td>
                     <td>{{$shop->user_about}}</td>
@@ -304,26 +306,26 @@
                 return true;
                 @endif
                 params[field] = value;
+                params.shop_id = data.user_id;
                 console.log(params);
-                {{--common.confirm("{{trans('common.confirm.update')}}" , function(){--}}
-                {{--    common.ajax("{{url('/backstage/business/shop_address')}}/"+data.id, params , function(res){--}}
-                {{--        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');--}}
-                {{--        table.render();--}}
-                {{--        parent.location.reload();--}}
-                {{--    } , 'PATCH' , function (event,xhr,options,exc) {--}}
-                {{--        setTimeout(function(){--}}
-                {{--            common.init_error(event,xhr,options,exc);--}}
-                {{--            obj.update(d);--}}
-                {{--            $(that).val(original);--}}
-                {{--            table.render();--}}
-                {{--        },100);--}}
-                {{--    });--}}
-                {{--} , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){--}}
-                {{--    d[field] = original;--}}
-                {{--    obj.update(d);--}}
-                {{--    $(that).val(original);--}}
-                {{--    table.render();--}}
-                {{--});--}}
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax("{{url('/backstage/business/shop_address')}}/", params , function(res){
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                        table.render();
+                    } , 'PATCH' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            obj.update(d);
+                            $(that).val(original);
+                            table.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                    d[field] = original;
+                    obj.update(d);
+                    $(that).val(original);
+                    table.render();
+                });
             });
             form.on('switch(switchAll)', function(data){
                 console.log(data);

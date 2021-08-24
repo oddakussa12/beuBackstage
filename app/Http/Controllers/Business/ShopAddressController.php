@@ -14,23 +14,20 @@ class ShopAddressController extends Controller
         $longitude = $request->input('longitude' , '');
         $latitude = $request->input('latitude' , '');
         $now = date('Y-m-d H:i:s');
-        if(!empty($shopId)&&!empty($longitude)&&!empty($latitude))
+        if(!empty($shopId)&&(!empty($longitude)||!empty($latitude)))
         {
             $address = DB::connection('lovbee')->table('shops_addresses')->where('shop_id' , $shopId)->first();
+            $data = array(
+                'created_at'=>$now,
+            );
+            !empty($longitude)&&$data['longitude'] = $longitude;
+            !empty($latitude)&&$data['latitude'] = $latitude;
             if(empty($address))
             {
-                DB::connection('lovbee')->table('shops_addresses')->insert(array(
-                    'shop_id'=>$shopId,
-                    'longitude'=>$longitude,
-                    'latitude'=>$latitude,
-                    'created_at'=>$now,
-                ));
+                $data['shop_id'] = $shopId;
+                DB::connection('lovbee')->table('shops_addresses')->insert($data);
             }else{
-                DB::connection('lovbee')->table('shops_addresses')->where('shop_id' , $shopId)->update(array(
-                    'longitude'=>$longitude,
-                    'latitude'=>$latitude,
-                    'created_at'=>$now,
-                ));
+                DB::connection('lovbee')->table('shops_addresses')->where('shop_id' , $shopId)->update($data);
             }
         }
         return response()->json(array(
