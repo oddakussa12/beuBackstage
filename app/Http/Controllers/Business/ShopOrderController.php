@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Business;
 
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
+use App\Exports\OrderExport;
 use Illuminate\Http\Request;
 use App\Models\Passport\User;
 use App\Models\Business\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 
 
@@ -29,6 +31,7 @@ class ShopOrderController extends Controller
     public function index(Request $request)
     {
         $params = $data = $request->all();
+        $data['query'] = http_build_query($params);
         $user   = auth()->user();
         $promoCode = strval($request->input('promo_code' , ''));
         $schedule = intval($request->input('schedule' , 0));
@@ -280,6 +283,24 @@ class ShopOrderController extends Controller
         $data['statusEncode'] = json_encode($this->schedule, true);
         $data['statusKv'] = array_map(function ($value, $key) {return ['title'=>trans('business.table.header.shop_order.'.$value), 'id'=>$key];}, $this->schedule, array_keys($this->schedule));
         return view('backstage.business.shop_order.browse', $data);
+    }
+
+
+    public function export(Request $request)
+    {
+        ini_set('memory_limit','256M');
+        $params = $request->all();
+        $dateTime = (string)($request->input('dateTime' , ' - '));
+        $date_time = $this->parseTime($dateTime);
+        if($date_time!==false)
+        {
+            $start = $date_time['start'];
+            $end = $date_time['end'];
+            $file = 'order-'.$start.'-'.$end.'.xlsx';
+        }else{
+            $file = 'order-'.date('Y-m-d H:i:s').'.xlsx';
+        }
+        return  Excel::download(new OrderExport($params , $date_time), $file);
     }
 
 }

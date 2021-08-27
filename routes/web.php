@@ -131,6 +131,7 @@ Route::group(['prefix'=>'backstage'] , function(){
                 Route::patch('delivery_order/{delivery_order}' , 'DeliveryOrderController@update')->name('delivery_order.update');
                 Route::get('delivery_order/browse' , 'DeliveryOrderController@browse')->name('delivery_order.browse');
                 Route::get('shop_order' , 'ShopOrderController@index')->name('shop_order.index');
+                Route::get('shop_order/export' , 'ShopOrderController@export')->name('shop_order.export');
                 Route::get('shop_order/browse' , 'ShopOrderController@browse')->name('shop_order.browse');
                 Route::get('shopping_cart' , 'ShoppingCartController@index')->name('shopping_cart.index');
                 Route::get('shop_tag' , 'ShopTagController@index')->name('shop_tag.index');

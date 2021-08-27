@@ -50,6 +50,7 @@
                     </div>
                     <div class="layui-input-inline">
                         <button class="layui-btn" type="submit"  lay-submit >{{trans('common.form.button.submit')}}</button>
+                        <a href="{{route('business::shop_order.export')}}@if(!empty($query))?{{$query}}@endif" class="layui-btn" target="_blank">{{trans('common.form.button.export')}}</a>
                     </div>
                 </div>
             </div>
