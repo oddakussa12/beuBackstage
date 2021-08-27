@@ -64,7 +64,7 @@ class ShopOrderController extends Controller
             }
             //        $user->admin_id!=1 && $ordersWhere = $ordersWhere->where('operator', $user->admin_id);
             $shopId!=0  && $ordersWhere = $ordersWhere->where('shop_id', $shopId);
-            $date_time = $this->parseTime($dateTime);
+            $date_time = $this->parseTime($dateTime , 'subHours' , 0);
             if($date_time!==false)
             {
                 $data['dateTime'] = $dateTime;
@@ -291,7 +291,7 @@ class ShopOrderController extends Controller
         ini_set('memory_limit','256M');
         $params = $request->all();
         $dateTime = (string)($request->input('dateTime' , ' - '));
-        $date_time = $this->parseTime($dateTime);
+        $date_time = $this->parseTime($dateTime , 'subHours' , 0);
         if($date_time!==false)
         {
             $start = $date_time['start'];
