@@ -146,6 +146,10 @@ Route::group(['prefix'=>'backstage'] , function(){
                 Route::get('comment_manager' , 'CommentManagerController@index')->name('comment_manager.index');
                 Route::get('comment_manager/{comment_manager}' , 'CommentManagerController@show')->name('comment_manager.show');
                 Route::get('complex' , 'ComplexController@index')->name('complex.index');
+                Route::get('delivery_cost' , 'DeliveryCostController@index')->name('delivery_cost.index');
+                Route::post('delivery_cost' , 'DeliveryCostController@store')->name('delivery_cost.store');
+                Route::patch('delivery_cost/{delivery_cost}' , 'DeliveryCostController@update')->name('delivery_cost.update');
+                Route::delete('delivery_cost/{delivery_cost}' , 'DeliveryCostController@destroy')->name('delivery_cost.destroy');
 
             });
 
