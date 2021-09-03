@@ -79,26 +79,19 @@ class ShopOrderController extends Controller
         $data['totalPrice'] = $ordersWhere->sum('total_price');
         $data['discountedPrice'] = $ordersWhere->sum('discounted_price');
         $data['reductionCoast'] = $ordersWhere->sum('reduction');
-        $data['brokerageCoast'] = 0;
-        $data['profit'] = 0;
+        $data['brokerageCoast'] = $ordersWhere->sum('brokerage');
+        $data['profit'] = $ordersWhere->sum('profit');
         $data['perPage'] = $perPage = 20;
         $orders   = $ordersWhere->orderByDesc('created_at')->paginate($perPage)->appends($params);
         $shopIds = $orders->pluck('shop_id')->unique()->toArray();
-        $orderIds = $orders->pluck('order_id')->unique()->toArray();
         $shops = User::whereIn('user_id' , $shopIds)->get();
-        $bitrixOrders = DB::connection('lovbee')->table('bitrix_orders')->whereIn('order_id' , $orderIds)->get();
         $time = Carbon::now()->subHour(8)->toDateTimeString();
-        $orders->each(function($order) use ($shops , $time , $bitrixOrders){
+        $orders->each(function($order) use ($shops , $time){
             $order->shop = $shops->where('user_id' , $order->shop_id)->first();
-            $bitrixOrder = $bitrixOrders->where('order_id' , $order->order_id)->first();
             $duration = strtotime($time)-strtotime($order->created_at);
             if (($order->schedule==1 && $duration>300) || ($order->schedule==2 && $duration>600) || ($order->schedule==3 && $duration>780) || ($order->schedule==4 && $duration>3600)) {
                 $order->color = 1;
             }
-            $order->extension_id = empty($bitrixOrder)?'':$bitrixOrder->extension_id;
-            $assigned_at = strtotime($order->assigned_at);
-            $delivered_at = strtotime($order->delivered_at);
-            $order->delivery_time = ($assigned_at<0||$delivered_at<0)?-1:($delivered_at-$assigned_at);
         });
         $data['type' ] = $params['type'] ?? 0;
         $data['orders'] = $orders;
@@ -111,7 +104,6 @@ class ShopOrderController extends Controller
 
     public function update(Request $request , $id)
     {
-        abort(403 , 'Prohibited operation!');
         $params  = $request->all();
         $schedule= $request->input('schedule');
         $free_delivery = $request->input('free_delivery');
