@@ -343,7 +343,8 @@ return [
             ],
             'promo_code'=>[
                 'reduction'=>"抵扣",
-                'discount'=>"折扣"
+                'discount'=>"折扣",
+                'limit'=>"限制",
             ]
         ],
         'button'=>[

@@ -343,7 +343,8 @@ return [
             ],
             'promo_code'=>[
                 'reduction'=>"Reduction",
-                'discount'=>"Discount"
+                'discount'=>"Discount",
+                'limit'=>"Limit",
             ]
         ],
         'button'=>[
