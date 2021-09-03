@@ -83,10 +83,10 @@ class PromoCodeController extends Controller
 
     public function show($id)
     {
-        $result = DB::connection('lovbee')->table('promo_codes')->where('id', $id)->first();
-        $code = DB::connection('lovbee')->table('promo_goods')->where('code' , $result->code)->first();
-        $result->goods_id = empty($code)?'':$code->code;
-        return view('backstage.business.promo_code.edit', compact('result'));
+        $promoCode = DB::connection('lovbee')->table('promo_codes')->where('id', $id)->first();
+        $code = DB::connection('lovbee')->table('promo_goods')->where('code' , $promoCode->promo_code)->first();
+        $promoCode->goods_id = empty($code)?'':$code->code;
+        return view('backstage.business.promo_code.edit', compact('promoCode'));
     }
 
     public function update(Request $request, $id)

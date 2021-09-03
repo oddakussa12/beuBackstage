@@ -9,14 +9,14 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.promo_code.description')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="description" lay-verify="required" required placeholder="{{trans('business.form.placeholder.promo_code.description')}}" value="{{$result->description}}">
+                        <input class="layui-input" type="text" name="description" lay-verify="required" required placeholder="{{trans('business.form.placeholder.promo_code.description')}}" value="{{$promoCode->description}}">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.promo_code.promo_code')}}：</label>
                     <div class="layui-input-inline">
-                        <input type="hidden" id="id" name="id" value="{{$result->id}}">
-                        <input class="layui-input" type="text" name="promo_code" lay-verify="required" required placeholder="{{trans('business.form.placeholder.promo_code.promo_code')}}" value="{{$result->promo_code}}" disabled>
+                        <input type="hidden" id="id" name="id" value="{{$promoCode->id}}">
+                        <input class="layui-input" type="text" name="promo_code" lay-verify="required" required placeholder="{{trans('business.form.placeholder.promo_code.promo_code')}}" value="{{$promoCode->promo_code}}" disabled>
                     </div>
                 </div>
             </div>
@@ -26,14 +26,14 @@
                     <div class="layui-input-inline">
                         <select name="free_delivery" >
                             <option value="1">YES</option>
-                            <option value="0" @if(empty($result->free_delivery)) selected @endif>NO</option>
+                            <option value="0" @if(empty($promoCode->free_delivery)) selected @endif>NO</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.promo_code.deadline')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" readonly lay-verify="date" required placeholder="{{trans('common.form.label.date')}}" id="deadline" name="deadline" value="{{$result->deadline}}">
+                        <input class="layui-input" type="text" readonly lay-verify="date" required placeholder="{{trans('common.form.label.date')}}" id="deadline" name="deadline" value="{{$promoCode->deadline}}">
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     <div class="layui-input-inline">
                         <select lay-filter="select" id="discount_type" name="discount_type">
                             @foreach(trans('business.form.select.promo_code') as $k=>$v)
-                                <option value="{{$k}}" @if($result->discount_type==$k) selected @endif>{{$v}}</option>
+                                <option value="{{$k}}" @if($promoCode->discount_type==$k) selected @endif>{{$v}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -51,7 +51,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.promo_code.reduction')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="number" min="0" placeholder="Reduction" id="reduction" name="reduction" value="{{$result->reduction}}">
+                        <input class="layui-input" type="number" min="0" placeholder="Reduction" id="reduction" name="reduction" value="{{$promoCode->reduction}}">
                     </div>
                 </div>
             </div>
@@ -59,13 +59,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.promo_code.percentage')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="number" min="0" max="100" placeholder="Percentage" id="percentage" name="percentage" value="{{$result->percentage}}">
+                        <input class="layui-input" type="number" min="0" max="100" placeholder="Percentage" id="percentage" name="percentage" value="{{$promoCode->percentage}}">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.promo_code.limit')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="number" placeholder="Limit" name="limit" value="{{$result->limit}}">
+                        <input class="layui-input" type="number" placeholder="Limit" name="limit" value="{{$promoCode->limit}}">
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">{{trans('business.form.label.promo_code.goods_id')}}：</label>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" min="0" max="100"  id="goods_id" name="goods_id"  value="{{$result->goods_id}}">
+                        <input class="layui-input" type="text" min="0" max="100"  id="goods_id" name="goods_id"  value="{{$promoCode->goods_id}}">
                     </div>
                 </div>
                 <div class="layui-inline">
