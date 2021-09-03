@@ -110,7 +110,7 @@ class PromoCodeController extends Controller
         if(!empty($goodsId))
         {
             Goods::where('id' , $goodsId)->firstOrFail();
-            $promoGoods = DB::connection('lovbee')->table('promo_goods')->where('promo_code' , $params['promo_code'])->first();
+            $promoGoods = DB::connection('lovbee')->table('promo_goods')->where('code' , $params['promo_code'])->first();
         }
         try {
             DB::connection('lovbee')->table('promo_codes')->where('id', $id)->update($params);
@@ -118,12 +118,12 @@ class PromoCodeController extends Controller
             {
                 if(empty($promoGoods))
                 {
-                    DB::connection('lovbee')->table('promo_codes')->insert(array(
+                    DB::connection('lovbee')->table('promo_goods')->insert(array(
                         'code'=>$params['promo_code'],
                         'goods_id'=>$goodsId,
                     ));
                 }else{
-                    DB::connection('lovbee')->table('promo_codes')->where('code' , $params['promo_code'])->update(
+                    DB::connection('lovbee')->table('promo_goods')->where('code' , $params['promo_code'])->update(
                         array(
                             'goods_id'=>$goodsId
                         )
