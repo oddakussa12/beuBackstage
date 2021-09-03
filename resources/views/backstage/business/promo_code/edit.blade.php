@@ -16,7 +16,7 @@
                     <label class="layui-form-label">{{trans('business.form.label.promo_code.promo_code')}}：</label>
                     <div class="layui-input-inline">
                         <input type="hidden" id="id" name="id" value="{{$result->id}}">
-                        <input class="layui-input" type="text" name="promo_code" lay-verify="required" required placeholder="{{trans('business.form.placeholder.promo_code.promo_code')}}" value="{{$result->promo_code}}">
+                        <input class="layui-input" type="text" name="promo_code" lay-verify="required" required placeholder="{{trans('business.form.placeholder.promo_code.promo_code')}}" value="{{$result->promo_code}}" disabled>
                     </div>
                 </div>
             </div>
@@ -70,8 +70,16 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" type="submit"  lay-submit lay-filter="prop_form" >{{trans('common.form.button.update')}}</button>
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.goods_id')}}：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" min="0" max="100"  id="goods_id" name="goods_id"  value="{{$result->goods_id}}">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" type="submit"  lay-submit lay-filter="prop_form" >{{trans('common.form.button.update')}}</button>
+                    </div>
                 </div>
             </div>
         </form>

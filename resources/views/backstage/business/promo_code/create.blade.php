@@ -69,7 +69,13 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{trans('business.form.label.promo_code.goods_id')}}：</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" min="0" max="100"  id="goods_id" name="goods_id">
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <div class="layui-input-block">
                         <button class="layui-btn" type="submit"  lay-submit lay-filter="prop_form" >{{trans('common.form.button.add')}}</button>
                     </div>

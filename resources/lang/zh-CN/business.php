@@ -243,6 +243,7 @@ return [
                 'reduction'=>'抵扣',
                 'limit'=>'限制',
                 'percentage'=>'折扣',
+                'goods_id'=>'商品ID',
             ],
             'shop_order'=>[
                 'shop'=>'商家',

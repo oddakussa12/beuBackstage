@@ -20,11 +20,12 @@
                 <th lay-data="{field:'limit', minWidth:100}">{{trans('business.table.header.promo_code.limit')}}</th>
                 <th lay-data="{field:'created_at', minWidth:170}">{{trans('common.table.header.created_at')}}</th>
                 <th lay-data="{field:'updated_at', minWidth:170}">{{trans('common.table.header.updated_at')}}</th>
+                <th lay-data="{field:'goods_id', minWidth:180, hide:'true'}"></th>
                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($result as $value)
+            @foreach($promoCodes as $value)
                 <tr>
                     <td>{{$value->id}}</td>
                     <td>{{$value->description}}</td>
@@ -37,15 +38,16 @@
                     <td>{{$value->limit}}</td>
                     <td>{{$value->created_at}}</td>
                     <td>{{$value->updated_at}}</td>
+                    <td>{{$value->goods_id}}</td>
                     <td></td>
                 </tr>
             @endforeach
             </tbody>
         </table>
         @if(empty($appends))
-            {{ $result->links('vendor.pagination.default') }}
+            {{ $promoCodes->links('vendor.pagination.default') }}
         @else
-            {{ $result->appends($appends)->links('vendor.pagination.default') }}
+            {{ $promoCodes->appends($appends)->links('vendor.pagination.default') }}
         @endif
     </div>
 @endsection

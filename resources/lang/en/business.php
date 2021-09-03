@@ -244,6 +244,7 @@ return [
                 'reduction'=>'Reduction',
                 'limit'=>'Limit',
                 'percentage'=>'Percentage',
+                'goods_id'=>'GoodsID',
             ],
             'shop_order'=>[
                 'shop'=>'Shop',
