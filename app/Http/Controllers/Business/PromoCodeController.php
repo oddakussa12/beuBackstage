@@ -58,7 +58,7 @@ class PromoCodeController extends Controller
         if(!empty($goodsId))
         {
             Goods::where('id' , $goodsId)->firstOrFail();
-            $promoGoods = DB::connection('lovbee')->table('promo_goods')->where('promo_code' , $params['promo_code'])->first();
+            $promoGoods = DB::connection('lovbee')->table('promo_goods')->where('code' , $params['promo_code'])->first();
             if(!empty($promoGoods))
             {
                 abort(403, "Field PromoCode ({$params['promo_code']}) already exists!");
