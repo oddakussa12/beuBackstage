@@ -68,12 +68,27 @@ class GoodsController extends Controller
     public function update(Request $request, $id)
     {
         $params = $request->all();
-        $goods  = Goods::where('id' , $id)->fisrtOrFail();
+        $goods  = Goods::where('id' , $id)->firstOrFail();
         if (!empty($params['recommend'])) {
             $goods->recommend = $params['recommend'] == 'on';
             $goods->recommended_at = date('Y-m-d H:i:s');
-            $goods->save();
         }
+        if(isset($params['purchase_price']))
+        {
+            $purchase_price = round((float)$params['purchase_price'] , 2);
+            $goods->purchase_price = $purchase_price;
+        }
+        if(isset($params['package_purchase_price']))
+        {
+            $package_purchase_price = round((float)$params['package_purchase_price'] , 2);
+            $goods->package_purchase_price = $package_purchase_price;
+        }
+        if(isset($params['charge']))
+        {
+            $charge = (string)$params['charge'];
+            $goods->charge = $charge;
+        }
+        $goods->save();
         return response()->json(['result' => 'success']);
     }
 

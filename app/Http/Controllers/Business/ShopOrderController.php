@@ -79,19 +79,26 @@ class ShopOrderController extends Controller
         $data['totalPrice'] = $ordersWhere->sum('total_price');
         $data['discountedPrice'] = $ordersWhere->sum('discounted_price');
         $data['reductionCoast'] = $ordersWhere->sum('reduction');
-        $data['brokerageCoast'] = $ordersWhere->sum('brokerage');
-        $data['profit'] = $ordersWhere->sum('profit');
+        $data['brokerageCoast'] = 0;
+        $data['profit'] = 0;
         $data['perPage'] = $perPage = 20;
         $orders   = $ordersWhere->orderByDesc('created_at')->paginate($perPage)->appends($params);
         $shopIds = $orders->pluck('shop_id')->unique()->toArray();
+        $orderIds = $orders->pluck('order_id')->unique()->toArray();
         $shops = User::whereIn('user_id' , $shopIds)->get();
+        $bitrixOrders = DB::connection('lovbee')->table('bitrix_orders')->whereIn('order_id' , $orderIds)->get();
         $time = Carbon::now()->subHour(8)->toDateTimeString();
-        $orders->each(function($order) use ($shops , $time){
+        $orders->each(function($order) use ($shops , $time , $bitrixOrders){
             $order->shop = $shops->where('user_id' , $order->shop_id)->first();
             $duration = strtotime($time)-strtotime($order->created_at);
+            $bitrixOrder = $bitrixOrders->where('order_id' , $order->order_id)->first();
             if (($order->schedule==1 && $duration>300) || ($order->schedule==2 && $duration>600) || ($order->schedule==3 && $duration>780) || ($order->schedule==4 && $duration>3600)) {
                 $order->color = 1;
             }
+            $order->extension_id = empty($bitrixOrder)?'':$bitrixOrder->extension_id;
+            $assigned_at = strtotime($order->assigned_at);
+            $delivered_at = strtotime($order->delivered_at);
+            $order->delivery_time = ($assigned_at<0||$delivered_at<0)?-1:($delivered_at-$assigned_at);
         });
         $data['type' ] = $params['type'] ?? 0;
         $data['orders'] = $orders;
@@ -104,6 +111,7 @@ class ShopOrderController extends Controller
 
     public function update(Request $request , $id)
     {
+        abort(403 , 'Prohibited operation!');
         $params  = $request->all();
         $schedule= $request->input('schedule');
         $free_delivery = $request->input('free_delivery');
@@ -301,6 +309,33 @@ class ShopOrderController extends Controller
             $file = 'order-'.date('Y-m-d H:i:s').'.xlsx';
         }
         return  Excel::download(new OrderExport($params , $date_time), $file);
+    }
+
+
+    public function special(Request $request)
+    {
+        $params = $request->all();
+        $perPage = 10;
+        $dateTime = (string)($request->input('dateTime' , ' - '));
+        $date_time = $this->parseTime($dateTime , 'subHours' , 0);
+        if($date_time!==false)
+        {
+            $start = $date_time['start'];
+            $end = $date_time['end'];
+        }else{
+            $start = date('Y-m-d H:i:s' , strtotime('-7 Day'));
+            $end = date('Y-m-d H:i:s');
+        }
+        $orders = DB::connection('lovbee')->table('special_counts')->whereBetween('created_at', array($start , $end))->orderByDesc('created_at')->paginate($perPage)->appends($params);
+        $orderCounts = collect(DB::connection('lovbee')->select('SELECT count(*) as c,DATE_FORMAT(created_at,"%Y-%m-%d") as `date`  from t_orders where status=1 and created_at BETWEEN "'.$start.'" and "'.$end.'" GROUP BY `date`;'))->map(function ($value) {return (array)$value;});
+        $todayOrderCounts = collect(DB::connection('lovbee')->select('SELECT sum(num) as c,`date`  from t_special_counts where  created_at BETWEEN "'.$start.'" and "'.$end.'" GROUP BY `date`;'))->map(function ($value) {return (array)$value;});
+        $orders->each(function($order) use ($orderCounts , $todayOrderCounts){
+            $orderCount = $orderCounts->where('date' , $order->date)->first();
+            $todayOrderCount = $todayOrderCounts->where('date' , $order->date)->first();
+            $order->order_count = empty($orderCount)?0:$orderCount['c'];
+            $order->today_order_count = empty($todayOrderCount)?0:$todayOrderCount['c'];
+        });
+        return view('backstage.business.shop_order.special' , compact('orders' , 'orderCounts'));
     }
 
 }

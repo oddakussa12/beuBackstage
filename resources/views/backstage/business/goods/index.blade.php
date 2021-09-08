@@ -61,11 +61,14 @@
                 <th lay-data="{field:'name', minWidth:160}">{{trans('business.table.header.goods.name')}}</th>
                 <th lay-data="{field:'category', minWidth:100}">{{trans('business.table.header.goods.category')}}</th>
                 <th lay-data="{field:'image', minWidth:200}">{{trans('business.table.header.goods.image')}}</th>
-                <th lay-data="{field:'like', minWidth:120}">{{trans('business.table.header.goods.like')}}</th>
-                <th lay-data="{field:'view_num', minWidth:100}">{{trans('business.table.header.goods.view_num')}}</th>
-                <th lay-data="{field:'format_point', minWidth:120}">{{trans('business.table.header.goods.point')}}</th>
                 <th lay-data="{field:'price', minWidth:140}">{{trans('business.table.header.goods.price')}}</th>
-                <th lay-data="{field:'recommendation', minWidth:120}">{{trans('business.table.header.goods.recommendation')}}</th>
+                <th lay-data="{field:'packaging_cost', minWidth:140}">{{trans('business.table.header.goods.packaging_cost')}}</th>
+                <th lay-data="{field:'total_price', minWidth:140}">{{trans('business.table.header.goods.total_price')}}</th>
+                <th lay-data="{field:'purchase_price', minWidth:140,edit:'text'}">{{trans('business.table.header.goods.purchase_price')}}</th>
+                <th lay-data="{field:'package_purchase_price', minWidth:160,edit:'text'}">{{trans('business.table.header.goods.package_purchase_price')}}</th>
+                <th lay-data="{field:'total_purchase_price', minWidth:140}">{{trans('business.table.header.goods.total_purchase_price')}}</th>
+                <th lay-data="{field:'recommendation', minWidth:140}">{{trans('business.table.header.goods.recommendation')}}</th>
+                <th lay-data="{field:'charge', minWidth:100,edit:'text'}">{{trans('business.table.header.goods.charge')}}</th>
                 <th lay-data="{field:'status', minWidth:100}">{{trans('business.table.header.goods.status')}}</th>
                 <th lay-data="{field:'comment', minWidth:200}">{{trans('business.table.header.goods.comment')}}</th>
                 <th lay-data="{field:'created_at', minWidth:160}">{{trans('common.table.header.created_at')}}</th>
@@ -86,11 +89,14 @@
                             @endforeach
                         @endif
                     </td>
-                    <td>{{$value->like}}</td>
-                    <td>@if(!empty($value->view->num)){{$value->view->num}}@else 0 @endif</td>
-                    <td>@if(!empty($value->average_point)){{$value->average_point}}@else 0 @endif</td>
                     <td>{{$value->price}} {{$value->currency}}</td>
+                    <td>{{$value->packaging_cost}}</td>
+                    <td>{{$value->price+$value->packaging_cost}}</td>
+                    <td>{{$value->purchase_price}}</td>
+                    <td>{{$value->package_purchase_price}}</td>
+                    <td>{{$value->purchase_price+$value->package_purchase_price}}</td>
                     <td><input type="checkbox" @if($value->recommend==1) checked @endif name="recommend" lay-skin="switch" lay-filter="switchAll" lay-text="YES|NO"></td>
+                    <td>{{$value->charge}}</td>
                     <td><span class="layui-btn layui-btn-xs @if(empty($value->status)) layui-btn-danger @else layui-btn-warm @endif">@if(empty($value->status)) NO @else YES @endif</span></td>
                     <td>{{$value->description}}</td>
                     <td>{{$value->created_at}}</td>
@@ -177,6 +183,43 @@
                 }else if(layEvent === 'delay'){
                     common.open_page("{{LaravelLocalization::localizeUrl('/backstage/business/delay_special_goods/create')}}"+"?goods_id="+data.id+"&timezone="+Intl.DateTimeFormat().resolvedOptions().timeZone);
                 }
+            });
+
+            table.on('edit(table)', function(obj){
+                var that = this;
+                var value = obj.value
+                    ,data = obj.data
+                    ,field = obj.field
+                    ,original = $(this).prev().text(); //得到字段
+                var params = {},d={};
+                params[field] = value;
+                d[field] = original;
+                @if(!Auth::user()->can('business::goods.update'))
+                common.tips("{{trans('common.ajax.result.prompt.no_permission')}}" , $(this));
+                obj.update(d);
+                $(this).val(original);
+                table.render();
+                return true;
+                @endif
+                common.confirm("{{trans('common.confirm.update')}}" , function(){
+                    common.ajax("{{url('/backstage/business/goods/')}}/"+data.id , params , function(res){
+                        common.prompt("{{trans('common.ajax.result.prompt.update')}}" , 1 , 300 , 6 , 't');
+                        location.reload();
+                    } , 'patch' , function (event,xhr,options,exc) {
+                        setTimeout(function(){
+                            common.init_error(event,xhr,options,exc);
+                            obj.update(d);
+                            $(that).val(original);
+                            table.render();
+                        },100);
+                    });
+                } , {btn:["{{trans('common.confirm.yes')}}" , "{{trans('common.confirm.cancel')}}"]} , function(){
+                    d[field] = original;
+                    obj.update(d);
+                    $(that).val(original);
+                    table.render();
+                });
+
             });
             $(function () {
                 let img_show = null; // tips提示

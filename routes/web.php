@@ -131,6 +131,7 @@ Route::group(['prefix'=>'backstage'] , function(){
                 Route::patch('delivery_order/{delivery_order}' , 'DeliveryOrderController@update')->name('delivery_order.update');
                 Route::get('delivery_order/browse' , 'DeliveryOrderController@browse')->name('delivery_order.browse');
                 Route::get('shop_order' , 'ShopOrderController@index')->name('shop_order.index');
+                Route::get('shop_order/special' , 'ShopOrderController@special')->name('shop_order.special');
                 Route::get('shop_order/export' , 'ShopOrderController@export')->name('shop_order.export');
                 Route::get('shop_order/browse' , 'ShopOrderController@browse')->name('shop_order.browse');
                 Route::get('shopping_cart' , 'ShoppingCartController@index')->name('shopping_cart.index');
@@ -146,7 +147,10 @@ Route::group(['prefix'=>'backstage'] , function(){
                 Route::get('comment_manager' , 'CommentManagerController@index')->name('comment_manager.index');
                 Route::get('comment_manager/{comment_manager}' , 'CommentManagerController@show')->name('comment_manager.show');
                 Route::get('complex' , 'ComplexController@index')->name('complex.index');
-
+                Route::get('delivery_cost' , 'DeliveryCostController@index')->name('delivery_cost.index');
+                Route::post('delivery_cost' , 'DeliveryCostController@store')->name('delivery_cost.store');
+                Route::patch('delivery_cost/{delivery_cost}' , 'DeliveryCostController@update')->name('delivery_cost.update');
+                Route::delete('delivery_cost/{delivery_cost}' , 'DeliveryCostController@destroy')->name('delivery_cost.destroy');
             });
 
             Route::resource('menu' , 'MenuController');
