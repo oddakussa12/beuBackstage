@@ -178,14 +178,19 @@
                 limit:{{$perPage}},
                 totalRow: {
                     "order_id": 'Total',
-                    "delivery_coast": {{$deliveryCoast}},
                     "order_price": {{$orderPrice}},
                     "promo_price": {{$promoPrice}},
-                    "total_price": {{$totalPrice}},
                     "discounted_price": {{$discountedPrice}},
-                    "reduction": {{$reductionCoast}},
-                    "brokerage": {{$brokerageCoast}},
-                    "profit": {{$profit}}
+                    "total_price": {{$totalPrice}},
+                    "delivery_cost": {{$deliveryCost}},
+                    "packaging_cost": {{$packagingCost}},
+                    "discounted_price": {{$discountedPrice}},
+                    "pay": {{$counts['pay_c']??0}},
+                    "purchase_price": {{$counts['purchase_price_c']??0}},
+                    "package_purchase_price": {{$counts['package_purchase_price_c']??0}},
+                    "gross_profit": {{$counts['gross_profit_c']??0}},
+                    "income": {{$counts['income_c']??0}},
+                    "brokerage": {{$counts['brokerage_c']??0}},
                 },
                 done: function(res, curr, count){
                     $('th').css({'font-size': '15'});	//进行表头样式设置

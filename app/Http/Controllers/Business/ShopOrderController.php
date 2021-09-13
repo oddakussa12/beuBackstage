@@ -53,34 +53,43 @@ class ShopOrderController extends Controller
         }
         $data['schedules'] = $schedules;
         $ordersWhere = new Order();
+        $sql  = "select SUM(pay) AS pay_c,SUM(purchase_price) AS purchase_price_c,SUM(package_purchase_price) AS package_purchase_price_c,SUM(gross_profit) AS gross_profit_c,SUM(income) AS income_c,SUM(brokerage) AS brokerage_c from t_orders JOIN t_bitrix_orders ON t_orders.order_id = t_bitrix_orders.order_id";
         if(empty($promoCode))
         {
+            $where = "";
             if (isset($params['status'])) {
                 $status = intval($params['status']);
                 $ordersWhere = $ordersWhere->where('status', $status);
+                $where .= " WHERE t_orders.status={$status}";
             }
             if (!empty($schedule)) {
                 $ordersWhere = $ordersWhere->where('schedule', $schedule);
+                $where = empty($where)?" WHERE t_orders.schedule={$schedule}":$where." and t_orders.schedule={$schedule}";
             }
-            //        $user->admin_id!=1 && $ordersWhere = $ordersWhere->where('operator', $user->admin_id);
-            $shopId!=0  && $ordersWhere = $ordersWhere->where('shop_id', $shopId);
+            if($shopId!=0)
+            {
+                $ordersWhere = $ordersWhere->where('shop_id', $shopId);
+                $where = empty($where)?" WHERE t_orders.shop_id={$shopId}":$where." and t_orders.shop_id={$shopId}";
+            }
             $date_time = $this->parseTime($dateTime , 'subHours' , 0);
             if($date_time!==false)
             {
                 $data['dateTime'] = $dateTime;
                 $ordersWhere = $ordersWhere->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
+                $where = empty($where)?" WHERE t_orders.created_at between {$date_time['start']} and {$date_time['end']}":$where . " t_orders.created_at between {$date_time['start']} and {$date_time['end']}";
             }
         }else{
             $ordersWhere = $ordersWhere->where('status', 1)->where('promo_code', $promoCode);
+            $where = " WHERE t_orders.status=1 and t_orders.promo_code={$promoCode}";
         }
-        $data['deliveryCoast'] = $ordersWhere->sum('delivery_coast');
+        $counts = collect(DB::connection('lovbee')->select($sql.$where))->map(function ($value) {return (array)$value;})->toArray();
         $data['orderPrice'] = $ordersWhere->sum('order_price');
+        $data['discountedPrice'] = $ordersWhere->sum('discounted_price');
+        $data['deliveryCost'] = $ordersWhere->sum('delivery_coast');
         $data['promoPrice'] = $ordersWhere->sum('promo_price');
         $data['totalPrice'] = $ordersWhere->sum('total_price');
-        $data['discountedPrice'] = $ordersWhere->sum('discounted_price');
-        $data['reductionCoast'] = $ordersWhere->sum('reduction');
-        $data['brokerageCoast'] = 0;
-        $data['profit'] = 0;
+        $data['packagingCost'] = $ordersWhere->sum('packaging_cost');
+
         $data['perPage'] = $perPage = 20;
         $orders   = $ordersWhere->orderByDesc('created_at')->paginate($perPage)->appends($params);
         $shopIds = $orders->pluck('shop_id')->unique()->toArray();
@@ -96,12 +105,21 @@ class ShopOrderController extends Controller
                 $order->color = 1;
             }
             $order->extension_id = empty($bitrixOrder)?'':$bitrixOrder->extension_id;
+            $order->pay = empty($bitrixOrder)?0:$bitrixOrder->pay;
+            $order->purchase_price = empty($bitrixOrder)?0:$bitrixOrder->purchase_price;
+            $order->package_purchase_price = empty($bitrixOrder)?0:$bitrixOrder->package_purchase_price;
+            $order->gross_profit = empty($bitrixOrder)?0:$bitrixOrder->gross_profit;
+            $order->income = empty($bitrixOrder)?0:$bitrixOrder->income;
+            $order->brokerage_percentage = empty($bitrixOrder)?0:$bitrixOrder->brokerage_percentage;
+            $order->brokerage = empty($bitrixOrder)?0:$bitrixOrder->brokerage;
+            $order->reason = empty($bitrixOrder)?0:$bitrixOrder->reason;
             $assigned_at = strtotime($order->assigned_at);
             $delivered_at = strtotime($order->delivered_at);
             $order->delivery_time = ($assigned_at<0||$delivered_at<0)?-1:($delivered_at-$assigned_at);
         });
         $data['type' ] = $params['type'] ?? 0;
         $data['orders'] = $orders;
+        $data['counts'] = $counts;
         $data['orderStatuses'] = $this->orderStatuses;
         $data['colorStyles']  = $this->colorStyles;
         $data['statusEncode'] = json_encode($this->schedule, true);
@@ -327,13 +345,23 @@ class ShopOrderController extends Controller
             $end = date('Y-m-d H:i:s');
         }
         $orders = DB::connection('lovbee')->table('special_counts')->whereBetween('created_at', array($start , $end))->orderByDesc('created_at')->paginate($perPage)->appends($params);
-        $orderCounts = collect(DB::connection('lovbee')->select('SELECT count(*) as c,DATE_FORMAT(created_at,"%Y-%m-%d") as `date`  from t_orders where status=1 and created_at BETWEEN "'.$start.'" and "'.$end.'" GROUP BY `date`;'))->map(function ($value) {return (array)$value;});
-        $todayOrderCounts = collect(DB::connection('lovbee')->select('SELECT sum(num) as c,`date`  from t_special_counts where  created_at BETWEEN "'.$start.'" and "'.$end.'" GROUP BY `date`;'))->map(function ($value) {return (array)$value;});
-        $orders->each(function($order) use ($orderCounts , $todayOrderCounts){
+        $shopIds = $orders->pluck('shop_id')->unique()->toArray();
+        $shops = DB::connection('lovbee')->table('users')->whereIn('user_id' , $shopIds)->get();
+        $orderCounts = collect(DB::connection('lovbee')->select('SELECT count(*) as c,sum(delivery_coast) as delivery_coast_c,sum(total_price) as total_price_c , DATE_FORMAT(created_at,"%Y-%m-%d") as `date`  from t_orders where status=1 and created_at BETWEEN "'.$start.'" and "'.$end.'" GROUP BY `date`;'))->map(function ($value) {return (array)$value;});
+        $todayOrderCounts = collect(DB::connection('lovbee')->select('SELECT sum(num) as c,sum(special_price) as special_price_c,sum(total_price) as total_price_c,sum(total_purchase_price) as total_purchase_price_c,`date`  from t_special_counts where  created_at BETWEEN "'.$start.'" and "'.$end.'" GROUP BY `date`;'))->map(function ($value) {return (array)$value;});
+        $orders->each(function($order) use ($orderCounts , $todayOrderCounts , $shops){
             $orderCount = $orderCounts->where('date' , $order->date)->first();
-            $todayOrderCount = $todayOrderCounts->where('date' , $order->date)->first();
+            $count = $todayOrderCounts->where('date' , $order->date)->first();
+            $special_price_c = empty($count)?0:$count['special_price_c'];
+            $total_price_c = empty($count)?0:$count['total_price_c'];
+            $total_purchase_price_c = empty($count)?0:$count['total_purchase_price_c'];
             $order->order_count = empty($orderCount)?0:$orderCount['c'];
-            $order->today_order_count = empty($todayOrderCount)?0:$todayOrderCount['c'];
+            $order->today_special_order_count = empty($count)?0:$count['c'];
+            $order->expenses = $special_price_c-$total_purchase_price_c;
+            $order->special_price_c = $special_price_c;
+            $order->delivery_cost_c = $orderCount['delivery_coast_c'];
+            $order->total_price_c = $orderCount['total_price_c'];
+            $order->shop = $shops->where('user_id' , $order->shop_id)->first();
         });
         return view('backstage.business.shop_order.special' , compact('orders' , 'orderCounts'));
     }
