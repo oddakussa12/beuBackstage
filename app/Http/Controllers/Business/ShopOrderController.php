@@ -76,7 +76,7 @@ class ShopOrderController extends Controller
             {
                 $data['dateTime'] = $dateTime;
                 $ordersWhere = $ordersWhere->whereBetween('created_at' , array($date_time['start'] , $date_time['end']));
-                $where = empty($where)?" WHERE t_orders.created_at between {$date_time['start']} and {$date_time['end']}":$where . " t_orders.created_at between {$date_time['start']} and {$date_time['end']}";
+                $where = empty($where)?" WHERE t_orders.created_at between '{$date_time['start']}' and '{$date_time['end']}'":$where . " and t_orders.created_at between '{$date_time['start']}' and '{$date_time['end']}'";
             }
         }else{
             $ordersWhere = $ordersWhere->where('status', 1)->where('promo_code', $promoCode);
