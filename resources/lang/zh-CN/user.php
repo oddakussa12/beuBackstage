@@ -31,6 +31,9 @@ return [
             'user_audit_time'=>'审核时间',
             'user_friend_time'=>'加好友时间',
             'user_op'=>'操作',
+            'food_preparation_time'=>'Food preparation time',
+            'open_time'=>'Shop open time',
+            'close_time'=>'Shop close time',
         ],
         'button'=>[
             'friend'=>'好友数',

@@ -31,6 +31,9 @@ return [
             'user_friend_time'=>'Add friend time',
             'user_audit_time'=>'AuditedAt',
             'user_op'=>'Operation',
+            'food_preparation_time'=>'Food preparation time',
+            'open_time'=>'Shop open time',
+            'close_time'=>'Shop close time',
         ],
         'button'=>[
             'friend'=>'Friend',

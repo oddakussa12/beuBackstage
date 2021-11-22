@@ -69,10 +69,13 @@ class ShopController extends Controller
             'users.user_address' , 'users_phones.user_phone_country' ,
             'users.user_nick_name' , 'users_countries.country' , 'users.user_delivery' ,
             'users.user_level' , 'shops_views.num' , //'users.user_online',
+            'users.food_preparation_time' , 
+            'users.open_time' ,
+            'users.close_time' ,
             'shop_evaluation_points.point_1', 'users.user_created_at', 'users.user_verified_at',
             'shop_evaluation_points.point_2' , 'shop_evaluation_points.point_3',
             'shop_evaluation_points.point_4' , 'shop_evaluation_points.point_5',
-            'shop_evaluation_points.quality' , 'shop_evaluation_points.service',
+            'shop_evaluation_points.quality' , 'shop_evaluation_points.service'
         ])->paginate(10)->appends($params);
         $admins = DB::table('admins')->select(DB::raw('admin_id id, admin_username title'))->get();
         $shopIds = $shops->pluck('user_id')->unique()->toArray();
