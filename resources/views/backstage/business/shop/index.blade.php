@@ -98,16 +98,14 @@
                 <th lay-data="{field:'longitude', minWidth:180, edit:'text'}">{{trans('business.table.header.shop.longitude')}}</th>
                 <th lay-data="{field:'latitude', minWidth:180, edit:'text'}">{{trans('business.table.header.shop.latitude')}}</th>
                 <th lay-data="{field:'user_tag', minWidth:100, event:'updateTag'}">{{trans('business.table.header.shop.user_tag')}}</th>
-
-                <th lay-data="{field:'admin_username', maxWidth:180, minWidth:150, @if(auth()->user()->admin_id!=1) hide:'true' @endif templet: function(field){
-                    return field.admin_username; },event:'updateAmin'}">{{trans('business.table.header.shop.manager')}}</th>
-
                 <th lay-data="{field:'user_about', minWidth:200}">{{trans('user.table.header.user_about')}}</th>
                 <th lay-data="{field:'user_verified_at', minWidth:160}">{{trans('user.table.header.user_audit_time')}}</th>
                 <th lay-data="{field:'food_preparation_time', minWidth:160}">{{trans('user.table.header.food_preparation_time')}}</th>
                 <th lay-data="{field:'open_time', minWidth:100, edit:'text'}">{{trans('user.table.header.open_time')}}</th>
                 <th lay-data="{field:'close_time', minWidth:100, edit:'text'}">{{trans('user.table.header.close_time')}}</th>
                 <th lay-data="{fixed: 'right', width:300, align:'center', toolbar: '#op'}">{{trans('common.table.header.op')}}</th>
+                <th lay-data="{field:'admin_username', maxWidth:180, minWidth:150, @if(auth()->user()->admin_id!=1) hide:'true' @endif templet: function(field){
+                    return field.admin_username; },event:'updateAmin'}">{{trans('business.table.header.shop.manager')}}</th>
             </tr>
             </thead>
             <tbody>
@@ -134,13 +132,13 @@
                     <td>{{$shop->longitude}}</td>
                     <td>{{$shop->latitude}}</td>
                     <td>{{$shop->user_tag}}</td>
-                    <td>{{empty($shop->admin)?'':$shop->admin->title}}</td>
                     <td>{{$shop->user_about}}</td>
                     <td>@if($shop->user_verified_at!='0000-00-00 00:00:00'){{$shop->user_verified_at}}@endif</td>
                     <!-- <td>{{$shop->user_created_at}}</td> -->
                     <td>{{$shop->food_preparation_time}}</td>
                     <td>{{$shop->open_time}}</td>
                     <td>{{$shop->close_time}}</td>
+                    <td>{{empty($shop->admin)?'':$shop->admin->title}}</td>
                     <td></td>
                 </tr>
             @endforeach
